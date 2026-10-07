@@ -340,7 +340,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
         
-        const otherRelatedItems = Array.from(allItemsMap.values());
+        let otherRelatedItems = Array.from(allItemsMap.values());
+
+        // Suodatetaan pois Hylätyt ja Piilotetut havainnot/ilmoitukset (observations-taulu)
+        if (otherRelatedItems.length > 0) {
+            const relCandidateIds = otherRelatedItems.map(i => String(i.id)).filter(Boolean);
+            if (relCandidateIds.length > 0) {
+                try {
+                    const { data: supaObsRel } = await aiSb
+                        .from('observations')
+                        .select('id, status')
+                        .in('id', relCandidateIds);
+                    
+                    if (supaObsRel && supaObsRel.length > 0) {
+                        const supaStatusMap = new Map();
+                        supaObsRel.forEach(s => supaStatusMap.set(String(s.id), String(s.status).toLowerCase()));
+                        
+                        otherRelatedItems = otherRelatedItems.filter(item => {
+                            const supaStatus = supaStatusMap.get(String(item.id));
+                            if (supaStatus) {
+                                return supaStatus === 'approved';
+                            }
+                            return true;
+                        });
+                    }
+                } catch (relErr) {
+                    console.warn('Virhe place_relations suodatuksessa:', relErr);
+                }
+            }
+        }
 
         const placeIdStr = String(placeId);
         let allSources = [];
