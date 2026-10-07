@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadLostItemsForPlace(placeData).catch(e => console.warn('[LostItems] error:', e));
         loadRoutesForPlace(placeData).catch(e => console.warn('[Routes] error:', e));
         loadThemesForPlace(placeData).catch(e => console.warn('[Themes] error:', e));
-        loadPlaceObservations(placeId);
+        loadPlaceObservations(placeData).catch(e => console.warn('[Observations] error:', e));
 
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
         // place_media on AI Supabase -kannassa (aiSb)
@@ -2813,7 +2813,8 @@ function renderEncounters(encounters) {
 // LOSTNFOUND: FIREBASE FIRESTORE -HAU (kadonneet/löydetyt)
 // ==========================================================
 async function loadLostItemsForPlace(place) {
-    if (!place.place_id) return;
+    const targetPlaceId = place.place_id || place.id;
+    if (!targetPlaceId) return;
     
     try {
         // Firebase SDK ladataan dynaamisesti jos ei vielä ladattu
@@ -2834,9 +2835,9 @@ async function loadLostItemsForPlace(place) {
         const db = firebase.firestore(window._lfApp);
         
         // Hae kyseisen paikan ilmoitukset placeId-kentällä (ilman status-kyselyä indeksien välttämiseksi)
-        console.log('Haetaan lostItems paikalle:', place.place_id);
+        console.log('Haetaan lostItems paikalle:', targetPlaceId);
         const snapshot = await db.collection('lostItems')
-            .where('placeId', '==', place.place_id)
+            .where('placeId', '==', targetPlaceId)
             .limit(50)
             .get();
         
@@ -2851,8 +2852,38 @@ async function loadLostItemsForPlace(place) {
         
         console.log('Aktiiviset lostItems:', activeDocs.length);
         if (activeDocs.length === 0) return;
+
+        // Suodatetaan pois Supabasessa hylätyt (rejected) tai piilotetut (hidden) moderointi-overridet
+        let filteredDocs = activeDocs;
+        const candidateIds = activeDocs.map(d => d.id);
+        const sbClient = window.aiSb || window.LaukaaSupabase;
+        if (sbClient && candidateIds.length > 0) {
+            try {
+                const { data: supaObs } = await sbClient
+                    .from('observations')
+                    .select('id, status')
+                    .in('id', candidateIds);
+                
+                if (supaObs && supaObs.length > 0) {
+                    const supaStatusMap = new Map();
+                    supaObs.forEach(s => supaStatusMap.set(s.id, s.status));
+                    filteredDocs = activeDocs.filter(d => {
+                        const supaStatus = supaStatusMap.get(d.id);
+                        if (supaStatus) {
+                            // Jos Supabasessa on asetettu tila (esim. 'rejected' tai 'hidden'), sallitaan VAIN 'approved'
+                            return supaStatus === 'approved';
+                        }
+                        return true;
+                    });
+                }
+            } catch (e) {
+                console.warn('Virhe Supabase-overriden tarkistuksessa lostItemsille:', e);
+            }
+        }
+
+        if (filteredDocs.length === 0) return;
         
-        const sortedByDate = [...activeDocs].sort((a, b) => {
+        const sortedByDate = [...filteredDocs].sort((a, b) => {
             const tA = a.data().timestamp?.toMillis?.() || 0;
             const tB = b.data().timestamp?.toMillis?.() || 0;
             return tB - tA;
@@ -3659,16 +3690,30 @@ async function loadThemesForPlace(placeData) {
 }
 
 // ── Paikan havainnot (LostReFound / Supabase observations) ────────────────────
-async function loadPlaceObservations(placeId) {
+async function loadPlaceObservations(placeInput) {
     const section = document.getElementById('timeline-section');
     const list = document.getElementById('timeline-list');
     if (!section || !list || !window.aiSb) return;
 
     try {
+        let placeIds = [];
+        if (typeof placeInput === 'object' && placeInput !== null) {
+            if (Array.isArray(placeInput)) {
+                placeIds = placeInput;
+            } else {
+                if (placeInput.id) placeIds.push(placeInput.id);
+                if (placeInput.place_id) placeIds.push(placeInput.place_id);
+            }
+        } else if (placeInput) {
+            placeIds.push(placeInput);
+        }
+        placeIds = [...new Set(placeIds.filter(Boolean))];
+        if (placeIds.length === 0) return;
+
         const { data: obs, error } = await window.aiSb
             .from('observations')
             .select('id, title, description, photo_url, external_url, external_source, created_at, category')
-            .eq('place_id', placeId)
+            .in('place_id', placeIds)
             .eq('status', 'approved')
             .order('created_at', { ascending: false })
             .limit(10);
