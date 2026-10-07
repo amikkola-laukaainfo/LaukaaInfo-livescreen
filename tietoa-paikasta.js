@@ -424,6 +424,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadRoutesForPlace(placeData).catch(e => console.warn('[Routes] error:', e));
         loadThemesForPlace(placeData).catch(e => console.warn('[Themes] error:', e));
         loadPlaceObservations(placeData).catch(e => console.warn('[Observations] error:', e));
+        loadWallPostsForPlace(placeData).catch(e => console.warn('[WallPosts] error:', e));
 
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
         // place_media on AI Supabase -kannassa (aiSb)
@@ -3938,5 +3939,160 @@ async function loadPlaceObservations(placeInput) {
 
     } catch (e) {
         console.warn('loadPlaceObservations virhe:', e);
+    }
+}
+
+/**
+ * Hakee seinäjulkaisut (posts) tähän paikkaan liittyen.
+ * Suodattaa post_places-relaation kautta paikan nimen tai canonical_name:n perusteella.
+ * Näyttää osion vain jos julkaisuja löytyy.
+ */
+async function loadWallPostsForPlace(placeData) {
+    const section = document.getElementById('wall-posts-section');
+    const list = document.getElementById('wall-posts-list');
+    if (!section || !list) return;
+
+    const aiSb = window.aiSb;
+    if (!aiSb) return;
+
+    try {
+        // Kerää hakutermit: paikan nimi, canonical_name ja mahdolliset aliakset
+        const placeNames = new Set();
+        if (placeData.name) placeNames.add(placeData.name.trim());
+        if (placeData.canonical_name) placeNames.add(placeData.canonical_name.trim());
+        // Lisää myös slugi-versio (esim. "Lievestuore" → "lievestuore")
+        if (placeData.name) placeNames.add(placeData.name.trim().toLowerCase());
+
+        // Hae post_places-taulusta matching place_id:t
+        // post_places.place_id on tekstimuotoinen paikan nimi (esim. "Lievestuore")
+        const nameArray = Array.from(placeNames);
+        
+        // Hae julkaisut post_places-liitoksen kautta
+        // Kokeillaan ensin: suora haku post_places → posts
+        let posts = [];
+
+        for (const pName of nameArray) {
+            const { data, error } = await aiSb
+                .from('post_places')
+                .select(`
+                    place_id,
+                    post:post_id (
+                        id,
+                        title,
+                        content,
+                        type,
+                        created_at,
+                        status,
+                        visibility,
+                        organization_id,
+                        is_pinned,
+                        pinned_until,
+                        post_media(url, media_type),
+                        post_attachments(url, type, file_name)
+                    )
+                `)
+                .ilike('place_id', pName)
+                .limit(20);
+
+            if (!error && data && data.length > 0) {
+                data.forEach(row => {
+                    if (row.post && row.post.status !== 'cleanup_pending' && row.post.status !== 'deleted') {
+                        if (row.post.visibility === 'public' || row.post.visibility == null) {
+                            // Tarkista ettei jo lisätty
+                            if (!posts.some(p => p.id === row.post.id)) {
+                                posts.push(row.post);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        if (posts.length === 0) {
+            // Kokeile fallback: hae posts-taulusta post_places-liitoksella tekstihaulla
+            const { data: fallbackData, error: fallbackErr } = await aiSb
+                .from('posts')
+                .select(`
+                    id, title, content, type, created_at, status, visibility,
+                    organization_id, is_pinned, pinned_until,
+                    post_places(place_id),
+                    post_media(url, media_type),
+                    post_attachments(url, type, file_name)
+                `)
+                .neq('status', 'cleanup_pending')
+                .neq('status', 'deleted')
+                .eq('visibility', 'public')
+                .order('created_at', { ascending: false })
+                .limit(50);
+
+            if (!fallbackErr && fallbackData) {
+                const nameLower = new Set(Array.from(placeNames).map(n => n.toLowerCase()));
+                posts = fallbackData.filter(p => {
+                    if (!p.post_places || p.post_places.length === 0) return false;
+                    return p.post_places.some(pp => nameLower.has((pp.place_id || '').toLowerCase()));
+                });
+            }
+        }
+
+        if (posts.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        // Järjestä: kiinnitetyt ensin, sitten uusimmat
+        posts.sort((a, b) => {
+            const aPinned = a.is_pinned && a.pinned_until && new Date(a.pinned_until) > new Date();
+            const bPinned = b.is_pinned && b.pinned_until && new Date(b.pinned_until) > new Date();
+            if (aPinned && !bPinned) return -1;
+            if (!aPinned && bPinned) return 1;
+            return new Date(b.created_at) - new Date(a.created_at);
+        });
+
+        const typeEmoji = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️' };
+        const typeFi = { announcement: 'Ilmoitus', news: 'Uutinen', event: 'Tapahtuma', offer: 'Tarjous' };
+
+        list.innerHTML = posts.slice(0, 10).map(p => {
+            const isPinned = p.is_pinned && p.pinned_until && new Date(p.pinned_until) > new Date();
+            const dateStr = p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : '';
+            const emoji = typeEmoji[p.type] || '📝';
+            const typeLabel = typeFi[p.type] || p.type || '';
+            const bodyText = (p.content || '').substring(0, 200);
+
+            // Kuva jos saatavilla
+            const img = p.post_media && p.post_media.find(m => m.media_type === 'image');
+            const imgHtml = img ? `
+                <div style="width:100%;height:160px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
+                    <img src="${img.url}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
+                         onerror="this.parentElement.style.display='none'">
+                </div>` : '';
+
+            // PDF-liite jos saatavilla
+            const pdf = p.post_attachments && p.post_attachments.find(a => a.type === 'pdf');
+            const pdfHtml = pdf ? `
+                <a href="${pdf.url}" target="_blank" rel="noopener noreferrer"
+                   style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#7c3aed;font-weight:600;text-decoration:none;margin-top:0.5rem;padding:4px 10px;background:#f3f0ff;border-radius:6px;border:1px solid #ddd6fe;"
+                   onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#f3f0ff'">
+                    📄 ${pdf.file_name || 'Avaa PDF'}
+                </a>` : '';
+
+            return `
+                <div style="background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;${isPinned ? 'border-left:3px solid #f59e0b;background:#fffbeb;' : 'border-left:3px solid #7c3aed;'}">
+                    ${imgHtml}
+                    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.4rem;">
+                        <span style="display:inline-flex;align-items:center;gap:3px;background:#f3f0ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">${emoji} ${typeLabel}</span>
+                        ${isPinned ? '<span style="display:inline-flex;align-items:center;gap:3px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📌 Kiinnitetty</span>' : ''}
+                        ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+                    </div>
+                    <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.3rem;">${safeHtml(p.title || '')}</div>
+                    ${bodyText ? `<div style="font-size:0.88rem;color:#475569;line-height:1.5;">${safeHtml(bodyText)}${(p.content || '').length > 200 ? '...' : ''}</div>` : ''}
+                    ${pdfHtml}
+                </div>`;
+        }).join('');
+
+        section.style.display = 'block';
+
+    } catch (e) {
+        console.warn('[loadWallPostsForPlace] virhe:', e);
+        section.style.display = 'none';
     }
 }

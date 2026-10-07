@@ -1388,6 +1388,21 @@
                     </div>
                 </section>
 
+                <!-- Seinä-julkaisut tähän paikkaan liittyen -->
+                <section id="wall-posts-section" class="content-block" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #7c3aed;" data-icon="material-symbols:campaign-outline"></span>
+                        Ajankohtaista täällä
+                    </h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+                        Organisaatioiden julkaisut ja ilmoitukset tähän paikkaan liittyen.
+                        <a href="seina.html" style="color: var(--color-forest); font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">→ Avaa koko seinä</a>
+                    </p>
+                    <div id="wall-posts-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Filled by loadWallPostsForPlace (tietoa-paikasta.js) -->
+                    </div>
+                </section>
+
                 <!-- 4. Aktiviteetit -->
                 <section class="content-block" id="activities-section" style="display: none;">
                     <h2>Mitä täällä voi tehdä?</h2>
