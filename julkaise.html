@@ -676,9 +676,12 @@
               post_media(url, media_type),
               post_links(url, title),
               post_places(place_id),
-              post_themes(tag_id)
+              post_themes(tag_id),
+              post_attachments(*)
             `)
             .eq('organization_id', selectedOrgId)
+            .neq('status', 'cleanup_pending')
+            .neq('status', 'deleted')
             .order('created_at', { ascending: false });
 
           if (error) {
@@ -835,36 +838,6 @@
         document.getElementById('editBadge').classList.add('hidden');
         document.getElementById('cancelEditBtn').classList.add('hidden');
         document.getElementById('submitPublishBtn').innerHTML = `<span>🚀 Julkaise ${verifiedOrgName || ''} seinälle</span>`;
-      }
-
-      // Delete post with key verification
-      async function deletePost(postId) {
-        const p = loadedMyPosts.find(item => item.id === postId);
-        const titleStr = p ? `"${p.title}"` : 'tämä julkaisu';
-        
-        if (!confirm(`Haluatko varmasti poistaa julkaisun:\n${titleStr}?`)) {
-          return;
-        }
-
-        if (supabaseClient) {
-          try {
-            const { error } = await supabaseClient
-              .from('posts')
-              .delete()
-              .eq('id', postId);
-            if (error) {
-              alert('Julkaisun poistaminen epäonnistui: ' + error.message);
-              return;
-            }
-          } catch (e) {
-            console.warn('Delete error:', e);
-            alert('Julkaisun poistaminen epäonnistui.');
-            return;
-          }
-        }
-
-        loadedMyPosts = loadedMyPosts.filter(item => item.id !== postId);
-        await loadMyPosts();
       }
 
       // Global Attachment & Duration State

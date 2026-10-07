@@ -809,7 +809,7 @@
 
         if (supabaseClient) {
           try {
-            let query = supabaseClient.from('posts').select('*').order('created_at', { ascending: false });
+            let query = supabaseClient.from('posts').select('*').neq('status', 'cleanup_pending').neq('status', 'deleted').order('created_at', { ascending: false });
             
             if (orgFilterId) {
               query = query.eq('organization_id', orgFilterId).or('visibility.eq.public,visibility.is.null');

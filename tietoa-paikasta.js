@@ -2460,7 +2460,7 @@ async function loadEncountersForPlace(place) {
                     : { data: null };
                 const postsData = (postsResult.data || []).filter(item => {
                     const st = String(item.status || '').toLowerCase();
-                    if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted') return false;
+                    if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted' || st === 'cleanup_pending') return false;
                     if (item.visibility === 'code_protected' || item.visibility === 'hidden') return false;
                     if (!item.expires_at && !item.valid_until) return true;
                     const exp = item.expires_at || item.valid_until;
