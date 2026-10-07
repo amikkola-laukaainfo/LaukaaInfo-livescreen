@@ -57,6 +57,13 @@ try {
     console.error('Virhe SEO-sivujen generoinnissa:', e.message);
 }
 
+console.log('1.57 Generoidaan kohteet-hakemistosivu (/kohteet/index.html)...');
+try {
+    execSync('node generate_kohteet_index.js', { stdio: 'inherit' });
+} catch (e) {
+    console.error('Virhe kohteet-hakemiston generoinnissa:', e.message);
+}
+
 console.log('1.6 Generoidaan sitemap...');
 try {
     execSync('node generate_sitemap.js', { stdio: 'inherit' });

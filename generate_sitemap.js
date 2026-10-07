@@ -52,6 +52,9 @@ async function generateSitemap() {
         'maksuehto.html'
     ];
 
+    // Kohteet-hakemistosivu erikseen korkealla prioriteetilla
+    const kohteetIndexUrl = `${baseUrl}kohteet/index.html`;
+
     // Palveluiden ja reittien id:t (näitä voi laajentaa tarvittaessa)
     const dynamicPages = [
         'pikahaku.html?id=vuokrauspalvelut',
@@ -124,18 +127,23 @@ async function generateSitemap() {
     });
 
     // 1b. Lisätään generoidut SEO-hakemistosivut (/kohteet/*.html ja /teemat/*.html)
+    // kohteet/index.html (hakemistosivu) saa korkeamman prioriteetin 0.95
     ['kohteet', 'teemat'].forEach(dirName => {
         const dirPath = path.join(__dirname, dirName);
         if (fs.existsSync(dirPath)) {
             const files = fs.readdirSync(dirPath).filter(f => f.endsWith('.html'));
             files.forEach(file => {
+                const isIndex = file === 'index.html';
+                const priority = isIndex ? '0.95' : '0.90';
                 xml += `<url>
   <loc>${baseUrl}${dirName}/${file}</loc>
   <lastmod>${currentDate}</lastmod>
-  <priority>0.90</priority>
+  <priority>${priority}</priority>
 </url>\n`;
             });
-            console.log(`✓ Lisätty ${files.length} SEO-sivua kansiosta /${dirName}/ sitemapiin.`);
+            const indexCount = files.filter(f => f === 'index.html').length;
+            const pageCount  = files.length - indexCount;
+            console.log(`✓ Lisätty /${dirName}/: ${indexCount > 0 ? '1 hakemistosivu (0.95) + ' : ''}${pageCount} SEO-sivua (0.90).`);
         }
     });
 

@@ -5,7 +5,11 @@
     "scripts": {
         "start": "npx serve .",
         "dev": "npx serve .",
-        "build": "node build.js"
+        "build": "node build.js",
+        "seo": "node generate_seo_pages.js",
+        "kohteet": "node generate_kohteet_index.js",
+        "generate": "node generate_seo_pages.js && node generate_kohteet_index.js && node generate_sitemap.js",
+        "sitemap": "node generate_sitemap.js"
     },
     "dependencies": {},
     "devDependencies": {
