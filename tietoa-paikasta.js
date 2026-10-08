@@ -3989,6 +3989,8 @@ async function loadWallPostsForPlace(placeData) {
                         status,
                         visibility,
                         organization_id,
+                        publisher_name,
+                        org_name,
                         is_pinned,
                         pinned_until,
                         post_media(url, media_type),
@@ -4020,7 +4022,7 @@ async function loadWallPostsForPlace(placeData) {
                 .from('posts')
                 .select(`
                     id, title, content, type, created_at, status, visibility,
-                    organization_id, is_pinned, pinned_until,
+                    organization_id, publisher_name, org_name, is_pinned, pinned_until,
                     post_places(place_id),
                     post_media(url, media_type),
                     post_attachments(url, type, file_name)
@@ -4074,6 +4076,12 @@ async function loadWallPostsForPlace(placeData) {
             const typeLabel = typeFi[p.type] || p.type || '';
             const bodyText = (p.content || '').substring(0, 200);
 
+            // Organisaation nimi
+            const orgName = p.publisher_name || p.org_name || (p.organization_id && !p.organization_id.startsWith('company-') ? p.organization_id : null);
+            const orgHtml = orgName
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#f8fafc;color:#334155;border:1px solid #cbd5e1;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">🏢 ${safeHtml(orgName)}</span>`
+                : '';
+
             // Paikan nimi: _matched_place_id tai post_places-taulusta
             const matchedPlace = p._matched_place_id
                 || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null);
@@ -4111,6 +4119,7 @@ async function loadWallPostsForPlace(placeData) {
                     ${imgHtml}
                     <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.4rem;">
                         <span style="display:inline-flex;align-items:center;gap:3px;background:#f3f0ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">${emoji} ${typeLabel}</span>
+                        ${orgHtml}
                         ${newBadgeHtml}
                         ${isPinned ? '<span style="display:inline-flex;align-items:center;gap:3px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📌 Kiinnitetty</span>' : ''}
                         ${placeHtml}

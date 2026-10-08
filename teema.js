@@ -1118,12 +1118,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     const postTypeUpper = (post.type || '').toUpperCase();
                                     const isCommunity = COMMUNITY_TYPES.includes(postTypeUpper);
                                     const mediaUrl = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : (post.image_url || null);
+                                    const pubName = post.publisher_name || post.org_name || (post.organization_id && !post.organization_id.startsWith('company-') ? post.organization_id : '');
                                     sbAjankohtainen.push({
                                         id: post.id,
                                         type: isCommunity ? postTypeUpper : 'feed_post',
                                         category: isCommunity ? (post.type || 'Julkaisu') : 'Seinäjulkaisu',
+                                        title: post.title || '',
                                         description: post.content || post.description || post.title || '',
-                                        location_name: post.location_name || '',
+                                        location_name: post.location_name || post.place_name || '',
+                                        publisher_name: pubName,
                                         photo_url: mediaUrl,
                                         created_at: post.created_at,
                                         isSupabase: true
@@ -1510,6 +1513,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span class="badge" style="background: ${badgeColor};">${badgeLabel}</span>
                             <h3 class="card-title">${(() => { const text = enc.title || enc.description || ''; return text.substring(0, 120) + (text.length > 120 ? '...' : ''); })()}</h3>
                             <div class="card-meta">
+                                ${enc.publisher_name ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:corporate-fare-outline"></span> ${enc.publisher_name}</span>` : ''}
                                 ${enc.location_name ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:location-on-outline"></span> ${enc.location_name}</span>` : ''}
                                 ${dateStr ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:calendar-month-outline"></span> ${dateStr}</span>` : ''}
                             </div>
