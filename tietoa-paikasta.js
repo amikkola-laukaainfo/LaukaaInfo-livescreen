@@ -4000,7 +4000,8 @@ async function loadWallPostsForPlace(placeData) {
                         if (row.post.visibility === 'public' || row.post.visibility == null) {
                             // Tarkista ettei jo lisätty
                             if (!posts.some(p => p.id === row.post.id)) {
-                                posts.push(row.post);
+                                // Talleta myös paikan nimi (post_places.place_id) post-objektiin
+                                posts.push({ ...row.post, _matched_place_id: row.place_id });
                             }
                         }
                     }
@@ -4050,13 +4051,28 @@ async function loadWallPostsForPlace(placeData) {
 
         const typeEmoji = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️' };
         const typeFi = { announcement: 'Ilmoitus', news: 'Uutinen', event: 'Tapahtuma', offer: 'Tarjous' };
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
         list.innerHTML = posts.slice(0, 10).map(p => {
             const isPinned = p.is_pinned && p.pinned_until && new Date(p.pinned_until) > new Date();
-            const dateStr = p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : '';
+            const postDate = p.created_at ? new Date(p.created_at) : null;
+            const dateStr = postDate ? postDate.toLocaleDateString('fi-FI') : '';
+            const isNew = postDate && postDate > sevenDaysAgo;
             const emoji = typeEmoji[p.type] || '📝';
             const typeLabel = typeFi[p.type] || p.type || '';
             const bodyText = (p.content || '').substring(0, 200);
+
+            // Paikan nimi: _matched_place_id tai post_places-taulusta
+            const matchedPlace = p._matched_place_id
+                || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null);
+            const placeHtml = matchedPlace
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📍 ${safeHtml(matchedPlace)}</span>`
+                : '';
+
+            // Uusi-badge: julkaistu alle 7 vrk sitten
+            const newBadgeHtml = isNew
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dc2626;color:#fff;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:800;animation:pulse 1.5s infinite;">🆕 Uusi</span>`
+                : '';
 
             // Kuva jos saatavilla
             const img = p.post_media && p.post_media.find(m => m.media_type === 'image');
@@ -4075,12 +4091,17 @@ async function loadWallPostsForPlace(placeData) {
                     📄 ${pdf.file_name || 'Avaa PDF'}
                 </a>` : '';
 
+            const borderColor = isPinned ? '#f59e0b' : (isNew ? '#dc2626' : '#7c3aed');
+            const bgColor = isPinned ? '#fffbeb' : (isNew ? '#fff5f5' : '#fff');
+
             return `
-                <div style="background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;${isPinned ? 'border-left:3px solid #f59e0b;background:#fffbeb;' : 'border-left:3px solid #7c3aed;'}">
+                <div style="background:${bgColor};border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;border-left:3px solid ${borderColor};">
                     ${imgHtml}
                     <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.4rem;">
                         <span style="display:inline-flex;align-items:center;gap:3px;background:#f3f0ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">${emoji} ${typeLabel}</span>
+                        ${newBadgeHtml}
                         ${isPinned ? '<span style="display:inline-flex;align-items:center;gap:3px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📌 Kiinnitetty</span>' : ''}
+                        ${placeHtml}
                         ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
                     </div>
                     <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.3rem;">${safeHtml(p.title || '')}</div>
