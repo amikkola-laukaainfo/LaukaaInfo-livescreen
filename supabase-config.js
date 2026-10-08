@@ -5,8 +5,8 @@
  * 2. Supabase Auth: kirjautuminen tapahtuu magic linkin kautta (kirjaudu.html)
  */
 
-const SUPABASE_URL = 'https://usswojtlvrnqtzwnffpg.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_SI9jkzJCyrxXQebhuoQGqQ_LN9wH8hl';
+const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
 
 let supabaseClient = null;
 

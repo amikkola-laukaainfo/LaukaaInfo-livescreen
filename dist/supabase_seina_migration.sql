@@ -530,7 +530,8 @@ SECURITY DEFINER
 AS $$
 DECLARE
     v_clean_key TEXT;
-    v_hash TEXT;
+    v_hash_clean TEXT;
+    v_hash_raw TEXT;
     v_cred RECORD;
     v_org RECORD;
 BEGIN
@@ -539,11 +540,13 @@ BEGIN
         RETURN jsonb_build_object('valid', false, 'error', 'Syötä vähintään 6-merkkinen julkaisuavain.');
     END IF;
 
-    v_hash := encode(digest(v_clean_key, 'sha256'), 'hex');
+    -- Hashataan sekä puhdistettu (ilman viivaa) että alkuperäinen muotoiltu avain
+    v_hash_clean := encode(digest(v_clean_key, 'sha256'), 'hex');
+    v_hash_raw := encode(digest(UPPER(TRIM(p_publish_key)), 'sha256'), 'hex');
 
     SELECT * INTO v_cred
     FROM public.organization_publish_credentials
-    WHERE code_hash = v_hash
+    WHERE (code_hash = v_hash_clean OR code_hash = v_hash_raw)
       AND revoked_at IS NULL
     ORDER BY created_at DESC
     LIMIT 1;

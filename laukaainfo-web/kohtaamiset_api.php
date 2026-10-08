@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
 // ============================================================
 // KONFIGURAATIO
 // ============================================================
-define('SUPABASE_URL', 'https://usswojtlvrnqtzwnffpg.supabase.co');
+define('SUPABASE_URL', 'https://duxluwyqxvbmkkjzuzkz.supabase.co');
 // Hae Supabase-konsolista: Settings → API → service_role (salainen, vain palvelimella!)
 define('SUPABASE_SERVICE_KEY', 'TÄHÄN_SERVICE_ROLE_KEY');
 define('BASE_URL', 'https://laukaainfo.fi');
