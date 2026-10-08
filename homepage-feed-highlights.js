@@ -159,6 +159,16 @@
         if (item.type === 'event') {
             card.className = 'homepage-feed-highlights__card';
             const img = item.image || item.imageUrl || (item.media && Array.isArray(item.media) ? item.media.find(m => m.type === 'image' && m.url)?.url : null);
+            const rawDate = item.event_date || item.date || item.published_at || item.created_at;
+            let dateStr = 'Tapahtuma';
+            if (rawDate) {
+                try {
+                    const d = new Date(rawDate);
+                    if (!isNaN(d.getTime())) {
+                        dateStr = d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' });
+                    }
+                } catch (e) {}
+            }
 
             card.innerHTML = `
                 <a href="${targetUrl}" class="homepage-feed-highlights__card-link">

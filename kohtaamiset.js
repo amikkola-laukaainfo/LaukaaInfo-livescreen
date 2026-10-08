@@ -110,7 +110,7 @@ const mockEncounters = [
     {
         id: '1',
         type: 'need_help',
-        title: 'Nurmikon leikkuu ja pihatyöt',
+        title: 'Nurmikon leikkuu ja pihatyöt (Demo)',
         description: 'Etsin reipasta tekijää leikkaamaan omakotitalon nurmikon (n. 800m2) kerran viikossa kesän ajan. Omat välineet plussaa, mutta meiltäkin löytyy työnnettävä leikkuri.',
         price_info: '20€ / kerta',
         location: 'Lievestuore',
@@ -120,7 +120,7 @@ const mockEncounters = [
     {
         id: '2',
         type: 'work_and_gigs',
-        title: 'Tietokoneiden asennus ja opastus',
+        title: 'Tietokoneiden asennus ja opastus (Demo)',
         description: 'Olen IT-alan opiskelija ja autan mielelläni uuden tietokoneen tai puhelimen käyttöönotossa. Voin opastaa myös pankkitunnusten käytössä turvallisesti.',
         price_info: '25€ / h',
         location: 'Koko Laukaa',
@@ -130,7 +130,7 @@ const mockEncounters = [
     {
         id: '3',
         type: 'work_and_gigs',
-        title: 'Tarjouspyyntö: Toimistotilojen siivous',
+        title: 'Tarjouspyyntö: Toimistotilojen siivous (Demo)',
         description: 'Etsimme paikallista siivousyritystä hoitamaan toimistomme (150m2) siivouksen kerran viikossa. Yhteydenotot vain y-tunnuksellisilta toimijoilta.',
         price_info: 'Pyydä tarjous',
         location: 'Laukaa kk',
@@ -140,7 +140,7 @@ const mockEncounters = [
     {
         id: '4',
         type: 'community',
-        title: 'Leppäveden Kyläjuhlat: Järjestyksenvalvojia',
+        title: 'Leppäveden Kyläjuhlat: Järjestyksenvalvojia (Demo)',
         description: 'Etsimme vapaaehtoisia järjestyksenvalvojia (JV-kortti vaaditaan) kyläjuhliin lauantaille. Tarjoamme ruoat ja kahvit.',
         price_info: 'Vapaaehtoistyö',
         location: 'Leppävesi',
@@ -150,7 +150,7 @@ const mockEncounters = [
     {
         id: '5',
         type: 'space_rental',
-        title: 'Vuokrataan peräkärry kuomulla',
+        title: 'Vuokrataan peräkärry kuomulla (Demo)',
         description: 'Tilava ja siisti kuomullinen peräkärry vuokralle muuttoihin tai puutarhajätteelle. Kantavuus 500kg.',
         price_info: '20€ / vrk',
         location: 'Vihtavuori',
@@ -160,7 +160,7 @@ const mockEncounters = [
     {
         id: '6',
         type: 'high_value',
-        title: 'Myydään: Traktorimönkijä Polaris Sportsman',
+        title: 'Myydään: Traktorimönkijä Polaris Sportsman (Demo)',
         description: 'Hyväkuntoinen ja säännöllisesti huollettu mönkijä lumilevyllä ja vinssillä. Ajettu vain 1500km. Loistava talven lumitöihin tai metsätöihin.',
         price_info: '5 500 €',
         location: 'Vehniä',
@@ -170,7 +170,7 @@ const mockEncounters = [
     {
         id: '7',
         type: 'offer_service',
-        title: 'Piensähkötyöt ja asennukset',
+        title: 'Piensähkötyöt ja asennukset (Demo)',
         description: 'Sähköasentaja tarjoaa palveluja piensähkötöihin: pistorasiat, valaisinasennukset, vikavirtasuojat jne. Nopea reagointi, paikallinen tekijä.',
         price_info: '55€ / h + alv',
         location: 'Laukaa',
@@ -180,7 +180,7 @@ const mockEncounters = [
     {
         id: '8',
         type: 'work_and_gigs',
-        title: 'Keikkatyö: DJ juhlatilaisuuksiin',
+        title: 'Keikkatyö: DJ juhlatilaisuuksiin (Demo)',
         description: 'Kokenut DJ haluaa keikkatöitä häihin, syntymäpäiville ja yritystapahtumiin. Oma kalusto (äänijärjestelmä + valot). Esiintynyt 50+ tilaisuudessa.',
         price_info: 'Sopimuksen mukaan',
         location: 'Koko Laukaa',
