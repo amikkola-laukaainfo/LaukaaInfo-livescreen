@@ -50,7 +50,8 @@ async function generateSitemap() {
         'laatu.html',
         'tietosuoja.html',
         'maksuehto.html',
-        'seina-esittely.html'
+        'seina-esittely.html',
+        'alusta.html'
     ];
 
     // Kohteet-hakemistosivu erikseen korkealla prioriteetilla
