@@ -3957,6 +3957,8 @@ async function loadWallPostsForPlace(placeData) {
     const aiSb = window.aiSb;
     if (!aiSb) return;
 
+    const safeHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
     try {
         // Kerää hakutermit: paikan nimi, canonical_name ja mahdolliset aliakset
         const placeNames = new Set();
@@ -4012,7 +4014,8 @@ async function loadWallPostsForPlace(placeData) {
         }
 
         if (posts.length === 0) {
-            // Kokeile fallback: hae posts-taulusta post_places-liitoksella tekstihaulla
+            // Kokeile fallback: hae posts-taulusta post_places-liitoksella tai tekstihakuna paikan nimellä
+            const primaryName = placeData.name || placeData.canonical_name || '';
             const { data: fallbackData, error: fallbackErr } = await aiSb
                 .from('posts')
                 .select(`
@@ -4031,8 +4034,15 @@ async function loadWallPostsForPlace(placeData) {
             if (!fallbackErr && fallbackData) {
                 const nameLower = new Set(Array.from(placeNames).map(n => n.toLowerCase()));
                 posts = fallbackData.filter(p => {
-                    if (!p.post_places || p.post_places.length === 0) return false;
-                    return p.post_places.some(pp => nameLower.has((pp.place_id || '').toLowerCase()));
+                    if (p.post_places && p.post_places.length > 0) {
+                        if (p.post_places.some(pp => nameLower.has((pp.place_id || '').toLowerCase()))) return true;
+                    }
+                    if (primaryName) {
+                        const titleMatch = (p.title || '').toLowerCase().includes(primaryName.toLowerCase());
+                        const contentMatch = (p.content || '').toLowerCase().includes(primaryName.toLowerCase());
+                        if (titleMatch || contentMatch) return true;
+                    }
+                    return false;
                 });
             }
         }
