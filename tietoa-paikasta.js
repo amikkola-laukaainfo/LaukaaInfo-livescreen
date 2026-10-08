@@ -2488,6 +2488,8 @@ async function loadEncountersForPlace(place) {
                     const safePv = String(pv).replace(/["%,]/g, ' ').trim();
                     if (safePv) {
                         postsQueryParts.push(`place_id.ilike.%${safePv}%`);
+                        postsQueryParts.push(`place_name.ilike.%${safePv}%`);
+                        postsQueryParts.push(`location_name.ilike.%${safePv}%`);
                     }
                 });
 
