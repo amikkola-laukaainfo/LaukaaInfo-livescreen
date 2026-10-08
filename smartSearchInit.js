@@ -71,6 +71,21 @@
         const hierarchy = window.defaultPlaceHierarchy;
         const matchingPlaces = hierarchy ? hierarchy.searchPlaces(query, 5) : [];
         
+        const MAIN_AREAS = [
+            { name: 'Lievestuore', type: 'Taajama · Laukaa', url: 'lievestuore.html', keywords: ['lievestuore', 'lievestuoreen', 'lievestuoreella'] },
+            { name: 'Laukaan kirkonkylä', type: 'Keskus · Laukaa', url: 'laukaa.html', keywords: ['laukaa', 'kirkonkylä', 'kk', 'keskusta'] },
+            { name: 'Leppävesi', type: 'Taajama · Laukaa', url: 'leppavesi.html', keywords: ['leppavesi', 'leppävesi', 'leppäveden'] },
+            { name: 'Vihtavuori', type: 'Taajama · Laukaa', url: 'vihtavuori.html', keywords: ['vihtavuori', 'vihtavuoren'] },
+            { name: 'Vehniä', type: 'Kylä · Laukaa', url: 'vehnia.html', keywords: ['vehnia', 'vehniä', 'vehniän'] },
+            { name: 'Koko Laukaa', type: 'Kunta', url: 'koko-laukaa.html', keywords: ['koko laukaa', 'koko'] }
+        ];
+
+        const qLower = query.toLowerCase();
+        const matchedAreas = query ? MAIN_AREAS.filter(a =>
+            a.name.toLowerCase().includes(qLower) ||
+            a.keywords.some(kw => kw.includes(qLower) || qLower.includes(kw))
+        ) : [];
+
         // Match themes
         const sampleThemes = ['Aamiainen', 'Luonto & Retkeily', 'Lapsille & Perheille', 'Virkistys', 'Kulttuuri & Tapahtumat', 'Hyvinvointi'];
         const matchingThemes = query 
@@ -90,6 +105,21 @@
             : { companies: [], places: [], events: [] };
 
         let html = '';
+
+        // SECTION 0: TAAJAMAT & ALUEET
+        if (matchedAreas.length > 0) {
+            html += `<div style="margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">`;
+            html += `<div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #0056b3; letter-spacing: 0.05em; margin-bottom: 0.5rem;">🏞️ TAAJAMAT & ALUEET</div>`;
+            matchedAreas.forEach(a => {
+                html += `
+                    <a href="${a.url}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 8px; text-decoration: none; color: #0056b3; font-size: 0.95rem; font-weight: 700; background: #f0f7ff; margin-bottom: 4px;" onmouseover="this.style.background='#e0f2fe';" onmouseout="this.style.background='#f0f7ff';">
+                        <span>🏞️ ${escapeHtml(a.name)}</span>
+                        <span style="font-size: 0.75rem; background: #0056b3; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 600;">${escapeHtml(a.type)}</span>
+                    </a>
+                `;
+            });
+            html += `</div>`;
+        }
 
         // SECTION 1: ENTITY MATCHES (PAIKAT & TEEMAT AUTOCOMPLETE)
         if (query && (matchingPlaces.length > 0 || matchingThemes.length > 0)) {

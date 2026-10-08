@@ -3775,6 +3775,20 @@ async function performV4Search(query, dropdown) {
     const q = query.toLowerCase();
     const qNorm = normalizeForSearch(q);
 
+    const MAIN_AREAS = [
+        { name: 'Lievestuore', type: 'Taajama · Laukaa', url: 'lievestuore.html', keywords: ['lievestuore', 'lievestuoreen', 'lievestuoreella'] },
+        { name: 'Laukaan kirkonkylä', type: 'Keskus · Laukaa', url: 'laukaa.html', keywords: ['laukaa', 'kirkonkylä', 'kk', 'keskusta'] },
+        { name: 'Leppävesi', type: 'Taajama · Laukaa', url: 'leppavesi.html', keywords: ['leppavesi', 'leppävesi', 'leppäveden'] },
+        { name: 'Vihtavuori', type: 'Taajama · Laukaa', url: 'vihtavuori.html', keywords: ['vihtavuori', 'vihtavuoren'] },
+        { name: 'Vehniä', type: 'Kylä · Laukaa', url: 'vehnia.html', keywords: ['vehnia', 'vehniä', 'vehniän'] },
+        { name: 'Koko Laukaa', type: 'Kunta', url: 'koko-laukaa.html', keywords: ['koko laukaa', 'koko'] }
+    ];
+
+    const matchedAreas = MAIN_AREAS.filter(a =>
+        a.name.toLowerCase().includes(q) ||
+        a.keywords.some(kw => kw.includes(q) || q.includes(kw))
+    );
+
     const matchedThemes = (v4ActiveThemesCache || []).filter(t => {
         const name = formatThemeName(t);
         if (!name || isTechnicalOrRawCodeTag(name)) return false;
@@ -3836,6 +3850,35 @@ async function performV4Search(query, dropdown) {
 
     let html = '';
 
+    if (matchedAreas.length > 0) {
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0056b3; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🏞️ TAAJAMAT & ALUEET</div>`;
+        matchedAreas.forEach(a => {
+            html += `
+                <a href="${a.url}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #0056b3; font-size: 0.95rem; font-weight: 700; background: #f0f7ff; margin-bottom: 4px;" onmouseover="this.style.background='#e0f2fe';" onmouseout="this.style.background='#f0f7ff';">
+                    <span>🏞️ ${escapeHtml(a.name)}</span>
+                    <span style="font-size: 0.75rem; background: #0056b3; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 600;">${escapeHtml(a.type)}</span>
+                </a>
+            `;
+        });
+        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
+    }
+
+    if (matchedPlaces.length > 0) {
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 PAIKAT & KOHTEET</div>`;
+        matchedPlaces.forEach(p => {
+            const themesBadge = (p.genuineThemes && p.genuineThemes.length > 0)
+                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 2px;">🏷️ ${escapeHtml(p.genuineThemes.join(' · '))}</div>`
+                : '';
+            html += `
+                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                    <div>📍 ${escapeHtml(p.name || p.canonical_name)}</div>
+                    ${themesBadge}
+                </a>
+            `;
+        });
+        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
+    }
+
     if (matchedThemes.length > 0) {
         html += `<div style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🌲 NÄKÖKULMAT</div>`;
         matchedThemes.forEach(t => {
@@ -3848,22 +3891,6 @@ async function performV4Search(query, dropdown) {
                 <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
                     <span>🌲 ${escapeHtml(displayName)}</span>
                     ${countBadge}
-                </a>
-            `;
-        });
-        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
-    }
-
-    if (matchedPlaces.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 PAIKAT (MISSÄ)</div>`;
-        matchedPlaces.forEach(p => {
-            const themesBadge = (p.genuineThemes && p.genuineThemes.length > 0)
-                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 2px;">🏷️ ${escapeHtml(p.genuineThemes.join(' · '))}</div>`
-                : '';
-            html += `
-                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                    <div>📍 ${escapeHtml(p.name || p.canonical_name)}</div>
-                    ${themesBadge}
                 </a>
             `;
         });
