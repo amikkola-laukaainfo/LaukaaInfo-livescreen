@@ -3971,15 +3971,49 @@ async function loadWallPostsForPlace(placeData) {
     const safeHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
     try {
-        // Kerää hakutermit: paikan nimi, canonical_name ja mahdolliset aliakset
+        // Kerää hakutermit: paikan ID (UUID), place_id, nimi, canonical_name, slugit ja nimivariantit
         const placeNames = new Set();
-        if (placeData.name) placeNames.add(placeData.name.trim());
-        if (placeData.canonical_name) placeNames.add(placeData.canonical_name.trim());
-        // Lisää myös slugi-versio (esim. "Lievestuore" → "lievestuore")
-        if (placeData.name) placeNames.add(placeData.name.trim().toLowerCase());
+        
+        // 1. UUID ja tekniset tunnisteet
+        if (placeData.id) placeNames.add(String(placeData.id).trim());
+        if (placeData.place_id) placeNames.add(String(placeData.place_id).trim());
+        if (placeData.alue_slug) placeNames.add(String(placeData.alue_slug).trim());
+        if (placeData.seo_slug) placeNames.add(String(placeData.seo_slug).trim());
 
-        // Hae post_places-taulusta matching place_id:t
-        // post_places.place_id on tekstimuotoinen paikan nimi (esim. "Lievestuore")
+        // 2. Nimi- ja tekstitunnisteet
+        if (placeData.name) {
+            const trimmedName = placeData.name.trim();
+            placeNames.add(trimmedName);
+            placeNames.add(trimmedName.toLowerCase());
+            // Vaihdetaan " ja " ja ", " keskeltä
+            placeNames.add(trimmedName.replace(/ ja /gi, ', '));
+            placeNames.add(trimmedName.replace(/, /gi, ' ja '));
+            // Osanimet (esim. "Haarlan ranta, urheilukenttä" -> "Haarlan ranta")
+            const parts = trimmedName.split(/,| ja /i);
+            parts.forEach(p => {
+                const pTrim = p.trim();
+                if (pTrim.length > 2) {
+                    placeNames.add(pTrim);
+                    placeNames.add(pTrim.toLowerCase());
+                }
+            });
+        }
+
+        if (placeData.canonical_name) {
+            const trimmedCanon = placeData.canonical_name.trim();
+            placeNames.add(trimmedCanon);
+            placeNames.add(trimmedCanon.toLowerCase());
+            const canonParts = trimmedCanon.split(/,| ja /i);
+            canonParts.forEach(p => {
+                const pTrim = p.trim();
+                if (pTrim.length > 2) {
+                    placeNames.add(pTrim);
+                    placeNames.add(pTrim.toLowerCase());
+                }
+            });
+        }
+
+        // Hae post_places-taulusta matching place_id:t (mukaan lukien UUID)
         const nameArray = Array.from(placeNames);
         
         // Hae julkaisut post_places-liitoksen kautta
@@ -4017,7 +4051,7 @@ async function loadWallPostsForPlace(placeData) {
                         if (row.post.visibility === 'public' || row.post.visibility == null) {
                             // Tarkista ettei jo lisätty
                             if (!posts.some(p => p.id === row.post.id)) {
-                                // Talleta myös paikan nimi (post_places.place_id) post-objektiin
+                                // Talleta myös paikan nimi / ID (post_places.place_id) post-objektiin
                                 posts.push({ ...row.post, _matched_place_id: row.place_id });
                             }
                         }
@@ -4029,6 +4063,7 @@ async function loadWallPostsForPlace(placeData) {
         if (posts.length === 0) {
             // Kokeile fallback: hae posts-taulusta post_places-liitoksella tai tekstihakuna paikan nimellä
             const primaryName = placeData.name || placeData.canonical_name || '';
+            const shortPrimary = primaryName.split(/,| ja /i)[0].trim();
             const { data: fallbackData, error: fallbackErr } = await aiSb
                 .from('posts')
                 .select(`
@@ -4051,8 +4086,10 @@ async function loadWallPostsForPlace(placeData) {
                         if (p.post_places.some(pp => nameLower.has((pp.place_id || '').toLowerCase()))) return true;
                     }
                     if (primaryName) {
-                        const titleMatch = (p.title || '').toLowerCase().includes(primaryName.toLowerCase());
-                        const contentMatch = (p.content || '').toLowerCase().includes(primaryName.toLowerCase());
+                        const titleMatch = (p.title || '').toLowerCase().includes(primaryName.toLowerCase()) ||
+                                           (shortPrimary && (p.title || '').toLowerCase().includes(shortPrimary.toLowerCase()));
+                        const contentMatch = (p.content || '').toLowerCase().includes(primaryName.toLowerCase()) ||
+                                             (shortPrimary && (p.content || '').toLowerCase().includes(shortPrimary.toLowerCase()));
                         if (titleMatch || contentMatch) return true;
                     }
                     return false;
