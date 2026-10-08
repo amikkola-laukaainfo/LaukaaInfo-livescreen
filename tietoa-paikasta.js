@@ -2692,6 +2692,17 @@ function renderEncounters(encounters) {
         }
     }
     
+    // Piilota "Verkoston tilanne" -lohko kokonaan, jos kaikki luvut ovat nollia
+    const networkStatsSection = document.getElementById('network-stats-section');
+    if (networkStatsSection) {
+        const companiesVal = parseInt(document.getElementById('stat-companies')?.textContent || '0', 10);
+        const observationsVal = parseInt(document.getElementById('stat-observations')?.textContent || '0', 10);
+        const encountersVal = parseInt(document.getElementById('stat-encounters')?.textContent || '0', 10);
+        const offersVal = parseInt(document.getElementById('stat-offers')?.textContent || '0', 10);
+        const allZero = companiesVal === 0 && observationsVal === 0 && encountersVal === 0 && offersVal === 0;
+        networkStatsSection.style.display = allZero ? 'none' : '';
+    }
+    
     // Tarkistetaan aktiivisuus viikon sisällä
     const statusEl = document.getElementById('place-activity-status');
     const dotEl = document.getElementById('activity-dot');
