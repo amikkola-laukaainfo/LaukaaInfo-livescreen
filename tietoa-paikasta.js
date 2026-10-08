@@ -4061,7 +4061,7 @@ async function loadWallPostsForPlace(placeData) {
         }
 
         if (posts.length === 0) {
-            // Kokeile fallback: hae posts-taulusta post_places-liitoksella tai tekstihakuna paikan nimellä
+            // Kokeile fallback: hae posts-taulusta post_places-liitoksella tai posts.place_id-kentällä tai tekstihakuna
             const primaryName = placeData.name || placeData.canonical_name || '';
             const shortPrimary = primaryName.split(/,| ja /i)[0].trim();
             const { data: fallbackData, error: fallbackErr } = await aiSb
@@ -4069,6 +4069,7 @@ async function loadWallPostsForPlace(placeData) {
                 .select(`
                     id, title, content, type, created_at, status, visibility,
                     organization_id, publisher_name, org_name, is_pinned, pinned_until,
+                    place_id,
                     post_places(place_id),
                     post_media(url, media_type),
                     post_attachments(url, type, file_name)
@@ -4082,9 +4083,20 @@ async function loadWallPostsForPlace(placeData) {
             if (!fallbackErr && fallbackData) {
                 const nameLower = new Set(Array.from(placeNames).map(n => n.toLowerCase()));
                 posts = fallbackData.filter(p => {
+                    // 1. Tarkista post_places-liitostaulun place_id (livescreen-julkaisut)
                     if (p.post_places && p.post_places.length > 0) {
                         if (p.post_places.some(pp => nameLower.has((pp.place_id || '').toLowerCase()))) return true;
                     }
+                    // 2. Tarkista posts.place_id suoraan (UUSIPROJEKTI Android-sovelluksen julkaisut)
+                    if (p.place_id) {
+                        const pLower = p.place_id.toLowerCase().trim();
+                        if (nameLower.has(pLower)) return true;
+                        // Osittaistäsmäys: jos posts.place_id sisältää paikan nimen osan tai päinvastoin
+                        for (const n of nameLower) {
+                            if (n.length > 3 && (pLower.includes(n) || n.includes(pLower))) return true;
+                        }
+                    }
+                    // 3. Tekstihaku otsikosta/sisällöstä
                     if (primaryName) {
                         const titleMatch = (p.title || '').toLowerCase().includes(primaryName.toLowerCase()) ||
                                            (shortPrimary && (p.title || '').toLowerCase().includes(shortPrimary.toLowerCase()));
@@ -4094,6 +4106,14 @@ async function loadWallPostsForPlace(placeData) {
                     }
                     return false;
                 });
+                // Merkitse posts.place_id _matched_place_id:ksi kortin näyttöä varten
+                posts = posts.map(p => ({
+                    ...p,
+                    _matched_place_id: p._matched_place_id
+                        || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null)
+                        || p.place_id
+                        || null
+                }));
             }
         }
 
@@ -4130,9 +4150,11 @@ async function loadWallPostsForPlace(placeData) {
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#f8fafc;color:#334155;border:1px solid #cbd5e1;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">🏢 ${safeHtml(orgName)}</span>`
                 : '';
 
-            // Paikan nimi: _matched_place_id tai post_places-taulusta
+            // Paikan nimi: _matched_place_id, post_places-taulu tai posts.place_id (Android-app)
             const matchedPlace = p._matched_place_id
-                || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null);
+                || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null)
+                || p.place_id
+                || null;
             const placeHtml = matchedPlace
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📍 ${safeHtml(matchedPlace)}</span>`
                 : '';
