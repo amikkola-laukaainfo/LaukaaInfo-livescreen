@@ -895,6 +895,35 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     } catch(e) { console.warn('Kohtaamiset place_id-haku epäonnistui:', e); }
 
+                    try {
+                        // Seinäjulkaisut (posts & post_places -taulut) place_id:n perusteella
+                        const { data: wallPostPlaces } = await laukaaDb
+                            .from('post_places')
+                            .select('post_id, posts(*, post_media(url, media_type))')
+                            .eq('place_id', placeIdParam)
+                            .limit(5);
+
+                        if (wallPostPlaces) {
+                            wallPostPlaces.forEach(row => {
+                                const post = row.posts;
+                                if (post && post.visibility !== 'code_protected' && post.status !== 'deleted') {
+                                    const mediaUrl = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : (post.image_url || null);
+                                    localFeedItems.push({
+                                        id: post.id,
+                                        type: 'wall_post',
+                                        label: '🧱 Seinäjulkaisu',
+                                        color: '#8b5cf6',
+                                        title: post.title || post.content || '',
+                                        description: post.author_name ? `Kirjoittanut ${post.author_name}` : '',
+                                        photo_url: mediaUrl,
+                                        created_at: post.created_at,
+                                        linkUrl: `seina.html?post=${post.id}`
+                                    });
+                                }
+                            });
+                        }
+                    } catch(e) { console.warn('Seinäjulkaisut place_id-haku epäonnistui:', e); }
+
                     // Renderöi paikallinen feed
                     const localFeedSection = document.getElementById('local-feed-section');
                     const localFeedList = document.getElementById('local-feed-list');
@@ -1034,33 +1063,51 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }
                         }
 
-                        // Hae feed_post -julkaisut (posts-taulu)
-                        const feedPostEntities = taggedEntities.filter(e => e.entity_type === 'feed_post');
-                        if (feedPostEntities.length > 0) {
+                        // Hae feed_post ja wall_post -julkaisut (posts-taulu & post_themes)
+                        const feedPostEntities = taggedEntities.filter(e => ['feed_post', 'post', 'wall_post', 'wall'].includes((e.entity_type || '').toLowerCase()));
+                        const feedPostIds = feedPostEntities.map(e => e.entity_id);
+
+                        const laukaaDb2 = window.LaukaaSupabase || supabaseClient;
+                        if (laukaaDb2 && uniqueTagIds.length > 0) {
                             try {
-                                const feedPostIds = feedPostEntities.map(e => e.entity_id);
-                                const laukaaDb2 = window.LaukaaSupabase || supabaseClient;
+                                const { data: postThemeRows } = await laukaaDb2
+                                    .from('post_themes')
+                                    .select('post_id')
+                                    .in('tag_id', uniqueTagIds);
+                                if (postThemeRows) {
+                                    postThemeRows.forEach(r => {
+                                        if (r.post_id && !feedPostIds.includes(r.post_id)) {
+                                            feedPostIds.push(r.post_id);
+                                        }
+                                    });
+                                }
+                            } catch(e) { console.warn('post_themes fetch notice:', e); }
+                        }
+
+                        if (feedPostIds.length > 0 && laukaaDb2) {
+                            try {
                                 const { data: feedData, error: feedError } = await laukaaDb2
                                     .from('posts')
-                                    .select('*')
+                                    .select('*, post_media(url, media_type)')
                                     .in('id', feedPostIds)
-                                    .or('status.eq.APPROVED,status.is.null')
+                                    .or('status.eq.APPROVED,status.eq.published,status.is.null')
                                     .or('visibility.eq.public,visibility.is.null')
                                     .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                                     .order('created_at', { ascending: false });
                                 if (!feedError && feedData) {
-                                    feedData.filter(p => p.visibility !== 'code_protected').forEach(post => {
+                                    feedData.filter(p => p.visibility !== 'code_protected' && p.status !== 'deleted').forEach(post => {
                                         // Määritetään tyyppi: yhteisöjulkaisut vs. yrityksen feedjulkaisut
                                         const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
                                         const postTypeUpper = (post.type || '').toUpperCase();
                                         const isCommunity = COMMUNITY_TYPES.includes(postTypeUpper);
+                                        const mediaUrl = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : (post.image_url || null);
                                         sbAjankohtainen.push({
                                             id: post.id,
                                             type: isCommunity ? postTypeUpper : 'feed_post',
-                                            category: isCommunity ? (post.type || 'Julkaisu') : 'Feed-julkaisu',
-                                            description: post.description || post.title || '',
+                                            category: isCommunity ? (post.type || 'Julkaisu') : 'Seinäjulkaisu',
+                                            description: post.content || post.description || post.title || '',
                                             location_name: post.location_name || '',
-                                            photo_url: post.image_url || null,
+                                            photo_url: mediaUrl,
                                             created_at: post.created_at,
                                             isSupabase: true
                                         });
