@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const placeName = placeData.name || placeData.canonical_name || '';
         const placeSlug = toSlug(placeName);
 
-        const [relationsResult, pcrResult, tagMatchResult, visibilityResult] = await Promise.all([
+        const [relationsResult, pcrResult, tagMatchResult, visibilityResult, actorThemePlacesResult] = await Promise.all([
             aiSb
                 .from('place_relations')
                 .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
@@ -259,10 +259,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .eq('status', 'ACTIVE')
                 .or(`ends_at.is.null,ends_at.gt.${new Date().toISOString()}`)
                 .then(res => res)
-                .catch(() => ({ data: null })) // Ei kaadu vaikka taulu puuttuisi
+                .catch(() => ({ data: null })), // Ei kaadu vaikka taulu puuttuisi
+            // Toimijat (actor_theme_places): esim. Haarlan Teollisuusperintö ry
+            aiSb
+                .from('actor_theme_places')
+                .select('actor_id, actor_type, tag_id')
+                .eq('place_id', placeId)
+                .then(res => res)
+                .catch(() => ({ data: [] }))
         ]);
         const { data: relationsData, error: relationsError } = relationsResult;
         const { data: tagMatches } = tagMatchResult;
+        const actorThemePlacesData = actorThemePlacesResult?.data || [];
 
         // Yhdistä place_company_relations (pcr) -relaatiot place_relations-tietoihin
         let combinedRelations = relationsData ? [...relationsData] : [];
@@ -280,6 +288,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                     });
                 }
             });
+        }
+
+        // Rikastetaan actor_theme_places -kytkennät (esim. Haarlan Teollisuusperintö ry)
+        if (actorThemePlacesData && actorThemePlacesData.length > 0) {
+            const tagIds = actorThemePlacesData.map(atp => atp.tag_id).filter(Boolean);
+            if (tagIds.length > 0) {
+                try {
+                    const { data: tagsData } = await aiSb
+                        .from('tags')
+                        .select('tag_id, name, category, icon, description')
+                        .in('tag_id', tagIds);
+                        
+                    if (tagsData && tagsData.length > 0) {
+                        tagsData.forEach(tag => {
+                            if (!combinedRelations.some(r => String(r.entity_id) === String(tag.tag_id))) {
+                                combinedRelations.push({
+                                    entity_id: tag.tag_id,
+                                    entity_type: tag.category || 'ACTOR',
+                                    entity_name: tag.name,
+                                    relation_type: 'ACTOR_LINK',
+                                    relation_context: tag.description || 'Toimija / Yhdistys',
+                                    strength: 100
+                                });
+                            }
+                        });
+                    }
+                } catch (tagErr) {
+                    console.warn('[actor_theme_places] Virhe täydennettäessä tag-tietoja:', tagErr);
+                }
+            }
         }
         // Suodata näkyvyysdata tähän paikkaan liittyviin merkintöihin
         const allVisibility = visibilityResult?.data || [];
@@ -348,10 +386,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.warn('Supabase offers haku epäonnistui:', e);
         }
         
-        // Lisää kohteet ja tarjoukset ja ei-yritys relaatiot allItemsMapiin,
-        // jotta ne näkyvät edelleen (esim. havainnot, tapahtumat)
-        if (!relationsError && relationsData) {
-            relationsData.forEach(r => {
+        // Lisää kohteet, tarjoukset, toimijat ja ei-yritys relaatiot allItemsMapiin,
+        // jotta ne näkyvät edelleen (esim. havainnot, tapahtumat, toimijat)
+        if (combinedRelations && combinedRelations.length > 0) {
+            combinedRelations.forEach(r => {
                 const eId = String(r.entity_id);
                 let mappedType = (r.entity_type || 'other').toLowerCase();
                 if (mappedType === 'company') mappedType = 'business';
@@ -1744,6 +1782,8 @@ const TYPE_LABELS = {
     'business': 'Yritys',
     'service': 'Palvelu',
     'association': 'Yhdistys',
+    'actor': 'Toimija',
+    'actor_link': 'Toimija / Yhdistys',
     'event': 'Tapahtuma',
     'offer': 'Tarjous',
     'product': 'Tuote'
@@ -2047,7 +2087,7 @@ function renderRelations(items, allSources = [], allContents = []) {
         let iconName = 'material-symbols:storefront-outline';
         if (item.type === 'event') iconName = 'material-symbols:event-outline';
         else if (item.type === 'offer') iconName = 'material-symbols:local-offer-outline';
-        else if (item.type === 'association') iconName = 'material-symbols:groups-outline';
+        else if (item.type === 'association' || item.type === 'actor' || item.type === 'actor_link') iconName = 'material-symbols:groups-outline';
         
         const displayName = item.name || item.id;
         let linkUrl = '?id=' + item.id;
