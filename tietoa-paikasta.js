@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // 1. Hae ID URL:sta tai window.PLACE_CONTEXT-alustuksesta
     const urlParams = new URLSearchParams(window.location.search);
     let placeId = urlParams.get('id') || (window.PLACE_CONTEXT && window.PLACE_CONTEXT.rootPlaceId);
@@ -3974,96 +3974,91 @@ async function loadWallPostsForPlace(placeData) {
 
     const safeHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-    // Kentät joita tarvitaan korteissa (description = Android, content = livescreen)
-    const POST_SELECT = `id, title, description, content, type,
-        created_at, published_at, status, visibility,
-        organization_id, publisher_name, org_name,
-        is_pinned, pinned_until, place_id, image_url`;
-
     try {
         let posts = [];
         const seenIds = new Set();
 
         const addPost = (p, matchedPlaceId) => {
-            if (!p || seenIds.has(p.id)) return;
+            if (!p || !p.id || seenIds.has(p.id)) return;
             const st = (p.status || '').toLowerCase();
-            if (st === 'cleanup_pending' || st === 'deleted') return;
+            if (st === 'cleanup_pending' || st === 'deleted' || st === 'hidden') return;
             const vis = p.visibility;
-            if (vis && vis !== 'public') return;
+            if (vis && vis !== 'public' && vis !== 'approved') return;
             seenIds.add(p.id);
             posts.push({ ...p, _matched_place_id: matchedPlaceId || p.place_id || null });
         };
 
-        // ── VAIHE 1: UUID-haku post_places:sta (Android tallentaa UUID:n) ──
-        const uuids = [];
-        if (placeData.id) uuids.push(placeData.id);
-        if (placeData.place_id && placeData.place_id !== placeData.id) uuids.push(placeData.place_id);
+        // Kerätään kaikki mahdolliset paikan tunnisteet (UUID, place_id, name, canonical_name, alue_slug)
+        const placeIdentifiers = new Set();
+        if (placeData.id) placeIdentifiers.add(String(placeData.id).trim());
+        if (placeData.place_id) placeIdentifiers.add(String(placeData.place_id).trim());
+        if (placeData.name) placeIdentifiers.add(String(placeData.name).trim());
+        if (placeData.canonical_name) placeIdentifiers.add(String(placeData.canonical_name).trim());
+        if (placeData.alue_slug) placeIdentifiers.add(String(placeData.alue_slug).trim());
 
-        for (const uuid of uuids) {
-            try {
-                const { data: ppRows } = await aiSb
-                    .from('post_places')
-                    .select('post_id, place_id')
-                    .eq('place_id', uuid)
-                    .limit(50);
-                if (ppRows && ppRows.length > 0) {
-                    const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
-                    if (postIds.length > 0) {
-                        const { data: pData } = await aiSb
-                            .from('posts').select(POST_SELECT)
-                            .in('id', postIds)
-                            .order('created_at', { ascending: false });
-                        (pData || []).forEach(p => addPost(p, uuid));
-                    }
-                }
-            } catch (e) { console.debug('[WallPosts] UUID post_places:', uuid, e?.message); }
-        }
+        const idList = [...placeIdentifiers].filter(Boolean);
 
-        // ── VAIHE 2: Suora posts.place_id UUID-haku ──
-        if (posts.length === 0) {
-            for (const uuid of uuids) {
+        // ── VAIHE 1: Suora posts.place_id -haku (Android tallentaa place_id:n posts-tauluun) ──
+        if (idList.length > 0) {
+            for (const pId of idList) {
                 try {
-                    const { data: directData } = await aiSb
-                        .from('posts').select(POST_SELECT)
-                        .eq('place_id', uuid).eq('visibility', 'public')
-                        .order('created_at', { ascending: false }).limit(20);
-                    (directData || []).forEach(p => addPost(p, uuid));
-                } catch (e) { console.debug('[WallPosts] Suora UUID posts:', uuid, e?.message); }
+                    const { data: directData, error: dErr } = await aiSb
+                        .from('posts')
+                        .select('*')
+                        .eq('place_id', pId)
+                        .order('created_at', { ascending: false })
+                        .limit(30);
+                    if (dErr) console.debug('[WallPosts] Direct query error for', pId, dErr.message);
+                    (directData || []).forEach(p => addPost(p, pId));
+                } catch (e) { console.debug('[WallPosts] Direct query exc:', e?.message); }
             }
         }
 
-        // ── VAIHE 3: Nimipohjaiset post_places-haut (vanhat livescreen-julkaisut) ──
-        if (posts.length === 0) {
-            const placeNames = new Set();
-            if (placeData.name) {
-                const n = placeData.name.trim();
-                placeNames.add(n);
-                n.split(/,| ja /i).forEach(p => { const t = p.trim(); if (t.length > 2) placeNames.add(t); });
-            }
-            if (placeData.canonical_name) {
-                const n = placeData.canonical_name.trim();
-                placeNames.add(n);
-                n.split(/,| ja /i).forEach(p => { const t = p.trim(); if (t.length > 2) placeNames.add(t); });
-            }
-            if (placeData.alue_slug) placeNames.add(placeData.alue_slug.trim());
-
-            for (const pName of placeNames) {
+        // ── VAIHE 2: post_places -relaatiohaku (haetaan post_id:t place_id:n perusteella) ──
+        if (idList.length > 0) {
+            for (const pId of idList) {
                 try {
-                    const { data: ppRows } = await aiSb
-                        .from('post_places').select('post_id, place_id')
-                        .ilike('place_id', pName).limit(20);
+                    const { data: ppRows, error: ppErr } = await aiSb
+                        .from('post_places')
+                        .select('post_id, place_id')
+                        .eq('place_id', pId)
+                        .limit(50);
+                    if (ppErr) console.debug('[WallPosts] post_places query error for', pId, ppErr.message);
                     if (ppRows && ppRows.length > 0) {
                         const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
                         if (postIds.length > 0) {
                             const { data: pData } = await aiSb
-                                .from('posts').select(POST_SELECT)
-                                .in('id', postIds).order('created_at', { ascending: false });
-                            (pData || []).forEach(p => addPost(p, pName));
+                                .from('posts')
+                                .select('*')
+                                .in('id', postIds)
+                                .order('created_at', { ascending: false });
+                            (pData || []).forEach(p => addPost(p, pId));
                         }
                     }
-                } catch (e) { console.debug('[WallPosts] Nimi post_places:', pName, e?.message); }
-                if (posts.length > 0) break;
+                } catch (e) { console.debug('[WallPosts] post_places exc:', e?.message); }
             }
+        }
+
+        // ── VAIHE 3: Nimipohjainen ilike-haku post_places:sta (vanhat julkaisut) ──
+        if (posts.length === 0 && placeData.name) {
+            try {
+                const { data: ppRows } = await aiSb
+                    .from('post_places')
+                    .select('post_id, place_id')
+                    .ilike('place_id', `%${placeData.name.trim()}%`)
+                    .limit(30);
+                if (ppRows && ppRows.length > 0) {
+                    const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
+                    if (postIds.length > 0) {
+                        const { data: pData } = await aiSb
+                            .from('posts')
+                            .select('*')
+                            .in('id', postIds)
+                            .order('created_at', { ascending: false });
+                        (pData || []).forEach(p => addPost(p, placeData.name));
+                    }
+                }
+            } catch (e) { console.debug('[WallPosts] ilike post_places exc:', e?.message); }
         }
 
         // ── VAIHE 4: Fallback – posts.place_id nimihaku ──
@@ -4071,15 +4066,12 @@ async function loadWallPostsForPlace(placeData) {
             const primaryName = placeData.name || placeData.canonical_name || '';
             const shortPrimary = primaryName.split(/,| ja /i)[0].trim();
             try {
-                const nameLower = new Set([
-                    ...(placeData.name ? [placeData.name.trim().toLowerCase()] : []),
-                    ...(placeData.canonical_name ? [placeData.canonical_name.trim().toLowerCase()] : []),
-                    ...(placeData.alue_slug ? [placeData.alue_slug.trim().toLowerCase()] : [])
-                ]);
+                const nameLower = new Set(idList.map(s => s.toLowerCase()));
                 const { data: fallbackData } = await aiSb
-                    .from('posts').select(POST_SELECT)
-                    .eq('visibility', 'public')
-                    .order('created_at', { ascending: false }).limit(100);
+                    .from('posts')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(100);
                 (fallbackData || []).forEach(p => {
                     if (!p.place_id) return;
                     const pLower = p.place_id.toLowerCase().trim();
@@ -4092,7 +4084,7 @@ async function loadWallPostsForPlace(placeData) {
                         addPost(p, null);
                     }
                 });
-            } catch (e) { console.debug('[WallPosts] Fallback:', e?.message); }
+            } catch (e) { console.debug('[WallPosts] Fallback exc:', e?.message); }
         }
 
         if (posts.length === 0) {
@@ -4128,24 +4120,28 @@ async function loadWallPostsForPlace(placeData) {
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#f8fafc;color:#334155;border:1px solid #cbd5e1;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">🏢 ${safeHtml(orgName)}</span>`
                 : '';
 
-            const matchedPlace = p._matched_place_id || p.place_id || null;
-            const placeHtml = matchedPlace
-                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📍 ${safeHtml(matchedPlace)}</span>`
+            const rawPlace = p._matched_place_id || p.place_id || null;
+            let displayPlace = rawPlace;
+            if (displayPlace && displayPlace.length > 20 && displayPlace.includes('-')) {
+                displayPlace = placeData.name || placeData.canonical_name || displayPlace;
+            }
+            const placeHtml = displayPlace
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📍 ${safeHtml(displayPlace)}</span>`
                 : '';
 
             const newBadgeHtml = isNew
-                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dc2626;color:#fff;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:800;animation:pulse 1.5s infinite;">🆕 Uusi</span>`
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dc2626;color:#fff;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:800;">🆕 Uusi</span>`
                 : '';
 
             // Kuva: image_url (Android) tai post_media (livescreen)
-            const imgUrl = p.image_url || (p.post_media && p.post_media.find(m => m.media_type === 'image')?.url);
+            const imgUrl = p.image_url || (p.post_media && p.post_media.find && p.post_media.find(m => m.media_type === 'image')?.url);
             const imgHtml = imgUrl ? `
                 <div style="width:100%;height:160px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
                     <img src="${imgUrl}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
                          onerror="this.parentElement.style.display='none'">
                 </div>` : '';
 
-            const pdf = p.post_attachments && p.post_attachments.find(a => a.type === 'pdf');
+            const pdf = p.post_attachments && p.post_attachments.find && p.post_attachments.find(a => a.type === 'pdf');
             const pdfHtml = pdf ? `
                 <a href="${pdf.url}" target="_blank" rel="noopener noreferrer"
                    style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#7c3aed;font-weight:600;text-decoration:none;margin-top:0.5rem;padding:4px 10px;background:#f3f0ff;border-radius:6px;border:1px solid #ddd6fe;"
