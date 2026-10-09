@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+﻿document.addEventListener('DOMContentLoaded', async () => {
     // 1. Hae ID URL:sta tai window.PLACE_CONTEXT-alustuksesta
     const urlParams = new URLSearchParams(window.location.search);
     let placeId = urlParams.get('id') || (window.PLACE_CONTEXT && window.PLACE_CONTEXT.rootPlaceId);
@@ -3956,8 +3956,12 @@ async function loadPlaceObservations(placeInput) {
 }
 
 /**
- * Hakee seinäjulkaisut (posts) tähän paikkaan liittyen.
- * Suodattaa post_places-relaation kautta paikan nimen tai canonical_name:n perusteella.
+ * Hakee paikan seinäjulkaisut post_places- ja posts-tauluista.
+ * Strategia sama kuin Android fetchPlaceWallPosts:
+ *   1. post_places.place_id = UUID → hae post_id:t → hae posts
+ *   2. posts.place_id = UUID (suora haku)
+ *   3. Nimipohjaiset ilike-haut post_places:sta (vanhat julkaisut)
+ *   4. Fallback: posts.place_id nimihaku
  * Näyttää osion vain jos julkaisuja löytyy.
  */
 async function loadWallPostsForPlace(placeData) {
@@ -3970,151 +3974,125 @@ async function loadWallPostsForPlace(placeData) {
 
     const safeHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+    // Kentät joita tarvitaan korteissa (description = Android, content = livescreen)
+    const POST_SELECT = `id, title, description, content, type,
+        created_at, published_at, status, visibility,
+        organization_id, publisher_name, org_name,
+        is_pinned, pinned_until, place_id, image_url`;
+
     try {
-        // Kerää hakutermit: paikan ID (UUID), place_id, nimi, canonical_name, slugit ja nimivariantit
-        const placeNames = new Set();
-        
-        // 1. UUID ja tekniset tunnisteet
-        if (placeData.id) placeNames.add(String(placeData.id).trim());
-        if (placeData.place_id) placeNames.add(String(placeData.place_id).trim());
-        if (placeData.alue_slug) placeNames.add(String(placeData.alue_slug).trim());
-        if (placeData.seo_slug) placeNames.add(String(placeData.seo_slug).trim());
-
-        // 2. Nimi- ja tekstitunnisteet
-        if (placeData.name) {
-            const trimmedName = placeData.name.trim();
-            placeNames.add(trimmedName);
-            placeNames.add(trimmedName.toLowerCase());
-            // Vaihdetaan " ja " ja ", " keskeltä
-            placeNames.add(trimmedName.replace(/ ja /gi, ', '));
-            placeNames.add(trimmedName.replace(/, /gi, ' ja '));
-            // Osanimet (esim. "Haarlan ranta, urheilukenttä" -> "Haarlan ranta")
-            const parts = trimmedName.split(/,| ja /i);
-            parts.forEach(p => {
-                const pTrim = p.trim();
-                if (pTrim.length > 2) {
-                    placeNames.add(pTrim);
-                    placeNames.add(pTrim.toLowerCase());
-                }
-            });
-        }
-
-        if (placeData.canonical_name) {
-            const trimmedCanon = placeData.canonical_name.trim();
-            placeNames.add(trimmedCanon);
-            placeNames.add(trimmedCanon.toLowerCase());
-            const canonParts = trimmedCanon.split(/,| ja /i);
-            canonParts.forEach(p => {
-                const pTrim = p.trim();
-                if (pTrim.length > 2) {
-                    placeNames.add(pTrim);
-                    placeNames.add(pTrim.toLowerCase());
-                }
-            });
-        }
-
-        // Hae post_places-taulusta matching place_id:t (mukaan lukien UUID)
-        const nameArray = Array.from(placeNames);
-        
-        // Hae julkaisut post_places-liitoksen kautta
-        // Kokeillaan ensin: suora haku post_places → posts
         let posts = [];
+        const seenIds = new Set();
 
-        for (const pName of nameArray) {
-            const { data, error } = await aiSb
-                .from('post_places')
-                .select(`
-                    place_id,
-                    post:post_id (
-                        id,
-                        title,
-                        content,
-                        type,
-                        created_at,
-                        status,
-                        visibility,
-                        organization_id,
-                        publisher_name,
-                        org_name,
-                        is_pinned,
-                        pinned_until,
-                        post_media(url, media_type),
-                        post_attachments(url, type, file_name)
-                    )
-                `)
-                .ilike('place_id', pName)
-                .limit(20);
+        const addPost = (p, matchedPlaceId) => {
+            if (!p || seenIds.has(p.id)) return;
+            const st = (p.status || '').toLowerCase();
+            if (st === 'cleanup_pending' || st === 'deleted') return;
+            const vis = p.visibility;
+            if (vis && vis !== 'public') return;
+            seenIds.add(p.id);
+            posts.push({ ...p, _matched_place_id: matchedPlaceId || p.place_id || null });
+        };
 
-            if (!error && data && data.length > 0) {
-                data.forEach(row => {
-                    if (row.post && row.post.status !== 'cleanup_pending' && row.post.status !== 'deleted') {
-                        if (row.post.visibility === 'public' || row.post.visibility == null) {
-                            // Tarkista ettei jo lisätty
-                            if (!posts.some(p => p.id === row.post.id)) {
-                                // Talleta myös paikan nimi / ID (post_places.place_id) post-objektiin
-                                posts.push({ ...row.post, _matched_place_id: row.place_id });
-                            }
-                        }
+        // ── VAIHE 1: UUID-haku post_places:sta (Android tallentaa UUID:n) ──
+        const uuids = [];
+        if (placeData.id) uuids.push(placeData.id);
+        if (placeData.place_id && placeData.place_id !== placeData.id) uuids.push(placeData.place_id);
+
+        for (const uuid of uuids) {
+            try {
+                const { data: ppRows } = await aiSb
+                    .from('post_places')
+                    .select('post_id, place_id')
+                    .eq('place_id', uuid)
+                    .limit(50);
+                if (ppRows && ppRows.length > 0) {
+                    const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
+                    if (postIds.length > 0) {
+                        const { data: pData } = await aiSb
+                            .from('posts').select(POST_SELECT)
+                            .in('id', postIds)
+                            .order('created_at', { ascending: false });
+                        (pData || []).forEach(p => addPost(p, uuid));
                     }
-                });
+                }
+            } catch (e) { console.debug('[WallPosts] UUID post_places:', uuid, e?.message); }
+        }
+
+        // ── VAIHE 2: Suora posts.place_id UUID-haku ──
+        if (posts.length === 0) {
+            for (const uuid of uuids) {
+                try {
+                    const { data: directData } = await aiSb
+                        .from('posts').select(POST_SELECT)
+                        .eq('place_id', uuid).eq('visibility', 'public')
+                        .order('created_at', { ascending: false }).limit(20);
+                    (directData || []).forEach(p => addPost(p, uuid));
+                } catch (e) { console.debug('[WallPosts] Suora UUID posts:', uuid, e?.message); }
             }
         }
 
+        // ── VAIHE 3: Nimipohjaiset post_places-haut (vanhat livescreen-julkaisut) ──
         if (posts.length === 0) {
-            // Kokeile fallback: hae posts-taulusta post_places-liitoksella tai posts.place_id-kentällä tai tekstihakuna
+            const placeNames = new Set();
+            if (placeData.name) {
+                const n = placeData.name.trim();
+                placeNames.add(n);
+                n.split(/,| ja /i).forEach(p => { const t = p.trim(); if (t.length > 2) placeNames.add(t); });
+            }
+            if (placeData.canonical_name) {
+                const n = placeData.canonical_name.trim();
+                placeNames.add(n);
+                n.split(/,| ja /i).forEach(p => { const t = p.trim(); if (t.length > 2) placeNames.add(t); });
+            }
+            if (placeData.alue_slug) placeNames.add(placeData.alue_slug.trim());
+
+            for (const pName of placeNames) {
+                try {
+                    const { data: ppRows } = await aiSb
+                        .from('post_places').select('post_id, place_id')
+                        .ilike('place_id', pName).limit(20);
+                    if (ppRows && ppRows.length > 0) {
+                        const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
+                        if (postIds.length > 0) {
+                            const { data: pData } = await aiSb
+                                .from('posts').select(POST_SELECT)
+                                .in('id', postIds).order('created_at', { ascending: false });
+                            (pData || []).forEach(p => addPost(p, pName));
+                        }
+                    }
+                } catch (e) { console.debug('[WallPosts] Nimi post_places:', pName, e?.message); }
+                if (posts.length > 0) break;
+            }
+        }
+
+        // ── VAIHE 4: Fallback – posts.place_id nimihaku ──
+        if (posts.length === 0) {
             const primaryName = placeData.name || placeData.canonical_name || '';
             const shortPrimary = primaryName.split(/,| ja /i)[0].trim();
-            const { data: fallbackData, error: fallbackErr } = await aiSb
-                .from('posts')
-                .select(`
-                    id, title, content, type, created_at, status, visibility,
-                    organization_id, publisher_name, org_name, is_pinned, pinned_until,
-                    place_id,
-                    post_places(place_id),
-                    post_media(url, media_type),
-                    post_attachments(url, type, file_name)
-                `)
-                .neq('status', 'cleanup_pending')
-                .neq('status', 'deleted')
-                .eq('visibility', 'public')
-                .order('created_at', { ascending: false })
-                .limit(50);
-
-            if (!fallbackErr && fallbackData) {
-                const nameLower = new Set(Array.from(placeNames).map(n => n.toLowerCase()));
-                posts = fallbackData.filter(p => {
-                    // 1. Tarkista post_places-liitostaulun place_id (livescreen-julkaisut)
-                    if (p.post_places && p.post_places.length > 0) {
-                        if (p.post_places.some(pp => nameLower.has((pp.place_id || '').toLowerCase()))) return true;
+            try {
+                const nameLower = new Set([
+                    ...(placeData.name ? [placeData.name.trim().toLowerCase()] : []),
+                    ...(placeData.canonical_name ? [placeData.canonical_name.trim().toLowerCase()] : []),
+                    ...(placeData.alue_slug ? [placeData.alue_slug.trim().toLowerCase()] : [])
+                ]);
+                const { data: fallbackData } = await aiSb
+                    .from('posts').select(POST_SELECT)
+                    .eq('visibility', 'public')
+                    .order('created_at', { ascending: false }).limit(100);
+                (fallbackData || []).forEach(p => {
+                    if (!p.place_id) return;
+                    const pLower = p.place_id.toLowerCase().trim();
+                    if (nameLower.has(pLower)) { addPost(p, p.place_id); return; }
+                    for (const n of nameLower) {
+                        if (n.length > 3 && (pLower.includes(n) || n.includes(pLower))) { addPost(p, p.place_id); return; }
                     }
-                    // 2. Tarkista posts.place_id suoraan (UUSIPROJEKTI Android-sovelluksen julkaisut)
-                    if (p.place_id) {
-                        const pLower = p.place_id.toLowerCase().trim();
-                        if (nameLower.has(pLower)) return true;
-                        // Osittaistäsmäys: jos posts.place_id sisältää paikan nimen osan tai päinvastoin
-                        for (const n of nameLower) {
-                            if (n.length > 3 && (pLower.includes(n) || n.includes(pLower))) return true;
-                        }
+                    if (shortPrimary && shortPrimary.length > 3 &&
+                        (p.title || '').toLowerCase().includes(shortPrimary.toLowerCase())) {
+                        addPost(p, null);
                     }
-                    // 3. Tekstihaku otsikosta/sisällöstä
-                    if (primaryName) {
-                        const titleMatch = (p.title || '').toLowerCase().includes(primaryName.toLowerCase()) ||
-                                           (shortPrimary && (p.title || '').toLowerCase().includes(shortPrimary.toLowerCase()));
-                        const contentMatch = (p.content || '').toLowerCase().includes(primaryName.toLowerCase()) ||
-                                             (shortPrimary && (p.content || '').toLowerCase().includes(shortPrimary.toLowerCase()));
-                        if (titleMatch || contentMatch) return true;
-                    }
-                    return false;
                 });
-                // Merkitse posts.place_id _matched_place_id:ksi kortin näyttöä varten
-                posts = posts.map(p => ({
-                    ...p,
-                    _matched_place_id: p._matched_place_id
-                        || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null)
-                        || p.place_id
-                        || null
-                }));
-            }
+            } catch (e) { console.debug('[WallPosts] Fallback:', e?.message); }
         }
 
         if (posts.length === 0) {
@@ -4128,51 +4106,45 @@ async function loadWallPostsForPlace(placeData) {
             const bPinned = b.is_pinned && b.pinned_until && new Date(b.pinned_until) > new Date();
             if (aPinned && !bPinned) return -1;
             if (!aPinned && bPinned) return 1;
-            return new Date(b.created_at) - new Date(a.created_at);
+            return new Date(b.published_at || b.created_at) - new Date(a.published_at || a.created_at);
         });
 
-        const typeEmoji = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️' };
-        const typeFi = { announcement: 'Ilmoitus', news: 'Uutinen', event: 'Tapahtuma', offer: 'Tarjous' };
+        const typeEmoji = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️', notice: '📣', article: '📰', story: '📖', video: '🎥' };
+        const typeFi   = { announcement: 'Ilmoitus', news: 'Uutinen', event: 'Tapahtuma', offer: 'Tarjous', notice: 'Ilmoitus', article: 'Artikkeli', story: 'Tarina', video: 'Video' };
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
         list.innerHTML = posts.slice(0, 10).map(p => {
             const isPinned = p.is_pinned && p.pinned_until && new Date(p.pinned_until) > new Date();
-            const postDate = p.created_at ? new Date(p.created_at) : null;
+            const postDate = (p.published_at || p.created_at) ? new Date(p.published_at || p.created_at) : null;
             const dateStr = postDate ? postDate.toLocaleDateString('fi-FI') : '';
             const isNew = postDate && postDate > sevenDaysAgo;
             const emoji = typeEmoji[p.type] || '📝';
             const typeLabel = typeFi[p.type] || p.type || '';
-            const bodyText = (p.content || '').substring(0, 200);
+            // Android käyttää description-kenttää, livescreen content-kenttää
+            const bodyText = (p.description || p.content || '').substring(0, 200);
 
-            // Organisaation nimi
-            const orgName = p.publisher_name || p.org_name || (p.organization_id && !p.organization_id.startsWith('company-') ? p.organization_id : null);
+            const orgName = p.publisher_name || p.org_name;
             const orgHtml = orgName
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#f8fafc;color:#334155;border:1px solid #cbd5e1;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">🏢 ${safeHtml(orgName)}</span>`
                 : '';
 
-            // Paikan nimi: _matched_place_id, post_places-taulu tai posts.place_id (Android-app)
-            const matchedPlace = p._matched_place_id
-                || (p.post_places && p.post_places.length > 0 ? p.post_places[0].place_id : null)
-                || p.place_id
-                || null;
+            const matchedPlace = p._matched_place_id || p.place_id || null;
             const placeHtml = matchedPlace
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📍 ${safeHtml(matchedPlace)}</span>`
                 : '';
 
-            // Uusi-badge: julkaistu alle 7 vrk sitten
             const newBadgeHtml = isNew
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dc2626;color:#fff;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:800;animation:pulse 1.5s infinite;">🆕 Uusi</span>`
                 : '';
 
-            // Kuva jos saatavilla
-            const img = p.post_media && p.post_media.find(m => m.media_type === 'image');
-            const imgHtml = img ? `
+            // Kuva: image_url (Android) tai post_media (livescreen)
+            const imgUrl = p.image_url || (p.post_media && p.post_media.find(m => m.media_type === 'image')?.url);
+            const imgHtml = imgUrl ? `
                 <div style="width:100%;height:160px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
-                    <img src="${img.url}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
+                    <img src="${imgUrl}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
                          onerror="this.parentElement.style.display='none'">
                 </div>` : '';
 
-            // PDF-liite jos saatavilla
             const pdf = p.post_attachments && p.post_attachments.find(a => a.type === 'pdf');
             const pdfHtml = pdf ? `
                 <a href="${pdf.url}" target="_blank" rel="noopener noreferrer"
@@ -4196,7 +4168,7 @@ async function loadWallPostsForPlace(placeData) {
                         ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
                     </div>
                     <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.3rem;">${safeHtml(p.title || '')}</div>
-                    ${bodyText ? `<div style="font-size:0.88rem;color:#475569;line-height:1.5;">${safeHtml(bodyText)}${(p.content || '').length > 200 ? '...' : ''}</div>` : ''}
+                    ${bodyText ? `<div style="font-size:0.88rem;color:#475569;line-height:1.5;">${safeHtml(bodyText)}${(p.description || p.content || '').length > 200 ? '...' : ''}</div>` : ''}
                     ${pdfHtml}
                 </div>`;
         }).join('');
