@@ -412,6 +412,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) { console.warn(e); }
 
         // 6. Päivitä DOM
+        placeData.subPlaces = subPlaces;
         await renderPlace(placeData, otherRelatedItems, aiProfileData, aiFaqData, allSources, allContents, scoredCompanies, parentPlace, subPlaces, yritykset);
 
         // Ladataan kaikki rinnakkaisosiot turvallisesti siten, ettei mikään estä toisen osion toimintaa
@@ -607,10 +608,19 @@ async function loadMemoriesForPlace(place) {
 
     try {
         // Hae muistot ensin (ilman nested select - entity_id on polymorfinen)
+        const placeIdsSet = new Set([place.place_id, place.id].filter(Boolean));
+        if (Array.isArray(place.subPlaces)) {
+            place.subPlaces.forEach(sp => {
+                if (sp.id) placeIdsSet.add(sp.id);
+                if (sp.place_id) placeIdsSet.add(sp.place_id);
+            });
+        }
+        const placeIds = Array.from(placeIdsSet);
+
         const { data: memoriesData, error: memoriesError } = await aiSb
             .from('memories')
             .select('*')
-            .eq('place_id', place.place_id)
+            .in('place_id', placeIds)
             .order('year', { ascending: true });
 
         if (memoriesError || !memoriesData || memoriesData.length === 0) {
@@ -2410,7 +2420,14 @@ async function loadEncountersForPlace(place) {
     try {
         // Hakee ilmoitukset jotka on linkitetty location_id:llä (UUID tai slug) tai joilla on sama nimi (fallback)
         const placeName = place.name || place.canonical_name || '';
-        const targetIds = [place.place_id, place.id].filter(Boolean);
+        const targetIdsSet = new Set([place.place_id, place.id].filter(Boolean));
+        if (Array.isArray(place.subPlaces)) {
+            place.subPlaces.forEach(sp => {
+                if (sp.id) targetIdsSet.add(sp.id);
+                if (sp.place_id) targetIdsSet.add(sp.place_id);
+            });
+        }
+        const targetIds = Array.from(targetIdsSet);
         
         let query = window.LaukaaSupabase
             .from('encounters')
@@ -3351,7 +3368,15 @@ async function loadMixonetContentForPlace(placeData) {
 
     try {
         const mixonetPlaceId = placeData ? placeData.mixonet_place_id : null;
-        const placeIdFilter = Array.from(new Set([placeId, mixonetPlaceId].filter(Boolean)));
+        const placeIdFilterSet = new Set([placeId, mixonetPlaceId].filter(Boolean));
+        if (placeData && Array.isArray(placeData.subPlaces)) {
+            placeData.subPlaces.forEach(sp => {
+                if (sp.id) placeIdFilterSet.add(sp.id);
+                if (sp.place_id) placeIdFilterSet.add(sp.place_id);
+                if (sp.mixonet_place_id) placeIdFilterSet.add(sp.mixonet_place_id);
+            });
+        }
+        const placeIdFilter = Array.from(placeIdFilterSet);
 
         console.log('[Mixonet] Querying Mixonet Supabase for placeId:', placeId, 'mixonetPlaceId:', mixonetPlaceId, 'placeName:', placeName, 'placeIdFilter:', placeIdFilter);
 
@@ -3891,6 +3916,12 @@ async function loadPlaceObservations(placeInput) {
             } else {
                 if (placeInput.id) placeIds.push(placeInput.id);
                 if (placeInput.place_id) placeIds.push(placeInput.place_id);
+                if (Array.isArray(placeInput.subPlaces)) {
+                    placeInput.subPlaces.forEach(sp => {
+                        if (sp.id) placeIds.push(sp.id);
+                        if (sp.place_id) placeIds.push(sp.place_id);
+                    });
+                }
             }
         } else if (placeInput) {
             placeIds.push(placeInput);
@@ -3965,8 +3996,34 @@ async function loadPlaceObservations(placeInput) {
  * Näyttää osion vain jos julkaisuja löytyy.
  */
 async function loadWallPostsForPlace(placeData) {
-    const section = document.getElementById('wall-posts-section');
-    const list = document.getElementById('wall-posts-list');
+    let section = document.getElementById('wall-posts-section');
+    let list = document.getElementById('wall-posts-list');
+    
+    // Alustetaan osio dynaamisesti tarvittaessa (esim. taajamasivut ilman valmista DOM-säiliötä)
+    if (!section) {
+        const placeContent = document.getElementById('place-content') || document.querySelector('.page-container .left-col') || document.body;
+        if (placeContent) {
+            section = document.createElement('section');
+            section.id = 'wall-posts-section';
+            section.className = 'place-section-wrap alt content-block';
+            section.style.display = 'none';
+            section.innerHTML = `
+                <div class="place-section">
+                    <h2 style="display:flex;align-items:center;gap:.5rem">
+                        <span class="iconify" style="color:#7c3aed" data-icon="material-symbols:campaign-outline"></span>
+                        Ajankohtaista täällä &amp; alueella
+                    </h2>
+                    <p style="color:var(--text-muted,#64748b);font-size:.95rem;margin-bottom:1rem">
+                        Seinäjulkaisut ja ilmoitukset tähän paikkaan ja alueeseen liittyen.
+                        <a href="seina.html" style="color:var(--color-forest,#0056b3);font-weight:600;text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">→ Avaa koko seinä</a>
+                    </p>
+                    <div id="wall-posts-list" style="display:flex;flex-direction:column;gap:1rem"></div>
+                </div>
+            `;
+            placeContent.appendChild(section);
+            list = section.querySelector('#wall-posts-list');
+        }
+    }
     if (!section || !list) return;
 
     const aiSb = window.aiSb;
@@ -3988,13 +4045,20 @@ async function loadWallPostsForPlace(placeData) {
             posts.push({ ...p, _matched_place_id: matchedPlaceId || p.place_id || null });
         };
 
-        // Kerätään kaikki mahdolliset paikan tunnisteet (UUID, place_id, name, canonical_name, alue_slug)
+        // Kerätään kaikki mahdolliset paikan tunnisteet (UUID, place_id, name, canonical_name, alue_slug + alakohteet)
         const placeIdentifiers = new Set();
-        if (placeData.id) placeIdentifiers.add(String(placeData.id).trim());
-        if (placeData.place_id) placeIdentifiers.add(String(placeData.place_id).trim());
-        if (placeData.name) placeIdentifiers.add(String(placeData.name).trim());
-        if (placeData.canonical_name) placeIdentifiers.add(String(placeData.canonical_name).trim());
-        if (placeData.alue_slug) placeIdentifiers.add(String(placeData.alue_slug).trim());
+        const addPlaceIds = (p) => {
+            if (!p) return;
+            if (p.id) placeIdentifiers.add(String(p.id).trim());
+            if (p.place_id) placeIdentifiers.add(String(p.place_id).trim());
+            if (p.name) placeIdentifiers.add(String(p.name).trim());
+            if (p.canonical_name) placeIdentifiers.add(String(p.canonical_name).trim());
+            if (p.alue_slug) placeIdentifiers.add(String(p.alue_slug).trim());
+        };
+        addPlaceIds(placeData);
+        if (Array.isArray(placeData.subPlaces)) {
+            placeData.subPlaces.forEach(addPlaceIds);
+        }
 
         const idList = [...placeIdentifiers].filter(Boolean);
 
