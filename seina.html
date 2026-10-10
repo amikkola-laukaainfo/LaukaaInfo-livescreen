@@ -738,12 +738,13 @@
         // copyToClipboard antaa suoran seina.html-linkin → parempi normaalikäyttäjälle
         const postUrl = `seina.html?post=${encodeURIComponent(post.id)}`;
         const postOgUrl = `https://duxluwyqxvbmkkjzuzkz.supabase.co/functions/v1/seina-og?post=${encodeURIComponent(post.id)}`;
+        const fullPostUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + postUrl;
         document.getElementById('singlePostShareBar').innerHTML = `
           <div class="flex flex-wrap items-center gap-2">
             <button onclick="shareContent({ title: '${title.replace(/'/g, "\\'")}', text: '${escapeHtml(orgName).replace(/'/g, "\\'")}', url: '${postOgUrl}' })" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-xs shadow-xs transition-all flex items-center gap-1.5">
               <span>↗</span> <span>Jaa julkaisu</span>
             </button>
-            <button onclick="copyToClipboard('${SITE_BASE}/${postUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5">
+            <button onclick="copyToClipboard('${fullPostUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5">
               <span>🔗</span> <span>Kopioi linkki</span>
             </button>
           </div>
@@ -1390,10 +1391,10 @@
                   ${orgUrl ? `<a href="${orgUrl}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>` : '<span class="text-slate-400 font-medium">LaukaaInfo Stream</span>'}
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <button onclick="shareContent({ title: '${escapeHtml(p.title).replace(/'/g, "\\'")}', text: '${escapeHtml(p.org_name || '').replace(/'/g, "\\'")}', url: 'seina.html?post=${encodeURIComponent(p.id)}' })" class="px-2 py-1 bg-slate-100 hover:bg-violet-100 text-slate-700 hover:text-violet-900 rounded-lg font-bold transition-all flex items-center gap-1">
+                  <button onclick="shareContent({ title: '${escapeHtml(p.title).replace(/'/g, "\\'")}', text: '${escapeHtml(p.org_name || '').replace(/'/g, "\\'")}', url: 'https://duxluwyqxvbmkkjzuzkz.supabase.co/functions/v1/seina-og?post=${encodeURIComponent(p.id)}' })" class="px-2 py-1 bg-slate-100 hover:bg-violet-100 text-slate-700 hover:text-violet-900 rounded-lg font-bold transition-all flex items-center gap-1">
                     <span>↗</span> <span>Jaa</span>
                   </button>
-                  <button onclick="copyToClipboard('seina.html?post=${encodeURIComponent(p.id)}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-bold transition-all flex items-center gap-1" title="Kopioi suora linkki julkaisuun">
+                  <button onclick="copyToClipboard(window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + 'seina.html?post=${encodeURIComponent(p.id)}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-bold transition-all flex items-center gap-1" title="Kopioi suora linkki julkaisuun">
                     <span>🔗</span>
                   </button>
                 </div>
