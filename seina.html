@@ -803,7 +803,43 @@
           }
         }
 
-        const orgName = (orgData && (orgData.name || orgData.nimi)) || (targetOrgParam.toLowerCase().includes('mediazoo') ? 'Mediazoo' : (targetOrgParam === 'company-313' ? 'Laukaan Kädenjälki ry' : 'Organisaatio'));
+        // Fallback: Haetaan yrityksen tiedot ja nimi companies_data.json -tiedostosta jos Supabase ei palauttanut sitä
+        if (!orgData && targetOrgParam) {
+          try {
+            const res = await fetch('companies_data.json');
+            if (res.ok) {
+              const json = await res.json();
+              const list = Array.isArray(json) ? json : (json.results || []);
+              const cleanId = String(targetOrgParam).replace('company-', '');
+              const match = list.find(c => 
+                String(c.id) === String(targetOrgParam) || 
+                String(c.id) === cleanId || 
+                ('company-' + c.id) === String(targetOrgParam) ||
+                (c.slug && c.slug === targetOrgParam)
+              );
+              if (match) {
+                orgData = match;
+                resolvedOrgId = match.id || targetOrgParam;
+                if (match.id && match.nimi) {
+                  orgNamesCache[match.id] = match.nimi;
+                  orgNamesCache['company-' + String(match.id).replace('company-', '')] = match.nimi;
+                }
+              }
+            }
+          } catch (e) {
+            console.warn('companies_data.json fallback lookup notice:', e);
+          }
+        }
+
+        let orgName = (orgData && (orgData.name || orgData.nimi));
+        if (!orgName) {
+          orgName = getOrgNameSync(resolvedOrgId || targetOrgParam, null);
+        }
+        if (!orgName || orgName === 'Organisaatio') {
+          if (targetOrgParam && targetOrgParam.toLowerCase().includes('mediazoo')) orgName = 'Mediazoo';
+          else if (targetOrgParam === 'company-313') orgName = 'Laukaan Kädenjälki ry';
+          else orgName = 'Organisaatio';
+        }
         const orgSlug = (orgData && orgData.slug) || targetOrgParam;
         const orgWallUrl = `seina.html?org=${encodeURIComponent(orgSlug)}`;
 
@@ -888,6 +924,11 @@
       function getOrgNameSync(orgId, fallbackName) {
         if (fallbackName && fallbackName !== 'Organisaatio' && fallbackName !== 'undefined') return fallbackName;
         if (orgId && orgNamesCache[orgId]) return orgNamesCache[orgId];
+        if (orgId) {
+          const clean = String(orgId).replace('company-', '');
+          if (orgNamesCache[clean]) return orgNamesCache[clean];
+          if (orgNamesCache['company-' + clean]) return orgNamesCache['company-' + clean];
+        }
         if (orgId === 'company-2' || orgId === '2') return 'Mediazoo';
         if (orgId === 'company-313' || orgId === '313') return 'Laukaan Kädenjälki ry';
         if (orgId === 'company-202' || orgId === '202') return 'Laukaan Yrittäjät';
