@@ -734,13 +734,16 @@
         `;
 
         // Share & Copy Bar for Single Post
+        // shareContent käyttää Edge Functionia → Facebook/WhatsApp saa oikeat OG-tiedot
+        // copyToClipboard antaa suoran seina.html-linkin → parempi normaalikäyttäjälle
         const postUrl = `seina.html?post=${encodeURIComponent(post.id)}`;
+        const postOgUrl = `https://duxluwyqxvbmkkjzuzkz.supabase.co/functions/v1/seina-og?post=${encodeURIComponent(post.id)}`;
         document.getElementById('singlePostShareBar').innerHTML = `
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="shareContent({ title: '${title.replace(/'/g, "\\'")}', text: '${escapeHtml(orgName).replace(/'/g, "\\'")}', url: '${postUrl}' })" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-xs shadow-xs transition-all flex items-center gap-1.5">
+            <button onclick="shareContent({ title: '${title.replace(/'/g, "\\'")}', text: '${escapeHtml(orgName).replace(/'/g, "\\'")}', url: '${postOgUrl}' })" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-xs shadow-xs transition-all flex items-center gap-1.5">
               <span>↗</span> <span>Jaa julkaisu</span>
             </button>
-            <button onclick="copyToClipboard('${postUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5">
+            <button onclick="copyToClipboard('${SITE_BASE}/${postUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5">
               <span>🔗</span> <span>Kopioi linkki</span>
             </button>
           </div>
