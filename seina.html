@@ -888,6 +888,30 @@
         document.getElementById('orgBio').innerText = bio;
 
         const cleanId = resolvedOrgId ? String(resolvedOrgId).replace('company-', '') : '';
+
+        // Slugify helper (must match generate_premium.js / yrityskortti.js logic)
+        function slugifyOrgName(text) {
+          if (!text) return '';
+          return text.toString().toLowerCase().trim()
+            .replace(/\s+/g, '-')
+            .replace(/[äÄàáâãäå]/g, 'a')
+            .replace(/[öÖòóôõöø]/g, 'o')
+            .replace(/[åÅ]/g, 'a')
+            .replace(/[^\w-]/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+        }
+
+        // Determine correct profile URL: premium → yritys/slug.html, others → yrityskortti.html?id=
+        const isPremiumOrg = orgData && (orgData.tyyppi === 'maksu' || orgData.tyyppi === 'paid' || orgData.taso === 'premium' || orgData.subscription_tier >= 2);
+        let yrityskorttHref;
+        if (isPremiumOrg && orgName && orgName !== 'Organisaatio') {
+          yrityskorttHref = `yritys/${slugifyOrgName(orgName)}.html`;
+        } else {
+          yrityskorttHref = `yrityskortti.html?id=${encodeURIComponent(cleanId || resolvedOrgId)}`;
+        }
+
         const badgesContainer = document.getElementById('orgBadgesContainer');
         badgesContainer.innerHTML = `
           <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
@@ -896,7 +920,7 @@
           <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
             🧩 Ajankohtaista
           </span>
-          <a href="yrityskortti.html?id=${encodeURIComponent(cleanId || resolvedOrgId)}" class="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-lg font-bold hover:bg-emerald-100 transition-all flex items-center gap-1">
+          <a href="${yrityskorttHref}" class="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-lg font-bold hover:bg-emerald-100 transition-all flex items-center gap-1">
             📇 Yrityskortti →
           </a>
         `;
