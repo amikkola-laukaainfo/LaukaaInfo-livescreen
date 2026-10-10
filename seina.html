@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="pageTitle">LaukaaInfo — Seinä (Julkaisukerros)</title>
+
+    <!-- ── Open Graph -metatiedot (päivitetään dynaamisesti yksittäisissä julkaisuissa) ── -->
+    <meta property="og:site_name" content="LaukaaInfo" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="fi_FI" />
+    <meta id="ogTitle" property="og:title" content="LaukaaInfo — Seinä" />
+    <meta id="ogDescription" property="og:description" content="LaukaaInfon yhteisöseinä — alueen organisaatioiden, yritysten ja yhdistysten ajankohtaiset julkaisut yhdessä paikassa." />
+    <meta id="ogUrl" property="og:url" content="https://laukaainfo.fi/seina.html" />
+    <meta id="ogImage" property="og:image" content="https://laukaainfo.fi/og-yrityskortti.png" />
+    <meta id="ogImageWidth" property="og:image:width" content="1200" />
+    <meta id="ogImageHeight" property="og:image:height" content="630" />
+    <meta id="ogImageAlt" property="og:image:alt" content="LaukaaInfo Seinä" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta id="twTitle" name="twitter:title" content="LaukaaInfo — Seinä" />
+    <meta id="twDescription" name="twitter:description" content="LaukaaInfon yhteisöseinä — alueen organisaatioiden, yritysten ja yhdistysten ajankohtaiset julkaisut yhdessä paikassa." />
+    <meta id="twImage" name="twitter:image" content="https://laukaainfo.fi/og-yrityskortti.png" />
+    <!-- Canonical -->
+    <link id="canonicalLink" rel="canonical" href="https://laukaainfo.fi/seina.html" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -474,6 +494,92 @@
         }
       }
 
+      /**
+       * Päivittää sivun Open Graph -metatiedot dynaamisesti yksittäistä julkaisua varten.
+       * Kuvan prioriteetti:
+       *   1. Julkaisun ensimmäinen kuva post_media-listalta (Supabase Storage → transformaatio 1200×630)
+       *   2. Julkaisun image_url -kenttä
+       *   3. Organisaation logo (orgLogosCache)
+       *   4. Seinän oletuskuva (og-yrityskortti.png)
+       */
+      function updateOpenGraphTags(post, orgName) {
+        const SITE_BASE = 'https://laukaainfo.fi';
+        const DEFAULT_OG_IMAGE = `${SITE_BASE}/og-yrityskortti.png`;
+        const postUrl = `${SITE_BASE}/seina.html?post=${encodeURIComponent(post.id)}`;
+
+        // -- Otsikko --
+        const ogTitle = `${post.title || 'Julkaisu'} — ${orgName} · LaukaaInfo`;
+
+        // -- Kuvaus: julkaisun tekstin ensimmäiset ~200 merkkiä ilman HTML:ää --
+        const rawContent = (post.content || '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim();
+        const ogDesc = rawContent.length > 0
+          ? rawContent.substring(0, 200) + (rawContent.length > 200 ? '…' : '')
+          : `${orgName} — Ajankohtainen julkaisu LaukaaInfo-seinällä.`;
+
+        // -- Kuva: prioriteettijärjestyksessä --
+        let ogImageUrl = null;
+
+        // 1. Ensimmäinen kuva post_media-listalta (ei videota)
+        if (post.post_media && post.post_media.length > 0) {
+          const firstImage = post.post_media.find(m =>
+            m.media_type === 'image' ||
+            (m.url && !isVideoUrl(m.url, m.media_type))
+          );
+          if (firstImage && firstImage.url) {
+            ogImageUrl = firstImage.url;
+          }
+        }
+
+        // 2. image_url -kenttä suoraan (jos ei vielä löytynyt ja se on kuva eikä video)
+        if (!ogImageUrl && post._rawImageUrl && !isVideoUrl(post._rawImageUrl, 'image')) {
+          ogImageUrl = post._rawImageUrl;
+        }
+
+        // 3. Supabase Storage -kuvan transformaatio Facebook-jakoa varten (1200×630)
+        //    Jos kuva on Supabase Storagessa, lisätään muuntamis-URL-parametrit
+        if (ogImageUrl && ogImageUrl.includes('supabase.co/storage/v1/object/public/')) {
+          // Supabase Image Transformations: width=1200, height=630, resize=cover, format=webp
+          const separator = ogImageUrl.includes('?') ? '&' : '?';
+          ogImageUrl = `${ogImageUrl}${separator}width=1200&height=630&resize=cover&format=webp`;
+        }
+
+        // 4. Organisaation logo välivarana
+        if (!ogImageUrl) {
+          const cachedLogo = orgLogosCache[post.organization_id];
+          if (cachedLogo && cachedLogo.trim() && cachedLogo !== '-') {
+            ogImageUrl = cachedLogo.startsWith('http') ? cachedLogo : `${SITE_BASE}/${cachedLogo}`;
+          }
+        }
+
+        // 5. Seinän oletuskuva
+        if (!ogImageUrl) {
+          ogImageUrl = DEFAULT_OG_IMAGE;
+        }
+
+        // -- Kirjoita metatiedot DOM:iin --
+        function setMeta(id, value) {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('content', value);
+        }
+        function setHref(id, value) {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('href', value);
+        }
+
+        setMeta('ogTitle', ogTitle);
+        setMeta('ogDescription', ogDesc);
+        setMeta('ogUrl', postUrl);
+        setMeta('ogImage', ogImageUrl);
+        setMeta('ogImageAlt', post.title || 'Julkaisu');
+        setMeta('twTitle', ogTitle);
+        setMeta('twDescription', ogDesc);
+        setMeta('twImage', ogImageUrl);
+        setHref('canonicalLink', postUrl);
+
+        // Päivitä myös selaimen otsikko
+        document.title = ogTitle;
+      }
+
       // 4. Mode 3: Load Single Post Landing View (?post=abc123)
       async function loadSinglePostView(postId) {
         // Show loading state initially
@@ -577,7 +683,9 @@
                 post_themes: pThemes.length > 0 ? pThemes : (rawPost.tags ? (Array.isArray(rawPost.tags) ? rawPost.tags.map(t => ({ tag_id: t })) : []) : []),
                 post_attachments: pAttachments,
                 post_media: pMedia,
-                post_links: pLinks.length > 0 ? pLinks : (rawPost.website_url ? [{ title: 'Lue lisää', url: rawPost.website_url, link_type: 'external' }] : [])
+                post_links: pLinks.length > 0 ? pLinks : (rawPost.website_url ? [{ title: 'Lue lisää', url: rawPost.website_url, link_type: 'external' }] : []),
+                // Alkuperäinen image_url tallennetaan OG-kuvaa varten (ennen post_media-deduplication)
+                _rawImageUrl: rawPost.image_url || null
               };
             }
           } catch (e) {
@@ -606,6 +714,9 @@
         const desc = parseMarkdownLinks(post.content || post.description || '');
 
         document.getElementById('pageTitle').innerText = `${title} — ${orgName} · LaukaaInfo`;
+
+        // ── Päivitä Open Graph -metatiedot yksittäiselle julkaisulle ──
+        updateOpenGraphTags(post, orgName);
 
         // Render Single Post Content
         contentSlot.innerHTML = `
