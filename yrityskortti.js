@@ -1669,6 +1669,10 @@
 
         // 17. Lähipaikat tag-pilvi
         renderNearbyPlacesForCompany(company.id);
+
+        // 18. Julkaisut Supabase posts-taulusta (organization_id-kytkentä)
+        // organization_id = rawId (ilman "company-"-etuliitettä)
+        loadOrgPosts(rawId, company.nimi);
     }
 
     async function renderKohtaamisetForYritys(company) {
@@ -1751,6 +1755,145 @@
             }
         } catch(e) {
             console.error('Kohtaamiset error:', e);
+        }
+    }
+
+    /**
+     * loadOrgPosts — Lataa ja renderöi organisaation omat julkaisut Supabase posts-taulusta.
+     * Kytkeytyy organization_id-kenttään (= rawId, ilman "company-"-etuliitettä).
+     * Lisää #org-posts-section -osion card-content:n sisälle.
+     *
+     * @param {string} orgId  - Organisaation ID (rawId)
+     * @param {string} orgName - Näytettävä nimi otsikossa
+     */
+    async function loadOrgPosts(orgId, orgName) {
+        if (!orgId) return;
+
+        // Käytetään window.aiSb (LaukaaInfo Supabase), tai window.LaukaaSupabase varmuuskopio
+        const sb = window.aiSb || window.LaukaaSupabase;
+        if (!sb) {
+            console.warn('[loadOrgPosts] Supabase-client ei saatavilla');
+            return;
+        }
+
+        try {
+            // Haetaan enintään 10 viimeisintä julkista julkaisua
+            const { data: posts, error } = await sb
+                .from('posts')
+                .select(`
+                    id,
+                    title,
+                    content,
+                    type,
+                    visibility,
+                    status,
+                    created_at,
+                    expires_at,
+                    event_start_at,
+                    image_url,
+                    post_places ( place_id ),
+                    post_themes ( tag_id )
+                `)
+                .eq('organization_id', orgId)
+                .neq('status', 'deleted')
+                .neq('status', 'cleanup_pending')
+                .order('created_at', { ascending: false })
+                .limit(10);
+
+            if (error) {
+                console.warn('[loadOrgPosts] Supabase virhe:', error.message);
+                return;
+            }
+
+            if (!posts || posts.length === 0) return;
+
+            // --- Renderöinti ---
+            const cardContent = document.getElementById('card-content');
+            if (!cardContent) return;
+
+            // Vältetään duplikaatit (esim. rapid re-render)
+            if (document.getElementById('org-posts-section')) return;
+
+            const typeEmoji = {
+                event:        '📅',
+                announcement: '📣',
+                news:         '📰',
+                offer:        '🏷️',
+                request:      '🙏',
+                project:      '🚀',
+                general:      '📌'
+            };
+
+            const linkBase = window.location.pathname.includes('/yritys/') ? '../' : '';
+            const now = new Date();
+
+            const cardsHtml = posts.map(p => {
+                const isExpired = p.expires_at && new Date(p.expires_at) < now;
+                if (isExpired) return ''; // Ohita vanhentuneet
+
+                const emoji = typeEmoji[p.type] || '📌';
+                const title = p.title || '';
+                const excerpt = p.content ? p.content.replace(/<[^>]+>/g, '').substring(0, 120) : '';
+                const dateStr = p.event_start_at
+                    ? new Date(p.event_start_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'long' })
+                    : new Date(p.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short' });
+
+                const placeTags = (p.post_places || []).length > 0
+                    ? `<div style="font-size:0.75rem;color:#64748b;margin-top:0.4rem;">📍 ${p.post_places.length} paikkaa</div>`
+                    : '';
+                const themeTags = (p.post_themes || [])
+                    .map(t => `<span style="display:inline-block;font-size:0.7rem;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:50px;padding:1px 7px;margin:0 2px;">${t.tag_id}</span>`)
+                    .join('');
+
+                const visibilityNote = p.visibility === 'link'
+                    ? '<span style="font-size:0.7rem;background:#fef3c7;color:#92400e;border-radius:50px;padding:1px 7px;margin-left:4px;">🔒 Rajattu</span>'
+                    : '';
+
+                return `
+                    <a href="${linkBase}seina.html?post=${p.id}"
+                       style="display:block;text-decoration:none;color:inherit;
+                              background:#f8fafc;border-radius:12px;padding:0.9rem 1rem;
+                              border-left:4px solid #059669;transition:background 0.15s;
+                              margin-bottom:0.6rem;"
+                       onmouseover="this.style.background='#f0fdf4'"
+                       onmouseout="this.style.background='#f8fafc'">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
+                            <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;
+                                        color:#059669;margin-bottom:0.3rem;letter-spacing:0.3px;">
+                                ${emoji} ${p.type || 'julkaisu'}${visibilityNote}
+                            </div>
+                            <div style="font-size:0.72rem;color:#94a3b8;white-space:nowrap;">${dateStr}</div>
+                        </div>
+                        <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.3rem;
+                                    font-family:'Outfit','Inter',sans-serif;">${title}</div>
+                        ${excerpt ? `<div style="font-size:0.85rem;color:#475569;line-height:1.4;">${excerpt}${p.content && p.content.length > 120 ? '…' : ''}</div>` : ''}
+                        ${placeTags}
+                        ${themeTags ? `<div style="margin-top:0.4rem;">${themeTags}</div>` : ''}
+                    </a>`;
+            }).filter(h => h.length > 0).join('');
+
+            if (!cardsHtml) return;
+
+            const section = document.createElement('div');
+            section.id = 'org-posts-section';
+            section.style.cssText = 'margin-top:1.75rem;padding:1.25rem 1rem 0.5rem;background:#fff;border-top:1px solid #e2e8f0;';
+            section.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                    <h2 style="margin:0;font-size:1.2rem;color:#1e293b;font-family:'Outfit','Inter',sans-serif;">
+                        📣 Julkaisut
+                    </h2>
+                    <a href="${linkBase}seina.html?org=${encodeURIComponent(orgId)}"
+                       style="font-size:0.85rem;color:#059669;font-weight:600;text-decoration:none;">
+                        Kaikki →
+                    </a>
+                </div>
+                ${cardsHtml}
+            `;
+
+            cardContent.appendChild(section);
+
+        } catch (err) {
+            console.warn('[loadOrgPosts] Virhe:', err);
         }
     }
 
