@@ -897,30 +897,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     try {
                         // Seinäjulkaisut (posts & post_places -taulut) place_id:n perusteella
-                        const { data: wallPostPlaces } = await laukaaDb
-                            .from('post_places')
-                            .select('post_id, posts(*, post_media(url, media_type))')
-                            .eq('place_id', placeIdParam)
-                            .limit(5);
+                        const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                        if (placeIdParam && UUID_REGEX.test(String(placeIdParam).trim())) {
+                            const { data: wallPostPlaces } = await laukaaDb
+                                .from('post_places')
+                                .select('post_id, posts(*, post_attachments(*), post_media(url, media_type))')
+                                .eq('place_id', placeIdParam)
+                                .limit(5);
 
-                        if (wallPostPlaces) {
-                            wallPostPlaces.forEach(row => {
-                                const post = row.posts;
-                                if (post && post.visibility !== 'code_protected' && post.status !== 'deleted') {
-                                    const mediaUrl = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : (post.image_url || null);
-                                    localFeedItems.push({
-                                        id: post.id,
-                                        type: 'wall_post',
-                                        label: '🧱 Seinäjulkaisu',
-                                        color: '#8b5cf6',
-                                        title: post.title || post.content || '',
-                                        description: post.author_name ? `Kirjoittanut ${post.author_name}` : '',
-                                        photo_url: mediaUrl,
-                                        created_at: post.created_at,
-                                        linkUrl: `seina.html?post=${post.id}`
-                                    });
-                                }
-                            });
+                            if (wallPostPlaces) {
+                                wallPostPlaces.forEach(row => {
+                                    const post = row.posts;
+                                    if (post && post.visibility !== 'code_protected' && post.status !== 'deleted') {
+                                        const exp = post.expires_at || post.valid_until;
+                                        if (exp && new Date(exp) < new Date()) return;
+                                        const attImg = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'image')?.url;
+                                        const mediaImg = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : null;
+                                        const mediaUrl = attImg || mediaImg || post.image_url || null;
+                                        localFeedItems.push({
+                                            id: post.id,
+                                            type: 'wall_post',
+                                            label: '🧱 Seinäjulkaisu',
+                                            color: '#8b5cf6',
+                                            title: post.title || post.content || '',
+                                            description: post.author_name ? `Kirjoittanut ${post.author_name}` : '',
+                                            photo_url: mediaUrl,
+                                            created_at: post.created_at,
+                                            linkUrl: `seina.html?post=${post.id}`
+                                        });
+                                    }
+                                });
+                            }
                         }
                     } catch(e) { console.warn('Seinäjulkaisut place_id-haku epäonnistui:', e); }
 
@@ -1105,20 +1112,37 @@ document.addEventListener('DOMContentLoaded', async () => {
                         try {
                             const { data: feedData, error: feedError } = await laukaaDb2
                                 .from('posts')
-                                .select('*, post_media(url, media_type)')
+                                .select('*, post_attachments(*), post_media(url, media_type)')
                                 .in('id', feedPostIds)
                                 .or('status.eq.APPROVED,status.eq.published,status.is.null')
                                 .or('visibility.eq.public,visibility.is.null')
-                                .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                                 .order('created_at', { ascending: false });
                             if (!feedError && feedData) {
-                                feedData.filter(p => p.visibility !== 'code_protected' && p.status !== 'deleted').forEach(post => {
+                                const seenPostIds = new Set(sbAjankohtainen.map(x => x.id));
+                                feedData.filter(p => {
+                                    if (p.visibility === 'code_protected' || p.visibility === 'hidden') return false;
+                                    const st = String(p.status || '').toLowerCase();
+                                    if (st === 'deleted' || st === 'cleanup_pending' || st === 'rejected' || st === 'archived') return false;
+                                    const exp = p.expires_at || p.valid_until;
+                                    if (exp && new Date(exp) < new Date()) return false;
+                                    return true;
+                                }).forEach(post => {
+                                    if (seenPostIds.has(post.id)) return;
+                                    seenPostIds.add(post.id);
+
                                     // Määritetään tyyppi: yhteisöjulkaisut vs. yrityksen feedjulkaisut
                                     const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
                                     const postTypeUpper = (post.type || '').toUpperCase();
                                     const isCommunity = COMMUNITY_TYPES.includes(postTypeUpper);
-                                    const mediaUrl = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : (post.image_url || null);
+
+                                    // Liitteet: post_attachments ensisijainen, post_media toissijainen, image_url fallback
+                                    const attImg = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'image')?.url;
+                                    const mediaImg = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : null;
+                                    const mediaUrl = attImg || mediaImg || post.image_url || null;
+
+                                    const pdfAtt = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'pdf');
                                     const pubName = post.publisher_name || post.org_name || (post.organization_id && !post.organization_id.startsWith('company-') ? post.organization_id : '');
+
                                     sbAjankohtainen.push({
                                         id: post.id,
                                         type: isCommunity ? postTypeUpper : 'feed_post',
@@ -1128,6 +1152,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                         location_name: post.location_name || post.place_name || '',
                                         publisher_name: pubName,
                                         photo_url: mediaUrl,
+                                        pdf_url: pdfAtt ? pdfAtt.url : null,
+                                        pdf_name: pdfAtt ? (pdfAtt.file_name || 'Avaa PDF') : null,
                                         created_at: post.created_at,
                                         isSupabase: true
                                     });
@@ -1508,7 +1534,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                         linkUrl = `ilmoituskortti.html?id=${enc.id}`;
                     }
 
+                    const photoHtml = enc.photo_url ? `
+                        <div style="width:100%;height:150px;overflow:hidden;border-radius:8px 8px 0 0;background:#e2e8f0;margin-bottom:0.75rem;">
+                            <img src="${enc.photo_url}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>` : '';
+
+                    const pdfHtml = enc.pdf_url ? `
+                        <div style="margin-top:0.5rem;">
+                            <span onclick="event.preventDefault(); event.stopPropagation(); window.open('${enc.pdf_url}', '_blank');" style="display:inline-flex;align-items:center;gap:4px;font-size:0.8rem;color:#7c3aed;font-weight:600;padding:3px 8px;background:#f3f0ff;border-radius:6px;border:1px solid #ddd6fe;cursor:pointer;">
+                                📄 ${enc.pdf_name || 'Avaa PDF'}
+                            </span>
+                        </div>` : '';
+
                     const cardInner = `
+                        ${photoHtml}
                         <div class="card-content">
                             <span class="badge" style="background: ${badgeColor};">${badgeLabel}</span>
                             <h3 class="card-title">${(() => { const text = enc.title || enc.description || ''; return text.substring(0, 120) + (text.length > 120 ? '...' : ''); })()}</h3>
@@ -1517,6 +1556,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 ${enc.location_name ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:location-on-outline"></span> ${enc.location_name}</span>` : ''}
                                 ${dateStr ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:calendar-month-outline"></span> ${dateStr}</span>` : ''}
                             </div>
+                            ${pdfHtml}
                         </div>
                     `;
 

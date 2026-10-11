@@ -2503,64 +2503,50 @@ async function loadEncountersForPlace(place) {
                     .from('contents')
                     .select('*')
                     .or(contentsQuery);
-                
+
                 // Feed-julkaisut (posts & post_places -taulut) – LaukaaLive-projekti
-                const placeVariants = Array.from(new Set([
-                    place.place_id,
+                const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                const validPlaceUuids = Array.from(new Set([
                     place.id,
-                    place.name,
-                    place.canonical_name,
-                    placeName,
-                    ...(parentPlace ? [parentPlace.name, parentPlace.place_id, parentPlace.canonical_name] : []),
-                    ...(subPlaces ? subPlaces.flatMap(sp => [sp.name, sp.place_id, sp.canonical_name]) : [])
-                ].filter(Boolean)));
+                    place.place_id,
+                    ...(parentPlace ? [parentPlace.id, parentPlace.place_id] : []),
+                    ...(subPlaces ? subPlaces.flatMap(sp => [sp.id, sp.place_id]) : [])
+                ].filter(id => id && UUID_REGEX.test(String(id).trim()))));
 
                 let matchedPostIds = [];
-                if (liveSb) {
+                if (liveSb && validPlaceUuids.length > 0) {
                     try {
                         const { data: ppData } = await liveSb
                             .from('post_places')
-                            .select('post_id, place_id');
+                            .select('post_id')
+                            .in('place_id', validPlaceUuids);
                         if (ppData && ppData.length > 0) {
-                            const lowerVariants = placeVariants.map(v => String(v).toLowerCase());
-                            matchedPostIds = ppData
-                                .filter(row => row.place_id && lowerVariants.some(v => {
-                                    const r = String(row.place_id).toLowerCase();
-                                    return r.includes(v) || v.includes(r) ||
-                                           r.replace(/en$/, '').includes(v.replace(/en$/, '')) ||
-                                           v.replace(/en$/, '').includes(r.replace(/en$/, ''));
-                                }))
-                                .map(row => row.post_id);
+                            matchedPostIds = [...new Set(ppData.map(row => row.post_id).filter(Boolean))];
                         }
                     } catch (e) {
                         console.warn('post_places fetch notice:', e);
                     }
                 }
 
-                let postsQueryParts = [];
-                if (matchedPostIds.length > 0) {
-                    postsQueryParts.push(`id.in.(${matchedPostIds.join(',')})`);
-                }
-                placeVariants.forEach(pv => {
-                    const safePv = String(pv).replace(/["%,]/g, ' ').trim();
-                    if (safePv) {
-                        postsQueryParts.push(`place_id.ilike.%${safePv}%`);
-                        postsQueryParts.push(`place_name.ilike.%${safePv}%`);
-                        postsQueryParts.push(`location_name.ilike.%${safePv}%`);
+                let postsData = [];
+                if (liveSb && matchedPostIds.length > 0) {
+                    try {
+                        const { data: rawPosts } = await liveSb
+                            .from('posts')
+                            .select('*, post_attachments(*), post_media(url, media_type)')
+                            .in('id', matchedPostIds);
+                        postsData = (rawPosts || []).filter(item => {
+                            const st = String(item.status || '').toLowerCase();
+                            if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted' || st === 'cleanup_pending') return false;
+                            if (item.visibility === 'code_protected' || item.visibility === 'hidden') return false;
+                            const exp = item.expires_at || item.valid_until;
+                            if (exp && new Date(exp) < new Date()) return false;
+                            return true;
+                        });
+                    } catch (e) {
+                        console.warn('posts fetch notice:', e);
                     }
-                });
-
-                const postsResult = (liveSb && postsQueryParts.length > 0)
-                    ? await liveSb.from('posts').select('*').or(postsQueryParts.join(','))
-                    : { data: null };
-                const postsData = (postsResult.data || []).filter(item => {
-                    const st = String(item.status || '').toLowerCase();
-                    if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted' || st === 'cleanup_pending') return false;
-                    if (item.visibility === 'code_protected' || item.visibility === 'hidden') return false;
-                    if (!item.expires_at && !item.valid_until) return true;
-                    const exp = item.expires_at || item.valid_until;
-                    return new Date(exp) >= new Date();
-                });
+                }
                     
                 // Tarjoukset/Tapahtumat – LaukaaLive-projekti
                 const offersQuery = targetIds.map(idVal => `place_id.eq.${idVal}`).join(',');
@@ -2606,27 +2592,21 @@ async function loadEncountersForPlace(place) {
                         const postTypeUpper = (item.type || '').toUpperCase();
                         const isCommunityPost = COMMUNITY_TYPES.includes(postTypeUpper);
                         
-                        const pMedia = mediaByPost[item.id] || [];
-                        const pAtt = attachmentsByPost[item.id] || [];
+                        const pMedia = (item.post_media && item.post_media.length > 0 ? item.post_media : mediaByPost[item.id]) || [];
+                        const pAtt = (item.post_attachments && item.post_attachments.length > 0 ? item.post_attachments : attachmentsByPost[item.id]) || [];
                         
-                        let firstImg = item.image_url;
-                        if (!firstImg && pMedia.length > 0) {
-                            const imgItem = pMedia.find(m => m.media_type === 'image');
-                            if (imgItem) firstImg = imgItem.url;
-                        }
-                        if (!firstImg && pAtt.length > 0) {
-                            const imgAtt = pAtt.find(a => a.type === 'image');
-                            if (imgAtt) firstImg = imgAtt.url;
-                        }
+                        const attImg = pAtt.find?.(a => a.type === 'image')?.url;
+                        const mediaImg = pMedia.find?.(m => m.media_type === 'image')?.url;
+                        let firstImg = attImg || mediaImg || item.image_url || null;
 
                         let ytVidId = item.video_id;
-                        if (!ytVidId && pMedia.length > 0) {
-                            const vidItem = pMedia.find(m => m.media_type === 'video');
-                            if (vidItem) ytVidId = extractYouTubeId(vidItem.url);
-                        }
                         if (!ytVidId && pAtt.length > 0) {
                             const ytAtt = pAtt.find(a => a.type === 'youtube');
                             if (ytAtt) ytVidId = ytAtt.youtube_video_id || extractYouTubeId(ytAtt.url);
+                        }
+                        if (!ytVidId && pMedia.length > 0) {
+                            const vidItem = pMedia.find(m => m.media_type === 'video');
+                            if (vidItem) ytVidId = extractYouTubeId(vidItem.url);
                         }
                         
                         allItems.push({
@@ -4078,9 +4058,11 @@ async function loadWallPostsForPlace(placeData) {
         const addPost = (p, matchedPlaceId) => {
             if (!p || !p.id || seenIds.has(p.id)) return;
             const st = (p.status || '').toLowerCase();
-            if (st === 'cleanup_pending' || st === 'deleted' || st === 'hidden') return;
+            if (st === 'cleanup_pending' || st === 'deleted' || st === 'hidden' || st === 'rejected' || st === 'archived') return;
             const vis = p.visibility;
             if (vis && vis !== 'public' && vis !== 'approved') return;
+            const exp = p.expires_at || p.valid_until;
+            if (exp && new Date(exp) < new Date()) return;
             seenIds.add(p.id);
             posts.push({ ...p, _matched_place_id: matchedPlaceId || p.place_id || null });
         };
@@ -4108,7 +4090,7 @@ async function loadWallPostsForPlace(placeData) {
                 try {
                     const { data: directData, error: dErr } = await aiSb
                         .from('posts')
-                        .select('*')
+                        .select('*, post_attachments(*), post_media(url, media_type)')
                         .eq('place_id', pId)
                         .order('created_at', { ascending: false })
                         .limit(30);
@@ -4118,51 +4100,33 @@ async function loadWallPostsForPlace(placeData) {
             }
         }
 
-        // ── VAIHE 2: post_places -relaatiohaku (haetaan post_id:t place_id:n perusteella) ──
-        if (idList.length > 0) {
-            for (const pId of idList) {
-                try {
-                    const { data: ppRows, error: ppErr } = await aiSb
-                        .from('post_places')
-                        .select('post_id, place_id')
-                        .eq('place_id', pId)
-                        .limit(50);
-                    if (ppErr) console.debug('[WallPosts] post_places query error for', pId, ppErr.message);
-                    if (ppRows && ppRows.length > 0) {
-                        const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
-                        if (postIds.length > 0) {
-                            const { data: pData } = await aiSb
-                                .from('posts')
-                                .select('*')
-                                .in('id', postIds)
-                                .order('created_at', { ascending: false });
-                            (pData || []).forEach(p => addPost(p, pId));
-                        }
-                    }
-                } catch (e) { console.debug('[WallPosts] post_places exc:', e?.message); }
-            }
-        }
+        const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const validPlaceUuids = idList.filter(id => id && UUID_REGEX.test(String(id).trim()));
 
-        // ── VAIHE 3: Nimipohjainen ilike-haku post_places:sta (vanhat julkaisut) ──
-        if (posts.length === 0 && placeData.name) {
+        // ── VAIHE 2: post_places -relaatiohaku kelvollisilla UUID-tunnisteilla (Uusi skeema) ──
+        if (validPlaceUuids.length > 0) {
             try {
-                const { data: ppRows } = await aiSb
+                const { data: ppRows, error: ppErr } = await aiSb
                     .from('post_places')
                     .select('post_id, place_id')
-                    .ilike('place_id', `%${placeData.name.trim()}%`)
-                    .limit(30);
+                    .in('place_id', validPlaceUuids)
+                    .limit(100);
+                if (ppErr) console.debug('[WallPosts] post_places query error:', ppErr.message);
                 if (ppRows && ppRows.length > 0) {
                     const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
                     if (postIds.length > 0) {
                         const { data: pData } = await aiSb
                             .from('posts')
-                            .select('*')
+                            .select('*, post_attachments(*), post_media(url, media_type)')
                             .in('id', postIds)
                             .order('created_at', { ascending: false });
-                        (pData || []).forEach(p => addPost(p, placeData.name));
+                        (pData || []).forEach(p => {
+                            const match = ppRows.find(r => r.post_id === p.id);
+                            addPost(p, match?.place_id);
+                        });
                     }
                 }
-            } catch (e) { console.debug('[WallPosts] ilike post_places exc:', e?.message); }
+            } catch (e) { console.debug('[WallPosts] post_places exc:', e?.message); }
         }
 
         // ── VAIHE 4: Fallback – posts.place_id nimihaku ──
@@ -4237,8 +4201,10 @@ async function loadWallPostsForPlace(placeData) {
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dc2626;color:#fff;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:800;">🆕 Uusi</span>`
                 : '';
 
-            // Kuva: image_url (Android) tai post_media (livescreen)
-            const imgUrl = p.image_url || (p.post_media && p.post_media.find && p.post_media.find(m => m.media_type === 'image')?.url);
+            // Kuva: post_attachments (uusi), post_media (livescreen) tai image_url (Android)
+            const attImg = p.post_attachments && p.post_attachments.find && p.post_attachments.find(a => a.type === 'image')?.url;
+            const mediaImg = p.post_media && p.post_media.find && p.post_media.find(m => m.media_type === 'image')?.url;
+            const imgUrl = attImg || mediaImg || p.image_url || null;
             const imgHtml = imgUrl ? `
                 <div style="width:100%;height:160px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
                     <img src="${imgUrl}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
