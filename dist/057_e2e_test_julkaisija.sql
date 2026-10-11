@@ -151,7 +151,7 @@ SELECT
     pl.name AS place_name,
     pl.type AS place_type
 FROM public.post_places pp
-LEFT JOIN public.places pl ON pl.id::text = pp.place_id
+LEFT JOIN public.places pl ON pl.id = pp.place_id
 WHERE pp.post_id = 'eeeeeeee-e2e0-4e2e-ae2e-e2e2e2e2e2e2';
 
 -- Odotettu tulos: 1 rivi, jossa place_name on 'Laukaan kirkonkylä' (tai vastaava)
@@ -228,7 +228,7 @@ SELECT
     'Paikkayhteys (post_places → places)',
     CASE WHEN EXISTS (
         SELECT 1 FROM public.post_places pp
-        JOIN public.places pl ON pl.id::text = pp.place_id
+        JOIN public.places pl ON pl.id = pp.place_id
         WHERE pp.post_id = 'eeeeeeee-e2e0-4e2e-ae2e-e2e2e2e2e2e2'
     ) THEN '✅ UUID TÄSMÄÄ' ELSE '❌ UUID EI TÄSMÄÄ (V1-bugi)' END
 

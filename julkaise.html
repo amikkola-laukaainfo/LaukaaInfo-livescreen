@@ -393,7 +393,24 @@
       let editingPostId = null;
       let loadedMyPosts = [];
       let currentPubType = 'announcement';
-      let availableTags = ['Käsityö', 'Kulttuuri', 'Yrittäjyys', 'Verkostot', 'VIDEOTUOTANTO', 'DIGITAALISUUS', 'KOULUTUS', 'Liikunta', 'Nuoret', 'Tapahtumat', 'Perinteet'];
+      let availableTags = [
+        { tag_id: 'kulttuuri', name: 'Kulttuuri' },
+        { tag_id: 'kasityo', name: 'Käsityö' },
+        { tag_id: 'musiikki', name: 'Musiikki' },
+        { tag_id: 'perinteet', name: 'Perinteet' },
+        { tag_id: 'tapahtumat', name: 'Tapahtumat' },
+        { tag_id: 'matkailu', name: 'Matkailu' },
+        { tag_id: 'luonto', name: 'Luonto' },
+        { tag_id: 'liikunta', name: 'Liikunta & Urheilu' },
+        { tag_id: 'hyvinvointi', name: 'Hyvinvointi' },
+        { tag_id: 'nuoret', name: 'Nuoret' },
+        { tag_id: 'lapset', name: 'Lapset & Perhe' },
+        { tag_id: 'yrittajyys', name: 'Yrittäjyys' },
+        { tag_id: 'verkostot', name: 'Verkostot' },
+        { tag_id: 'videotuotanto', name: 'Videotuotanto & Media' },
+        { tag_id: 'digitaalisuus', name: 'Digitaalisuus' },
+        { tag_id: 'koulutus', name: 'Koulutus' }
+      ];
       let selectedThemes = new Set();
 
       // Page Init
@@ -415,32 +432,70 @@
         if (!select || !supabaseClient) return;
 
         try {
-          const { data: dbPlaces } = await supabaseClient
+          const { data: dbPlaces, error } = await supabaseClient
             .from('places')
-            .select('name, type')
+            .select('id, name, canonical_name, type, municipality, importance')
+            .order('importance', { ascending: false, nullsFirst: false })
             .order('name', { ascending: true });
 
-          if (dbPlaces && dbPlaces.length > 0) {
-            const existingValues = new Set(Array.from(select.options).map(o => o.value.toLowerCase().trim()));
+          if (error) {
+            console.warn('Places fetch error:', error);
+            return;
+          }
 
-            let dynamicGroup = document.getElementById('dynamicDbPlacesGroup');
-            if (!dynamicGroup) {
-              dynamicGroup = document.createElement('optgroup');
-              dynamicGroup.id = 'dynamicDbPlacesGroup';
-              dynamicGroup.label = 'Kaikki Laukaan kohteet & paikat';
-              select.appendChild(dynamicGroup);
+          if (dbPlaces && dbPlaces.length > 0) {
+            const currentValue = select.value;
+            select.innerHTML = '';
+
+            // Etsitään Laukaan kunta / pääalue oletukseksi
+            const kuntaPlace = dbPlaces.find(p =>
+              p.id === '55555555-5555-4555-a555-555555555555' ||
+              p.type === 'KUNTA' ||
+              p.canonical_name === 'Laukaa kk' ||
+              p.name === 'Laukaa'
+            ) || dbPlaces[0];
+
+            if (kuntaPlace) {
+              const opt = document.createElement('option');
+              opt.value = kuntaPlace.id;
+              opt.textContent = `📍 Koko Laukaan alue (${kuntaPlace.name})`;
+              select.appendChild(opt);
             }
 
-            dbPlaces.forEach(p => {
-              const nameClean = p.name ? p.name.trim() : '';
-              if (nameClean && !existingValues.has(nameClean.toLowerCase())) {
-                existingValues.add(nameClean.toLowerCase());
+            // Ryhmä: Taajamat & Kylät
+            const areaPlaces = dbPlaces.filter(p => (p.type === 'AREA' || p.type === 'KUNTA') && p.id !== kuntaPlace?.id);
+            if (areaPlaces.length > 0) {
+              const optgroup = document.createElement('optgroup');
+              optgroup.label = 'Taajamat & Kylät';
+              areaPlaces.forEach(p => {
                 const opt = document.createElement('option');
-                opt.value = nameClean;
-                opt.textContent = `📍 ${nameClean}`;
-                dynamicGroup.appendChild(opt);
-              }
-            });
+                opt.value = p.id;
+                opt.textContent = `📍 ${p.name || p.canonical_name}`;
+                optgroup.appendChild(opt);
+              });
+              select.appendChild(optgroup);
+            }
+
+            // Ryhmä: Kohteet & Suositut Alueet
+            const spotPlaces = dbPlaces.filter(p => p.type !== 'AREA' && p.type !== 'KUNTA');
+            if (spotPlaces.length > 0) {
+              const optgroup = document.createElement('optgroup');
+              optgroup.label = 'Kohteet & Suositut Alueet';
+              spotPlaces.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = `📍 ${p.name}`;
+                optgroup.appendChild(opt);
+              });
+              select.appendChild(optgroup);
+            }
+
+            // Palautetaan aiempi valinta jos löytyy, muutoin oletuspaikka
+            if (currentValue && Array.from(select.options).some(o => o.value === currentValue)) {
+              select.value = currentValue;
+            } else if (kuntaPlace) {
+              select.value = kuntaPlace.id;
+            }
           }
         } catch (e) {
           console.warn('Places fetch notice:', e);
@@ -449,9 +504,12 @@
 
       function addThemeFromDropdown(val) {
         if (!val) return;
-        selectedThemes.add(val);
-        if (!availableTags.includes(val)) {
-          availableTags.unshift(val);
+        let match = availableTags.find(t => t.tag_id === val || (t.name && t.name.toLowerCase() === val.toLowerCase()));
+        let finalId = match ? match.tag_id : val.toLowerCase().replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/[^a-z0-9_-]/g, '');
+
+        selectedThemes.add(finalId);
+        if (!availableTags.some(t => t.tag_id === finalId)) {
+          availableTags.unshift({ tag_id: finalId, name: val });
         }
         document.getElementById('selectedThemesCount').innerText = `${selectedThemes.size} valittu`;
         renderThemesList(availableTags);
@@ -462,10 +520,22 @@
       async function loadThemesFromSupabase() {
         if (supabaseClient) {
           try {
-            const { data } = await supabaseClient.from('tags').select('name').limit(100);
+            const { data } = await supabaseClient.from('tags').select('tag_id, name').limit(150);
             if (data && data.length > 0) {
-              const fetchedNames = data.map(t => t.name).filter(Boolean);
-              availableTags = Array.from(new Set([...fetchedNames, ...availableTags]));
+              const dbTagList = data.map(t => ({
+                tag_id: t.tag_id || t.id,
+                name: t.name || t.tag_id
+              })).filter(t => t.tag_id);
+
+              const seen = new Set();
+              const merged = [];
+              for (const t of [...dbTagList, ...availableTags]) {
+                if (!seen.has(t.tag_id)) {
+                  seen.add(t.tag_id);
+                  merged.push(t);
+                }
+              }
+              availableTags = merged;
             }
           } catch (e) {
             console.warn('Tags fetch notice:', e);
@@ -476,21 +546,25 @@
 
       function renderThemesList(tags) {
         const container = document.getElementById('themesContainer');
+        if (!container) return;
         container.innerHTML = tags.map(t => {
-          const isSel = selectedThemes.has(t);
+          const tid = typeof t === 'object' ? t.tag_id : t;
+          const tname = typeof t === 'object' ? t.name : t;
+          const isSel = selectedThemes.has(tid);
           return `
-            <button type="button" onclick="toggleThemeTag('${t}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${isSel ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-slate-700 border-slate-200 hover:border-violet-300'}">
-              ${isSel ? '✓ ' : '+ '}🧩 ${t}
+            <button type="button" onclick="toggleThemeTag('${tid}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${isSel ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-slate-700 border-slate-200 hover:border-violet-300'}">
+              ${isSel ? '✓ ' : '+ '}🧩 ${tname}
             </button>
           `;
         }).join('');
       }
 
-      function toggleThemeTag(tag) {
-        if (selectedThemes.has(tag)) {
-          selectedThemes.delete(tag);
+      function toggleThemeTag(tagId) {
+        if (!tagId) return;
+        if (selectedThemes.has(tagId)) {
+          selectedThemes.delete(tagId);
         } else {
-          selectedThemes.add(tag);
+          selectedThemes.add(tagId);
         }
         document.getElementById('selectedThemesCount').innerText = `${selectedThemes.size} valittu`;
         renderThemesList(availableTags);
@@ -498,7 +572,7 @@
 
       function filterThemes(query) {
         const q = query.toLowerCase().trim();
-        const filtered = availableTags.filter(t => t.toLowerCase().includes(q));
+        const filtered = availableTags.filter(t => (t.name || t.tag_id).toLowerCase().includes(q) || t.tag_id.toLowerCase().includes(q));
         renderThemesList(filtered);
       }
 
