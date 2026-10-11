@@ -208,6 +208,59 @@ let encounterCacheTime = 0;
 // ===================================================
 // DATAN HAKU (Encounters, Places, Themes, Theme_Places)
 // ===================================================
+// RPC-APUFUNKTIOT (create, update, delete, contact)
+// ===================================================
+
+async function createEncounterRpc(params) {
+    if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
+    const { data, error } = await window.LaukaaSupabase.rpc('create_encounter', params);
+    if (error) throw error;
+    return data;
+}
+
+async function updateEncounterRpc(encounterId, editToken, updates = {}) {
+    if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
+    const { data, error } = await window.LaukaaSupabase.rpc('update_encounter_with_token', {
+        p_encounter_id: encounterId,
+        p_edit_token: editToken,
+        p_title: updates.title || null,
+        p_description: updates.description || null,
+        p_price_info: updates.price_info || null,
+        p_status: updates.status || null
+    });
+    if (error) throw error;
+    return data;
+}
+
+async function deleteEncounterRpc(encounterId, editToken = null) {
+    if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
+    const { data, error } = await window.LaukaaSupabase.rpc('delete_encounter_with_token', {
+        p_encounter_id: encounterId,
+        p_edit_token: editToken
+    });
+    if (error) throw error;
+    return data;
+}
+
+async function getEncounterContactRpc(encounterId, editToken = null) {
+    if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
+    const { data, error } = await window.LaukaaSupabase.rpc('get_encounter_contact', {
+        p_encounter_id: encounterId,
+        p_edit_token: editToken
+    });
+    if (error) throw error;
+    return data;
+}
+
+// Globaali API-rajapinta
+window.LaukaaKohtaamiset = {
+    createEncounter: createEncounterRpc,
+    updateEncounter: updateEncounterRpc,
+    deleteEncounter: deleteEncounterRpc,
+    getContact: getEncounterContactRpc
+};
+
+// ===================================================
 async function fetchEncounters(currentUser = null) {
     if (!currentUser && encounterCache && Date.now() - encounterCacheTime < 5 * 60 * 1000) {
         return encounterCache;
@@ -217,24 +270,29 @@ async function fetchEncounters(currentUser = null) {
             let data, error;
 
             if (currentUser) {
-                // Kirjautunut: näytä julkiset + omat kaikissa tiloissa
+                // Kirjautunut: näytä julkiset + omat kaikissa tiloissa suorasta taulusta
                 ({ data, error } = await window.LaukaaSupabase
                     .from('encounters')
                     .select('*')
                     .or(`status.eq.active,and(user_id.eq.${currentUser.id},status.in.(draft,closed,archived))`)
                     .order('created_at', { ascending: false }));
             } else {
-                // Anonyymi: vain aktiiviset julkiset ilmoitukset
+                // Anonyymi: luetaan aina encounters_public -näkymästä (RLS-turvattu, ei salaisuuksia)
                 ({ data, error } = await window.LaukaaSupabase
-                    .from('encounters')
+                    .from('encounters_public')
                     .select('*')
-                    .eq('status', 'active')
                     .order('created_at', { ascending: false }));
             }
 
             if (error) {
                 console.error('Supabase fetch error:', error);
-                return mockEncounters;
+                // Käyttöliittymä ei korvaa aitoa tietokantavirhettä mock-datalla
+                const errBanner = document.getElementById('km-db-error-banner');
+                if (errBanner) {
+                    errBanner.style.display = 'block';
+                    errBanner.innerText = 'Kohtaamisten lataus epäonnistui tietokantavirheen vuoksi.';
+                }
+                return [];
             }
             if (data !== null) {
                 const res = data.map(d => ({ ...d, is_encounter: true, tags: Array.isArray(d.tags) ? d.tags : [] }));
@@ -246,8 +304,10 @@ async function fetchEncounters(currentUser = null) {
             }
         }
     } catch (e) {
-        console.warn('Virhe haettaessa Supabasesta, käytetään mock-dataa:', e);
+        console.error('Virhe haettaessa Supabasesta:', e);
+        return [];
     }
+    // Vain jos Supabase-asiakasta ei ole määritelty lainkaan (paikallinen offline-testaus)
     return mockEncounters.map(m => ({ ...m, is_encounter: true }));
 }
 
@@ -1080,7 +1140,7 @@ async function initIlmoituskortti() {
             if (descEl && descEl.parentNode) {
                 descEl.parentNode.insertBefore(resolvedBanner, descEl);
             }
-        } else if (ad.contact_email) {
+        } else if (ad.allow_messages !== false) {
             btn.href = '#';
             btn.innerText = 'Ota yhteyttä ilmoittajaan';
             btn.onclick = (e) => {
@@ -1089,7 +1149,7 @@ async function initIlmoituskortti() {
             };
         } else {
             btn.href = '#';
-            btn.innerText = 'Ei yhteystietoja saatavilla';
+            btn.innerText = 'Ei viestintää saatavilla';
             btn.style.opacity = '0.5';
             btn.style.cursor = 'not-allowed';
             btn.onclick = (e) => e.preventDefault();
