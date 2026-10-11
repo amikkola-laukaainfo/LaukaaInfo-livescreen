@@ -3047,11 +3047,11 @@ async function loadLostItemsForPlace(place) {
         for (const pid of targetPlaceIds) {
             try {
                 const snap1 = await db.collection('lostItems').where('placeId', '==', pid).limit(50).get();
-                if (!snap1.empty) rawDocs.push(...snap1.docs);
+                if (!snap1.empty) snap1.docs.forEach(d => { d._sourceCol = 'lostItems'; rawDocs.push(d); });
             } catch(e) {}
             try {
                 const snap2 = await db.collection('observations').where('placeId', '==', pid).limit(50).get();
-                if (!snap2.empty) rawDocs.push(...snap2.docs);
+                if (!snap2.empty) snap2.docs.forEach(d => { d._sourceCol = 'observations'; rawDocs.push(d); });
             } catch(e) {}
         }
         
@@ -3109,101 +3109,221 @@ async function loadLostItemsForPlace(place) {
         if (filteredDocs.length === 0) return;
         
         const sortedByDate = [...filteredDocs].sort((a, b) => {
-            const tA = a.data().timestamp?.toMillis?.() || 0;
-            const tB = b.data().timestamp?.toMillis?.() || 0;
+            const dA = a.data();
+            const dB = b.data();
+            const tA = dA.timestamp?.toMillis?.() || dA.createdAt?.toMillis?.() || 0;
+            const tB = dB.timestamp?.toMillis?.() || dB.createdAt?.toMillis?.() || 0;
             return tB - tA;
         });
         
-        const lostItems = sortedByDate.map(doc => {
+        const allMappedItems = sortedByDate.map(doc => {
             const d = doc.data();
-            const isLost = d.category === 'LOST' || d.category === 'lost';
-            return {
-                id: doc.id,
-                type: 'lost_and_found',
-                title: (isLost ? '🔍 Kadonnut: ' : '🔍 Löytynyt: ') + (d.title || 'Ilmoitus'),
-                description: d.description || '',
-                created_at: d.timestamp?.toDate?.()?.toISOString() || null,
-                url: `https://lostnfound-f0d25.web.app/item/${doc.id}`,
-                imageUrl: d.imageUrl1 || null
-            };
+            const isObs = doc._sourceCol === 'observations' ||
+                (doc.ref && doc.ref.parent && doc.ref.parent.id === 'observations') ||
+                ['POSITIVE', 'PROBLEM', 'TIP', 'SIGHTING', 'MONITORING', 'OBSERVATION'].includes(String(d.type || '').toUpperCase()) ||
+                Boolean(d.phenomenonId);
+
+            const timestampVal = d.timestamp?.toDate?.() || d.createdAt?.toDate?.() || null;
+            const img = d.imageUrl1 || d.photo_url || (Array.isArray(d.images) && d.images.length > 0 ? d.images[0] : null) || null;
+            const desc = d.description || '';
+            const rawTitle = d.title || (isObs ? 'Havainto' : 'Ilmoitus');
+
+            if (isObs) {
+                const obsType = String(d.type || '').toUpperCase();
+                let prefix = '🌱 Havainto: ';
+                let badgeLabel = 'Havainto';
+                let icon = '🌱';
+
+                if (obsType === 'POSITIVE' || String(d.category || '').toLowerCase().includes('huomaa hyvä')) {
+                    prefix = '✨ Huomaa hyvä: ';
+                    badgeLabel = 'Huomaa hyvä';
+                    icon = '✨';
+                } else if (obsType === 'PROBLEM') {
+                    prefix = '⚠️ Ongelma: ';
+                    badgeLabel = 'Ongelma';
+                    icon = '⚠️';
+                } else if (obsType === 'TIP') {
+                    prefix = '💡 Vinkki: ';
+                    badgeLabel = 'Vinkki';
+                    icon = '💡';
+                } else if (obsType === 'SIGHTING') {
+                    prefix = '👀 Havainto: ';
+                    badgeLabel = 'Havainto';
+                    icon = '👀';
+                } else if (obsType === 'MONITORING') {
+                    prefix = '📊 Seuranta: ';
+                    badgeLabel = 'Seuranta';
+                    icon = '📊';
+                } else if (d.category) {
+                    prefix = `${d.category}: `;
+                    badgeLabel = d.category;
+                    icon = '🌱';
+                }
+
+                return {
+                    id: doc.id,
+                    isObservation: true,
+                    type: 'observation',
+                    obsType: obsType,
+                    badgeLabel: badgeLabel,
+                    category: d.category || null,
+                    tags: Array.isArray(d.tags) ? d.tags : [],
+                    title: prefix + rawTitle,
+                    rawTitle: rawTitle,
+                    description: desc,
+                    created_at: timestampVal ? timestampVal.toISOString() : null,
+                    url: `https://lostnfound-f0d25.web.app/item/${doc.id}?tab=havainnot`,
+                    imageUrl: img,
+                    icon: icon
+                };
+            } else {
+                const isLost = d.category === 'LOST' || d.category === 'lost' || d.type === 'LOST' || d.type === 'lost';
+                return {
+                    id: doc.id,
+                    isObservation: false,
+                    type: 'lost_and_found',
+                    badgeLabel: isLost ? 'Kadonnut' : 'Löytynyt',
+                    category: d.category || null,
+                    tags: Array.isArray(d.tags) ? d.tags : [],
+                    title: (isLost ? '🔍 Kadonnut: ' : '🔍 Löytynyt: ') + rawTitle,
+                    rawTitle: rawTitle,
+                    description: desc,
+                    created_at: timestampVal ? timestampVal.toISOString() : null,
+                    url: `https://lostnfound-f0d25.web.app/item/${doc.id}`,
+                    imageUrl: img,
+                    icon: '🔍'
+                };
+            }
         });
-        
-        // Lisätään löydetyt/kadonneet olemassa olevaan encounters-listaan
+
+        const obsItems = allMappedItems.filter(i => i.isObservation);
+        const lostItems = allMappedItems.filter(i => !i.isObservation);
+
         const container = document.getElementById('encounters-list');
         const section = document.getElementById('encounters-section');
-        if (!container || lostItems.length === 0) return;
+        if (!container || allMappedItems.length === 0) return;
         
         section.style.display = 'block';
         
         // Nostetaan myös scroll-painike näkyviin, jos on ilmoituksia
         const scrollBtn = document.getElementById('btn-scroll-encounters');
         if (scrollBtn) scrollBtn.style.display = 'inline-flex';
-        
-        const icon = '🔍';
-        const label = 'Kadonnut & Löydetty (Lostnfound)';
-        
-        let html = `<div style="margin-bottom: 1.5rem; border: 1px solid #fde68a; border-radius: var(--inner-radius); overflow: hidden; background: #fffbeb;">
-            <div style="padding: 1.25rem; background: #fef9c3; font-weight: 700; color: #92400e; border-bottom: 1px solid #fde68a; display: flex; justify-content: space-between; align-items: center;">
-                <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
-                <span style="background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${lostItems.length} kpl</span>
-            </div>
-            <div>`;
-        
-        lostItems.forEach((item, index) => {
-            const isLast = index === lostItems.length - 1;
-            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #fde68a;';
-            const accId = `lost-acc-${index}`;
-            const hasImage = !!item.imageUrl;
+
+        function renderGroupBlock(items, isObsGroup) {
+            if (items.length === 0) return '';
             
-            const dateStr = item.created_at
-                ? new Date(item.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short', year: 'numeric' })
-                : '';
-                
-            const thumbHtml = hasImage
-                ? `<img src="${item.imageUrl}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">`
-                : `<div style="width:48px;height:48px;background:#fef3c7;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;">🔍</div>`;
-                
-            let mediaContent = '';
-            if (hasImage) {
-                mediaContent += `<img src="${item.imageUrl}" alt="${item.title}" style="width:100%;max-height:320px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;">`;
-            }
-            
-            html += `
-            <div style="${borderBottom}">
-                <div onclick="(function(el){var c=document.getElementById('${accId}');var open=c.style.maxHeight&&c.style.maxHeight!=='0px';c.style.maxHeight=open?'0px':c.scrollHeight+'px';c.style.opacity=open?'0':'1';el.querySelector('.acc-arrow').style.transform=open?'rotate(0deg)':'rotate(180deg)';})(this)"
-                    style="display:flex;align-items:flex-start;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;transition:background 0.2s;"
-                    onmouseover="this.style.background='#fef9c3'" onmouseout="this.style.background='transparent'">
-                    ${thumbHtml}
-                    <div style="flex:1;min-width:0;">
-                        <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
-                        <div style="font-size:0.88rem;color:#64748b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || ''}</div>
-                        <div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-                            ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+            const cfg = isObsGroup ? {
+                borderColor: '#a7f3d0',
+                bgColor: '#f0fdf4',
+                headerBg: '#dcfce7',
+                headerColor: '#065f46',
+                badgeBg: '#bbf7d0',
+                badgeColor: '#065f46',
+                hoverBg: '#dcfce7',
+                arrowColor: '#065f46',
+                btnBg: '#059669',
+                btnShadow: 'rgba(5, 150, 105, 0.25)',
+                icon: '🌱',
+                label: 'Huomaa hyvä & Aluehavainnot (LostReFound)',
+                prefixId: 'obs-acc'
+            } : {
+                borderColor: '#fde68a',
+                bgColor: '#fffbeb',
+                headerBg: '#fef9c3',
+                headerColor: '#92400e',
+                badgeBg: '#fef3c7',
+                badgeColor: '#92400e',
+                hoverBg: '#fef9c3',
+                arrowColor: '#92400e',
+                btnBg: '#f59e0b',
+                btnShadow: 'rgba(245, 158, 11, 0.2)',
+                icon: '🔍',
+                label: 'Kadonnut & Löydetty (LostReFound)',
+                prefixId: 'lost-acc'
+            };
+
+            let blockHtml = `<div style="margin-bottom: 1.5rem; border: 1px solid ${cfg.borderColor}; border-radius: var(--inner-radius); overflow: hidden; background: ${cfg.bgColor};">
+                <div style="padding: 1.25rem; background: ${cfg.headerBg}; font-weight: 700; color: ${cfg.headerColor}; border-bottom: 1px solid ${cfg.borderColor}; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">${cfg.icon} ${cfg.label}</span>
+                    <span style="background: ${cfg.badgeBg}; color: ${cfg.badgeColor}; padding: 4px 10px; border-radius: 50px; font-size: 0.85rem; font-weight: 700;">${items.length} kpl</span>
+                </div>
+                <div>`;
+
+            items.forEach((item, index) => {
+                const isLast = index === items.length - 1;
+                const borderBottom = isLast ? '' : `border-bottom: 1px solid ${cfg.borderColor};`;
+                const accId = `${cfg.prefixId}-${index}`;
+                const hasImage = !!item.imageUrl;
+
+                const dateStr = item.created_at
+                    ? new Date(item.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short', year: 'numeric' })
+                    : '';
+
+                const thumbHtml = hasImage
+                    ? `<img src="${item.imageUrl}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">`
+                    : `<div style="width:48px;height:48px;background:${cfg.badgeBg};border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;">${item.icon || cfg.icon}</div>`;
+
+                let mediaContent = '';
+                if (hasImage) {
+                    mediaContent += `<img src="${item.imageUrl}" alt="${item.title}" style="width:100%;max-height:320px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;">`;
+                }
+
+                let badgesHtml = '';
+                if (item.category) {
+                    badgesHtml += `<span style="font-size:0.75rem;background:${cfg.badgeBg};color:${cfg.badgeColor};border:1px solid ${cfg.borderColor};border-radius:50px;padding:2px 8px;font-weight:600;">${item.category}</span>`;
+                }
+                if (item.tags && item.tags.length > 0) {
+                    badgesHtml += item.tags.slice(0, 4).map(t => `<span style="font-size:0.72rem;background:rgba(255,255,255,0.7);color:#475569;border-radius:50px;padding:2px 7px;">#${t}</span>`).join('');
+                }
+
+                blockHtml += `
+                <div style="${borderBottom}">
+                    <div onclick="(function(el){var c=document.getElementById('${accId}');var open=c.style.maxHeight&&c.style.maxHeight!=='0px';c.style.maxHeight=open?'0px':c.scrollHeight+'px';c.style.opacity=open?'0':'1';el.querySelector('.acc-arrow').style.transform=open?'rotate(0deg)':'rotate(180deg)';})(this)"
+                        style="display:flex;align-items:flex-start;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;transition:background 0.2s;"
+                        onmouseover="this.style.background='${cfg.hoverBg}'" onmouseout="this.style.background='transparent'">
+                        ${thumbHtml}
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
+                            <div style="font-size:0.88rem;color:#64748b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || ''}</div>
+                            <div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                                ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+                                ${badgesHtml}
+                            </div>
+                        </div>
+                        <span class="acc-arrow" style="flex-shrink:0;font-size:1rem;color:${cfg.arrowColor};transition:transform 0.25s;transform:rotate(0deg);">▼</span>
+                    </div>
+                    
+                    <div id="${accId}" style="max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;">
+                        <div style="padding:0 1.25rem 1.25rem;">
+                            ${mediaContent}
+                            <div style="font-size: 0.95rem; color: #1e293b; line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap;">${item.description || (isObsGroup ? 'Aluehavainto tai huomio kohteesta.' : '')}</div>
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;background:${cfg.btnBg};color:#fff;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.9rem;text-decoration:none;font-weight:700;box-shadow:0 2px 4px ${cfg.btnShadow};">
+                                Avaa LostReFoundissa →
+                            </a>
                         </div>
                     </div>
-                    <span class="acc-arrow" style="flex-shrink:0;font-size:1rem;color:#92400e;transition:transform 0.25s;transform:rotate(0deg);">▼</span>
-                </div>
-                
-                <div id="${accId}" style="max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;">
-                    <div style="padding:0 1.25rem 1.25rem;">
-                        ${mediaContent}
-                        <div style="font-size: 0.95rem; color: #1e293b; line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap;">${item.description || ''}</div>
-                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;background:#f59e0b;color:#fff;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.9rem;text-decoration:none;font-weight:700;box-shadow:0 2px 4px rgba(245, 158, 11, 0.2);">
-                            Avaa LostReFoundissa →
-                        </a>
-                    </div>
-                </div>
-            </div>`;
-        });
+                </div>`;
+            });
+
+            blockHtml += `</div></div>`;
+            return blockHtml;
+        }
+
+        let combinedHtml = '';
+        if (obsItems.length > 0) {
+            combinedHtml += renderGroupBlock(obsItems, true);
+        }
+        if (lostItems.length > 0) {
+            combinedHtml += renderGroupBlock(lostItems, false);
+        }
         
-        html += `</div></div>`;
-        container.insertAdjacentHTML('beforeend', html);
+        container.insertAdjacentHTML('beforeend', combinedHtml);
         
         // Päivitetään myös tilastolaskuri
         const statEncounters = document.getElementById('stat-encounters');
         if (statEncounters) {
             const current = parseInt(statEncounters.textContent) || 0;
-            const total = current + lostItems.length;
+            const total = current + allMappedItems.length;
             statEncounters.textContent = total;
             const statEncountersRow = document.getElementById('stat-encounters-row') || statEncounters.closest('.place-stat-pill, .stat-row');
             if (statEncountersRow) {
