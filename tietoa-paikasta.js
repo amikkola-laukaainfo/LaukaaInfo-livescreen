@@ -2469,8 +2469,8 @@ async function loadEncountersForPlace(place) {
         }
         const targetIds = Array.from(targetIdsSet);
         
-        const sbClient = window.LaukaaSupabase || window.aiSb;
-        let query = sbClient
+        const encSbClient = window.LaukaaSupabase || window.aiSb;
+        let query = encSbClient
             .from('encounters_public')
             .select('*');
             
@@ -2659,10 +2659,10 @@ async function loadEncountersForPlace(place) {
         
         // Moderointisuodatus: Poistetaan allItems-listasta kaikki joiden status on rejected/hidden Supabasen observations-taulussa
         const candidateItemIds = allItems.map(i => String(i.id)).filter(Boolean);
-        const sbClient = window.aiSb || window.LaukaaSupabase;
-        if (sbClient && candidateItemIds.length > 0) {
+        const obsSbClient = window.aiSb || window.LaukaaSupabase;
+        if (obsSbClient && candidateItemIds.length > 0) {
             try {
-                const { data: supaObs } = await sbClient
+                const { data: supaObs } = await obsSbClient
                     .from('observations')
                     .select('id, status')
                     .in('id', candidateItemIds);

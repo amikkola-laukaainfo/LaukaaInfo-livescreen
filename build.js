@@ -255,6 +255,16 @@ function updateReferences(dir) {
 
 updateReferences(distDir);
 
+// Kopioidaan dynaamisesti ladattavat scriptit myös alkuperäisillä nimillä fallbackiksi
+const dynamicScripts = ['nav-sync.js', 'site-nav.js'];
+for (const scriptName of dynamicScripts) {
+    const srcPath = path.join(__dirname, scriptName);
+    const destPath = path.join(distDir, scriptName);
+    if (fs.existsSync(srcPath) && !fs.existsSync(destPath)) {
+        fs.copyFileSync(srcPath, destPath);
+    }
+}
+
 // Luodaan version.json sw.js:lle ja frontendille
 fs.writeFileSync(path.join(distDir, 'version.json'), JSON.stringify({ version: buildVersion, date: new Date().toISOString() }, null, 2));
 
