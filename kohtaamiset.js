@@ -213,16 +213,53 @@ let encounterCacheTime = 0;
 
 async function createEncounterRpc(params) {
     if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
-    const { data, error } = await window.LaukaaSupabase.rpc('create_encounter', params);
+    
+    // Tarkistetaan onko aktiivinen organisaatioistunto sessionStorage-muistissa
+    const finalParams = { ...params };
+    const orgSession = window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null;
+
+    if (orgSession && orgSession.session_token) {
+        // Jos organisaatiotunnus täsmää tai sitä ei ole asetettu, liitetään istunto automaattisesti
+        if (!finalParams.p_organization_id || finalParams.p_organization_id === orgSession.org_id) {
+            finalParams.p_org_session_token = orgSession.session_token;
+            finalParams.p_organization_id = orgSession.org_id;
+            if (!finalParams.p_creator_type) {
+                finalParams.p_creator_type = 'ORGANIZATION';
+            }
+        }
+    }
+
+    const { data, error } = await window.LaukaaSupabase.rpc('create_encounter', finalParams);
     if (error) throw error;
+
+    // Jos saatiin palautteena anonyymi edit_token, tallennetaan se localStorage-muistiin
+    if (data && data.encounter_id && data.edit_token && window.LaukaaEditTokens) {
+        window.LaukaaEditTokens.saveToken(data.encounter_id, data.edit_token);
+    }
+
     return data;
 }
 
-async function updateEncounterRpc(encounterId, editToken, updates = {}) {
+async function updateEncounterRpc(encounterId, editToken = null, updates = {}, orgSessionToken = null, organizationId = null) {
     if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
+
+    let effectiveEditToken = editToken || (window.LaukaaEditTokens ? window.LaukaaEditTokens.getToken(encounterId) : null);
+    let effectiveOrgToken = orgSessionToken;
+    let effectiveOrgId = organizationId;
+
+    if (!effectiveOrgToken && window.LaukaaOrgSession) {
+        const session = window.LaukaaOrgSession.getSession();
+        if (session) {
+            effectiveOrgToken = session.session_token;
+            effectiveOrgId = effectiveOrgId || session.org_id;
+        }
+    }
+
     const { data, error } = await window.LaukaaSupabase.rpc('update_encounter_with_token', {
         p_encounter_id: encounterId,
-        p_edit_token: editToken,
+        p_edit_token: effectiveEditToken || null,
+        p_org_session_token: effectiveOrgToken || null,
+        p_organization_id: effectiveOrgId || null,
         p_title: updates.title || null,
         p_description: updates.description || null,
         p_price_info: updates.price_info || null,
@@ -232,13 +269,32 @@ async function updateEncounterRpc(encounterId, editToken, updates = {}) {
     return data;
 }
 
-async function deleteEncounterRpc(encounterId, editToken = null) {
+async function deleteEncounterRpc(encounterId, editToken = null, orgSessionToken = null, organizationId = null) {
     if (!window.LaukaaSupabase) throw new Error('Supabase ei ole alustettu');
+
+    let effectiveEditToken = editToken || (window.LaukaaEditTokens ? window.LaukaaEditTokens.getToken(encounterId) : null);
+    let effectiveOrgToken = orgSessionToken;
+    let effectiveOrgId = organizationId;
+
+    if (!effectiveOrgToken && window.LaukaaOrgSession) {
+        const session = window.LaukaaOrgSession.getSession();
+        if (session) {
+            effectiveOrgToken = session.session_token;
+            effectiveOrgId = effectiveOrgId || session.org_id;
+        }
+    }
+
     const { data, error } = await window.LaukaaSupabase.rpc('delete_encounter_with_token', {
         p_encounter_id: encounterId,
-        p_edit_token: editToken
+        p_edit_token: effectiveEditToken || null,
+        p_org_session_token: effectiveOrgToken || null,
+        p_organization_id: effectiveOrgId || null
     });
     if (error) throw error;
+
+    if (window.LaukaaEditTokens) {
+        window.LaukaaEditTokens.removeToken(encounterId);
+    }
     return data;
 }
 
@@ -257,7 +313,10 @@ window.LaukaaKohtaamiset = {
     createEncounter: createEncounterRpc,
     updateEncounter: updateEncounterRpc,
     deleteEncounter: deleteEncounterRpc,
-    getContact: getEncounterContactRpc
+    getContact: getEncounterContactRpc,
+    beginOrgSession: (orgId, key) => (window.LaukaaOrgSession ? window.LaukaaOrgSession.beginSession(orgId, key) : Promise.reject('OrgSession ei alustettu')),
+    endOrgSession: () => (window.LaukaaOrgSession ? window.LaukaaOrgSession.endSession() : Promise.resolve(true)),
+    getOrgSession: () => (window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null)
 };
 
 // ===================================================
@@ -475,6 +534,7 @@ async function initKohtaamisetFeed() {
     renderSidebar();
     renderMobileCats();
     updateActiveFiltersBar();
+    initOrgSessionUI();
     renderFeed();
 
     // Piilota spinner
@@ -493,7 +553,311 @@ async function initKohtaamisetFeed() {
 }
 
 // ===================================================
-// KONTEKSTUAALINEN PAIKKA & TEEMA LOGIIKKA (V2 Dual-Axis)
+// ORGANISAATION ISTUNTO & JULKAISUKOODI UI
+// ===================================================
+
+function initOrgSessionUI() {
+    renderOrgSessionBar();
+
+    // Kuunnellaan istunnon tilaa globaalisti
+    window.addEventListener('laukaa:org_session_changed', () => {
+        renderOrgSessionBar();
+        renderFeed();
+    });
+
+    const keyInput = document.getElementById('km-org-code-input');
+    if (keyInput) {
+        keyInput.addEventListener('input', () => formatOrgKeyInput(keyInput));
+    }
+}
+
+function renderOrgSessionBar() {
+    const bar = document.getElementById('km-org-session-bar');
+    if (!bar) return;
+
+    const session = window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null;
+
+    if (session) {
+        let expiryStr = '';
+        if (session.expires_at) {
+            const expD = new Date(session.expires_at);
+            expiryStr = ` (Voimassa klo ${expD.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })} asti)`;
+        }
+
+        bar.innerHTML = `
+            <div class="km-org-bar-active">
+                <div class="km-org-bar-left">
+                    <span class="km-org-badge-icon">🏢</span>
+                    <div>
+                        <strong class="km-org-name">${escapeHtml(session.org_name)}</strong>
+                        <span class="km-org-status">Aktiivinen organisaatioistunto${expiryStr}</span>
+                    </div>
+                </div>
+                <div class="km-org-bar-actions">
+                    <a href="julkaise.html" class="km-org-action-link" title="Siirry Seinä-julkaisupisteeseen">
+                        <span class="iconify" data-icon="lucide:layout-grid"></span> Seinä-näkymä
+                    </a>
+                    <button type="button" class="km-org-logout-btn" onclick="handleOrgLogout()">
+                        Kirjaudu ulos ✕
+                    </button>
+                </div>
+            </div>
+        `;
+        bar.style.display = 'block';
+    } else {
+        bar.innerHTML = `
+            <div class="km-org-bar-idle">
+                <div class="km-org-idle-text">
+                    <span class="iconify" data-icon="lucide:building-2"></span>
+                    <span>Julkaisetko organisaation, yrityksen tai yhdistyksen puolesta?</span>
+                </div>
+                <button type="button" class="km-org-login-trigger-btn" onclick="openOrgLoginModal()">
+                    🔑 Kirjaudu organisaatiokoodilla
+                </button>
+            </div>
+        `;
+        bar.style.display = 'block';
+    }
+}
+
+function openOrgLoginModal() {
+    const modal = document.getElementById('km-org-login-modal');
+    if (!modal) return;
+    const input = document.getElementById('km-org-code-input');
+    const errBox = document.getElementById('km-org-login-error');
+    if (input) input.value = '';
+    if (errBox) {
+        errBox.innerText = '';
+        errBox.style.display = 'none';
+    }
+    modal.classList.add('active');
+    setTimeout(() => { if (input) input.focus(); }, 120);
+}
+
+function closeOrgLoginModal() {
+    const modal = document.getElementById('km-org-login-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function formatOrgKeyInput(input) {
+    if (!input) return;
+    let val = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (val.length > 4) {
+        val = val.substring(0, 4) + '-' + val.substring(4, 8);
+    }
+    input.value = val;
+}
+
+async function handleOrgLoginSubmit(event) {
+    if (event) event.preventDefault();
+
+    const input = document.getElementById('km-org-code-input');
+    const errBox = document.getElementById('km-org-login-error');
+    const btn = document.getElementById('km-org-login-submit-btn');
+
+    if (!input) return;
+    const rawKey = input.value.trim().toUpperCase();
+
+    if (errBox) {
+        errBox.innerText = '';
+        errBox.style.display = 'none';
+    }
+
+    if (!rawKey || rawKey.replace('-', '').length < 6) {
+        if (errBox) {
+            errBox.innerText = 'Syötä organisaation 8-merkkinen julkaisukoodi (esim. ABCD-1234)';
+            errBox.style.display = 'block';
+        }
+        return;
+    }
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = 'Tarkistetaan koodia...';
+    }
+
+    try {
+        if (!window.LaukaaOrgSession) {
+            throw new Error('Istuntohallinta ei ole käytettävissä');
+        }
+
+        const session = await window.LaukaaOrgSession.beginSession(null, rawKey);
+        closeOrgLoginModal();
+        renderOrgSessionBar();
+        renderFeed();
+        
+        alert(`✅ Kirjauduttu organisaationa: ${session.org_name || session.org_id}!\nIstunto on voimassa tässä selaimessa 8 tuntia.`);
+    } catch (err) {
+        console.error('Org login error:', err);
+        if (errBox) {
+            errBox.innerText = err.message || 'Virheellinen julkaisukoodi tai palvelinvirhe.';
+            errBox.style.display = 'block';
+        }
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = 'Kirjaudu sisään';
+        }
+    }
+}
+
+async function handleOrgLogout() {
+    if (!confirm('Haluatko varmasti sulkea organisaation julkaisuistunnon?')) return;
+    try {
+        if (window.LaukaaOrgSession) {
+            await window.LaukaaOrgSession.endSession();
+        }
+        renderOrgSessionBar();
+        renderFeed();
+    } catch (e) {
+        console.warn('Logout error:', e);
+    }
+}
+
+// Suora hallintamodaali organisaatiolle tai edit-tokenin haltijalle
+async function openDirectManageModal(ad, mode = 'ORG') {
+    const existing = document.getElementById('km-direct-manage-modal');
+    if (existing) existing.remove();
+
+    const isOrg = mode === 'ORG';
+    const orgSession = window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null;
+    const currentToken = window.LaukaaEditTokens ? window.LaukaaEditTokens.getToken(ad.id) : null;
+
+    const modalHtml = `
+        <div class="modal-overlay active" id="km-direct-manage-modal" style="display:flex;">
+            <div class="modal-content" style="max-width:540px; background:#fff; border-radius:20px; padding:1.75rem; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+                <button class="modal-close" onclick="document.getElementById('km-direct-manage-modal').remove()">&times;</button>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                    <span style="font-size:1.5rem;">${isOrg ? '🏢' : '🔑'}</span>
+                    <h2 class="modal-title" style="margin:0; font-size:1.25rem;">${isOrg ? 'Organisaation ilmoituksen hallinta' : 'Ilmoituksen pika-hallinta'}</h2>
+                </div>
+                <p style="color:#64748b; font-size:0.85rem; margin-bottom:1.25rem;">
+                    ${isOrg ? `Kirjautuneena organisaationa <strong>${escapeHtml(orgSession?.org_name)}</strong>.` : 'Hallinnoi aiemmin jättämääsi ilmoitusta suoraan selaimessasi.'}
+                </p>
+
+                <div id="km-manage-feedback" style="display:none; margin-bottom:1rem; padding:0.75rem; border-radius:8px; font-size:0.88rem;"></div>
+
+                <form id="km-direct-manage-form" style="display:flex; flex-direction:column; gap:0.85rem;">
+                    <div>
+                        <label style="display:block; font-size:0.82rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">Otsikko</label>
+                        <input type="text" id="km-manage-title" value="${escapeHtml(ad.title)}" style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:8px; font-size:0.92rem;" required>
+                    </div>
+
+                    <div>
+                        <label style="display:block; font-size:0.82rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">Kuvaus</label>
+                        <textarea id="km-manage-desc" rows="4" style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:8px; font-size:0.92rem; font-family:inherit;" required>${escapeHtml(ad.description)}</textarea>
+                    </div>
+
+                    <div>
+                        <label style="display:block; font-size:0.82rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">Hintatiedot / Korvaus</label>
+                        <input type="text" id="km-manage-price" value="${escapeHtml(ad.price_info || '')}" style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:8px; font-size:0.92rem;">
+                    </div>
+
+                    <div>
+                        <label style="display:block; font-size:0.82rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">Tila</label>
+                        <select id="km-manage-status" style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:8px; font-size:0.92rem; background:#fff;">
+                            <option value="active" ${ad.status === 'active' ? 'selected' : ''}>🟢 Aktiivinen</option>
+                            <option value="resolved" ${ad.status === 'resolved' ? 'selected' : ''}>⏳ Ratkaistu / Valmis</option>
+                            <option value="closed" ${ad.status === 'closed' ? 'selected' : ''}>🔒 Suljettu (ei näy julkisesti)</option>
+                        </select>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; gap:0.5rem; flex-wrap:wrap;">
+                        <button type="button" id="km-manage-delete-btn" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:0.55rem 1rem; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                            🗑️ Poista ilmoitus
+                        </button>
+                        <div style="display:flex; gap:0.5rem;">
+                            <button type="button" onclick="document.getElementById('km-direct-manage-modal').remove()" style="background:#f1f5f9; color:#475569; border:none; padding:0.55rem 1rem; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                Peruuta
+                            </button>
+                            <button type="submit" id="km-manage-save-btn" style="background:#0ea5e9; color:#fff; border:none; padding:0.55rem 1.25rem; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                💾 Tallenna muutokset
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    const form = document.getElementById('km-direct-manage-form');
+    const deleteBtn = document.getElementById('km-manage-delete-btn');
+    const fb = document.getElementById('km-manage-feedback');
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const saveBtn = document.getElementById('km-manage-save-btn');
+        saveBtn.disabled = true;
+        saveBtn.innerText = 'Tallennetaan...';
+
+        const newTitle = document.getElementById('km-manage-title').value.trim();
+        const newDesc = document.getElementById('km-manage-desc').value.trim();
+        const newPrice = document.getElementById('km-manage-price').value.trim();
+        const newStatus = document.getElementById('km-manage-status').value;
+
+        try {
+            await updateEncounterRpc(ad.id, currentToken, {
+                title: newTitle,
+                description: newDesc,
+                price_info: newPrice,
+                status: newStatus
+            });
+
+            fb.style.display = 'block';
+            fb.style.background = '#dcfce7';
+            fb.style.color = '#166534';
+            fb.innerText = '✅ Ilmoitus päivitetty onnistuneesti!';
+
+            // Päivitetään lokaali data
+            ad.title = newTitle;
+            ad.description = newDesc;
+            ad.price_info = newPrice;
+            ad.status = newStatus;
+
+            setTimeout(() => {
+                document.getElementById('km-direct-manage-modal')?.remove();
+                if (typeof initKohtaamisetFeed === 'function') renderFeed();
+                else window.location.reload();
+            }, 1200);
+        } catch (err) {
+            console.error('Update error:', err);
+            fb.style.display = 'block';
+            fb.style.background = '#fee2e2';
+            fb.style.color = '#991b1b';
+            fb.innerText = '❌ Virhe tallennuksessa: ' + (err.message || 'Tarkista oikeudet');
+            saveBtn.disabled = false;
+            saveBtn.innerText = '💾 Tallenna muutokset';
+        }
+    };
+
+    deleteBtn.onclick = async () => {
+        if (!confirm('Haluatko varmasti poistaa tämän ilmoituksen pysyvästi?')) return;
+        deleteBtn.disabled = true;
+        deleteBtn.innerText = 'Poistetaan...';
+
+        try {
+            await deleteEncounterRpc(ad.id, currentToken);
+            alert('✅ Ilmoitus poistettu onnistuneesti!');
+            document.getElementById('km-direct-manage-modal')?.remove();
+            if (typeof initKohtaamisetFeed === 'function') {
+                allEncounters = allEncounters.filter(x => x.id !== ad.id);
+                renderFeed();
+            } else {
+                window.location.href = 'kohtaamiset.html';
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+            fb.style.display = 'block';
+            fb.style.background = '#fee2e2';
+            fb.style.color = '#991b1b';
+            fb.innerText = '❌ Poisto epäonnistui: ' + (err.message || 'Tarkista oikeudet');
+            deleteBtn.disabled = false;
+            deleteBtn.innerText = '🗑️ Poista ilmoitus';
+        }
+    };
+}
 // ===================================================
 function renderPlaceSelectOptions() {
     const select = document.getElementById('km-place-select');
@@ -914,9 +1278,25 @@ function renderFeed() {
         if (isResolved) card.style.opacity = '0.85';
 
         const publisherBadge = renderPublisherBadge(ad);
+        const orgSession = window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null;
+        const isOrgMine = orgSession && (ad.organization_id === orgSession.org_id || (ad.publisher_name && ad.publisher_name.toLowerCase() === orgSession.org_name.toLowerCase()));
+        const hasEditToken = window.LaukaaEditTokens && window.LaukaaEditTokens.getToken(ad.id);
+
+        let manageBadgeHtml = '';
+        if (isOrgMine) {
+            manageBadgeHtml = `<span style="background:#e0e7ff; color:#3730a3; padding:2px 7px; border-radius:6px; font-size:0.73rem; font-weight:700; display:inline-block; margin-bottom:0.4rem; border:1px solid #c7d2fe;">🏢 Organisaatiosi ilmoitus</span>`;
+        }
+
+        const manageBtnHtml = (isOrgMine || hasEditToken)
+            ? `<button type="button" class="km-card-manage-btn" onclick="event.preventDefault(); event.stopPropagation(); openDirectManageModal(allEncounters.find(x => x.id === '${ad.id}'), '${isOrgMine ? 'ORG' : 'TOKEN'}')" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; font-size:0.75rem; font-weight:700; border-radius:6px; padding:3px 8px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">✏️ Hallinnoi</button>`
+            : '';
 
         card.innerHTML = `
-            <span class="km-card-badge" style="color:${cat.color};">${cat.emoji} ${cat.title}${subBadge}</span>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem;">
+                <span class="km-card-badge" style="color:${cat.color};">${cat.emoji} ${cat.title}${subBadge}</span>
+                ${manageBtnHtml}
+            </div>
+            ${manageBadgeHtml}
             ${publisherBadge ? `<div style="margin-bottom:4px;">${publisherBadge}</div>` : ''}
             ${resolvedBadge}
             <h3 class="km-card-title">${escapeHtml(ad.title)}</h3>
@@ -1156,24 +1536,47 @@ async function initIlmoituskortti() {
         }
     }
 
-    // Auth-tarkistus hallintanapille
+    // Auth-, Organisaatio- ja Edit-token-tarkistus hallintanapille
+    let canManage = false;
+    let manageMode = 'USER';
+
     if (window.LaukaaAuth) {
         const user = await window.LaukaaAuth.getUser();
         if (user) {
             const isOwner = ad.user_id === user.id;
             const isMod = await window.LaukaaAuth.isModerator();
-            
             if (isOwner || isMod) {
-                const manageBtn = document.querySelector('.manage-btn');
-                if (manageBtn) {
-                    manageBtn.innerHTML = '<span class="iconify" data-icon="lucide:edit"></span> Muokkaa ilmoitusta';
-                    manageBtn.style.color = '#0ea5e9';
-                    manageBtn.style.fontWeight = '700';
-                    manageBtn.onclick = () => {
-                        window.location.href = `muokkaa-ilmoitus.html?id=${ad.id}`;
-                    };
-                }
+                canManage = true;
+                manageMode = 'AUTH';
             }
+        }
+    }
+
+    const orgSession = window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null;
+    const isOrgOwner = orgSession && (ad.organization_id === orgSession.org_id || (ad.publisher_name && ad.publisher_name.toLowerCase() === orgSession.org_name.toLowerCase()));
+    const hasEditToken = window.LaukaaEditTokens && window.LaukaaEditTokens.getToken(ad.id);
+
+    if (isOrgOwner) {
+        canManage = true;
+        manageMode = 'ORG';
+    } else if (hasEditToken) {
+        canManage = true;
+        manageMode = 'TOKEN';
+    }
+
+    if (canManage) {
+        const manageBtn = document.querySelector('.manage-btn');
+        if (manageBtn) {
+            const label = manageMode === 'ORG'
+                ? '🏢 Muokkaa organisaation ilmoitusta'
+                : (manageMode === 'TOKEN' ? '🔑 Muokkaa ilmoitustasi' : '✏️ Muokkaa ilmoitusta');
+            manageBtn.innerHTML = `<span class="iconify" data-icon="lucide:settings-2"></span> ${label}`;
+            manageBtn.style.color = '#10b981';
+            manageBtn.style.fontWeight = '700';
+            manageBtn.onclick = (e) => {
+                e.preventDefault();
+                openDirectManageModal(ad, manageMode === 'ORG' ? 'ORG' : 'TOKEN');
+            };
         }
     }
 }

@@ -108,3 +108,158 @@ window.LaukaaAuth = {
     }
 };
 
+/**
+ * LaukaaOrgSession – Organisaation julkaisukoodi-istunnot (Kohtaamiset & Seinä)
+ * Istuntotoken pidetään TIETOTURVASYYISTÄ sessionStorage-muistissa (ei koskaan localStorage tai evästeet).
+ */
+window.LaukaaOrgSession = {
+    KEY_TOKEN: 'km_org_session_token',
+    KEY_ORG_ID: 'km_org_session_org_id',
+    KEY_ORG_NAME: 'km_org_session_org_name',
+    KEY_EXPIRES_AT: 'km_org_session_expires_at',
+
+    /** Palauttaa voimassaolevan istunnon tai null */
+    getSession: () => {
+        try {
+            const token = sessionStorage.getItem(window.LaukaaOrgSession.KEY_TOKEN);
+            const orgId = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_ID);
+            const orgName = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_NAME);
+            const expiresAt = sessionStorage.getItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
+
+            if (!token || !orgId) return null;
+
+            if (expiresAt) {
+                const expTime = new Date(expiresAt).getTime();
+                if (Date.now() >= expTime) {
+                    window.LaukaaOrgSession.clearSession();
+                    return null;
+                }
+            }
+
+            return {
+                session_token: token,
+                org_id: orgId,
+                org_name: orgName || orgId,
+                expires_at: expiresAt
+            };
+        } catch (e) {
+            console.warn('LaukaaOrgSession.getSession error:', e);
+            return null;
+        }
+    },
+
+    /** Tallentaa istunnon sessionStorageen ja tiedottaa kuuntelijoille */
+    setSession: (sessionData) => {
+        try {
+            if (!sessionData || !sessionData.session_token) return;
+            sessionStorage.setItem(window.LaukaaOrgSession.KEY_TOKEN, sessionData.session_token);
+            sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_ID, sessionData.org_id || '');
+            sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_NAME, sessionData.org_name || sessionData.org_id || '');
+            if (sessionData.expires_at) {
+                sessionStorage.setItem(window.LaukaaOrgSession.KEY_EXPIRES_AT, sessionData.expires_at);
+            }
+            window.dispatchEvent(new CustomEvent('laukaa:org_session_changed', { detail: sessionData }));
+        } catch (e) {
+            console.warn('LaukaaOrgSession.setSession error:', e);
+        }
+    },
+
+    /** Tyhjentää istunnon */
+    clearSession: () => {
+        try {
+            sessionStorage.removeItem(window.LaukaaOrgSession.KEY_TOKEN);
+            sessionStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_ID);
+            sessionStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_NAME);
+            sessionStorage.removeItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
+            window.dispatchEvent(new CustomEvent('laukaa:org_session_changed', { detail: null }));
+        } catch (e) {
+            console.warn('LaukaaOrgSession.clearSession error:', e);
+        }
+    },
+
+    /**
+     * Aloittaa uuden organisaatioistunnon palvelimella
+     * @param {string|null} orgId Valinnainen organisaatiotunnus (jos null, selvitetään koodista)
+     * @param {string} publishKey 8-merkkinen julkaisukoodi
+     */
+    beginSession: async (orgId, publishKey) => {
+        const client = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+        if (!client) throw new Error('Supabase-asiakas ei ole alustettu');
+
+        let targetOrgId = orgId;
+        const cleanKey = (publishKey || '').trim().toUpperCase();
+
+        if (!targetOrgId) {
+            // Etsitään organisaatio julkaisukoodin perusteella
+            const { data: resData, error: resError } = await client.rpc('resolve_publisher_key', {
+                p_publish_key: cleanKey
+            });
+            if (resError) throw resError;
+            if (!resData || !resData.valid) {
+                throw new Error((resData && resData.error) || 'Virheellinen julkaisukoodi');
+            }
+            targetOrgId = resData.org_id;
+        }
+
+        const { data, error } = await client.rpc('begin_org_session', {
+            p_organization_id: targetOrgId,
+            p_publish_key: cleanKey
+        });
+
+        if (error) throw error;
+        if (!data || !data.success) {
+            throw new Error((data && data.error) || 'Istunnon luonti epäonnistui');
+        }
+
+        window.LaukaaOrgSession.setSession(data);
+        return data;
+    },
+
+    /** Lopettaa aktiivisen istunnon ja mitätöi sen palvelimelta */
+    endSession: async () => {
+        const current = window.LaukaaOrgSession.getSession();
+        if (!current) return true;
+
+        const client = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+        if (client && current.session_token) {
+            try {
+                await client.rpc('end_org_session', {
+                    p_session_token: current.session_token,
+                    p_organization_id: current.org_id
+                });
+            } catch (e) {
+                console.warn('Virhe palvelinistunnon sulkemisessa:', e);
+            }
+        }
+        window.LaukaaOrgSession.clearSession();
+        return true;
+    }
+};
+
+/**
+ * LaukaaEditTokens – Anonyymien ilmoitusten edit-tokenit selaimen muistissa
+ */
+window.LaukaaEditTokens = {
+    saveToken: (encounterId, token) => {
+        if (!encounterId || !token) return;
+        try {
+            localStorage.setItem('km_edit_' + encounterId, token);
+        } catch (e) {}
+    },
+    getToken: (encounterId) => {
+        if (!encounterId) return null;
+        try {
+            return localStorage.getItem('km_edit_' + encounterId);
+        } catch (e) {
+            return null;
+        }
+    },
+    removeToken: (encounterId) => {
+        if (!encounterId) return;
+        try {
+            localStorage.removeItem('km_edit_' + encounterId);
+        } catch (e) {}
+    }
+};
+
+

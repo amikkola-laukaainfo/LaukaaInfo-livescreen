@@ -6,6 +6,7 @@
     <title>LaukaaInfo — Organisaation Julkaisupiste</title>
     <link rel="stylesheet" href="julkaise.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -382,7 +383,7 @@
       // Supabase Client Initialization
       const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
       const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-      const supabaseClient = (window.supabase && typeof window.supabase.createClient === 'function')
+      const supabaseClient = window.LaukaaSupabase || ((window.supabase && typeof window.supabase.createClient === 'function')
         ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
         : null;
 
@@ -634,6 +635,15 @@
           selectedOrgId = orgId;
           verifiedOrgName = orgName;
 
+          // Synkronoidaan aktiivinen organisaation istunto sessionStorage-muistiin (Kohtaamiset & Seinä)
+          if (window.LaukaaOrgSession) {
+            try {
+              await window.LaukaaOrgSession.beginSession(orgId, rawKey);
+            } catch (e) {
+              console.warn('LaukaaOrgSession begin error:', e);
+            }
+          }
+
           // Unlock Editor
           document.getElementById('authSection').classList.add('hidden');
           document.getElementById('editorSection').classList.remove('hidden');
@@ -661,6 +671,9 @@
       }
 
       function resetAuth() {
+        if (window.LaukaaOrgSession) {
+          window.LaukaaOrgSession.endSession();
+        }
         activePublishKey = '';
         selectedOrgId = '';
         verifiedOrgName = '';

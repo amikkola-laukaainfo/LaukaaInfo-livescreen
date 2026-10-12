@@ -621,6 +621,187 @@
         @media (max-width: 540px) {
             .km-grid { grid-template-columns: 1fr; }
         }
+
+        /* ===== ORGANISAATIOISTUNTO BANNERI & MODAALI ===== */
+        .km-org-session-container {
+            max-width: 1240px;
+            margin: 1rem auto 0;
+            padding: 0 1.5rem;
+        }
+        .km-org-bar-active {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: 0 2px 6px rgba(99, 102, 241, 0.08);
+            flex-wrap: wrap;
+        }
+        .km-org-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .km-org-badge-icon {
+            font-size: 1.6rem;
+            background: #fff;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .km-org-name {
+            display: block;
+            font-size: 0.95rem;
+            color: #312e81;
+            font-weight: 800;
+        }
+        .km-org-status {
+            font-size: 0.78rem;
+            color: #4338ca;
+        }
+        .km-org-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .km-org-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #fff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .km-org-action-link:hover {
+            background: #f8fafc;
+            border-color: #818cf8;
+        }
+        .km-org-logout-btn {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .km-org-logout-btn:hover {
+            background: #fecaca;
+        }
+        .km-org-bar-idle {
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 0.6rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .km-org-idle-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #475569;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+        .km-org-login-trigger-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .km-org-login-trigger-btn:hover {
+            background: #0ea5e9;
+            color: #fff;
+            border-color: #0ea5e9;
+        }
+        .km-org-modal-content {
+            max-width: 480px !important;
+            padding: 1.75rem !important;
+            border-radius: 20px !important;
+        }
+        .km-org-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .km-org-modal-icon {
+            font-size: 2rem;
+            background: #e0e7ff;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .km-org-code-input {
+            width: 100%;
+            padding: 11px 40px 11px 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-sizing: border-box;
+            font-family: monospace, sans-serif;
+            color: #1e293b;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .km-org-code-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+        .km-org-login-error-box {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .km-btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .km-btn-secondary:hover {
+            background: #e2e8f0;
+        }
     </style>
 </head>
 <body>
@@ -666,6 +847,9 @@
             </a>
         </div>
     </header>
+
+    <!-- Organisaation aktiivinen julkaisuistunto / Kirjautumispalkki -->
+    <div id="km-org-session-bar" class="km-org-session-container" style="display:none;"></div>
 
     <!-- Monipuolinen Contextual Multi-Dimensional Search Bar -->
     <div class="km-search-bar" id="km-search-bar-container">
@@ -815,10 +999,58 @@
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 
+    <!-- Organisaation julkaisukoodi -kirjautumismodaali -->
+    <div class="modal-overlay" id="km-org-login-modal">
+        <div class="modal-content km-org-modal-content">
+            <button class="modal-close" onclick="closeOrgLoginModal()">&times;</button>
+            <div class="km-org-modal-header">
+                <div class="km-org-modal-icon">🏢</div>
+                <div>
+                    <h2 class="modal-title" style="margin:0; font-size:1.3rem;">Kirjaudu organisaatiokoodilla</h2>
+                    <p style="color:#64748b; font-size:0.85rem; margin:0.25rem 0 0;">Hallinnoi ja julkaise ilmoituksia yrityksen tai yhteisön nimissä</p>
+                </div>
+            </div>
+
+            <div id="km-org-login-error" class="km-org-login-error-box" style="display:none;"></div>
+
+            <form id="km-org-login-form" onsubmit="handleOrgLoginSubmit(event)">
+                <div style="margin-bottom:1.25rem;">
+                    <label for="km-org-code-input" style="display:block; font-weight:700; font-size:0.85rem; color:#334155; margin-bottom:0.4rem;">
+                        8-merkkinen julkaisukoodi *
+                    </label>
+                    <div style="position:relative;">
+                        <input
+                            type="text"
+                            id="km-org-code-input"
+                            class="km-org-code-input"
+                            placeholder="esim. ABCD-1234"
+                            maxlength="9"
+                            autocomplete="off"
+                            required
+                        >
+                        <span class="iconify" data-icon="lucide:key" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:1.1rem; pointer-events:none;"></span>
+                    </div>
+                    <p style="font-size:0.75rem; color:#64748b; margin-top:0.4rem; line-height:1.4;">
+                        Käytä samaa organisaatiokohtaista julkaisukoodia kuin Seinä-palvelussa. Istunto säilyy aktiivisena tässä selaimessa 8 tuntia.
+                    </p>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:0.6rem;">
+                    <button type="button" class="km-btn-secondary" onclick="closeOrgLoginModal()">
+                        Peruuta
+                    </button>
+                    <button type="submit" id="km-org-login-submit-btn" class="km-btn-primary" style="padding:10px 20px; border:none; cursor:pointer;">
+                        🚀 Kirjaudu sisään
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="modal.js"></script>
-    <script src="kohtaamiset.js?v=20260709"></script>
+    <script src="kohtaamiset.js?v=20261012"></script>
     <script src="script.js"></script>
     <script src="nav-sync.js"></script>
 </body>
