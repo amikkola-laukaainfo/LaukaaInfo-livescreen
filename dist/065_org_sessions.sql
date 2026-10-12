@@ -354,7 +354,29 @@ DECLARE
     v_hash        TEXT;
     v_new_version INT;
 BEGIN
-    -- 1. Validointi
+    -- 1. Valtuutustarkistus: Vain todellinen ylläpitäjä tai service_role saa asettaa/vaihtaa avaimen!
+    IF current_user != 'service_role' AND COALESCE(auth.role(), '') != 'service_role' THEN
+        IF auth.uid() IS NULL OR (
+            public.check_permission('announcement.manage') IS NOT TRUE
+            AND NOT EXISTS (
+                SELECT 1
+                FROM public.user_roles ur
+                LEFT JOIN public.roles r ON ur.role_id = r.id
+                WHERE ur.user_id = auth.uid()
+                  AND (
+                      COALESCE(r.name, ur.role_name) IN ('admin', 'moderator')
+                      OR (
+                          COALESCE(r.name, ur.role_name) = 'company_admin'
+                          AND ur.target_id = REPLACE(p_organization_id, 'company-', '')
+                      )
+                  )
+            )
+        ) THEN
+            RETURN jsonb_build_object('success', false, 'error', 'Käyttöoikeus evätty. Vain valtuutettu ylläpitäjä voi generoida tai vaihtaa julkaisukoodeja.');
+        END IF;
+    END IF;
+
+    -- 2. Validointi
     IF p_organization_id IS NULL OR TRIM(p_organization_id) = '' THEN
         RETURN jsonb_build_object('success', false, 'error', 'Organisaatiotunnus vaaditaan.');
     END IF;
@@ -366,7 +388,7 @@ BEGIN
 
     v_hash := encode(digest(v_clean_key, 'sha256'), 'hex');
 
-    -- 2. Varmistetaan organisaation olemassaolo
+    -- 3. Varmistetaan organisaation olemassaolo
     INSERT INTO public.organizations (id, name, publisher_enabled, publisher_code_version)
     VALUES (p_organization_id, COALESCE(p_org_name, p_organization_id), TRUE, 1)
     ON CONFLICT (id) DO UPDATE
@@ -377,24 +399,24 @@ BEGIN
     FROM public.organizations
     WHERE id = p_organization_id;
 
-    -- 3. Merkitaan vanhat credentials peruutetuiksi
+    -- 4. Merkitaan vanhat credentials peruutetuiksi
     UPDATE public.organization_publish_credentials
     SET revoked_at = now()
     WHERE organization_id = p_organization_id AND revoked_at IS NULL;
 
-    -- 4. UUTTA (K6): Mitatoidaan kaikki vanhat istunnot eksplisiittisesti
+    -- 5. UUTTA (K6): Mitatoidaan kaikki vanhat istunnot eksplisiittisesti
     UPDATE public.org_publisher_sessions
     SET revoked_at = now()
     WHERE organization_id = p_organization_id AND revoked_at IS NULL;
 
-    -- 5. Nostetaan publisher_code_version (K4): kaksinkertainen suoja istuntojen mitatoinnissa
+    -- 6. Nostetaan publisher_code_version (K4): kaksinkertainen suoja istuntojen mitatoinnissa
     v_new_version := COALESCE(v_new_version, 1) + 1;
     UPDATE public.organizations
     SET publisher_code_version = v_new_version,
         updated_at             = now()
     WHERE id = p_organization_id;
 
-    -- 6. Taltioidaan uusi credential-hash
+    -- 7. Taltioidaan uusi credential-hash
     INSERT INTO public.organization_publish_credentials (organization_id, code_hash)
     VALUES (p_organization_id, v_hash);
 
@@ -409,8 +431,9 @@ $$;
 
 ALTER FUNCTION public.set_organization_publish_key(TEXT, TEXT, TEXT) OWNER TO postgres;
 REVOKE ALL ON FUNCTION public.set_organization_publish_key(TEXT, TEXT, TEXT) FROM PUBLIC;
--- Vain service_role – kutsutaan vain yllapidon kautta
-GRANT EXECUTE ON FUNCTION public.set_organization_publish_key(TEXT, TEXT, TEXT) TO service_role;
+REVOKE ALL ON FUNCTION public.set_organization_publish_key(TEXT, TEXT, TEXT) FROM anon;
+-- Vain todennettu yllapitaja tai service_role
+GRANT EXECUTE ON FUNCTION public.set_organization_publish_key(TEXT, TEXT, TEXT) TO authenticated, service_role;
 
 -- =============================================================================
 -- 8. ENCOUNTER_ORG_AUDIT – KEVYT TAPAHTUMALOKI
