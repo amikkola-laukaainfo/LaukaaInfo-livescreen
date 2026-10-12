@@ -1760,7 +1760,7 @@ async function openObservationModal(id, name, description) {
                 document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${postData.description || postData.content || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + imgHtml + fallbackCtaHtml;
                 return;
             }
-            const { data: encData } = await aiSb.from('encounters').select('*').eq('id', id).maybeSingle();
+            const { data: encData } = await (aiSb || window.LaukaaSupabase).from('encounters_public').select('*').eq('id', id).maybeSingle();
             if (encData) {
                 document.getElementById('subplace-modal-title').textContent = encData.title || decodedName;
                 const encImg = encData.image_url || encData.photo_url;
@@ -2469,20 +2469,24 @@ async function loadEncountersForPlace(place) {
         }
         const targetIds = Array.from(targetIdsSet);
         
-        let query = window.LaukaaSupabase
-            .from('encounters')
-            .select('*')
-            .eq('status', 'active');
+        const sbClient = window.LaukaaSupabase || window.aiSb;
+        let query = sbClient
+            .from('encounters_public')
+            .select('*');
             
-        if (targetIds.length > 0 && placeName) {
+        const conditions = [];
+        targetIds.forEach(idVal => {
+            conditions.push(`location_id.eq.${idVal}`);
+            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idVal)) {
+                conditions.push(`place_id.eq.${idVal}`);
+            }
+        });
+        if (placeName) {
             const safeName = placeName.replace(/["%,]/g, ' ').trim();
-            const idConditions = targetIds.map(idVal => `location_id.eq.${idVal}`).join(',');
-            query = query.or(`${idConditions},location.ilike.%${safeName}%`);
-        } else if (targetIds.length > 0) {
-            const idConditions = targetIds.map(idVal => `location_id.eq.${idVal}`).join(',');
-            query = query.or(idConditions);
-        } else if (placeName) {
-            query = query.ilike('location', `%${placeName}%`);
+            conditions.push(`location.ilike.%${safeName}%`);
+        }
+        if (conditions.length > 0) {
+            query = query.or(conditions.join(','));
         }
             
         const { data, error } = await query;

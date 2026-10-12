@@ -862,11 +862,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     } catch(e) { console.warn('Tarjoushaku epäonnistui:', e); }
 
                     try {
-                        // Kohtaamiset place_id:n mukaan
-                        const { data: placeEncounters } = await laukaaDb
-                            .from('encounters')
-                            .select('id, description, category, type, image_url, photo_url, created_at, location')
-                            .eq('location_id', placeIdParam)
+                        // Kohtaamiset place_id:n tai location_id:n mukaan
+                        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(placeIdParam);
+                        let encQuery = laukaaDb
+                            .from('encounters_public')
+                            .select('id, description, type, sub_category, title, image_url, created_at, location, place_id, location_id');
+                        
+                        if (isUuid) {
+                            encQuery = encQuery.or(`location_id.eq.${placeIdParam},place_id.eq.${placeIdParam}`);
+                        } else {
+                            encQuery = encQuery.or(`location_id.eq.${placeIdParam},location.ilike.%${placeIdParam}%`);
+                        }
+                        const { data: placeEncounters } = await encQuery
                             .order('created_at', { ascending: false })
                             .limit(5);
                         
@@ -1046,7 +1053,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const laukaaDb = window.LaukaaSupabase || supabaseClient;
                             try {
                                 const { data: encounterData, error } = await laukaaDb
-                                    .from('encounters')
+                                    .from('encounters_public')
                                     .select('*')
                                     .in('id', encounterIds)
                                     .order('created_at', { ascending: false });
@@ -1209,10 +1216,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const encountersByTagsResults = await Promise.all(
                                 uniqueTagIds.map(tagId =>
                                     laukaaDbDirect
-                                        .from('encounters')
-                                        .select('id, title, type, sub_category, description, location, image_url, photo_url, created_at, tags, status, expires_at')
+                                        .from('encounters_public')
+                                        .select('id, title, type, sub_category, description, location, image_url, created_at, tags, status, expires_at')
                                         .contains('tags', [tagId])
-                                        .or('status.eq.active,status.is.null')
                                         .order('created_at', { ascending: false })
                                         .limit(20)
                                 )

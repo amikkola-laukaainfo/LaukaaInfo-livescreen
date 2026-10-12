@@ -207,15 +207,16 @@ const Ilmoitustutka = (function () {
                 }
 
                 // Hae aktiiviset encounters
-                const { data: encData } = await sb.from('encounters').select('*').eq('status', 'active');
+                const { data: encData } = await sb.from('encounters_public').select('*');
                 if (encData) {
                     encData.forEach(e => {
                         let lat = e.latitude;
                         let lon = e.longitude;
                         
-                        // Jos koordinaatit puuttuu mutta on location_id, haetaan se allCompaniesista
-                        if ((!lat || !lon) && e.location_id) {
-                            const placeInfo = allCompanies.find(c => c.place_id === e.location_id || c.id === e.location_id);
+                        // Jos koordinaatit puuttuu mutta on location_id tai place_id, haetaan se allCompaniesista
+                        const locId = e.location_id || e.place_id;
+                        if ((!lat || !lon) && locId) {
+                            const placeInfo = allCompanies.find(c => c.place_id === locId || c.id === locId);
                             if (placeInfo && placeInfo.lat && placeInfo.lon) {
                                 lat = parseFloat(placeInfo.lat);
                                 lon = parseFloat(placeInfo.lon);

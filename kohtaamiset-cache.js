@@ -20,10 +20,8 @@ window.LaukaaKohtaamiset = {
 
         try {
             const { data, error } = await window.LaukaaSupabase
-                .from('encounters')
+                .from('encounters_public')
                 .select('*')
-                .eq('status', 'active')
-                .eq('visibility', 'public')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;

@@ -3836,10 +3836,10 @@ async function performV4Search(query, dropdown) {
 
     let matchedEncounters = [];
     try {
-        if (window.aiSb) {
-            const { data: encData } = await window.aiSb.from('encounters')
+        const searchSb = window.LaukaaSupabase || window.aiSb;
+        if (searchSb) {
+            const { data: encData } = await searchSb.from('encounters_public')
                 .select('id, title, type, location, price_info')
-                .eq('status', 'active')
                 .or(`title.ilike."%${q}%",description.ilike."%${q}%",location.ilike."%${q}%"`)
                 .limit(3);
             if (encData) matchedEncounters = encData;
@@ -4021,10 +4021,10 @@ async function openV4SearchModal(query) {
 
     let matchedEncounters = [];
     try {
-        if (window.aiSb) {
-            const { data: encData } = await window.aiSb.from('encounters')
+        const searchSb = window.LaukaaSupabase || window.aiSb;
+        if (searchSb) {
+            const { data: encData } = await searchSb.from('encounters_public')
                 .select('id, title, type, location, price_info, tags')
-                .eq('status', 'active')
                 .or(`title.ilike."%${q}%",description.ilike."%${q}%",location.ilike."%${q}%"`)
                 .limit(20);
             if (encData) matchedEncounters = encData;
