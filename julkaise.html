@@ -381,9 +381,10 @@
 
     <script>
       // Supabase Client Initialization
-      const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-      const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-      const supabaseClient = window.LaukaaSupabase || (
+      // HUOM: SUPABASE_URL on jo määritelty supabase-config.js:ssä, käytetään var välttääksemme konfliktia
+      var SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+      var SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+      var supabaseClient = window.LaukaaSupabase || (
         (window.supabase && typeof window.supabase.createClient === 'function')
           ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
           : null
