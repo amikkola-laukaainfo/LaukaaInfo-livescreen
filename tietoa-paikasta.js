@@ -2612,59 +2612,12 @@ async function loadEncountersForPlace(place) {
                     .select('*')
                     .or(contentsQuery);
 
-                // Feed-julkaisut (posts & post_places -taulut) – LaukaaLive-projekti
-                const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-                const validPlaceUuids = Array.from(new Set([
-                    place.id,
-                    place.place_id,
-                    ...(parentPlace ? [parentPlace.id, parentPlace.place_id] : []),
-                    ...(subPlaces ? subPlaces.flatMap(sp => [sp.id, sp.place_id]) : [])
-                ].filter(id => id && UUID_REGEX.test(String(id).trim()))));
-
-                let matchedPostIds = [];
-                if (liveSb && validPlaceUuids.length > 0) {
-                    try {
-                        const { data: ppData } = await liveSb
-                            .from('post_places')
-                            .select('post_id')
-                            .in('place_id', validPlaceUuids);
-                        if (ppData && ppData.length > 0) {
-                            matchedPostIds = [...new Set(ppData.map(row => row.post_id).filter(Boolean))];
-                        }
-                    } catch (e) {
-                        console.warn('post_places fetch notice:', e);
-                    }
-                }
-
-                let postsData = [];
-                if (liveSb && matchedPostIds.length > 0) {
-                    try {
-                        const { data: rawPosts } = await liveSb
-                            .from('posts')
-                            .select('*, post_attachments(*), post_media(url, media_type)')
-                            .in('id', matchedPostIds);
-                        postsData = (rawPosts || []).filter(item => {
-                            const st = String(item.status || '').toLowerCase();
-                            if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted' || st === 'cleanup_pending') return false;
-                            if (item.visibility === 'code_protected' || item.visibility === 'hidden') return false;
-                            const exp = item.expires_at || item.valid_until;
-                            if (exp && new Date(exp) < new Date()) return false;
-                            return true;
-                        });
-                    } catch (e) {
-                        console.warn('posts fetch notice:', e);
-                    }
-                }
-                    
                 // Tarjoukset/Tapahtumat – LaukaaLive-projekti
                 const offersQuery = targetIds.map(idVal => `place_id.eq.${idVal}`).join(',');
                 const offersResult = liveSb
                     ? await liveSb.from('offers').select('*').or(offersQuery)
                     : { data: null };
                 const offersData = offersResult.data;
-                    
-                // Yhteisöjulkaisutyypit – käsitellään erikseen omaksi lohkokseen
-                const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
                     
                 if (contentsData) {
                     contentsData.forEach(item => {
@@ -2677,67 +2630,6 @@ async function loadEncountersForPlace(place) {
                             expires_at: item.metadata?.endDate || null,
                             url: 'tapahtumakortti.html?id=' + item.id,
                             created_at: item.created_at
-                        });
-                    });
-                }
-                
-                if (postsData) {
-                    const pIds = postsData.map(p => p.id).filter(Boolean);
-                    let mediaByPost = {};
-                    let attachmentsByPost = {};
-                    if (liveSb && pIds.length > 0) {
-                        try {
-                            const { data: pm } = await liveSb.from('post_media').select('*').in('post_id', pIds);
-                            if (pm) pm.forEach(m => { (mediaByPost[m.post_id] = mediaByPost[m.post_id] || []).push(m); });
-                            const { data: pa } = await liveSb.from('post_attachments').select('*').in('post_id', pIds);
-                            if (pa) pa.forEach(a => { (attachmentsByPost[a.post_id] = attachmentsByPost[a.post_id] || []).push(a); });
-                        } catch (subErr) {
-                            console.warn('Posts sub-tables fetch notice:', subErr);
-                        }
-                    }
-
-                    postsData.forEach(item => {
-                        const postTypeUpper = (item.type || '').toUpperCase();
-                        const isCommunityPost = COMMUNITY_TYPES.includes(postTypeUpper);
-                        
-                        const pMedia = (item.post_media && item.post_media.length > 0 ? item.post_media : mediaByPost[item.id]) || [];
-                        const pAtt = (item.post_attachments && item.post_attachments.length > 0 ? item.post_attachments : attachmentsByPost[item.id]) || [];
-                        
-                        const attImg = pAtt.find?.(a => a.type === 'image')?.url;
-                        const mediaImg = pMedia.find?.(m => m.media_type === 'image')?.url;
-                        let firstImg = attImg || mediaImg || item.image_url || null;
-
-                        let ytVidId = item.video_id;
-                        if (!ytVidId && pAtt.length > 0) {
-                            const ytAtt = pAtt.find(a => a.type === 'youtube');
-                            if (ytAtt) ytVidId = ytAtt.youtube_video_id || extractYouTubeId(ytAtt.url);
-                        }
-                        if (!ytVidId && pMedia.length > 0) {
-                            const vidItem = pMedia.find(m => m.media_type === 'video');
-                            if (vidItem) ytVidId = extractYouTubeId(vidItem.url);
-                        }
-                        
-                        allItems.push({
-                            id: item.id,
-                            type: isCommunityPost ? postTypeUpper : (item.type === 'event' ? 'event' : 'feed_post'),
-                            title: item.title,
-                            description: item.content || item.description || '',
-                            image_url: firstImg || null,
-                            website_url: item.website_url,
-                            facebook_url: item.facebook_url,
-                            instagram_url: item.instagram_url,
-                            youtube_url: item.youtube_url,
-                            video_id: ytVidId || null,
-                            is_shorts: item.is_shorts,
-                            is_promoted: item.is_promoted,
-                            publisher_name: item.publisher_name || item.org_name || 'Organisaatio',
-                            contact_email: item.contact_email,
-                            contact_phone: item.contact_phone,
-                            show_contact: item.show_contact,
-                            tags: item.tags || [],
-                            price_info: '',
-                            url: 'seina.html?post=' + item.id,
-                            created_at: item.publish_at || item.created_at
                         });
                     });
                 }
@@ -3157,10 +3049,6 @@ async function loadLostItemsForPlace(place) {
                 const snap1 = await db.collection('lostItems').where('placeId', '==', pid).limit(50).get();
                 if (!snap1.empty) snap1.docs.forEach(d => { d._sourceCol = 'lostItems'; rawDocs.push(d); });
             } catch(e) {}
-            try {
-                const snap2 = await db.collection('observations').where('placeId', '==', pid).limit(50).get();
-                if (!snap2.empty) snap2.docs.forEach(d => { d._sourceCol = 'observations'; rawDocs.push(d); });
-            } catch(e) {}
         }
         
         if (rawDocs.length === 0) return;
@@ -3224,88 +3112,34 @@ async function loadLostItemsForPlace(place) {
             return tB - tA;
         });
         
+        // Kaikki dokumentit ovat nyt lostItems-kokoelmasta (observations-kokoelma
+        // näytetään omassa #timeline-section-osiossa loadPlaceObservations-funktion kautta).
         const allMappedItems = sortedByDate.map(doc => {
             const d = doc.data();
-            const isObs = doc._sourceCol === 'observations' ||
-                (doc.ref && doc.ref.parent && doc.ref.parent.id === 'observations') ||
-                ['POSITIVE', 'PROBLEM', 'TIP', 'SIGHTING', 'MONITORING', 'OBSERVATION'].includes(String(d.type || '').toUpperCase()) ||
-                Boolean(d.phenomenonId);
-
             const timestampVal = d.timestamp?.toDate?.() || d.createdAt?.toDate?.() || null;
             const img = d.imageUrl1 || d.photo_url || (Array.isArray(d.images) && d.images.length > 0 ? d.images[0] : null) || null;
             const desc = d.description || '';
-            const rawTitle = d.title || (isObs ? 'Havainto' : 'Ilmoitus');
-
-            if (isObs) {
-                const obsType = String(d.type || '').toUpperCase();
-                let prefix = '🌱 Havainto: ';
-                let badgeLabel = 'Havainto';
-                let icon = '🌱';
-
-                if (obsType === 'POSITIVE' || String(d.category || '').toLowerCase().includes('huomaa hyvä')) {
-                    prefix = '✨ Huomaa hyvä: ';
-                    badgeLabel = 'Huomaa hyvä';
-                    icon = '✨';
-                } else if (obsType === 'PROBLEM') {
-                    prefix = '⚠️ Ongelma: ';
-                    badgeLabel = 'Ongelma';
-                    icon = '⚠️';
-                } else if (obsType === 'TIP') {
-                    prefix = '💡 Vinkki: ';
-                    badgeLabel = 'Vinkki';
-                    icon = '💡';
-                } else if (obsType === 'SIGHTING') {
-                    prefix = '👀 Havainto: ';
-                    badgeLabel = 'Havainto';
-                    icon = '👀';
-                } else if (obsType === 'MONITORING') {
-                    prefix = '📊 Seuranta: ';
-                    badgeLabel = 'Seuranta';
-                    icon = '📊';
-                } else if (d.category) {
-                    prefix = `${d.category}: `;
-                    badgeLabel = d.category;
-                    icon = '🌱';
-                }
-
-                return {
-                    id: doc.id,
-                    isObservation: true,
-                    type: 'observation',
-                    obsType: obsType,
-                    badgeLabel: badgeLabel,
-                    category: d.category || null,
-                    tags: Array.isArray(d.tags) ? d.tags : [],
-                    title: prefix + rawTitle,
-                    rawTitle: rawTitle,
-                    description: desc,
-                    created_at: timestampVal ? timestampVal.toISOString() : null,
-                    url: `https://lostnfound-f0d25.web.app/item/${doc.id}?tab=havainnot`,
-                    imageUrl: img,
-                    icon: icon
-                };
-            } else {
-                const isLost = d.category === 'LOST' || d.category === 'lost' || d.type === 'LOST' || d.type === 'lost';
-                return {
-                    id: doc.id,
-                    isObservation: false,
-                    type: 'lost_and_found',
-                    badgeLabel: isLost ? 'Kadonnut' : 'Löytynyt',
-                    category: d.category || null,
-                    tags: Array.isArray(d.tags) ? d.tags : [],
-                    title: (isLost ? '🔍 Kadonnut: ' : '🔍 Löytynyt: ') + rawTitle,
-                    rawTitle: rawTitle,
-                    description: desc,
-                    created_at: timestampVal ? timestampVal.toISOString() : null,
-                    url: `https://lostnfound-f0d25.web.app/item/${doc.id}`,
-                    imageUrl: img,
-                    icon: '🔍'
-                };
-            }
+            const rawTitle = d.title || 'Ilmoitus';
+            const isLost = d.category === 'LOST' || d.category === 'lost' || d.type === 'LOST' || d.type === 'lost';
+            return {
+                id: doc.id,
+                isObservation: false,
+                type: 'lost_and_found',
+                badgeLabel: isLost ? 'Kadonnut' : 'Löytynyt',
+                category: d.category || null,
+                tags: Array.isArray(d.tags) ? d.tags : [],
+                title: (isLost ? '🔍 Kadonnut: ' : '🔍 Löytynyt: ') + rawTitle,
+                rawTitle: rawTitle,
+                description: desc,
+                created_at: timestampVal ? timestampVal.toISOString() : null,
+                url: `https://lostnfound-f0d25.web.app/item/${doc.id}`,
+                imageUrl: img,
+                icon: '🔍'
+            };
         });
 
-        const obsItems = allMappedItems.filter(i => i.isObservation);
-        const lostItems = allMappedItems.filter(i => !i.isObservation);
+        const obsItems = []; // Tyhjä – havainnot näytetään #timeline-section-osiossa
+        const lostItems = allMappedItems;
 
         const container = document.getElementById('encounters-list');
         const section = document.getElementById('encounters-section');
@@ -3317,24 +3151,11 @@ async function loadLostItemsForPlace(place) {
         const scrollBtn = document.getElementById('btn-scroll-encounters');
         if (scrollBtn) scrollBtn.style.display = 'inline-flex';
 
-        function renderGroupBlock(items, isObsGroup) {
+        function renderGroupBlock(items) {
             if (items.length === 0) return '';
             
-            const cfg = isObsGroup ? {
-                borderColor: '#a7f3d0',
-                bgColor: '#f0fdf4',
-                headerBg: '#dcfce7',
-                headerColor: '#065f46',
-                badgeBg: '#bbf7d0',
-                badgeColor: '#065f46',
-                hoverBg: '#dcfce7',
-                arrowColor: '#065f46',
-                btnBg: '#059669',
-                btnShadow: 'rgba(5, 150, 105, 0.25)',
-                icon: '🌱',
-                label: 'Huomaa hyvä & Aluehavainnot (LostReFound)',
-                prefixId: 'obs-acc'
-            } : {
+            // Kaikki kohteet ovat nyt kadonnut/löytynyt-tyyppisiä
+            const cfg = {
                 borderColor: '#fde68a',
                 bgColor: '#fffbeb',
                 headerBg: '#fef9c3',
@@ -3404,7 +3225,7 @@ async function loadLostItemsForPlace(place) {
                     <div id="${accId}" style="max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;">
                         <div style="padding:0 1.25rem 1.25rem;">
                             ${mediaContent}
-                            <div style="font-size: 0.95rem; color: #1e293b; line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap;">${item.description || (isObsGroup ? 'Aluehavainto tai huomio kohteesta.' : '')}</div>
+                            <div style="font-size: 0.95rem; color: #1e293b; line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap;">${item.description || ''}</div>
                             <a href="${item.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;background:${cfg.btnBg};color:#fff;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.9rem;text-decoration:none;font-weight:700;box-shadow:0 2px 4px ${cfg.btnShadow};">
                                 Avaa LostReFoundissa →
                             </a>
@@ -3417,13 +3238,7 @@ async function loadLostItemsForPlace(place) {
             return blockHtml;
         }
 
-        let combinedHtml = '';
-        if (obsItems.length > 0) {
-            combinedHtml += renderGroupBlock(obsItems, true);
-        }
-        if (lostItems.length > 0) {
-            combinedHtml += renderGroupBlock(lostItems, false);
-        }
+        const combinedHtml = lostItems.length > 0 ? renderGroupBlock(lostItems) : '';
         
         container.insertAdjacentHTML('beforeend', combinedHtml);
         
