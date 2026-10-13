@@ -6,7 +6,7 @@
     <title>LaukaaInfo — Organisaation Julkaisupiste</title>
     <link rel="stylesheet" href="julkaise.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
+    <script src="supabase-config.js?v=20261013"></script>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -426,6 +426,16 @@
           loadThemesFromSupabase(),
           loadPlacesFromSupabase()
         ]);
+
+        // SSO: Tarkistetaan aktiivinen organisaatioistunto (Kohtaamiset / Seinä)
+        if (window.LaukaaOrgSession) {
+          const session = window.LaukaaOrgSession.getSession();
+          if (session && session.publish_key) {
+            const authInput = document.getElementById('authKeyInput');
+            if (authInput) authInput.value = session.publish_key;
+            await verifyAndContinue(session.publish_key);
+          }
+        }
       }
 
       async function loadPlacesFromSupabase() {
@@ -586,16 +596,22 @@
       }
 
       // Step 1 -> Step 2 Verification via Server RPC (Key auto-detects organization)
-      async function verifyAndContinue() {
-        const rawKey = document.getElementById('authKeyInput').value;
+      async function verifyAndContinue(directKey = null) {
+        const rawKey = directKey || (document.getElementById('authKeyInput') ? document.getElementById('authKeyInput').value : '');
 
         const errorBox = document.getElementById('authError');
-        errorBox.classList.add('hidden');
+        if (errorBox) errorBox.classList.add('hidden');
 
         if (!rawKey || rawKey.replace('-', '').length < 6) {
-          errorBox.innerText = 'Syötä 8-merkkinen julkaisuavaimesi!';
-          errorBox.classList.remove('hidden');
+          if (errorBox) {
+            errorBox.innerText = 'Syötä 8-merkkinen julkaisuavaimesi!';
+            errorBox.classList.remove('hidden');
+          }
           return;
+        }
+
+        if (directKey && document.getElementById('authKeyInput')) {
+          document.getElementById('authKeyInput').value = directKey;
         }
 
         let isValid = false;
@@ -613,8 +629,10 @@
               orgId = data.org_id;
               orgName = data.org_name;
             } else {
-              errorBox.innerText = (data && data.error) ? data.error : (error?.message || 'Virheellinen julkaisuavain!');
-              errorBox.classList.remove('hidden');
+              if (errorBox) {
+                errorBox.innerText = (data && data.error) ? data.error : (error?.message || 'Virheellinen julkaisuavain!');
+                errorBox.classList.remove('hidden');
+              }
               return;
             }
           } catch (e) {
@@ -638,7 +656,10 @@
           // Synkronoidaan aktiivinen organisaation istunto sessionStorage-muistiin (Kohtaamiset & Seinä)
           if (window.LaukaaOrgSession) {
             try {
-              await window.LaukaaOrgSession.beginSession(orgId, rawKey);
+              const curSession = window.LaukaaOrgSession.getSession();
+              if (!curSession || curSession.publish_key !== rawKey) {
+                await window.LaukaaOrgSession.beginSession(orgId, rawKey);
+              }
             } catch (e) {
               console.warn('LaukaaOrgSession begin error:', e);
             }

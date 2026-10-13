@@ -116,6 +116,7 @@ window.LaukaaOrgSession = {
     KEY_TOKEN: 'km_org_session_token',
     KEY_ORG_ID: 'km_org_session_org_id',
     KEY_ORG_NAME: 'km_org_session_org_name',
+    KEY_PUBLISH_KEY: 'km_org_publish_key',
     KEY_EXPIRES_AT: 'km_org_session_expires_at',
 
     /** Palauttaa voimassaolevan istunnon tai null */
@@ -124,6 +125,7 @@ window.LaukaaOrgSession = {
             const token = sessionStorage.getItem(window.LaukaaOrgSession.KEY_TOKEN);
             const orgId = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_ID);
             const orgName = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_NAME);
+            const publishKey = sessionStorage.getItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY);
             const expiresAt = sessionStorage.getItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
 
             if (!token || !orgId) return null;
@@ -140,6 +142,7 @@ window.LaukaaOrgSession = {
                 session_token: token,
                 org_id: orgId,
                 org_name: orgName || orgId,
+                publish_key: publishKey || null,
                 expires_at: expiresAt
             };
         } catch (e) {
@@ -155,6 +158,9 @@ window.LaukaaOrgSession = {
             sessionStorage.setItem(window.LaukaaOrgSession.KEY_TOKEN, sessionData.session_token);
             sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_ID, sessionData.org_id || '');
             sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_NAME, sessionData.org_name || sessionData.org_id || '');
+            if (sessionData.publish_key) {
+                sessionStorage.setItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY, sessionData.publish_key);
+            }
             if (sessionData.expires_at) {
                 sessionStorage.setItem(window.LaukaaOrgSession.KEY_EXPIRES_AT, sessionData.expires_at);
             }
@@ -170,6 +176,7 @@ window.LaukaaOrgSession = {
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_TOKEN);
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_ID);
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_NAME);
+            sessionStorage.removeItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY);
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
             window.dispatchEvent(new CustomEvent('laukaa:org_session_changed', { detail: null }));
         } catch (e) {
@@ -211,6 +218,7 @@ window.LaukaaOrgSession = {
             throw new Error((data && data.error) || 'Istunnon luonti epäonnistui');
         }
 
+        data.publish_key = cleanKey;
         window.LaukaaOrgSession.setSession(data);
         return data;
     },

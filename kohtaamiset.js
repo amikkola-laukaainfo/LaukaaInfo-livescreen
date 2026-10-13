@@ -594,8 +594,11 @@ function renderOrgSessionBar() {
                     </div>
                 </div>
                 <div class="km-org-bar-actions">
-                    <a href="julkaise.html" class="km-org-action-link" title="Siirry Seinä-julkaisupisteeseen">
-                        <span class="iconify" data-icon="lucide:layout-grid"></span> Seinä-näkymä
+                    <a href="julkaise.html" class="km-org-publish-cta-btn" title="Siirry suoraan luomaan uusi julkaisu Seinälle">
+                        <span class="iconify" data-icon="lucide:plus-circle"></span> Luo uusi julkaisu Seinälle →
+                    </a>
+                    <a href="seina.html" class="km-org-action-link" title="Avaa Seinä">
+                        <span class="iconify" data-icon="lucide:layout-grid"></span> Avaa Seinä
                     </a>
                     <button type="button" class="km-org-logout-btn" onclick="handleOrgLogout()">
                         Kirjaudu ulos ✕
@@ -686,7 +689,10 @@ async function handleOrgLoginSubmit(event) {
         renderOrgSessionBar();
         renderFeed();
         
-        alert(`✅ Kirjauduttu organisaationa: ${session.org_name || session.org_id}!\nIstunto on voimassa tässä selaimessa 8 tuntia.`);
+        const goToPublish = confirm(`✅ Kirjauduttu organisaationa: ${session.org_name || session.org_id}!\nIstunto on nyt aktiivinen myös Seinän julkaisupisteessä.\n\nHaluatko siirtyä suoraan luomaan uutta julkaisua Seinälle?`);
+        if (goToPublish) {
+            window.location.href = 'julkaise.html';
+        }
     } catch (err) {
         console.error('Org login error:', err);
         if (errBox) {
