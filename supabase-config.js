@@ -122,11 +122,11 @@ window.LaukaaOrgSession = {
     /** Palauttaa voimassaolevan istunnon tai null */
     getSession: () => {
         try {
-            const token = sessionStorage.getItem(window.LaukaaOrgSession.KEY_TOKEN);
-            const orgId = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_ID);
-            const orgName = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_NAME);
-            const publishKey = sessionStorage.getItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY);
-            const expiresAt = sessionStorage.getItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
+            const token = sessionStorage.getItem(window.LaukaaOrgSession.KEY_TOKEN) || localStorage.getItem(window.LaukaaOrgSession.KEY_TOKEN);
+            const orgId = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_ID) || localStorage.getItem(window.LaukaaOrgSession.KEY_ORG_ID);
+            const orgName = sessionStorage.getItem(window.LaukaaOrgSession.KEY_ORG_NAME) || localStorage.getItem(window.LaukaaOrgSession.KEY_ORG_NAME);
+            const publishKey = sessionStorage.getItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY) || localStorage.getItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY);
+            const expiresAt = sessionStorage.getItem(window.LaukaaOrgSession.KEY_EXPIRES_AT) || localStorage.getItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
 
             if (!token || !orgId) return null;
 
@@ -151,26 +151,36 @@ window.LaukaaOrgSession = {
         }
     },
 
-    /** Tallentaa istunnon sessionStorageen ja tiedottaa kuuntelijoille */
+    /** Tallentaa istunnon sessionStorageen ja localStorageen, tiedottaa kuuntelijoille */
     setSession: (sessionData) => {
         try {
             if (!sessionData || !sessionData.session_token) return;
-            sessionStorage.setItem(window.LaukaaOrgSession.KEY_TOKEN, sessionData.session_token);
-            sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_ID, sessionData.org_id || '');
-            sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_NAME, sessionData.org_name || sessionData.org_id || '');
-            if (sessionData.publish_key) {
-                sessionStorage.setItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY, sessionData.publish_key);
-            }
-            if (sessionData.expires_at) {
-                sessionStorage.setItem(window.LaukaaOrgSession.KEY_EXPIRES_AT, sessionData.expires_at);
-            }
+            const token = sessionData.session_token;
+            const orgId = sessionData.org_id || '';
+            const orgName = sessionData.org_name || sessionData.org_id || '';
+            const pubKey = sessionData.publish_key || '';
+            const expAt = sessionData.expires_at || '';
+
+            sessionStorage.setItem(window.LaukaaOrgSession.KEY_TOKEN, token);
+            sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_ID, orgId);
+            sessionStorage.setItem(window.LaukaaOrgSession.KEY_ORG_NAME, orgName);
+            if (pubKey) sessionStorage.setItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY, pubKey);
+            if (expAt) sessionStorage.setItem(window.LaukaaOrgSession.KEY_EXPIRES_AT, expAt);
+
+            // Tallennetaan myös localStorageen (8 tunnin voimassaololla) välilehtien välisen siirtymän tueksi
+            localStorage.setItem(window.LaukaaOrgSession.KEY_TOKEN, token);
+            localStorage.setItem(window.LaukaaOrgSession.KEY_ORG_ID, orgId);
+            localStorage.setItem(window.LaukaaOrgSession.KEY_ORG_NAME, orgName);
+            if (pubKey) localStorage.setItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY, pubKey);
+            if (expAt) localStorage.setItem(window.LaukaaOrgSession.KEY_EXPIRES_AT, expAt);
+
             window.dispatchEvent(new CustomEvent('laukaa:org_session_changed', { detail: sessionData }));
         } catch (e) {
             console.warn('LaukaaOrgSession.setSession error:', e);
         }
     },
 
-    /** Tyhjentää istunnon */
+    /** Tyhjentää istunnon molemmista muisteista */
     clearSession: () => {
         try {
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_TOKEN);
@@ -178,6 +188,13 @@ window.LaukaaOrgSession = {
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_NAME);
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY);
             sessionStorage.removeItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
+
+            localStorage.removeItem(window.LaukaaOrgSession.KEY_TOKEN);
+            localStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_ID);
+            localStorage.removeItem(window.LaukaaOrgSession.KEY_ORG_NAME);
+            localStorage.removeItem(window.LaukaaOrgSession.KEY_PUBLISH_KEY);
+            localStorage.removeItem(window.LaukaaOrgSession.KEY_EXPIRES_AT);
+
             window.dispatchEvent(new CustomEvent('laukaa:org_session_changed', { detail: null }));
         } catch (e) {
             console.warn('LaukaaOrgSession.clearSession error:', e);

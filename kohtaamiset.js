@@ -584,6 +584,9 @@ function renderOrgSessionBar() {
             expiryStr = ` (Voimassa klo ${expD.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })} asti)`;
         }
 
+        const currentKey = (session && session.publish_key) || sessionStorage.getItem('km_org_publish_key') || localStorage.getItem('km_org_publish_key') || '';
+        const publishUrl = currentKey ? `julkaise.html?key=${encodeURIComponent(currentKey)}` : 'julkaise.html';
+
         bar.innerHTML = `
             <div class="km-org-bar-active">
                 <div class="km-org-bar-left">
@@ -594,7 +597,7 @@ function renderOrgSessionBar() {
                     </div>
                 </div>
                 <div class="km-org-bar-actions">
-                    <a href="julkaise.html" class="km-org-publish-cta-btn" title="Siirry suoraan luomaan uusi julkaisu Seinälle">
+                    <a href="${publishUrl}" class="km-org-publish-cta-btn" title="Siirry suoraan luomaan uusi julkaisu Seinälle">
                         <span class="iconify" data-icon="lucide:plus-circle"></span> Luo uusi julkaisu Seinälle →
                     </a>
                     <a href="seina.html" class="km-org-action-link" title="Avaa Seinä">
@@ -684,14 +687,20 @@ async function handleOrgLoginSubmit(event) {
             throw new Error('Istuntohallinta ei ole käytettävissä');
         }
 
+        try {
+            localStorage.setItem('km_org_publish_key', rawKey);
+            sessionStorage.setItem('km_org_publish_key', rawKey);
+        } catch (e) {}
+
         const session = await window.LaukaaOrgSession.beginSession(null, rawKey);
         closeOrgLoginModal();
         renderOrgSessionBar();
         renderFeed();
         
+        const targetPublishUrl = `julkaise.html?key=${encodeURIComponent(rawKey)}`;
         const goToPublish = confirm(`✅ Kirjauduttu organisaationa: ${session.org_name || session.org_id}!\nIstunto on nyt aktiivinen myös Seinän julkaisupisteessä.\n\nHaluatko siirtyä suoraan luomaan uutta julkaisua Seinälle?`);
         if (goToPublish) {
-            window.location.href = 'julkaise.html';
+            window.location.href = targetPublishUrl;
         }
     } catch (err) {
         console.error('Org login error:', err);

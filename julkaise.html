@@ -422,20 +422,42 @@
           paramOrg = 'company-' + paramOrg;
         }
 
-        await Promise.all([
+        // 1. SSO: Tarkistetaan välittömästi URL-parametri tai tallennettu organisaatioistunto
+        const keyFromUrl = urlParams.get('key') || urlParams.get('code') || urlParams.get('auth') || urlParams.get('publish_key');
+        const session = window.LaukaaOrgSession ? window.LaukaaOrgSession.getSession() : null;
+        const keyFromStorage = (session && session.publish_key)
+          || sessionStorage.getItem('km_org_publish_key')
+          || localStorage.getItem('km_org_publish_key');
+
+        const effectiveKey = (keyFromUrl || keyFromStorage || '').trim().toUpperCase();
+
+        if (effectiveKey && effectiveKey.replace('-', '').length >= 6) {
+          const authInput = document.getElementById('authKeyInput');
+          if (authInput) authInput.value = effectiveKey;
+
+          // Siistitään avain URL-osoitteesta turvallisuussyistä
+          if (keyFromUrl) {
+            try {
+              const cleanParams = new URLSearchParams(window.location.search);
+              cleanParams.delete('key');
+              cleanParams.delete('code');
+              cleanParams.delete('auth');
+              cleanParams.delete('publish_key');
+              const searchStr = cleanParams.toString();
+              const cleanUrl = window.location.pathname + (searchStr ? '?' + searchStr : '');
+              window.history.replaceState({}, document.title, cleanUrl);
+            } catch (e) {}
+          }
+
+          // Avataan editori HETI!
+          await verifyAndContinue(effectiveKey);
+        }
+
+        // 2. Ladataan teemat ja paikat taustalla
+        Promise.all([
           loadThemesFromSupabase(),
           loadPlacesFromSupabase()
-        ]);
-
-        // SSO: Tarkistetaan aktiivinen organisaatioistunto (Kohtaamiset / Seinä)
-        if (window.LaukaaOrgSession) {
-          const session = window.LaukaaOrgSession.getSession();
-          if (session && session.publish_key) {
-            const authInput = document.getElementById('authKeyInput');
-            if (authInput) authInput.value = session.publish_key;
-            await verifyAndContinue(session.publish_key);
-          }
-        }
+        ]).catch(err => console.warn('Background metadata load notice:', err));
       }
 
       async function loadPlacesFromSupabase() {
