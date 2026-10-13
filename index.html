@@ -760,7 +760,9 @@
 
     <main>
 
-        <section class="v4-entry-points-section bg-full-white"
+        <!-- 01 · LÖYDÄ & 02 · PAIKAT JA KOHTEET -->
+
+<section class="v4-entry-points-section bg-full-white"
             style="padding: 4rem 0; position: relative; z-index: 10;">
 
             <div class="section-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
@@ -936,13 +938,7 @@
 
         </section>
 
-
-
-        <!-- Uutistikkeri / Swiper Slider -->
-
-
-
-        <section id="search-section" class="search-section bg-full-blue"
+<section id="search-section" class="search-section bg-full-blue"
             style="padding: 2.5rem 0 3.5rem; position: relative; z-index: 50;">
 
             <div class="section-container">
@@ -1110,29 +1106,9 @@
         </section>
 
 
+        <!-- 03 · AJANKOHTAISTA JA TAPAHTUMAT -->
 
-        <section class="homepage-feed-highlights-section bg-full-white">
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <h2 data-i18n="home_highlights_title">Paikalliset nostot</h2>
-
-                    <p data-i18n="home_highlights_desc">Esillä olevat julkaisut omasta LaukaaInfo-syötteestä ja nopea
-                        pääsy koko syötteen äärelle.</p>
-
-                </div>
-
-                <div id="homepage-feed-highlights" class="homepage-feed-highlights"></div>
-
-            </div>
-
-        </section>
-
-
-
-        <section class="homepage-feed-highlights-section bg-full-white">
+<section class="homepage-feed-highlights-section bg-full-white">
 
             <div class="section-container">
 
@@ -1174,9 +1150,7 @@
 
         </section>
 
-
-
-        <section class="ticker-section"
+<section class="ticker-section"
             style="background-color: #f8fbff; padding: 0; margin-top: 2rem; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
 
             <style>
@@ -1575,9 +1549,7 @@
 
         </section>
 
-
-
-        <section id="some-yhteisot-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
+<section id="some-yhteisot-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
 
             <!-- Otsikko -->
 
@@ -1627,8 +1599,76 @@
         </section>
 
 
+        <!-- 04 · PAIKALLISET NOSTOT JA JULKAISUT -->
 
-        <section class="need-based-section bg-full-white">
+<section class="homepage-feed-highlights-section bg-full-white">
+
+            <div class="section-container">
+
+                <div class="section-header">
+
+                    <h2 data-i18n="home_highlights_title">Paikalliset nostot</h2>
+
+                    <p data-i18n="home_highlights_desc">Esillä olevat julkaisut omasta LaukaaInfo-syötteestä ja nopea
+                        pääsy koko syötteen äärelle.</p>
+
+                </div>
+
+                <div id="homepage-feed-highlights" class="homepage-feed-highlights"></div>
+
+            </div>
+
+        </section>
+
+<section id="feed-section" class="feed-accordion-section bg-full-white"
+            style="padding: 3rem 0; margin-bottom: 0;">
+
+            <div class="section-container">
+
+                <div class="feed-accordion"
+                    style="border: none; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border-radius: 24px; overflow: visible;">
+
+                    <button class="feed-accordion-header closed" id="toggle-feed-btn"
+                        style="align-items: center; background: #0056b3; color: white; border-radius: 24px; padding: 1.8rem 2.5rem; transition: all 0.3s ease; border: none;">
+
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+
+                            <span data-i18n="feed_title" style="color: white; font-size: 1.4rem;">Paikallinen
+
+                                syöte</span>
+
+                            <small
+                                style="font-size: 0.9rem; font-weight: normal; opacity: 0.9; margin-top: 4px; color: rgba(255,255,255,0.85);"
+                                data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset
+
+                                tarjoukset</small>
+
+                        </div>
+
+                        <span class="icon-btn" data-i18n="feed_open"
+                            style="background: white; color: #0056b3; border: none; padding: 0.6rem 1.8rem; border-radius: 50px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Avaa</span>
+
+                    </button>
+
+                    <div class="feed-accordion-content closed" id="feed-accordion-content"
+                        style="background: #f8fbff; border-radius: 0 0 24px 24px;">
+
+                        <!-- Aktiivinen aineisto (Supabase posts -taulu) -->
+
+                        <div id="homepage-feed" data-feed-src="supabase" style="padding: 2rem;"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 05 · ETSI RATKAISUJA JA VERKOSTOIDU -->
+
+<section class="need-based-section bg-full-white">
 
             <div class="section-container">
 
@@ -2055,55 +2095,9 @@
         </section>
 
 
+        <!-- 06 · OSALLISTU JA JULKAISE -->
 
-        <section id="feed-section" class="feed-accordion-section bg-full-white"
-            style="padding: 3rem 0; margin-bottom: 0;">
-
-            <div class="section-container">
-
-                <div class="feed-accordion"
-                    style="border: none; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border-radius: 24px; overflow: visible;">
-
-                    <button class="feed-accordion-header closed" id="toggle-feed-btn"
-                        style="align-items: center; background: #0056b3; color: white; border-radius: 24px; padding: 1.8rem 2.5rem; transition: all 0.3s ease; border: none;">
-
-                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-
-                            <span data-i18n="feed_title" style="color: white; font-size: 1.4rem;">Paikallinen
-
-                                syöte</span>
-
-                            <small
-                                style="font-size: 0.9rem; font-weight: normal; opacity: 0.9; margin-top: 4px; color: rgba(255,255,255,0.85);"
-                                data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset
-
-                                tarjoukset</small>
-
-                        </div>
-
-                        <span class="icon-btn" data-i18n="feed_open"
-                            style="background: white; color: #0056b3; border: none; padding: 0.6rem 1.8rem; border-radius: 50px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Avaa</span>
-
-                    </button>
-
-                    <div class="feed-accordion-content closed" id="feed-accordion-content"
-                        style="background: #f8fbff; border-radius: 0 0 24px 24px;">
-
-                        <!-- Aktiivinen aineisto (Supabase posts -taulu) -->
-
-                        <div id="homepage-feed" data-feed-src="supabase" style="padding: 2rem;"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <section class="gate-section bg-full-white">
+<section class="gate-section bg-full-white">
 
             <div class="gate-container">
 
@@ -2161,11 +2155,7 @@
 
         </section>
 
-
-
-        <!-- Android App Promotion Card -->
-
-        <section class="bg-full-gray" style="padding: 3rem 0;">
+<section class="bg-full-gray" style="padding: 3rem 0;">
 
             <div class="section-container" style="max-width: 800px; margin: 0 auto;">
 
@@ -2308,8 +2298,76 @@
         </section>
 
 
+        <!-- 07 · TUTKI JA SYVENNY -->
 
-        <section class="share-generator-section bg-full-blue">
+<!-- ==================== 07 · TUTKI JA SYVENNY ==================== -->
+        <section id="explore-deep-section" class="bg-full-white" style="padding: 3.5rem 0; border-top: 1px solid #e2e8f0;">
+            <div class="section-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
+                    <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0284c7; margin-bottom: 0.35rem;">
+                        07 · Tutki ja syvenny
+                    </div>
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0a2540; margin: 0 0 0.5rem 0;" data-i18n="explore_deep_title">
+                        Laukaan tieto, tarinat ja päätökset
+                    </h2>
+                    <p style="color: #64748b; font-size: 1.1rem; margin: 0 auto; max-width: 700px;" data-i18n="explore_deep_desc">
+                        Tutustu kunnan päätöksenteon polkuihin, paikallishistorian tarinoihin ja kuvallisiin paikkamuistoihin.
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- 1. Päätösten polut -->
+                    <a href="asiahaku.html" style="text-decoration: none; display: flex; flex-direction: column; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.04)';">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <span style="width: 48px; height: 48px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">⚖️</span>
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0a2540; margin: 0;" data-i18n="paths_card_title">Päätösten polut</h3>
+                                <span style="font-size: 0.85rem; color: #64748b;" data-i18n="paths_card_sub">Hae ja tutki asioita</span>
+                            </div>
+                        </div>
+                        <p style="color: #475569; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1.25rem 0; flex-grow: 1;" data-i18n="paths_card_desc">
+                            Seuraa kunnallisen päätöksenteon etenemistä, lautakuntien päätöksiä ja asioiden taustoja läpinäkyvästi.
+                        </p>
+                        <span style="font-weight: 700; color: #2563eb; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.35rem;" data-i18n="paths_card_link">Avaa Päätösten polut &rarr;</span>
+                    </a>
+
+                    <!-- 2. Tarinakartta -->
+                    <a href="tarinakartta.html" style="text-decoration: none; display: flex; flex-direction: column; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.04)';">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <span style="width: 48px; height: 48px; background: linear-gradient(135deg, #10b981, #047857); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">🗺️</span>
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0a2540; margin: 0;" data-i18n="storymap_card_title">Tarinakartta</h3>
+                                <span style="font-size: 0.85rem; color: #64748b;" data-i18n="storymap_card_sub">Paikat ja tarinat kartalla</span>
+                            </div>
+                        </div>
+                        <p style="color: #475569; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1.25rem 0; flex-grow: 1;" data-i18n="storymap_card_desc">
+                            Tutustu Laukaan kiehtoviin paikkoihin, paikallistarinoihin, kulttuuriperintöön ja kävelyreitteihin kartalla.
+                        </p>
+                        <span style="font-weight: 700; color: #059669; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.35rem;" data-i18n="storymap_card_link">Avaa Tarinakartta &rarr;</span>
+                    </a>
+
+                    <!-- 3. Muistokartta -->
+                    <a href="muistokartta.html" style="text-decoration: none; display: flex; flex-direction: column; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.04)';">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <span style="width: 48px; height: 48px; background: linear-gradient(135deg, #f59e0b, #b45309); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">🏛️</span>
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0a2540; margin: 0;" data-i18n="memorymap_card_title">Muistokartta</h3>
+                                <span style="font-size: 0.85rem; color: #64748b;" data-i18n="memorymap_card_sub">Paikkamuistot & historia</span>
+                            </div>
+                        </div>
+                        <p style="color: #475569; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1.25rem 0; flex-grow: 1;" data-i18n="memorymap_card_desc">
+                            Koe elävä paikallishistoria ja yhteisön tallentamat kuvat ja muistot paikkoihin liitettynä.
+                        </p>
+                        <span style="font-weight: 700; color: #d97706; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.35rem;" data-i18n="memorymap_card_link">Avaa Muistokartta &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TYÖKALU: LUO JAKOLINKKI LAUKAAINFOON -->
+
+<section class="share-generator-section bg-full-blue">
 
             <div class="share-generator-card">
 

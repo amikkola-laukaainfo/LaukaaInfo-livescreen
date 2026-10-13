@@ -3,9 +3,10 @@
 -- Kuvaus:
 -- 1. Korjaa get_place_dashboard RPC-funktion ilmoitushaku:
 --    - Korjaa sarakkeet (e.title, e.image_url, e.publisher_name, e.price_info jne. e.name sijaan)
+--    - Kaksisuuntainen nimihaku (esim. "Haarlan ranta" täsmää "Haarlan ranta, urheilukenttä")
 --    - Sallii haun UUID:n (place_id, location_id), slugin tai paikan nimen perusteella
 -- 2. Backfill: Päivittää aiemmin jätetyt orvot ilmoitukset, joiden place_id oli jäänyt tyhjäksi,
---    mutta joiden sijaintiteksti (location) täsmää rekisteröityyn paikkaan (esim. "Haarlan ranta").
+--    mutta joiden sijaintiteksti (location) täsmää rekisteröityyn paikkaan.
 -- =============================================================================
 
 -- 1. Backfill olemassa oleville ilmoituksille, joilta puuttuu place_id linkitys
@@ -16,9 +17,20 @@ SET
 FROM public.places p
 WHERE (e.place_id IS NULL)
   AND (
-      (p.name IS NOT NULL AND TRIM(p.name) <> '' AND e.location ILIKE '%' || TRIM(p.name) || '%')
-      OR (p.place_id IS NOT NULL AND TRIM(p.place_id) <> '' AND e.location_id = p.place_id)
-      OR (p.canonical_name IS NOT NULL AND TRIM(p.canonical_name) <> '' AND e.location ILIKE '%' || TRIM(p.canonical_name) || '%')
+      (p.name IS NOT NULL AND TRIM(p.name) <> '' AND (
+          p.name ILIKE '%' || TRIM(e.location) || '%'
+          OR e.location ILIKE '%' || TRIM(p.name) || '%'
+          OR e.location ILIKE '%' || TRIM(SPLIT_PART(p.name, ',', 1)) || '%'
+          OR TRIM(SPLIT_PART(p.name, ',', 1)) ILIKE '%' || TRIM(e.location) || '%'
+      ))
+      OR (p.place_id IS NOT NULL AND TRIM(p.place_id) <> '' AND (
+          e.location_id = p.place_id
+          OR e.location ILIKE '%' || TRIM(p.place_id) || '%'
+      ))
+      OR (p.canonical_name IS NOT NULL AND TRIM(p.canonical_name) <> '' AND (
+          p.canonical_name ILIKE '%' || TRIM(e.location) || '%'
+          OR e.location ILIKE '%' || TRIM(p.canonical_name) || '%'
+      ))
   );
 
 -- 2. Päivitetään get_place_dashboard RPC
@@ -323,7 +335,20 @@ BEGIN
                     e.place_id = v_place_uuid
                     OR e.location_id = v_place_uuid::text
                     OR (v_place->>'place_id' IS NOT NULL AND e.location_id = (v_place->>'place_id'))
-                    OR (v_place->>'name' IS NOT NULL AND TRIM(v_place->>'name') <> '' AND e.location ILIKE '%' || TRIM(v_place->>'name') || '%')
+                    OR (
+                        e.location IS NOT NULL AND TRIM(e.location) <> '' AND (
+                            (v_place->>'name' IS NOT NULL AND (
+                                (v_place->>'name') ILIKE '%' || TRIM(e.location) || '%'
+                                OR e.location ILIKE '%' || TRIM(v_place->>'name') || '%'
+                                OR e.location ILIKE '%' || TRIM(SPLIT_PART(v_place->>'name', ',', 1)) || '%'
+                                OR TRIM(SPLIT_PART(v_place->>'name', ',', 1)) ILIKE '%' || TRIM(e.location) || '%'
+                            ))
+                            OR (v_place->>'canonical_name' IS NOT NULL AND (
+                                (v_place->>'canonical_name') ILIKE '%' || TRIM(e.location) || '%'
+                                OR e.location ILIKE '%' || TRIM(v_place->>'canonical_name') || '%'
+                            ))
+                        )
+                    )
                 )
                   AND e.status = 'active'
                   AND (e.visibility = 'public' OR e.visibility IS NULL)
@@ -338,7 +363,20 @@ BEGIN
                 e.place_id = v_place_uuid
                 OR e.location_id = v_place_uuid::text
                 OR (v_place->>'place_id' IS NOT NULL AND e.location_id = (v_place->>'place_id'))
-                OR (v_place->>'name' IS NOT NULL AND TRIM(v_place->>'name') <> '' AND e.location ILIKE '%' || TRIM(v_place->>'name') || '%')
+                OR (
+                    e.location IS NOT NULL AND TRIM(e.location) <> '' AND (
+                        (v_place->>'name' IS NOT NULL AND (
+                            (v_place->>'name') ILIKE '%' || TRIM(e.location) || '%'
+                            OR e.location ILIKE '%' || TRIM(v_place->>'name') || '%'
+                            OR e.location ILIKE '%' || TRIM(SPLIT_PART(v_place->>'name', ',', 1)) || '%'
+                            OR TRIM(SPLIT_PART(v_place->>'name', ',', 1)) ILIKE '%' || TRIM(e.location) || '%'
+                        ))
+                        OR (v_place->>'canonical_name' IS NOT NULL AND (
+                            (v_place->>'canonical_name') ILIKE '%' || TRIM(e.location) || '%'
+                            OR e.location ILIKE '%' || TRIM(v_place->>'canonical_name') || '%'
+                        ))
+                    )
+                )
             )
               AND e.status = 'active'
               AND (e.visibility = 'public' OR e.visibility IS NULL)
