@@ -85,9 +85,9 @@
             } catch (e) { console.error("Error parsing stored user coords", e); }
         }
 
-        if (!category) {
-            window.location.href = 'index.html';
-            return;
+        const isAll = !category || category.toLowerCase() === 'all';
+        if (isAll) {
+            category = 'all';
         }
 
         const friendlyRegions = {
@@ -100,12 +100,23 @@
         };
 
         villageName = friendlyRegions[selectedRegion] || '';
-        const displayTitle = villageName ? `${category} - ${villageName}` : category;
-
-        // Kun sivulla on kovakoodattu data-category (eli kyseessä on uusi SEO-alasivu), elä ylikirjoita sen Titlea tai H1-otsikkoa.
-        if (!document.body.dataset.category) {
-            document.getElementById('category-name').textContent = displayTitle;
-            document.title = `${displayTitle} – LaukaaInfo`;
+        let displayTitle = '';
+        if (isAll) {
+            displayTitle = villageName ? `Teemat & Kategoriat - ${villageName}` : 'Teemat & Kategoriat';
+            if (!document.body.dataset.category) {
+                const nameEl = document.getElementById('category-name');
+                if (nameEl) nameEl.textContent = displayTitle;
+                const descEl = document.getElementById('category-description');
+                if (descEl) descEl.textContent = 'Löydä Laukaan yritykset, palvelut ja kohteet toimialoittain ja teemoittain.';
+                document.title = `${displayTitle} – LaukaaInfo: Laukaa taskussasi`;
+            }
+        } else {
+            displayTitle = villageName ? `${category} - ${villageName}` : category;
+            if (!document.body.dataset.category) {
+                const nameEl = document.getElementById('category-name');
+                if (nameEl) nameEl.textContent = displayTitle;
+                document.title = `${displayTitle} – LaukaaInfo`;
+            }
         }
 
         // Icon selection
@@ -126,12 +137,13 @@
             'Muu': '🏢'
         };
         const cleanCat = (category || '').trim();
-        const icon = categoryIcons[cleanCat] ||
+        const icon = isAll ? '🗂️' : (categoryIcons[cleanCat] ||
             categoryIcons[cleanCat.replace('-', ' ')] ||
             categoryIcons[cleanCat.replace(' ', '-')] ||
             Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
-            '🏢';
-        document.getElementById('category-icon').textContent = icon;
+            '🏢');
+        const iconEl = document.getElementById('category-icon');
+        if (iconEl) iconEl.textContent = icon;
 
         const tagParam = params.get('tag');
         loadData(category, tagParam);
@@ -159,6 +171,8 @@
                     company.logo = baseUrl + company.logo;
                 }
             });
+
+            renderCategoryHub(allCompanies, category);
 
             let rawCategoryCompanies;
             const catLower = (category || '').trim().toLowerCase();
@@ -908,6 +922,65 @@
         regionMap.on('moveend', handleMapMoveForSidebar);
     }
     
+    function renderCategoryHub(allCompanies, currentCategory) {
+        const grid = document.getElementById('category-cards-grid');
+        if (!grid) return;
+
+        const catCounts = {};
+        allCompanies.forEach(c => {
+            if (c.kategoria) {
+                catCounts[c.kategoria] = (catCounts[c.kategoria] || 0) + 1;
+            }
+        });
+
+        const definedCats = [
+            { name: 'Kaikki toimialat', id: 'all', icon: '🌐', count: allCompanies.length },
+            { name: 'Auto ja kuljetus', id: 'Auto ja kuljetus', icon: '🚗', count: catCounts['Auto ja kuljetus'] || 0 },
+            { name: 'Rakentaminen ja remontointi', id: 'Rakentaminen ja remontointi', icon: '🏠', count: catCounts['Rakentaminen ja remontointi'] || 0 },
+            { name: 'Hyvinvointi ja terveys', id: 'Hyvinvointi ja terveys', icon: '🏥', count: catCounts['Hyvinvointi ja terveys'] || 0 },
+            { name: 'Ruokailu & Ravintolat', id: 'Ruokailu', icon: '🍕', count: (catCounts['Ruokailu'] || 0) + (catCounts['Kahvila'] || 0) },
+            { name: 'Kaupat ja ostokset', id: 'Kaupat ja ostokset', icon: '🛍️', count: catCounts['Kaupat ja ostokset'] || 0 },
+            { name: 'Palvelut', id: 'Palvelut', icon: '💼', count: catCounts['Palvelut'] || 0 },
+            { name: 'Elintarvikkeet', id: 'Elintarvikkeet', icon: '🛒', count: catCounts['Elintarvikkeet'] || 0 },
+            { name: 'Juhlatilat', id: 'Juhlatilat', icon: '🎊', count: catCounts['Juhlatilat'] || 0 },
+            { name: 'Majoitus', id: 'Majoitus', icon: '🏨', count: catCounts['Majoitus'] || 0 }
+        ];
+
+        grid.innerHTML = '';
+        definedCats.forEach(cat => {
+            const a = document.createElement('a');
+            const isActive = (currentCategory === 'all' && cat.id === 'all') || (currentCategory && currentCategory.toLowerCase() === cat.id.toLowerCase());
+            a.className = `category-hub-card ${isActive ? 'active' : ''}`;
+            const regParam = selectedRegion && selectedRegion !== 'all' ? `&region=${selectedRegion}` : '';
+            a.href = cat.id === 'all' ? `kategoria.html?cat=all${regParam}` : `kategoria.html?cat=${encodeURIComponent(cat.id)}${regParam}`;
+            a.innerHTML = `
+                <span class="cat-hub-icon">${cat.icon}</span>
+                <span class="cat-hub-name">${cat.name}</span>
+                <span class="cat-hub-count">${cat.count}</span>
+            `;
+            grid.appendChild(a);
+        });
+
+        // Teemat ja näkökulmat
+        const themeContainer = document.getElementById('theme-pills-container');
+        if (themeContainer) {
+            const themes = [
+                { name: 'Luonto & Retkeily', tag: 'luonto', color: '#059669', icon: '🌲' },
+                { name: 'Perheet & Lapset', tag: 'lapset', color: '#db2777', icon: '👨‍👩‍👧' },
+                { name: 'Kulttuuri & Historia', tag: 'kulttuuri', color: '#7c3aed', icon: '🎭' },
+                { name: 'Liikunta & Urheilu', tag: 'liikunta', color: '#0284c7', icon: '⚽' },
+                { name: 'Uimarannat & Vedet', tag: 'uimaranta', color: '#0891b2', icon: '🏖️' },
+                { name: 'Nähtävyydet', tag: 'nahtavyys', color: '#d97706', icon: '⭐' }
+            ];
+            themeContainer.innerHTML = themes.map(t => `
+                <a href="teema.html?tag=${encodeURIComponent(t.tag)}" class="theme-hub-pill"
+                   style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 0.9rem; border-radius:50px; background:${t.color}15; color:${t.color}; border:1.5px solid ${t.color}35; font-size:0.88rem; font-weight:700; text-decoration:none; transition:all 0.2s ease;">
+                   <span>${t.icon}</span> ${t.name}
+                </a>
+            `).join('');
+        }
+    }
+
     function handleMapMoveForSidebar() {
         if (typeof updateMapSidebar === 'function') {
             updateMapSidebar(window.currentMapCompanies || categoryCompanies);
