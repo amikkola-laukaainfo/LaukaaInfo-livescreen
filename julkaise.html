@@ -572,9 +572,10 @@
       }
 
       async function loadThemesFromSupabase() {
-        if (supabaseClient) {
+        const sb = getSbClient();
+        if (sb) {
           try {
-            const { data } = await supabaseClient.from('tags').select('tag_id, name').limit(150);
+            const { data } = await sb.from('tags').select('tag_id, name').limit(150);
             if (data && data.length > 0) {
               const dbTagList = data.map(t => ({
                 tag_id: t.tag_id || t.id,
@@ -661,9 +662,10 @@
         let orgId = '';
         let orgName = '';
 
-        if (supabaseClient) {
+        const sb = getSbClient();
+        if (sb) {
           try {
-            const { data, error } = await supabaseClient.rpc('resolve_publisher_key', {
+            const { data, error } = await sb.rpc('resolve_publisher_key', {
               p_publish_key: rawKey
             });
 
@@ -722,9 +724,9 @@
           }
 
           // Tarkistetaan organisaation oletusnäkyvyys Supabasesta
-          if (supabaseClient && orgId) {
+          if (sb && orgId) {
             try {
-              const { data: stData } = await supabaseClient.rpc('get_org_wall_access_status', { p_organization_id: orgId });
+              const { data: stData } = await sb.rpc('get_org_wall_access_status', { p_organization_id: orgId });
               if (stData && stData.default_post_visibility) {
                 const visSelect = document.getElementById('visibility');
                 if (visSelect) visSelect.value = stData.default_post_visibility;
@@ -806,13 +808,14 @@
 
         container.innerHTML = '<p class="text-xs text-slate-400 text-center py-3">Päivitetään julkaisulistaa...</p>';
 
-        if (!supabaseClient || !selectedOrgId) {
+        const sb = getSbClient();
+        if (!sb || !selectedOrgId) {
           container.innerHTML = '<p class="text-xs text-slate-400 text-center py-3">Ei julkaisuja saatavilla ilman tietokantayhteyttä.</p>';
           return;
         }
 
         try {
-          const { data: posts, error } = await supabaseClient
+          const { data: posts, error } = await sb
             .from('posts')
             .select(`
               *,
@@ -1165,13 +1168,14 @@
         let storagePath = null;
         let publicUrl = null;
 
-        if (supabaseClient) {
+        const sb = getSbClient();
+        if (sb) {
           try {
             const fileUuid = crypto.randomUUID ? crypto.randomUUID() : ('pdf_' + Date.now());
             const tempPostId = editingPostId || ('temp_' + Date.now());
             storagePath = `publication-files/${tempPostId}/${fileUuid}.pdf`;
 
-            const { data, error } = await supabaseClient.storage
+            const { data, error } = await sb.storage
               .from('publication-files')
               .upload(storagePath, file, {
                 cacheControl: '3600',
@@ -1180,15 +1184,15 @@
               });
 
             if (!error && data) {
-              const { data: pubUrlData } = supabaseClient.storage.from('publication-files').getPublicUrl(storagePath);
-              publicUrl = (pubUrlData && pubUrlData.publicUrl) ? pubUrlData.publicUrl : `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;
+              const { data: pubUrlData } = sb.storage.from('publication-files').getPublicUrl(storagePath);
+              publicUrl = (pubUrlData && pubUrlData.publicUrl) ? pubUrlData.publicUrl : `${STORAGE_BASE_URL}/storage/v1/object/public/${storagePath}`;
             } else if (storagePath) {
-              publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;
+              publicUrl = `${STORAGE_BASE_URL}/storage/v1/object/public/${storagePath}`;
             }
           } catch (e) {
             console.warn('Storage upload notice:', e);
             if (storagePath) {
-              publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;
+              publicUrl = `${STORAGE_BASE_URL}/storage/v1/object/public/${storagePath}`;
             }
           }
         }
@@ -1197,7 +1201,7 @@
           type: 'pdf',
           provider: 'supabase',
           storage_path: storagePath || `publication-files/demo/${file.name}`,
-          url: publicUrl || (storagePath ? `${SUPABASE_URL}/storage/v1/object/public/${storagePath}` : '#'),
+          url: publicUrl || (storagePath ? `${STORAGE_BASE_URL}/storage/v1/object/public/${storagePath}` : '#'),
           file_name: file.name,
           file_size: file.size,
           mime_type: 'application/pdf'
@@ -1319,9 +1323,10 @@
           return;
         }
 
-        if (supabaseClient && activePublishKey) {
+        const sb = getSbClient();
+        if (sb && activePublishKey) {
           try {
-            const { data, error } = await supabaseClient.rpc('delete_post_with_key', {
+            const { data, error } = await sb.rpc('delete_post_with_key', {
               p_organization_id: selectedOrgId,
               p_publish_key: activePublishKey,
               p_post_id: postId
@@ -1344,9 +1349,10 @@
 
       // Pin / Unpin post
       async function togglePinPost(postId, currentlyPinned) {
-        if (supabaseClient && activePublishKey) {
+        const sb = getSbClient();
+        if (sb && activePublishKey) {
           try {
-            const { data, error } = await supabaseClient.rpc('pin_post_with_key', {
+            const { data, error } = await sb.rpc('pin_post_with_key', {
               p_organization_id: selectedOrgId,
               p_publish_key: activePublishKey,
               p_post_id: postId,
@@ -1432,9 +1438,10 @@
         submitBtn.disabled = true;
         submitBtn.innerText = editingPostId ? 'Tallennetaan...' : 'Julkaistaan Supabaseen...';
 
-        if (supabaseClient && activePublishKey) {
+        const sb = getSbClient();
+        if (sb && activePublishKey) {
           try {
-            const { data, error } = await supabaseClient.rpc('publish_post_with_key', {
+            const { data, error } = await sb.rpc('publish_post_with_key', {
               p_organization_id: selectedOrgId,
               p_publish_key: activePublishKey,
               p_title: title.trim(),
@@ -1505,4 +1512,5 @@
 
       initPublishingPoint();
     </script>
-  </body
+  </body>
+</html>
