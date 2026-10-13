@@ -83,11 +83,11 @@
     function renderDesktopNav(base) {
         return `
             <li class="nav-item">
-                <a href="#" class="nav-link" data-i18n="nav_find">Löydä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="#" class="nav-link">Löydä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="${base}koko-laukaa.html">Kaikki palvelut</a></li>
                     <li class="has-arrow">
-                        <a href="#" data-i18n="nav_areas">Taajamat</a>
+                        <a href="#">Taajamat</a>
                         <ul class="nested-menu">
                             <li><a href="${base}laukaa.html">Laukaa kk</a></li>
                             <li><a href="${base}leppavesi.html">Leppävesi</a></li>
@@ -102,17 +102,17 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
-                    <li><a href="${base}ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
-                    <li><a href="${base}ajankohtaista.html#decisions-card" data-i18n="nav_decisions">Päätöksenteko</a></li>
-                    <li><a href="${base}ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
+                    <li><a href="${base}ajankohtaista.html#events-card">Tapahtumat</a></li>
+                    <li><a href="${base}ajankohtaista.html#news-card">Tiedotteet</a></li>
+                    <li><a href="${base}ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
+                    <li><a href="${base}ajankohtaista.html#feedback-card">Palautteet</a></li>
                     <li><a href="${base}yhteisot-ja-linkit.html">Laukaa somessa &amp; kanavat</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}seina.html" class="nav-link" data-i18n="nav_highlights">Paikalliset nostot <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}seina.html" class="nav-link">Paikalliset nostot <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="${base}seina.html" style="font-weight: 700; color: #1e40af;">📢 Seinä</a></li>
                     <li><a href="${base}kohtaamiset.html">Kohtaamispaikka &amp; Feed</a></li>
@@ -121,7 +121,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}verkostokartta.html" class="nav-link" data-i18n="nav_network">Verkostoidu <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}verkostokartta.html" class="nav-link">Verkostoidu <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="${base}index.html#service-needs">Mitä tarvitset? (Tarvehaku)</a></li>
                     <li><a href="${base}verkostokartta.html">Verkostokartta</a></li>
@@ -129,27 +129,27 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link" data-i18n="nav_explore">Tutki Laukaata <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="#" class="nav-link">Tutki Laukaata <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}asiahaku.html" data-i18n="nav_paths">Päätösten polut</a></li>
-                    <li><a href="${base}tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
-                    <li><a href="${base}tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
-                    <li><a href="${base}muistokartta.html" data-i18n="nav_memorial_map">Muistokartta</a></li>
-                    <li><a href="${base}kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
+                    <li><a href="${base}asiahaku.html">Päätösten polut</a></li>
+                    <li><a href="${base}tarinakartta.html">Tarinakartta</a></li>
+                    <li><a href="${base}tarinakartta.html#kavelyreitit-section">Reittikartta</a></li>
+                    <li><a href="${base}muistokartta.html">Muistokartta</a></li>
+                    <li><a href="${base}kadonneet.html">Kadonneet &amp; löydetyt</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}ilmoittaudu.html" class="nav-link" data-i18n="nav_publish">Julkaise <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}ilmoittaudu.html" class="nav-link">Julkaise <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}ilmoittaudu.html" data-i18n="nav_feed">Jätä ilmoitus / Kanavat</a></li>
-                    <li><a href="${base}lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
-                    <li><a href="${base}kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit &amp; Kauppa</a></li>
+                    <li><a href="${base}ilmoittaudu.html">Jätä ilmoitus / Kanavat</a></li>
+                    <li><a href="${base}lisaa-yritys.html">Yritysprofiili</a></li>
+                    <li><a href="${base}kauppa.html">Julkaisupaketit &amp; Kauppa</a></li>
                     <li><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" style="color: #3b82f6; font-weight: 700;">Kilpailutus</a></li>
                     <li><a href="${base}palvelun-esittely.html">Tietoa palvelusta</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}index.html#share-generator-section" class="nav-link" style="color: #0284c7; font-weight: 700; background: rgba(255,255,255,0.15); padding: 0.35rem 0.85rem; border-radius: 20px; text-decoration: none;">🔗 Luo jakolinkki</a>
+                <a href="${base}index.html#share-generator-section" class="nav-link" style="color: #ffffff; font-weight: 700; background: rgba(255,255,255,0.22); padding: 0.35rem 0.85rem; border-radius: 20px; text-decoration: none; border: 1px solid rgba(255,255,255,0.4);">🔗 Luo jakolinkki</a>
             </li>
         `;
     }

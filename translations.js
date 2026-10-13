@@ -1210,17 +1210,38 @@ const UI_TRANSLATIONS = {
 
 class I18nManager {
     constructor() {
-        this.currentLang = localStorage.getItem(I18N_CONFIG.storageKey) || I18N_CONFIG.defaultLanguage;
-        // Ensure language is supported
-        if (!I18N_CONFIG.languages.includes(this.currentLang)) {
-            this.currentLang = I18N_CONFIG.defaultLanguage;
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlLang = urlParams.get('lang');
+        if (urlLang && I18N_CONFIG.languages.includes(urlLang)) {
+            this.currentLang = urlLang;
+            try {
+                localStorage.setItem(I18N_CONFIG.storageKey, urlLang);
+                sessionStorage.setItem('laukaainfo_lang_active', 'true');
+            } catch (e) {}
+        } else {
+            // Suomen kieli on aina oletus. Nollataan mahdollinen vanhentunut 'en' localStorage-arvo,
+            // ellei käyttäjä ole aktiivisesti vaihtanut kieltä kuluvan selausistunnon aikana.
+            let saved = null;
+            try { saved = localStorage.getItem(I18N_CONFIG.storageKey); } catch (e) {}
+
+            if (saved === 'fi' || !saved) {
+                this.currentLang = 'fi';
+            } else if (sessionStorage.getItem('laukaainfo_lang_active') === 'true' && I18N_CONFIG.languages.includes(saved)) {
+                this.currentLang = saved;
+            } else {
+                this.currentLang = 'fi';
+                try { localStorage.setItem(I18N_CONFIG.storageKey, 'fi'); } catch (e) {}
+            }
         }
     }
 
     setLanguage(lang) {
         if (I18N_CONFIG.languages.includes(lang)) {
             this.currentLang = lang;
-            localStorage.setItem(I18N_CONFIG.storageKey, lang);
+            try {
+                localStorage.setItem(I18N_CONFIG.storageKey, lang);
+                sessionStorage.setItem('laukaainfo_lang_active', 'true');
+            } catch (e) {}
             this.translatePage();
             // Trigger custom event for other scripts (like search logic)
             window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
