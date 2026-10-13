@@ -5536,7 +5536,7 @@ footer {
 
 .need-card {
     position: relative;
-    height: 500px;
+    height: 340px;
     border-radius: 32px;
     overflow: hidden;
     background-color: #1a2a3a; /* Fallback color */
@@ -5580,13 +5580,13 @@ footer {
 
 .need-card-content {
     z-index: 3;
-    padding: 3rem;
+    padding: 1.75rem;
     color: white;
     width: 100%;
 }
 
 .need-card h3 {
-    font-size: 2.1rem;
+    font-size: 1.5rem;
     color: #ffffff !important;
     margin-bottom: 0.75rem;
     font-weight: 800;
@@ -5616,11 +5616,11 @@ footer {
     text-align: center;
     background: white;
     color: var(--primary-blue);
-    padding: 1.1rem;
+    padding: 0.75rem 1.25rem;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
