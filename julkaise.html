@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>LaukaaInfo — Organisaation Julkaisupiste</title>
+    <link rel="icon" href="logo.png" />
     <link rel="stylesheet" href="julkaise.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js?v=20261013"></script>
@@ -380,15 +381,16 @@
     </main>
 
     <script>
-      // Supabase Client Initialization
-      // HUOM: SUPABASE_URL on jo määritelty supabase-config.js:ssä, käytetään var välttääksemme konfliktia
-      var SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-      var SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-      var supabaseClient = window.LaukaaSupabase || (
-        (window.supabase && typeof window.supabase.createClient === 'function')
-          ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-          : null
-      );
+      // Supabase Client Helper
+      function getSbClient() {
+        if (!window.LaukaaSupabase && window.supabase && typeof window.supabase.createClient === 'function') {
+          const u = window.SUPABASE_URL || 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+          const k = window.SUPABASE_ANON_KEY || 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+          window.LaukaaSupabase = window.supabase.createClient(u, k);
+        }
+        return window.LaukaaSupabase || null;
+      }
+      const STORAGE_BASE_URL = window.SUPABASE_URL || 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
 
       // State
       let selectedOrgId = '';
@@ -480,10 +482,11 @@
 
       async function loadPlacesFromSupabase() {
         const select = document.getElementById('placeSelect');
-        if (!select || !supabaseClient) return;
+        const sb = getSbClient();
+        if (!select || !sb) return;
 
         try {
-          const { data: dbPlaces, error } = await supabaseClient
+          const { data: dbPlaces, error } = await sb
             .from('places')
             .select('id, name, canonical_name, type, municipality, importance')
             .order('importance', { ascending: false, nullsFirst: false })
@@ -1502,5 +1505,4 @@
 
       initPublishingPoint();
     </script>
-  </body>
-</html>
+  </body
