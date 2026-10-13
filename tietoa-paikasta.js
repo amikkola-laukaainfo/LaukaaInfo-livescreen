@@ -3513,6 +3513,9 @@ async function loadMixonetContentForPlace(placeData) {
     try {
         const mixonetPlaceId = placeData ? placeData.mixonet_place_id : null;
         const placeIdFilterSet = new Set([placeId, mixonetPlaceId].filter(Boolean));
+        if (placeData && placeData.parent_place_id) {
+            placeIdFilterSet.add(placeData.parent_place_id);
+        }
         if (placeData && Array.isArray(placeData.subPlaces)) {
             placeData.subPlaces.forEach(sp => {
                 if (sp.id) placeIdFilterSet.add(sp.id);
@@ -3595,11 +3598,14 @@ async function loadMixonetContentForPlace(placeData) {
             return false;
         }
 
-        // Kohdistetaan projektit ensisijaisesti LOCATED_AT / RELATES_TO relaatioihin
+        // Kohdistetaan projektit: LOCATED_IN, LOCATED_AT, RELATES_TO, OPERATES_IN, PRIMARY_PLACE
+        const allowedProjectRelTypes = ['LOCATED_IN', 'LOCATED_AT', 'RELATES_TO', 'OPERATES_IN', 'PRIMARY_PLACE'];
         const projectIdsFromRel = relations
-            .filter(r => r.source_type === 'PROJECT' && isPubliclyVisible(r.source_type) &&
-                (!r.relation_type || r.relation_type === 'LOCATED_AT' || r.relation_type === 'RELATES_TO' || r.relation_type === 'OPERATES_IN'))
-            .map(r => r.source_id);
+            .filter(r => (r.source_type === 'PROJECT' || r.target_type === 'PROJECT') &&
+                isPubliclyVisible(r.source_type === 'PROJECT' ? r.source_type : r.target_type) &&
+                (!r.relation_type || allowedProjectRelTypes.includes((r.relation_type || '').toUpperCase())))
+            .map(r => r.source_type === 'PROJECT' ? r.source_id : r.target_id)
+            .filter(Boolean);
 
         const ideaIdsFromRel = relations
             .filter(r => r.source_type === 'IDEA' && isPubliclyVisible(r.source_type))
