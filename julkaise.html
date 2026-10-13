@@ -437,7 +437,25 @@
           const authInput = document.getElementById('authKeyInput');
           if (authInput) authInput.value = effectiveKey;
 
-          // Siistitään avain URL-osoitteesta turvallisuussyistä
+          // Näytetään välitön tila, jotta käyttäjä tietää tunnistautumisen olevan käynnissä
+          const authSec = document.getElementById('authSection');
+          if (authSec) {
+            const loadingHtml = `
+              <div class="text-center py-6 space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-violet-100 text-violet-700 font-black flex items-center justify-center text-2xl mx-auto animate-pulse">
+                  🔑
+                </div>
+                <h2 class="text-sm font-bold text-slate-800">Tunnistetaan organisaatiota...</h2>
+                <p class="text-xs text-slate-500">Avataan julkaisupistettä avaimella <span class="font-mono font-bold text-violet-700">${effectiveKey}</span></p>
+              </div>
+            `;
+            authSec.innerHTML = loadingHtml;
+          }
+
+          // Avataan editori HETI!
+          await verifyAndContinue(effectiveKey);
+
+          // Siistitään avain URL-osoitteesta vasta onnistumisen jälkeen
           if (keyFromUrl) {
             try {
               const cleanParams = new URLSearchParams(window.location.search);
@@ -450,9 +468,6 @@
               window.history.replaceState({}, document.title, cleanUrl);
             } catch (e) {}
           }
-
-          // Avataan editori HETI!
-          await verifyAndContinue(effectiveKey);
         }
 
         // 2. Ladataan teemat ja paikat taustalla
@@ -621,7 +636,7 @@
 
       // Step 1 -> Step 2 Verification via Server RPC (Key auto-detects organization)
       async function verifyAndContinue(directKey = null) {
-        const rawKey = directKey || (document.getElementById('authKeyInput') ? document.getElementById('authKeyInput').value : '');
+        const rawKey = (directKey || (document.getElementById('authKeyInput') ? document.getElementById('authKeyInput').value : '')).trim().toUpperCase();
 
         const errorBox = document.getElementById('authError');
         if (errorBox) errorBox.classList.add('hidden');
@@ -677,6 +692,19 @@
           selectedOrgId = orgId;
           verifiedOrgName = orgName;
 
+          // Unlock Editor VÄLITTÖMÄSTI ennen taustaprosesseja
+          const authSec = document.getElementById('authSection');
+          const editSec = document.getElementById('editorSection');
+          if (authSec) authSec.classList.add('hidden');
+          if (editSec) editSec.classList.remove('hidden');
+          
+          const headerOrg = document.getElementById('headerOrgName');
+          if (headerOrg) headerOrg.innerText = orgName;
+          const verifiedTitle = document.getElementById('verifiedOrgTitle');
+          if (verifiedTitle) verifiedTitle.innerText = orgName;
+          const submitBtn = document.getElementById('submitPublishBtn');
+          if (submitBtn) submitBtn.innerText = `🚀 Julkaise ${orgName} seinälle`;
+
           // Synkronoidaan aktiivinen organisaation istunto sessionStorage-muistiin (Kohtaamiset & Seinä)
           if (window.LaukaaOrgSession) {
             try {
@@ -688,14 +716,6 @@
               console.warn('LaukaaOrgSession begin error:', e);
             }
           }
-
-          // Unlock Editor
-          document.getElementById('authSection').classList.add('hidden');
-          document.getElementById('editorSection').classList.remove('hidden');
-          
-          document.getElementById('headerOrgName').innerText = orgName;
-          document.getElementById('verifiedOrgTitle').innerText = orgName;
-          document.getElementById('submitPublishBtn').innerText = `🚀 Julkaise ${orgName} seinälle`;
 
           // Tarkistetaan organisaation oletusnäkyvyys Supabasesta
           if (supabaseClient && orgId) {
