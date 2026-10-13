@@ -409,30 +409,123 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         let otherRelatedItems = Array.from(allItemsMap.values());
 
-        // Suodatetaan pois Hylätyt ja Piilotetut havainnot/ilmoitukset (observations-taulu)
+        // Suodatetaan pois Hylätyt ja Piilotetut havainnot/ilmoitukset ja rikastetaan havaintojen otsikot sekä kuvaukset
         if (otherRelatedItems.length > 0) {
             const relCandidateIds = otherRelatedItems.map(i => String(i.id)).filter(Boolean);
             if (relCandidateIds.length > 0) {
+                // 1. Haetaan tiedot Supabasen observations-taulusta
                 try {
                     const { data: supaObsRel } = await aiSb
                         .from('observations')
-                        .select('id, status')
+                        .select('id, status, title, description, photo_url, created_at, category, images')
                         .in('id', relCandidateIds);
                     
                     if (supaObsRel && supaObsRel.length > 0) {
-                        const supaStatusMap = new Map();
-                        supaObsRel.forEach(s => supaStatusMap.set(String(s.id), String(s.status).toLowerCase()));
+                        const supaObsMap = new Map();
+                        supaObsRel.forEach(s => supaObsMap.set(String(s.id), s));
                         
                         otherRelatedItems = otherRelatedItems.filter(item => {
-                            const supaStatus = supaStatusMap.get(String(item.id));
-                            if (supaStatus) {
-                                return supaStatus === 'approved';
+                            const obs = supaObsMap.get(String(item.id));
+                            if (obs) {
+                                const st = String(obs.status || '').toLowerCase();
+                                if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'deleted') {
+                                    return false;
+                                }
+                                if (obs.title) {
+                                    item.name = obs.title;
+                                }
+                                if (obs.description) {
+                                    item.shortDescription = obs.description;
+                                } else if (item.shortDescription === 'Käyttäjän tekemä havainto' || item.shortDescription === 'OBSERVATION') {
+                                    item.shortDescription = '';
+                                }
+                                const photo = obs.photo_url || (Array.isArray(obs.images) && obs.images[0]);
+                                if (photo) {
+                                    item.image = photo;
+                                    item.images = [photo];
+                                }
+                                if (obs.created_at) {
+                                    item.createdAt = obs.created_at;
+                                }
                             }
                             return true;
                         });
                     }
                 } catch (relErr) {
                     console.warn('Virhe place_relations suodatuksessa:', relErr);
+                }
+
+                // 2. Jos osalta havainnoista puuttuu otsikko, haetaan Firebase-tietokannasta
+                const unresolvedObs = otherRelatedItems.filter(i => i.type === 'observation' && (!i.name || i.name === 'Havainto' || i.name === i.id));
+                if (unresolvedObs.length > 0 && typeof getFirebaseDbForObs === 'function') {
+                    try {
+                        const db = await getFirebaseDbForObs();
+                        if (db) {
+                            await Promise.all(unresolvedObs.map(async (item) => {
+                                try {
+                                    let doc = await db.collection('observations').doc(item.id).get();
+                                    if (!doc.exists) {
+                                        doc = await db.collection('lostItems').doc(item.id).get();
+                                    }
+                                    if (doc.exists) {
+                                        const d = doc.data();
+                                        const st = String(d.status || '').toLowerCase();
+                                        if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'deleted') {
+                                            item._rejected = true;
+                                            return;
+                                        }
+                                        if (d.title || d.name) {
+                                            item.name = d.title || d.name;
+                                        }
+                                        if (d.description) {
+                                            item.shortDescription = d.description;
+                                        } else if (item.shortDescription === 'Käyttäjän tekemä havainto' || item.shortDescription === 'OBSERVATION') {
+                                            item.shortDescription = '';
+                                        }
+                                        const photo = d.photo_url || d.photoUrl || (Array.isArray(d.images) && d.images[0]) || d.imageUrl1;
+                                        if (photo) {
+                                            item.image = photo;
+                                            item.images = [photo];
+                                        }
+                                        if (d.createdAt) {
+                                            item.createdAt = d.createdAt.toDate ? d.createdAt.toDate().toISOString() : d.createdAt;
+                                        }
+                                    }
+                                } catch (e) {}
+                            }));
+                            otherRelatedItems = otherRelatedItems.filter(item => !item._rejected);
+                        }
+                    } catch (fbErr) {
+                        console.warn('Firebase havaintojen rikastus huomautus:', fbErr);
+                    }
+                }
+
+                // 3. Fallback: encounters_public (LaukaaSupabase / aiSb)
+                const stillUnresolved = otherRelatedItems.filter(i => i.type === 'observation' && (!i.name || i.name === 'Havainto' || i.name === i.id));
+                if (stillUnresolved.length > 0) {
+                    const encIds = stillUnresolved.map(i => i.id).filter(id => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
+                    if (encIds.length > 0) {
+                        try {
+                            const encClient = window.LaukaaSupabase || aiSb;
+                            const { data: encList } = await encClient.from('encounters_public').select('id, title, description, image_url, photo_url, created_at').in('id', encIds);
+                            if (encList && encList.length > 0) {
+                                encList.forEach(enc => {
+                                    const it = stillUnresolved.find(i => String(i.id) === String(enc.id));
+                                    if (it) {
+                                        if (enc.title) it.name = enc.title;
+                                        if (enc.description) it.shortDescription = enc.description;
+                                        else if (it.shortDescription === 'Käyttäjän tekemä havainto' || it.shortDescription === 'OBSERVATION') it.shortDescription = '';
+                                        const photo = enc.image_url || enc.photo_url;
+                                        if (photo) {
+                                            it.image = photo;
+                                            it.images = [photo];
+                                        }
+                                        if (enc.created_at) it.createdAt = enc.created_at;
+                                    }
+                                });
+                            }
+                        } catch (e) {}
+                    }
                 }
             }
         }
@@ -2138,6 +2231,11 @@ function renderRelations(items, allSources = [], allContents = []) {
             if (fDate && uDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #b45309; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:schedule"></span> Voimassa: ${fDate} - ${uDate}</div>`;
             else if (uDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #b45309; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:schedule"></span> Päättyy: ${uDate}</div>`;
             else if (fDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #b45309; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:schedule"></span> Alkaa: ${fDate}</div>`;
+        } else if (item.createdAt || item.created_at) {
+            const cDate = formatDateFi(item.createdAt || item.created_at);
+            if (cDate) {
+                dateInfoHtml = `<span style="font-size: 0.75rem; color: #166534; font-weight: 600;">${cDate}</span>`;
+            }
         }
 
         const headerHtml = `
@@ -2162,8 +2260,14 @@ function renderRelations(items, allSources = [], allContents = []) {
         const highlightStyle = ' background: #f0f9ff; border-color: #bae6fd;';
 
         if (item.type === 'observation') {
+            const obsTitle = (displayName && displayName !== 'Havainto' && displayName !== item.id)
+                ? displayName
+                : (item.title || 'Havainto');
+            const cleanDesc = (item.shortDescription && item.shortDescription !== 'Käyttäjän tekemä havainto' && item.shortDescription !== 'OBSERVATION')
+                ? item.shortDescription
+                : '';
             return `
-            <div onclick="openObservationModal('${item.id}', '${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')"
+            <div onclick="openObservationModal('${item.id}', '${encodeURIComponent(obsTitle)}', '${encodeURIComponent(cleanDesc)}')"
                  class="list-item-card"
                  style="cursor: pointer; display: block; border-left: 4px solid #10b981; background: #f0fdf4; border-color: #bbf7d0; transition: transform 0.2s, box-shadow 0.2s;">
                 <div class="card-header-grid">
@@ -2176,8 +2280,8 @@ function renderRelations(items, allSources = [], allContents = []) {
                                 <span style="font-size: 0.75rem; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">📍 Havainto tästä paikasta</span>
                                 ${dateInfoHtml}
                             </div>
-                            <h3 style="margin: 0 0 0.35rem; font-size: 1.08rem; font-weight: 700; color: var(--text-main); font-family: 'Manrope', sans-serif;">${displayName}</h3>
-                            ${item.shortDescription ? `<p style="margin: 0 0 0.5rem; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">${item.shortDescription}</p>` : ''}
+                            <h3 style="margin: 0 0 0.35rem; font-size: 1.08rem; font-weight: 700; color: var(--text-main); font-family: 'Manrope', sans-serif;">${obsTitle}</h3>
+                            ${cleanDesc ? `<p style="margin: 0 0 0.5rem; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">${cleanDesc}</p>` : ''}
                             <div style="margin-top: 0.5rem;">
                                 <span style="font-size: 0.82rem; font-weight: 700; color: #15803d; display: inline-flex; align-items: center; gap: 0.25rem;">
                                     Katso havainto →
