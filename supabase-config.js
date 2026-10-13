@@ -5,12 +5,14 @@
  * 2. Supabase Auth: kirjautuminen tapahtuu magic linkin kautta (kirjaudu.html)
  */
 
-const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+var SUPABASE_URL = window.SUPABASE_URL || 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+var SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+window.SUPABASE_URL = SUPABASE_URL;
+window.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
 
-let supabaseClient = null;
+var supabaseClient = window.LaukaaSupabase || null;
 
-if (typeof supabase !== 'undefined') {
+if (typeof supabase !== 'undefined' && !supabaseClient) {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
             persistSession: true,
@@ -18,11 +20,12 @@ if (typeof supabase !== 'undefined') {
             detectSessionInUrl: true   // Käsittelee magic link -paluuosoitteen automaattisesti
         }
     });
-} else {
+} else if (typeof supabase === 'undefined') {
     console.warn('Supabase ei ole ladattu. Tarkista että supabase-js on mukana.');
 }
 
 window.LaukaaSupabase = supabaseClient;
+window.supabaseClient = supabaseClient;
 
 /**
  * LaukaaAuth – autentikointiaputyökalut
