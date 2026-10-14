@@ -1,2 +1,0 @@
-/* © Mediazoo / LaukaaInfo - Elämyspolku Engine v1.0 */
-const fs=require("fs"),path=require("path");function replaceInDir(i){fs.readdirSync(i).forEach(e=>{const l=path.join(i,e);if(fs.statSync(l).isFile()&&e.endsWith(".html"))try{let i=fs.readFileSync(l,"utf8");i.includes("Epävirallinen yhteisösovellus")&&(i=i.split("Epävirallinen yhteisösovellus").join("Palvelua ylläpitää Mediazoo.fi"),fs.writeFileSync(l,i,"utf8"))}catch(i){}})}replaceInDir("."),replaceInDir("./dist");

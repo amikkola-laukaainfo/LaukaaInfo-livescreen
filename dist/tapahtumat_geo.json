@@ -16,54 +16,6 @@
     "lng": null
   },
   {
-    "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "pe, 09 loka 2026 15:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/",
-    "lat": 62.4104566,
-    "lng": 25.9568791
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 10 loka 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
-    "lat": 62.4104566,
-    "lng": 25.9568791
-  },
-  {
-    "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "la, 10 loka 2026 11:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/",
-    "lat": 62.4104566,
-    "lng": 25.9568791
-  },
-  {
-    "nimi": "Pete Parkkonen Peurunka Areenalla",
-    "aika": "la, 10 loka 2026 21:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/pete-parkkonen-peurunka-areenalla/",
-    "lat": 62.4341199,
-    "lng": 25.8968081
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 13 loka 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
-    "lat": 62.4104566,
-    "lng": 25.9568791
-  },
-  {
-    "nimi": "Lukulemmikki Laukaan pääkirjastossa",
-    "aika": "ti, 13 loka 2026 14:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/lukulemmikki-laukaan-paakirjastossa/",
-    "lat": 62.4152685,
-    "lng": 25.9481125
-  },
-  {
     "nimi": "Ti-Ti Nallen Rytmiretki -konsertti",
     "aika": "to, 15 loka 2026 18:00:00",
     "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
