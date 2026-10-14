@@ -1451,16 +1451,24 @@
                     </details>
                 </section>
 
-                <!-- 7. Havainnot (Timeline) -->
+                <!-- 7. Havainnot (Timeline / Haitari oletuksena kiinni) -->
                 <section class="content-block" id="timeline-section" style="display: none;">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: #059669;" data-icon="material-symbols:history-toggle-off"></span>
-                        Viimeisimmät havainnot
-                    </h2>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Paikan maastohavainnot aikajärjestyksessä (LostReFound).</p>
-                    <div class="timeline" id="timeline-list">
-                        <!-- Filled by JS -->
-                    </div>
+                    <details id="timeline-details" class="service-accordion">
+                        <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                                <span class="iconify" style="color: #059669;" data-icon="material-symbols:history-toggle-off"></span>
+                                <span>Viimeisimmät havainnot</span>
+                                <span id="timeline-count-badge" style="display: none; font-size: 0.8rem; font-weight: 700; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 50px;"></span>
+                            </h2>
+                            <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
+                        </summary>
+                        <div style="padding: 0 1.25rem 1.25rem;">
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Paikan maastohavainnot aikajärjestyksessä (LostReFound). Aiemmat havainnot säilyvät täällä arkistossa.</p>
+                            <div class="timeline" id="timeline-list">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+                    </details>
                 </section>
 
                 <!-- ========================================================

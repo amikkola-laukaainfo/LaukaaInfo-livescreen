@@ -530,6 +530,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
+        // Erotellaan havainnoista:
+        // 1) Tuoreet havainnot (< 14 vrk), jotka näytetään "Tähän paikkaan liittyy" -osiossa heti
+        // 2) Yli 2 viikkoa vanhat havainnot siirtyvät arkistoon (Viimeisimmät havainnot -haitari) eivätkä jää "Tähän paikkaan liittyy" -lohkoon
+        const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
+        const nowMs = Date.now();
+
+        otherRelatedItems = otherRelatedItems.filter(item => {
+            if (item.type === 'observation') {
+                const rawDate = item.createdAt || item.created_at || item.timestamp;
+                if (!rawDate) return false; // Ei tuoretta päivämäärää -> siirtyy arkistoon
+                const itemTime = new Date(rawDate).getTime();
+                if (isNaN(itemTime)) return false;
+                const ageMs = nowMs - itemTime;
+                // Vain 0 - 14 vrk vanhat havainnot näytetään tässä osiossa tuoreina havaintoina
+                return ageMs >= 0 && ageMs <= TWO_WEEKS_MS;
+            }
+            return true;
+        });
+
         const placeIdStr = String(placeId);
         let allSources = [];
         let allContents = [];
@@ -1224,51 +1243,8 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
         }).join('');
     }
 
-    // Aikajana (Havainnot)
-    const timelineSection = document.getElementById('timeline-section');
-    const timelineList = document.getElementById('timeline-list');
-    if (timelineSection && timelineList) {
-        const observations = others.filter(i => i.type === 'observation' || i.type === 'other' || !i.type).slice(0, 5);
-        if (observations.length > 0) {
-            timelineSection.style.display = 'block';
-            timelineList.innerHTML = observations.map((obs) => {
-                const label = obs.name || 'Havainto';
-                const desc = obs.shortDescription || '';
-                const titleLower = (label + ' ' + desc).toLowerCase();
-                
-                let dotEmoji = '🟢';
-                let dotColor = '#10b981';
-                if (titleLower.includes('puu') || titleLower.includes('este') || titleLower.includes('vaara') || titleLower.includes('rikki') || titleLower.includes('varoitus') || titleLower.includes('huom') || titleLower.includes('vaurio')) {
-                    dotEmoji = '🟠';
-                    dotColor = '#f59e0b';
-                } else if (titleLower.includes('roska') || titleLower.includes('kyltti') || titleLower.includes('huolto') || titleLower.includes('siivous') || titleLower.includes('ilmoitus')) {
-                    dotEmoji = '🔵';
-                    dotColor = '#3b82f6';
-                }
-
-                return `
-                <div class="timeline-item" style="cursor: pointer;" onclick="openObservationModal('${obs.id}', '${encodeURIComponent(label)}', '${encodeURIComponent(desc)}')">
-                    <div class="time-label" style="display:flex; align-items:center; justify-content:space-between;">
-                        <span>${label}</span>
-                    </div>
-                    <div class="time-event" style="cursor: pointer; transition: all 0.2s ease; border-left: 3px solid ${dotColor};" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
-                        <div style="display:flex; align-items:flex-start; gap:0.75rem; width:100%;">
-                            <span style="font-size:1.15rem; line-height:1.2; flex-shrink:0;">${dotEmoji}</span>
-                            <div style="flex:1; min-width:0;">
-                                <div style="font-weight:700; color:var(--text-main); font-size:1rem; margin-bottom:0.25rem;">${label}</div>
-                                ${desc ? `<div style="font-size:0.9rem; color:var(--text-muted); line-height:1.45;">${desc}</div>` : ''}
-                                <div style="margin-top:0.45rem; font-size:0.8rem; font-weight:700; color:#059669; display:flex; align-items:center; gap:0.2rem;">
-                                    Katso havaintotiedot &rarr;
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        } else {
-            timelineSection.style.display = 'none';
-        }
-    }
+    // Aikajana (Havainnot) ladataan ja hallinnoidaan erillisessä loadPlaceObservations-funktiossa,
+    // joka hakee oikeat hyväksytyt havainnot Supabasesta ja näyttää ne oletuksena suljetussa haitarissa.
 
     // Verkostoyhteydet ja Yritykset (4-tasomalli)
     renderCompanies(scoredCompanies, allSources, allContents, place);
@@ -2277,7 +2253,7 @@ function renderRelations(items, allSources = [], allContents = []) {
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.25rem;">
-                                <span style="font-size: 0.75rem; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">📍 Havainto tästä paikasta</span>
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">✨ Uusi havainto (alle 2 vk)</span>
                                 ${dateInfoHtml}
                             </div>
                             <h3 style="margin: 0 0 0.35rem; font-size: 1.08rem; font-weight: 700; color: var(--text-main); font-family: 'Manrope', sans-serif;">${obsTitle}</h3>
@@ -4006,7 +3982,29 @@ async function loadPlaceObservations(placeInput) {
             .order('created_at', { ascending: false })
             .limit(10);
 
-        if (error || !obs || obs.length === 0) return;
+        if (error || !obs || obs.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        // Päivitetään haitarin lukumäärä-badge
+        const badge = document.getElementById('timeline-count-badge');
+        if (badge) {
+            badge.textContent = `${obs.length} kpl`;
+            badge.style.display = 'inline-block';
+        }
+
+        // Päivitetään myös pääsivun tilastolaskuri
+        const statObs = document.getElementById('stat-observations');
+        if (statObs) {
+            const cur = parseInt(statObs.textContent, 10) || 0;
+            const finalCount = Math.max(cur, obs.length);
+            statObs.textContent = finalCount;
+            const statObsLabel = document.getElementById('stat-observations-label');
+            if (statObsLabel) {
+                statObsLabel.textContent = finalCount === 1 ? 'havainto' : 'havaintoa';
+            }
+        }
 
         const safeHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -4035,7 +4033,8 @@ async function loadPlaceObservations(placeInput) {
                    </a>`
                 : '';
             return `
-                <div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;margin-bottom:0.75rem;border-left:3px solid #059669;">
+                <div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;margin-bottom:0.75rem;border-left:3px solid #059669;cursor:pointer;"
+                     onclick="openObservationModal('${o.id}', '${encodeURIComponent(o.title || 'Havainto')}', '${encodeURIComponent(o.description || '')}')">
                     ${photoHtml}
                     <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.4rem;">
                         ${srcBadge}
