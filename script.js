@@ -3610,6 +3610,15 @@ function isTechnicalOrRawCodeTag(term) {
     if (/^(BIZ|OPT|EVT|INTENT|CAPABILITY|ROLE)[-_]/i.test(t)) return true;
     if (t.toLowerCase() === 'catering') return true;
     if (/^[A-Z0-9_-]{4,}$/.test(t) && !['LVI', 'IT', 'LKI', 'Y-TUNNUS', 'GPS'].includes(t)) return true;
+    // Suodatetaan pois ASCII-only-slugit jotka ovat suomalaisten sanojen url-versioita
+    // (esim. 'kasityot', 'kasityo', 'luonto' – merkä jos sana voisi sisältää ä/ö/å mutta ei sisällä)
+    // Tunnistaminen: vain a-z-kirjaimia (ei numeroita, ei erikoismerkkejä), 5+ merkkiä,
+    // ja slug näyttää suomenkieliseltä sanalta mutta ei sisällä ä/ö → todennäköisesti duplikaatti-slug
+    if (/^[a-z]{5,}$/.test(t)) {
+        // Poikkeukset: lyhyet yleissanat jotka ovat ok myös ilman ääkkösiä
+        const allowedAscii = ['luonto', 'urheilu', 'talvi', 'kesä', 'historia', 'matkailu', 'kulttuuri', 'liikunta', 'hyvinvointi', 'yritykset', 'palvelut', 'yhteiso'];
+        if (!allowedAscii.includes(t.toLowerCase())) return true;
+    }
     return false;
 }
 
@@ -3660,16 +3669,46 @@ async function initV4Themes() {
             const name = formatThemeName(t);
             return name && !isTechnicalOrRawCodeTag(name) && ((t.places_count || 0) > 0 || (t.media_count || 0) > 0);
         });
-        if (activeThemes.length === 0) {
+
+        // Deduplikointi: jos sama sana on kahdesti (yksi ääntiöillä, yksi ASCII-slug),
+        // poistetaan se jolla ei ole ääntiöitä (ä/ö/å) jos toinen versio on olemassa
+        const normalizeForDedup = (s) => s.toLowerCase()
+            .replace(/ä/g,'a').replace(/ö/g,'o').replace(/å/g,'a')
+            .replace(/[^a-z0-9]/g,'');
+        const seenNorm = new Map();
+        const dedupedThemes = [];
+        activeThemes.forEach(t => {
+            const name = formatThemeName(t);
+            const norm = normalizeForDedup(name);
+            if (seenNorm.has(norm)) {
+                // Pidä se jolla on ääntiöitä (parempi nimi)
+                const existing = seenNorm.get(norm);
+                const existingName = formatThemeName(existing);
+                const hasAakkos = (s) => /[äöåÄÖÅ]/.test(s);
+                if (!hasAakkos(existingName) && hasAakkos(name)) {
+                    // Vaihda parempaan
+                    seenNorm.set(norm, t);
+                    const idx = dedupedThemes.indexOf(existing);
+                    if (idx !== -1) dedupedThemes.splice(idx, 1, t);
+                }
+                // else: pidetään nykyinen, ohitetaan uusi
+            } else {
+                seenNorm.set(norm, t);
+                dedupedThemes.push(t);
+            }
+        });
+
+        if (dedupedThemes.length === 0) {
             container.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem;">Ei vielä julkisia näkökulmia.</span>';
             return;
         }
 
         // Satunnaista ja näytä enintään 8 pilleriä
-        const shuffled = activeThemes.sort(() => Math.random() - 0.5).slice(0, 8);
+        const shuffled = dedupedThemes.sort(() => Math.random() - 0.5).slice(0, 8);
         const colors = ['#059669','#0284c7','#d97706','#7c3aed','#db2777','#0891b2','#16a34a','#b45309'];
 
         container.innerHTML = shuffled.map((t, idx) => {
+
             const name = formatThemeName(t);
             const color = colors[idx % colors.length];
             return `<a href="teema.html?tag=${encodeURIComponent(t.tag_id)}"

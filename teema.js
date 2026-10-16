@@ -425,8 +425,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const searchTag = tagParam.toLowerCase().trim();
     
-    // Aseta hero-otsikko
+    // Aseta hero-otsikko (slug-fallback ensin, korvataan Supabasesta haetulla nimellä)
     document.getElementById('theme-name').textContent = tagParam.charAt(0).toUpperCase() + tagParam.slice(1);
+    // Hae tagi Supabasesta ja päivitä otsikko suomenkielisellä nimellä
+    if (aiSbClient) {
+        (async () => {
+            try {
+                const { data: tagRow } = await aiSbClient
+                    .from('tags')
+                    .select('tag_id, name')
+                    .or(`tag_id.eq.${searchTag},name.ilike.${searchTag}`)
+                    .limit(1)
+                    .single();
+                if (tagRow && tagRow.name) {
+                    document.getElementById('theme-name').textContent = tagRow.name;
+                }
+            } catch(e) { /* Jatketaan slug-otsikolla jos haku epäonnistuu */ }
+        })();
+    }
     
     // Aseta karttalinkki
     const mapBtn = document.getElementById('btn-map');
@@ -1290,19 +1306,54 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // V4.5: Sulauteta Supabase entity_tags -pohjaiset yritykset (company_tags)
         if (window._sbTaggedCompanyIds && window._sbTaggedCompanyIds.length > 0) {
+            // Kerää tuntemattomien yritysten ID:t Supabase-hakua varten
+            const unknownIds = [];
             window._sbTaggedCompanyIds.forEach(sbId => {
                 const alreadyIn = matchedCompanies.find(c => String(c.id) === sbId || `company-${c.id}` === sbId);
                 if (!alreadyIn) {
-                    // Etsi JSON-listasta id-vastaavuus
                     const fromJson = allCompanies.find(c => String(c.id) === sbId || `company-${c.id}` === sbId);
                     if (fromJson) {
                         matchedCompanies.push({ ...fromJson, source: 'company_tags' });
                     } else {
-                        // Stub: nimi näytetään id:nä kunnes tarkempi data saatavilla
-                        matchedCompanies.push({ id: sbId, nimi: sbId, kategoria: '', tags: '', source: 'company_tags' });
+                        // Tuntematon: lisätään väliaikainen stub ja haetaan nimi myöhemmin
+                        matchedCompanies.push({ id: sbId, nimi: sbId, kategoria: '', tags: '', source: 'company_tags', _needsNameFetch: true });
+                        unknownIds.push(sbId);
                     }
                 }
             });
+            // Hae nimet Supabasesta (companies-taulusta) tuntemattomille yrityksille
+            if (unknownIds.length > 0 && aiSbClient) {
+                try {
+                    // Muodosta tai-lauseke: company-313 → external_id eq 'company-313' tai id eq 313
+                    const orParts = unknownIds.map(sid => {
+                        const numId = sid.replace(/^company-/i, '');
+                        return `external_id.eq.${sid},id.eq.${numId}`;
+                    }).join(',');
+                    const { data: sbCompanyData } = await aiSbClient
+                        .from('companies')
+                        .select('id, external_id, name, nimi')
+                        .or(orParts);
+                    if (sbCompanyData && sbCompanyData.length > 0) {
+                        sbCompanyData.forEach(c => {
+                            const resolvedName = c.name || c.nimi || null;
+                            if (!resolvedName) return;
+                            // Päivitä jo lisätyn stub-merkinnän nimi
+                            const stub = matchedCompanies.find(m =>
+                                m._needsNameFetch &&
+                                (String(m.id) === String(c.id) ||
+                                 String(m.id) === String(c.external_id) ||
+                                 `company-${c.id}` === String(m.id))
+                            );
+                            if (stub) {
+                                stub.nimi = resolvedName;
+                                delete stub._needsNameFetch;
+                            }
+                        });
+                    }
+                } catch(e) {
+                    console.warn('Yrityksen nimen haku Supabasesta epäonnistui:', e);
+                }
+            }
         }
 
         // Renderöi Paikat (vain jos kontekstuaalinen haku ei jo tehnyt tätä)
