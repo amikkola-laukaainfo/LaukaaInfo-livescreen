@@ -627,8 +627,8 @@
                 if (links) pLinks = links;
                 const { data: atts } = await supabaseClient.from('post_attachments').select('*').eq('post_id', postId);
                 if (atts) pAttachments = atts;
-                const { data: places } = await supabaseClient.from('post_places').select('*').eq('post_id', postId);
-                if (places) pPlaces = places;
+                const { data: places } = await supabaseClient.from('post_places').select('*, places(name)').eq('post_id', postId);
+                if (places) pPlaces = places.map(pl => ({ ...pl, place_name: (pl.places && pl.places.name) || pl.place_name || null }));
                 const { data: themes } = await supabaseClient.from('post_themes').select('*').eq('post_id', postId);
                 if (themes) pThemes = themes;
               } catch (subErr) {
@@ -679,7 +679,7 @@
                 offer_start_at: rawPost.offer_start_at,
                 offer_end_at: rawPost.offer_end_at,
                 offer_terms: rawPost.offer_terms,
-                post_places: pPlaces.length > 0 ? pPlaces : (rawPost.place ? [{ place_id: rawPost.place }] : []),
+                post_places: pPlaces.length > 0 ? pPlaces : (rawPost.place ? [{ place_id: rawPost.place, place_name: rawPost.place }] : []),
                 post_themes: pThemes.length > 0 ? pThemes : (rawPost.tags ? (Array.isArray(rawPost.tags) ? rawPost.tags.map(t => ({ tag_id: t })) : []) : []),
                 post_attachments: pAttachments,
                 post_media: pMedia,
@@ -1017,8 +1017,8 @@
               let placesMap = {}, themesMap = {}, mediaMap = {}, linksMap = {}, attachmentsMap = {};
 
               try {
-                const { data: pPlaces } = await supabaseClient.from('post_places').select('*').in('post_id', postIds);
-                if (pPlaces) pPlaces.forEach(p => { (placesMap[p.post_id] = placesMap[p.post_id] || []).push(p); });
+                const { data: pPlaces } = await supabaseClient.from('post_places').select('*, places(name)').in('post_id', postIds);
+                if (pPlaces) pPlaces.forEach(p => { const enriched = { ...p, place_name: (p.places && p.places.name) || p.place_name || null }; (placesMap[enriched.post_id] = placesMap[enriched.post_id] || []).push(enriched); });
 
                 const { data: pThemes } = await supabaseClient.from('post_themes').select('*').in('post_id', postIds);
                 if (pThemes) pThemes.forEach(t => { (themesMap[t.post_id] = themesMap[t.post_id] || []).push(t); });
@@ -1105,7 +1105,7 @@
                   offer_start_at: p.offer_start_at,
                   offer_end_at: p.offer_end_at,
                   offer_terms: p.offer_terms,
-                  post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
+                  post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place, place_name: p.place }] : []),
                   post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
                   post_attachments: pAttachments,
                   post_media: pMedia,
@@ -1313,7 +1313,7 @@
           document.getElementById('pinnedDate').innerText = timeLabel;
           
           const placeChipsHTML = (pinnedPost.post_places && pinnedPost.post_places.length > 0)
-            ? pinnedPost.post_places.map(pl => `<a href="tietoa-paikasta.html?id=${encodeURIComponent(pl.place_id)}" class="hover:underline font-bold text-slate-700">📍 ${pl.place_id}</a>`).join(', ')
+            ? pinnedPost.post_places.map(pl => { const pName = pl.place_name || pl.place_id; return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(pl.place_id)}" class="hover:underline font-bold text-slate-700">📍 ${pName}</a>`; }).join(', ')
             : `<a href="tietoa-paikasta.html?id=Laukaa" class="hover:underline font-bold text-slate-700">📍 Laukaa</a>`;
           document.getElementById('pinnedPlace').innerHTML = placeChipsHTML;
 
@@ -1365,7 +1365,7 @@
         feed.innerHTML = timelinePosts.map(p => {
           const formattedDate = p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : 'Tänään';
           const placeChips = (p.post_places && p.post_places.length > 0)
-            ? p.post_places.map(pl => `<a href="tietoa-paikasta.html?id=${encodeURIComponent(pl.place_id)}" class="text-[10px] px-2 py-0.5 bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-900 rounded-md font-medium border border-slate-200/60 transition-colors inline-flex items-center gap-1 no-underline">📍 ${pl.place_id}</a>`).join(' ')
+            ? p.post_places.map(pl => { const pName = pl.place_name || pl.place_id; return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(pl.place_id)}" class="text-[10px] px-2 py-0.5 bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-900 rounded-md font-medium border border-slate-200/60 transition-colors inline-flex items-center gap-1 no-underline">📍 ${pName}</a>`; }).join(' ')
             : `<a href="tietoa-paikasta.html?id=Laukaa" class="text-[10px] px-2 py-0.5 bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-900 rounded-md font-medium border border-slate-200/60 transition-colors inline-flex items-center gap-1 no-underline">📍 Laukaa</a>`;
           
           const themeChips = (p.post_themes && p.post_themes.length > 0)
