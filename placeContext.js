@@ -202,6 +202,27 @@ class PlaceContext {
         }
     }
 
+    /**
+     * Palauttaa tilannekuvan URL:n annetulle paikalle tai aktiiviselle kontekstille.
+     * @param {string|null} placeId - Paikan UUID tai null
+     */
+    static getDashboardUrl(placeId = null) {
+        if (!placeId) return 'tilannekuva.html';
+        return `tilannekuva.html?place=${encodeURIComponent(placeId)}`;
+    }
+
+    /**
+     * Lähettää paikan vaihtumistapahtuman, jota tilannekuva ja muut komponentit voivat kuunnella.
+     * @param {string|null} placeId - Valitun paikan UUID tai null
+     */
+    static dispatchPlaceChange(placeId = null) {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('laukaa:place-changed', {
+                detail: { placeId }
+            }));
+        }
+    }
+
     toJSON() {
         return {
             targetPlace: this.targetPlace,
