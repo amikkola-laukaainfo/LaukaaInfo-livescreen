@@ -640,6 +640,9 @@
                 <div class="role-pill" id="gov-role-badge" style="display:none;background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;cursor:pointer;" onclick="promptSwitchRoleAuth()" title="Klikkaa nähdäksesi rooli-istunnon tai kirjautuaksesi ulos">
                     <span>👑</span> <span id="gov-role-name">Hallitus</span>
                 </div>
+                <button class="btn-signup" id="btn-create-item" onclick="openCreateItemModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #0284c7, #38bdf8);" title="Luo uusi asia tai ehdotus toimintataululle">
+                    <span>➕</span> <span>Uusi asia</span>
+                </button>
                 <button class="btn-toggle-admin" id="btn-admin-toggle" onclick="toggleAdminMode()" title="Vaihda ylläpitäjän ja jäsenen näkymän välillä">
                     🛡️ Ylläpito
                 </button>
@@ -755,6 +758,70 @@
                 <button class="btn-toggle-admin" onclick="closeRoleAuthModal()">Peruuta</button>
                 <button class="btn-signup" id="btn-submit-role-auth" style="background:#2563eb;" onclick="submitRoleAuth()">Todenna ja jatka →</button>
             </div>
+        </div>
+    </div>
+
+    <!-- UUSI ASIA MODAALI -->
+    <div class="modal-overlay" id="create-item-modal">
+        <div class="modal-card" style="max-width: 540px;">
+            <button class="modal-close" onclick="closeCreateItemModal()">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(56,189,248,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">➕</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Luo uusi asia toimintataululle</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Vaatii puheenjohtajan, hallituksen jäsenen tai sihteerin roolin</p>
+                </div>
+            </div>
+
+            <form id="create-item-form" onsubmit="event.preventDefault(); submitCreateItem();" style="display:flex;flex-direction:column;gap:1rem;">
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Aiheen otsikko *</label>
+                    <input type="text" id="create-item-title" required minlength="3" maxlength="255" placeholder="esim. Kevään talkoopäivän järjestäminen" 
+                           style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.9rem;" />
+                </div>
+
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Kuvaus ja tausta</label>
+                    <textarea id="create-item-desc" rows="4" maxlength="10000" placeholder="Kerro lyhyesti tausta, tavoite tai käsiteltävä ehdotus..." 
+                              style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;font-family:inherit;resize:vertical;"></textarea>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Aloitusvaihe</label>
+                        <select id="create-item-stage" style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;">
+                            <option value="idea">💡 Idea</option>
+                            <option value="discussion" selected>💬 Keskustelussa</option>
+                            <option value="in_progress">🛠️ Toteutuksessa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Vastuuhenkilö / vetäjä</label>
+                        <input type="text" id="create-item-lead" maxlength="100" placeholder="esim. Matti K." 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Määräaika (pvm)</label>
+                        <input type="date" id="create-item-deadline-at" 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Määräajan kuvaus</label>
+                        <input type="text" id="create-item-deadline-label" maxlength="100" placeholder="esim. Ennen hallituksen kokousta" 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                </div>
+
+                <div id="create-item-error" style="display:none;color:#f87171;font-size:0.8rem;line-height:1.4;background:rgba(239,68,68,0.1);padding:0.6rem 0.8rem;border-radius:8px;border:1px solid rgba(239,68,68,0.2);"></div>
+
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:0.5rem;">
+                    <button type="button" class="btn-toggle-admin" onclick="closeCreateItemModal()">Peruuta</button>
+                    <button type="submit" class="btn-signup" id="btn-submit-create-item" style="background:#0284c7;">➕ Luo asia</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -950,6 +1017,136 @@
             } catch (err) {
                 console.error('submitRoleAuth error:', err);
                 showRoleAuthError('Tunnistus epäonnistui: ' + err.message);
+            }
+        }
+
+        // =========================================================================
+        // UUDEN ASIAN LUONTI (RPC: create_board_item)
+        // =========================================================================
+        function openCreateItemModal() {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => openCreateItemModal());
+                return;
+            }
+
+            const titleInput = document.getElementById('create-item-title');
+            const descInput = document.getElementById('create-item-desc');
+            const stageSelect = document.getElementById('create-item-stage');
+            const leadInput = document.getElementById('create-item-lead');
+            const deadlineAtInput = document.getElementById('create-item-deadline-at');
+            const deadlineLabelInput = document.getElementById('create-item-deadline-label');
+            const err = document.getElementById('create-item-error');
+            const btn = document.getElementById('btn-submit-create-item');
+
+            if (titleInput) titleInput.value = '';
+            if (descInput) descInput.value = '';
+            if (stageSelect) stageSelect.value = 'discussion';
+            if (leadInput) leadInput.value = ROLE_SESSION.member_name || USER_NAME || '';
+            if (deadlineAtInput) deadlineAtInput.value = '';
+            if (deadlineLabelInput) deadlineLabelInput.value = '';
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (btn) { btn.disabled = false; btn.innerText = '➕ Luo asia'; }
+
+            document.getElementById('create-item-modal').classList.add('open');
+            setTimeout(() => { if (titleInput) titleInput.focus(); }, 100);
+        }
+
+        function closeCreateItemModal() {
+            document.getElementById('create-item-modal').classList.remove('open');
+        }
+
+        function showCreateItemError(msg) {
+            const err = document.getElementById('create-item-error');
+            const btn = document.getElementById('btn-submit-create-item');
+            if (err) {
+                err.innerText = msg;
+                err.style.display = 'block';
+            }
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = '➕ Luo asia';
+            }
+        }
+
+        async function submitCreateItem() {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                closeCreateItemModal();
+                openRoleAuthModal(() => openCreateItemModal());
+                return;
+            }
+
+            const title = (document.getElementById('create-item-title')?.value || '').trim();
+            const desc = (document.getElementById('create-item-desc')?.value || '').trim();
+            const stage = document.getElementById('create-item-stage')?.value || 'discussion';
+            const lead = (document.getElementById('create-item-lead')?.value || '').trim();
+            const deadlineAtVal = document.getElementById('create-item-deadline-at')?.value || '';
+            const deadlineLabel = (document.getElementById('create-item-deadline-label')?.value || '').trim();
+            const btn = document.getElementById('btn-submit-create-item');
+
+            if (title.length < 3 || title.length > 255) {
+                showCreateItemError('Otsikon tulee olla 3–255 merkkiä pitkä.');
+                return;
+            }
+
+            if (!['idea', 'discussion', 'in_progress'].includes(stage)) {
+                showCreateItemError('Aloitusvaiheeksi sallitaan vain: idea, discussion tai in_progress.');
+                return;
+            }
+
+            let deadlineIso = null;
+            if (deadlineAtVal) {
+                try {
+                    deadlineIso = new Date(deadlineAtVal + 'T23:59:59Z').toISOString();
+                } catch (e) {
+                    deadlineIso = null;
+                }
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'Tallennetaan...';
+            }
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                showCreateItemError('Tietokantayhteys ei ole käytettävissä.');
+                return;
+            }
+
+            try {
+                const { data, error } = await sb.rpc('create_board_item', {
+                    p_session_token: ROLE_SESSION.session_token,
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_title: title,
+                    p_description: desc || null,
+                    p_stage: stage,
+                    p_lead_name: lead || null,
+                    p_deadline_at: deadlineIso,
+                    p_deadline_label: deadlineLabel || null
+                });
+
+                if (error || (data && !data.success)) {
+                    const rawMsg = (data && data.error) || (error && error.message) || 'Uuden asian luonti epäonnistui.';
+                    const lower = rawMsg.toLowerCase();
+                    if (lower.includes('rooli-istunto puuttuu') || lower.includes('istunto vanhentunut') || lower.includes('ei löydy')) {
+                        logoutRoleSession();
+                        closeCreateItemModal();
+                        alert('Istuntosi on vanhentunut. Tunnistaudu uudelleen hallituksen valtuuskoodilla.');
+                        openRoleAuthModal(() => openCreateItemModal());
+                        return;
+                    }
+                    showCreateItemError(rawMsg);
+                    return;
+                }
+
+                closeCreateItemModal();
+                await fetchBoardData();
+                if (data.item_id) {
+                    openDetail(data.item_id);
+                }
+            } catch (err) {
+                console.error('submitCreateItem error:', err);
+                showCreateItemError('Odottamaton virhe: ' + err.message);
             }
         }
 
@@ -1621,6 +1818,18 @@
                 btn.innerText = '🛡️ Ylläpito (Päällä)';
             }
             fetchBoardData();
+
+            // Sulje modaalit taustaklikkauksesta tai ESC-näppäimellä
+            window.addEventListener('click', (e) => {
+                if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
+                    e.target.classList.remove('open');
+                }
+            });
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+                }
+            });
         });
     </script>
 </body>
