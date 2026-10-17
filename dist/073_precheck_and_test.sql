@@ -64,6 +64,12 @@ DECLARE
     v_member_cred_id    UUID;
     v_member_cred_raw   TEXT;
 
+    v_sec_token         TEXT;
+    v_sec_hash          TEXT;
+    v_sec_id            UUID;
+    v_sec_cred_id       UUID;
+    v_sec_cred_raw      TEXT;
+
     v_coord_token       TEXT;
     v_coord_hash        TEXT;
     v_coord_id          UUID;
@@ -130,7 +136,7 @@ BEGIN
     INSERT INTO public.organization_role_assignments (organization_id, member_id, role_type)
     VALUES (v_test_org, v_member_id, 'board_member');
 
-    v_member_cred_raw := 'BM-' || pg_catalog.upper(pg_catalog.encode(extensions.gen_random_bytes(16), 'hex'));
+    v_member_cred_raw := 'HJ-' || pg_catalog.upper(pg_catalog.encode(extensions.gen_random_bytes(16), 'hex'));
     INSERT INTO public.organization_role_credentials (organization_id, member_id, code_hash)
     VALUES (v_test_org, v_member_id, pg_catalog.encode(extensions.digest(v_member_cred_raw, 'sha256'), 'hex'))
     RETURNING id INTO v_member_cred_id;
@@ -144,6 +150,28 @@ BEGIN
         v_test_org, v_member_hash, 'personal_role_code', v_member_id, v_member_cred_id, now() + interval '1 hour'
     );
 
+    -- 2b. Luodaan Sihteeri (secretary - oikeus julkaista seinälle manage_content)
+    INSERT INTO public.organization_members (organization_id, full_name, email)
+    VALUES (v_test_org, 'Testi Sihteeri', 'sihteeri@esim.fi')
+    RETURNING id INTO v_sec_id;
+
+    INSERT INTO public.organization_role_assignments (organization_id, member_id, role_type)
+    VALUES (v_test_org, v_sec_id, 'secretary');
+
+    v_sec_cred_raw := 'SI-' || pg_catalog.upper(pg_catalog.encode(extensions.gen_random_bytes(16), 'hex'));
+    INSERT INTO public.organization_role_credentials (organization_id, member_id, code_hash)
+    VALUES (v_test_org, v_sec_id, pg_catalog.encode(extensions.digest(v_sec_cred_raw, 'sha256'), 'hex'))
+    RETURNING id INTO v_sec_cred_id;
+
+    v_sec_token := extensions.gen_random_uuid()::TEXT;
+    v_sec_hash  := pg_catalog.encode(extensions.digest(v_sec_token, 'sha256'), 'hex');
+
+    INSERT INTO public.org_publisher_sessions (
+        organization_id, token_hash, session_type, member_id, role_credential_id, expires_at
+    ) VALUES (
+        v_test_org, v_sec_hash, 'personal_role_code', v_sec_id, v_sec_cred_id, now() + interval '1 hour'
+    );
+
     -- 3. Luodaan Koordinaattori (coordinator - ei oikeutta julkaista seinälle)
     INSERT INTO public.organization_members (organization_id, full_name, email)
     VALUES (v_test_org, 'Testi Koordinaattori', 'koord@esim.fi')
@@ -152,7 +180,7 @@ BEGIN
     INSERT INTO public.organization_role_assignments (organization_id, member_id, role_type)
     VALUES (v_test_org, v_coord_id, 'coordinator');
 
-    v_coord_cred_raw := 'CO-' || pg_catalog.upper(pg_catalog.encode(extensions.gen_random_bytes(16), 'hex'));
+    v_coord_cred_raw := 'KO-' || pg_catalog.upper(pg_catalog.encode(extensions.gen_random_bytes(16), 'hex'));
     INSERT INTO public.organization_role_credentials (organization_id, member_id, code_hash)
     VALUES (v_test_org, v_coord_id, pg_catalog.encode(extensions.digest(v_coord_cred_raw, 'sha256'), 'hex'))
     RETURNING id INTO v_coord_cred_id;
@@ -277,24 +305,47 @@ BEGIN
     RETURN NEXT;
 
     -- ==================================================================
-    -- TESTI 5: coordinator- tai lead-rooli -> Julkaisu hylätään
+    -- TESTI 5: Voimassa oleva secretary -istunto (manage_content) -> Julkaisu onnistuu
+    -- ==================================================================
+    BEGIN
+        v_result := public.publish_board_item_to_wall(
+            v_sec_token, v_test_item_id, 'Sihteerin Tiedote', 'Sihteerin julkaisema tiedote Seinälle'
+        );
+        IF (v_result ->> 'success')::BOOLEAN IS TRUE
+           AND (v_result ->> 'action') = 'updated' THEN
+            test_id := 5; test_name := 'Voimassa oleva secretary -istunto';
+            status  := 'HYVÄKSYTTY';
+            details := 'Sihteerin valtuutus toimi ja julkaisun päivitys onnistui manage_content-toimivallalla.';
+        ELSE
+            test_id := 5; test_name := 'Voimassa oleva secretary -istunto';
+            status  := 'HYLÄTTY';
+            details := 'Sihteerin julkaisu epäonnistui: ' || v_result::TEXT;
+        END IF;
+    EXCEPTION WHEN OTHERS THEN
+        test_id := 5; test_name := 'Voimassa oleva secretary -istunto';
+        status  := 'HYLÄTTY'; details := SQLERRM;
+    END;
+    RETURN NEXT;
+
+    -- ==================================================================
+    -- TESTI 6: coordinator- tai lead-rooli -> Julkaisu hylätään
     -- ==================================================================
     BEGIN
         v_result := public.publish_board_item_to_wall(
             v_coord_token, v_test_item_id, 'Luvaton julkaisu', 'Sisältöä koordinaattorilta'
         );
-        test_id := 5; test_name := 'coordinator-rooli hylätään';
+        test_id := 6; test_name := 'coordinator-rooli hylätään';
         status  := 'HYLÄTTY';
         details := 'Koordinaattori pääsi julkaisemaan Seinälle: ' || v_result::TEXT;
     EXCEPTION WHEN OTHERS THEN
-        test_id := 5; test_name := 'coordinator-rooli hylätään';
+        test_id := 6; test_name := 'coordinator-rooli hylätään';
         status  := 'HYVÄKSYTTY';
         details := 'Koordinaattori hylättiin odotetusti: ' || SQLERRM;
     END;
     RETURN NEXT;
 
     -- ==================================================================
-    -- TESTI 6: Suljettu tai arkistoitu kohde hylätään oikeustarkistuksen jälkeen
+    -- TESTI 7: Suljettu tai arkistoitu kohde hylätään oikeustarkistuksen jälkeen
     -- ==================================================================
     BEGIN
         v_result := public.publish_board_item_to_wall(
@@ -302,22 +353,22 @@ BEGIN
         );
         IF (v_result ->> 'success')::BOOLEAN IS FALSE
            AND (v_result ->> 'error') LIKE '%Suljettua, arkistoitua%' THEN
-            test_id := 6; test_name := 'Arkistoitu kohde hylätään';
+            test_id := 7; test_name := 'Arkistoitu kohde hylätään';
             status  := 'HYVÄKSYTTY';
             details := 'Hylättiin oikein tilatarkistuksessa: ' || (v_result ->> 'error');
         ELSE
-            test_id := 6; test_name := 'Arkistoitu kohde hylätään';
+            test_id := 7; test_name := 'Arkistoitu kohde hylätään';
             status  := 'HYLÄTTY';
             details := 'Arkistoitu kohde pääsi läpi tai virhe oli väärä: ' || v_result::TEXT;
         END IF;
     EXCEPTION WHEN OTHERS THEN
-        test_id := 6; test_name := 'Arkistoitu kohde hylätään';
+        test_id := 7; test_name := 'Arkistoitu kohde hylätään';
         status  := 'HYLÄTTY'; details := SQLERRM;
     END;
     RETURN NEXT;
 
     -- ==================================================================
-    -- TESTI 7: Postaus viittaa toiseen kohteeseen -> hylätään force_relinkilläkin
+    -- TESTI 8: Postaus viittaa toiseen kohteeseen -> hylätään force_relinkilläkin
     -- ==================================================================
     BEGIN
         -- Luodaan erillinen postaus, jonka target_id osoittaa toiseen kohteeseen (v_test_item_id)
@@ -338,11 +389,11 @@ BEGIN
 
         IF (v_result ->> 'success')::BOOLEAN IS FALSE
            AND (v_result ->> 'error') LIKE '%Ristiriitainen julkaisuviite%' THEN
-            test_id := 7; test_name := 'Postaus viittaa toiseen kohteeseen';
+            test_id := 8; test_name := 'Postaus viittaa toiseen kohteeseen';
             status  := 'HYVÄKSYTTY';
             details := 'Ristiriitainen viite hylättiin myös p_force_relink=true tilassa.';
         ELSE
-            test_id := 7; test_name := 'Postaus viittaa toiseen kohteeseen';
+            test_id := 8; test_name := 'Postaus viittaa toiseen kohteeseen';
             status  := 'HYLÄTTY';
             details := 'Ristiriitainen viite hyväksyttiin virheellisesti: ' || v_result::TEXT;
         END IF;
@@ -351,13 +402,13 @@ BEGIN
         UPDATE public.board_items SET wall_post_id = NULL WHERE id = v_second_item_id;
         DELETE FROM public.posts WHERE id = v_conflict_post_id;
     EXCEPTION WHEN OTHERS THEN
-        test_id := 7; test_name := 'Postaus viittaa toiseen kohteeseen';
+        test_id := 8; test_name := 'Postaus viittaa toiseen kohteeseen';
         status  := 'HYLÄTTY'; details := SQLERRM;
     END;
     RETURN NEXT;
 
     -- ==================================================================
-    -- TESTI 8: Puutteellinen viite vaatii force_relink=true ja palautuu sillä
+    -- TESTI 9: Puutteellinen viite vaatii force_relink=true ja palautuu sillä
     -- ==================================================================
     BEGIN
         -- Asetetaan target_id väliaikaisesti NULLiksi
@@ -378,27 +429,27 @@ BEGIN
 
             IF (v_result ->> 'success')::BOOLEAN IS TRUE
                AND (v_result ->> 'action') = 'republished' THEN
-                test_id := 8; test_name := 'Puutteellisen viitteen relink';
+                test_id := 9; test_name := 'Puutteellisen viitteen relink';
                 status  := 'HYVÄKSYTTY';
                 details := 'Ilman pakotusta vaati relinkiä; pakotettuna palautui ja päivitti target_id:n.';
             ELSE
-                test_id := 8; test_name := 'Puutteellisen viitteen relink';
+                test_id := 9; test_name := 'Puutteellisen viitteen relink';
                 status  := 'HYLÄTTY';
                 details := 'Pakotettu relink epäonnistui: ' || v_result::TEXT;
             END IF;
         ELSE
-            test_id := 8; test_name := 'Puutteellisen viitteen relink';
+            test_id := 9; test_name := 'Puutteellisen viitteen relink';
             status  := 'HYLÄTTY';
             details := 'Ilman pakotusta ei vaadittu relinkiä: ' || v_result::TEXT;
         END IF;
     EXCEPTION WHEN OTHERS THEN
-        test_id := 8; test_name := 'Puutteellisen viitteen relink';
+        test_id := 9; test_name := 'Puutteellisen viitteen relink';
         status  := 'HYLÄTTY'; details := SQLERRM;
     END;
     RETURN NEXT;
 
     -- ==================================================================
-    -- TESTI 9: Viitattu postaus on poistettu kannasta
+    -- TESTI 10: Viitattu postaus on poistettu kannasta
     -- ==================================================================
     BEGIN
         -- Poistetaan postaus kannasta
@@ -419,27 +470,27 @@ BEGIN
 
             IF (v_result ->> 'success')::BOOLEAN IS TRUE
                AND (v_result ->> 'action') = 'published' THEN
-                test_id := 9; test_name := 'Poistetun postauksen korvaus';
+                test_id := 10; test_name := 'Poistetun postauksen korvaus';
                 status  := 'HYVÄKSYTTY';
                 details := 'Poistettu viite vaati force_relinkin ja loi uuden postauksen onnistuneesti.';
             ELSE
-                test_id := 9; test_name := 'Poistetun postauksen korvaus';
+                test_id := 10; test_name := 'Poistetun postauksen korvaus';
                 status  := 'HYLÄTTY';
                 details := 'Uuden luonti force_relinkillä epäonnistui: ' || v_result::TEXT;
             END IF;
         ELSE
-            test_id := 9; test_name := 'Poistetun postauksen korvaus';
+            test_id := 10; test_name := 'Poistetun postauksen korvaus';
             status  := 'HYLÄTTY';
             details := 'Poistettu postaus ei vaatinut relinkiä: ' || v_result::TEXT;
         END IF;
     EXCEPTION WHEN OTHERS THEN
-        test_id := 9; test_name := 'Poistetun postauksen korvaus';
+        test_id := 10; test_name := 'Poistetun postauksen korvaus';
         status  := 'HYLÄTTY'; details := SQLERRM;
     END;
     RETURN NEXT;
 
     -- ==================================================================
-    -- TESTI 10: Audit-kirjaukset löytyvät governance-lokista
+    -- TESTI 11: Audit-kirjaukset löytyvät governance-lokista
     -- ==================================================================
     BEGIN
         IF EXISTS (
@@ -450,16 +501,16 @@ BEGIN
             SELECT 1 FROM public.organization_governance_audit
             WHERE organization_id = v_test_org AND action = 'ITEM_REPUBLISHED'
         ) THEN
-            test_id := 10; test_name := 'Audit-kirjaukset (ITEM_PUBLISHED + ITEM_REPUBLISHED)';
+            test_id := 11; test_name := 'Audit-kirjaukset (ITEM_PUBLISHED + ITEM_REPUBLISHED)';
             status  := 'HYVÄKSYTTY';
             details := 'Kumpikin julkaisun audit-toiminto löytyy organization_governance_audit -taulusta.';
         ELSE
-            test_id := 10; test_name := 'Audit-kirjaukset (ITEM_PUBLISHED + ITEM_REPUBLISHED)';
+            test_id := 11; test_name := 'Audit-kirjaukset (ITEM_PUBLISHED + ITEM_REPUBLISHED)';
             status  := 'HYLÄTTY';
             details := 'Osa audit-kirjauksista puuttuu lokista.';
         END IF;
     EXCEPTION WHEN OTHERS THEN
-        test_id := 10; test_name := 'Audit-kirjaukset (ITEM_PUBLISHED + ITEM_REPUBLISHED)';
+        test_id := 11; test_name := 'Audit-kirjaukset (ITEM_PUBLISHED + ITEM_REPUBLISHED)';
         status  := 'HYLÄTTY'; details := SQLERRM;
     END;
     RETURN NEXT;
@@ -470,19 +521,19 @@ BEGIN
 
     UPDATE public.org_publisher_sessions
     SET revoked_at = now()
-    WHERE organization_id = v_test_org AND token_hash IN (v_chair_hash, v_member_hash, v_coord_hash, v_legacy_hash);
+    WHERE organization_id = v_test_org AND token_hash IN (v_chair_hash, v_member_hash, v_sec_hash, v_coord_hash, v_legacy_hash);
 
     UPDATE public.organization_role_credentials
     SET revoked_at = now()
-    WHERE member_id IN (v_chair_id, v_member_id, v_coord_id) AND revoked_at IS NULL;
+    WHERE member_id IN (v_chair_id, v_member_id, v_sec_id, v_coord_id) AND revoked_at IS NULL;
 
     UPDATE public.organization_role_assignments
     SET is_active = FALSE, valid_until = now()
-    WHERE member_id IN (v_chair_id, v_member_id, v_coord_id) AND is_active IS TRUE;
+    WHERE member_id IN (v_chair_id, v_member_id, v_sec_id, v_coord_id) AND is_active IS TRUE;
 
     UPDATE public.organization_members
     SET is_active = FALSE
-    WHERE id IN (v_chair_id, v_member_id, v_coord_id);
+    WHERE id IN (v_chair_id, v_member_id, v_sec_id, v_coord_id);
 
 END;
 $$;

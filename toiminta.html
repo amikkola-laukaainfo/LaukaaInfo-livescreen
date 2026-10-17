@@ -740,12 +740,12 @@
             </div>
             
             <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
-                Toimintataulun asian julkaiseminen LaukaaInfon Seinälle on hallintotoiminto. Syötä henkilökohtainen valtuuskoodisi (puheenjohtaja tai hallituksen jäsen).
+                Toimintataulun asian julkaiseminen LaukaaInfon Seinälle on hallintotoiminto. Syötä henkilökohtainen valtuuskoodisi (puheenjohtaja, hallituksen jäsen tai sihteeri).
             </p>
 
             <div style="margin-bottom:1.25rem;">
                 <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">Henkilökohtainen valtuuskoodi</label>
-                <input type="text" id="input-role-code" placeholder="esim. PJ-3F8E... tai BM-9A2C..." 
+                <input type="text" id="input-role-code" placeholder="esim. PJ-3F8E... tai HJ-9A2C..." 
                        style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-family:monospace;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;"
                        onkeydown="if(event.key==='Enter') submitRoleAuth();" />
                 <div id="role-auth-error" style="display:none;color:#f87171;font-size:0.8rem;margin-top:0.5rem;line-height:1.4;"></div>
@@ -902,7 +902,7 @@
 
             const code = input.value.trim().toUpperCase();
             if (code.length < 10) {
-                showRoleAuthError('Koodi on liian lyhyt. Syötä vähintään 10-merkkinen valtuuskoodi (esim. PJ-3F8E... tai BM-9A2C...).');
+                showRoleAuthError('Koodi on liian lyhyt. Syötä vähintään 10-merkkinen valtuuskoodi (esim. PJ-3F8E... tai HJ-9A2C...).');
                 return;
             }
 
@@ -1498,8 +1498,8 @@
                 alert('Istuntosi tai valtuuskoodisi ei ole enää voimassa.\n\nTodenna itsesi uudelleen henkilökohtaisella valtuuskoodilla.');
                 logoutRoleSession();
                 openRoleAuthModal(() => confirmWallPublish());
-            } else if (lower.includes('publish_wall') || lower.includes('käyttöoikeus evätty') || lower.includes('toimivaltaa')) {
-                alert('Käyttöoikeus evätty:\n\nToimintataulun asian julkaiseminen Seinälle vaatii puheenjohtajan tai hallituksen jäsenen henkilökohtaisen valtuutuksen.');
+            } else if (lower.includes('manage_content') || lower.includes('publish_wall') || lower.includes('käyttöoikeus evätty') || lower.includes('toimivaltaa')) {
+                alert('Käyttöoikeus evätty:\n\nToimintataulun asian julkaiseminen Seinälle vaatii puheenjohtajan, hallituksen jäsenen tai sihteerin henkilökohtaisen valtuutuksen.');
             } else if (lower.includes('suljettua') || lower.includes('arkistoitua')) {
                 alert('Tilan rajoitus:\n\nSuljettua, arkistoitua tai virheellisessä tilassa olevaa asiaa ei voi julkaista Seinälle.');
             } else if (lower.includes('ristiriitainen julkaisuviite') || lower.includes('eri kohteeseen')) {
@@ -1514,7 +1514,7 @@
             const item = BOARD_DATA.items.find(i => i.id === activeItemId);
             if (!item) return;
 
-            // Seinälle julkaisu vaatii aina henkilökohtaisen rooli-istunnon (publish_wall: board_chair / board_member)
+            // Seinälle julkaisu vaatii aina henkilökohtaisen rooli-istunnon (manage_content: board_chair / board_member / secretary)
             if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
                 openRoleAuthModal(() => confirmWallPublish());
                 return;

@@ -1294,7 +1294,7 @@ BEGIN
         FOR UPDATE;
         IF FOUND THEN v_is_ok := TRUE; END IF;
 
-    ELSIF p_action = 'publish_wall' THEN
+    ELSIF p_action IN ('manage_content', 'publish_wall') THEN
         SELECT * INTO v_role
         FROM public.organization_role_assignments
         WHERE member_id = v_member.id
@@ -1302,8 +1302,12 @@ BEGIN
           AND is_active IS TRUE
           AND valid_from <= now()
           AND (valid_until IS NULL OR valid_until > now())
-          AND role_type IN ('board_chair', 'board_member')
-        ORDER BY CASE role_type WHEN 'board_chair' THEN 1 ELSE 2 END
+          AND role_type IN ('board_chair', 'board_member', 'secretary')
+        ORDER BY CASE role_type 
+            WHEN 'board_chair' THEN 1 
+            WHEN 'board_member' THEN 2 
+            WHEN 'secretary' THEN 3 
+            ELSE 4 END
         LIMIT 1
         FOR UPDATE;
         IF FOUND THEN v_is_ok := TRUE; END IF;

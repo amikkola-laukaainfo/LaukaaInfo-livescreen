@@ -7,22 +7,22 @@
 --
 -- Tavoite:
 --   Kytketään 071-migraation publish_board_item_to_wall-funktio
---   _verify_member_governance_permission-tarkistukseen ('publish_wall').
+--   _verify_member_governance_permission-tarkistukseen ('manage_content').
 --   Muut 071:n toiminnot (signup, cancel, comment) pysyvät ennallaan.
 --
 -- Muutokset 071-migraatioon nähden:
 --   publish_board_item_to_wall:
 --     ENNEN: _verify_org_session_internal (sallii legacy_org_pin)
---     JÄLKEEN: _verify_member_governance_permission('publish_wall')
+--     JÄLKEEN: _verify_member_governance_permission('manage_content')
 --              (vaatii personal_role_code-istunnon + voimassaolevan hallintoroolin:
---               board_chair tai board_member; 072-määrityksen mukaisesti)
+--               board_chair, board_member tai secretary)
 --
 -- Lukitusjärjestys (deadlock-turvallinen):
 --   1. Ensin kohteen organisaatiotunnisteen haku ilman rivin lukitusta
 --   2. Advisory xact lock (namespace 1936028780, hash(organization_id))
 --   3. board_items FOR UPDATE
 --   4. Varmistus ettei kohteen organisaatio muuttunut lukitusten välillä
---   5. _verify_member_governance_permission('publish_wall', p_item_id)
+--   5. _verify_member_governance_permission('manage_content', p_item_id)
 --   6. Kohteen stage-tilan tarkistus (vasta oikeustarkistuksen jälkeen)
 --   7. posts FOR UPDATE (jos wall_post_id asetettu)
 --
@@ -34,7 +34,223 @@
 BEGIN;
 
 -- =============================================================================
--- 1. PÄIVITETTY publish_board_item_to_wall
+-- 1. PÄIVITETTY _verify_member_governance_permission (manage_content + secretary)
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION public._verify_member_governance_permission(
+    p_token_hash      TEXT,
+    p_organization_id TEXT,
+    p_action          TEXT,
+    p_target_item_id  UUID DEFAULT NULL
+)
+RETURNS TABLE (
+    out_member_id       UUID,
+    out_member_name     TEXT,
+    out_authorized_role TEXT,
+    out_organization_id TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+    v_session        public.org_publisher_sessions;
+    v_cred           public.organization_role_credentials;
+    v_member         public.organization_members;
+    v_role           public.organization_role_assignments;
+    v_is_ok          BOOLEAN := FALSE;
+    v_lock_namespace CONSTANT INT := 1936028780;
+BEGIN
+    -- 1. HIERARKIATASO 1: Organisaation transaktiolukko (Advisory lock)
+    PERFORM pg_catalog.pg_advisory_xact_lock(v_lock_namespace, pg_catalog.hashtext(p_organization_id));
+
+    -- 2. HIERARKIATASO 2: Organisaatiorivin lukitus
+    PERFORM 1 FROM public.organizations WHERE id = p_organization_id FOR UPDATE;
+
+    -- Haetaan alustavasti istuntorivi jäsen- ja kooditunnisteiden selvittämiseksi
+    SELECT * INTO v_session
+    FROM public.org_publisher_sessions
+    WHERE token_hash = p_token_hash
+      AND organization_id = p_organization_id
+      AND revoked_at IS NULL
+      AND expires_at > now();
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Istunto ei ole voimassa tai organisaatiotunnus on virheellinen.';
+    END IF;
+
+    IF v_session.session_type IS DISTINCT FROM 'personal_role_code' OR v_session.member_id IS NULL THEN
+        RAISE EXCEPTION 'Toiminto vaatii todennetun henkilökohtaisen roolin (organisaation yleinen julkaisukoodi ei riitä hallintoon).';
+    END IF;
+
+    IF v_session.role_credential_id IS NULL THEN
+        RAISE EXCEPTION 'Henkilökohtaisella istunnolla on oltava valtuuskoodi (role_credential_id puuttuu).';
+    END IF;
+
+    -- 3. HIERARKIATASO 3: Jäsenen lukitus FOR UPDATE
+    SELECT * INTO v_member
+    FROM public.organization_members
+    WHERE id = v_session.member_id
+      AND organization_id = p_organization_id
+      AND is_active IS TRUE
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Henkilö ei ole enää aktiivinen tässä organisaatiossa.';
+    END IF;
+
+    -- 4. HIERARKIATASO 4: Roolin lukitus FOR UPDATE
+    IF p_target_item_id IS NOT NULL THEN
+        IF NOT EXISTS (
+            SELECT 1 FROM public.board_items
+            WHERE id = p_target_item_id AND organization_id = p_organization_id
+        ) THEN
+            RAISE EXCEPTION 'Kohde ei kuulu tähän organisaatioon tai kohdetta ei löydy.';
+        END IF;
+    END IF;
+
+    IF p_action = 'manage_tasks' THEN
+        SELECT * INTO v_role
+        FROM public.organization_role_assignments
+        WHERE member_id = v_member.id
+          AND organization_id = p_organization_id
+          AND is_active IS TRUE
+          AND valid_from <= now()
+          AND (valid_until IS NULL OR valid_until > now())
+          AND (
+              role_type IN ('board_chair', 'board_member', 'secretary')
+              OR (role_type IN ('coordinator', 'lead')
+                  AND scope_item_id IS NOT NULL
+                  AND scope_item_id = p_target_item_id)
+          )
+        ORDER BY CASE role_type WHEN 'board_chair' THEN 1 WHEN 'board_member' THEN 2 ELSE 3 END
+        LIMIT 1
+        FOR UPDATE;
+        IF FOUND THEN v_is_ok := TRUE; END IF;
+
+    ELSIF p_action = 'change_stage' THEN
+        SELECT * INTO v_role
+        FROM public.organization_role_assignments
+        WHERE member_id = v_member.id
+          AND organization_id = p_organization_id
+          AND is_active IS TRUE
+          AND valid_from <= now()
+          AND (valid_until IS NULL OR valid_until > now())
+          AND (
+              role_type IN ('board_chair', 'board_member', 'secretary')
+              OR (role_type = 'coordinator'
+                  AND scope_item_id IS NOT NULL
+                  AND scope_item_id = p_target_item_id)
+          )
+        ORDER BY CASE role_type WHEN 'board_chair' THEN 1 ELSE 2 END
+        LIMIT 1
+        FOR UPDATE;
+        IF FOUND THEN v_is_ok := TRUE; END IF;
+
+    ELSIF p_action = 'record_decision' THEN
+        SELECT * INTO v_role
+        FROM public.organization_role_assignments
+        WHERE member_id = v_member.id
+          AND organization_id = p_organization_id
+          AND is_active IS TRUE
+          AND valid_from <= now()
+          AND (valid_until IS NULL OR valid_until > now())
+          AND role_type IN ('board_chair', 'board_member', 'secretary')
+        ORDER BY CASE role_type WHEN 'board_chair' THEN 1 ELSE 2 END
+        LIMIT 1
+        FOR UPDATE;
+        IF FOUND THEN v_is_ok := TRUE; END IF;
+
+    ELSIF p_action IN ('manage_content', 'publish_wall') THEN
+        SELECT * INTO v_role
+        FROM public.organization_role_assignments
+        WHERE member_id = v_member.id
+          AND organization_id = p_organization_id
+          AND is_active IS TRUE
+          AND valid_from <= now()
+          AND (valid_until IS NULL OR valid_until > now())
+          AND role_type IN ('board_chair', 'board_member', 'secretary')
+        ORDER BY CASE role_type 
+            WHEN 'board_chair' THEN 1 
+            WHEN 'board_member' THEN 2 
+            WHEN 'secretary' THEN 3 
+            ELSE 4 END
+        LIMIT 1
+        FOR UPDATE;
+        IF FOUND THEN v_is_ok := TRUE; END IF;
+
+    ELSIF p_action = 'manage_governance' THEN
+        SELECT * INTO v_role
+        FROM public.organization_role_assignments
+        WHERE member_id = v_member.id
+          AND organization_id = p_organization_id
+          AND is_active IS TRUE
+          AND valid_from <= now()
+          AND (valid_until IS NULL OR valid_until > now())
+          AND role_type = 'board_chair'
+        LIMIT 1
+        FOR UPDATE;
+        IF FOUND THEN v_is_ok := TRUE; END IF;
+    END IF;
+
+    IF NOT v_is_ok THEN
+        RAISE EXCEPTION 'Käyttöoikeus evätty toimintoon "%". Henkilöllä ei ole vaadittavaa voimassaolevaa toimivaltaa.', p_action;
+    END IF;
+
+    -- 5. HIERARKIATASO 5: Valtuuskoodin lukitus FOR UPDATE
+    SELECT * INTO v_cred
+    FROM public.organization_role_credentials
+    WHERE id = v_session.role_credential_id
+      AND organization_id = p_organization_id
+      AND member_id = v_session.member_id
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Istunnon valtuuskoodi ei kuulu tähän organisaatioon tai jäseneen.';
+    END IF;
+
+    IF v_cred.revoked_at IS NOT NULL THEN
+        RAISE EXCEPTION 'Käytetty henkilökohtainen valtuuskoodi on peruutettu.';
+    END IF;
+
+    -- 6. HIERARKIATASO 6: Istunnon lukitus FOR UPDATE ja KAKSOISVARMENNUS
+    SELECT * INTO v_session
+    FROM public.org_publisher_sessions
+    WHERE id = v_session.id
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Istuntoa ei enää löydy.';
+    END IF;
+
+    IF v_session.token_hash IS DISTINCT FROM p_token_hash
+       OR v_session.organization_id IS DISTINCT FROM p_organization_id
+       OR v_session.session_type IS DISTINCT FROM 'personal_role_code'
+       OR v_session.member_id IS DISTINCT FROM v_member.id
+       OR v_session.role_credential_id IS DISTINCT FROM v_cred.id
+       OR v_session.revoked_at IS NOT NULL
+       OR v_session.expires_at IS NULL
+       OR v_session.expires_at <= now() THEN
+        RAISE EXCEPTION 'Istunto ei ole enää voimassa tai sen sidokset ovat muuttuneet.';
+    END IF;
+
+    UPDATE public.org_publisher_sessions
+    SET last_used_at = now()
+    WHERE id = v_session.id;
+
+    out_member_id       := v_member.id;
+    out_member_name     := v_member.full_name;
+    out_authorized_role := v_role.role_type;
+    out_organization_id := p_organization_id;
+    RETURN NEXT;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public._verify_member_governance_permission(TEXT, TEXT, TEXT, UUID) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public._verify_member_governance_permission(TEXT, TEXT, TEXT, UUID) TO anon, authenticated, service_role;
+
+-- =============================================================================
+-- 2. PÄIVITETTY publish_board_item_to_wall
 -- =============================================================================
 
 CREATE OR REPLACE FUNCTION public.publish_board_item_to_wall(
@@ -144,14 +360,14 @@ BEGIN
         extensions.digest(pg_catalog.btrim(p_session_token), 'sha256'), 'hex'
     );
 
-    -- Vaatii personal_role_code-istunnon ja publish_wall-toimivallan.
-    -- 072-migraation mukaan oikeutettuja ovat board_chair ja board_member.
+    -- Vaatii personal_role_code-istunnon ja manage_content-toimivallan.
+    -- Oikeutettuja rooleja ovat: board_chair, board_member ja secretary.
     -- Jos istunto ei kelpaa tai oikeus puuttuu, funktio heittää EXCEPTION.
     SELECT * INTO v_caller
     FROM public._verify_member_governance_permission(
         v_token_hash,
         v_item.organization_id::TEXT,
-        'publish_wall',
+        'manage_content',
         p_item_id
     );
 
@@ -392,10 +608,10 @@ GRANT EXECUTE ON FUNCTION public.publish_board_item_to_wall(TEXT, UUID, TEXT, TE
 
 COMMENT ON FUNCTION public.publish_board_item_to_wall(TEXT, UUID, TEXT, TEXT, TEXT, BOOLEAN) IS
 $$Julkaisee toimintataulun asian Seinä-syötteeseen.
-Vaatii voimassaolevan personal_role_code-istunnon ja publish_wall-toimivallan:
-board_chair tai board_member (072-migraation mukaisesti).
+Vaatii voimassaolevan personal_role_code-istunnon ja manage_content-toimivallan:
+board_chair, board_member tai secretary.
 Legacy-julkaisukoodi (legacy_org_pin) ei riitä julkaisutoimintoon.
 Audit-kirjaus: ITEM_PUBLISHED (uusi) tai ITEM_REPUBLISHED (päivitys).
-v1.1.0 — 073-migraatio (korvaa 071:n version)$$;
+v1.2.0 — 073-migraatio (korvaa 071:n version)$$;
 
 COMMIT;
