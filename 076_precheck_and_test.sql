@@ -83,12 +83,14 @@ BEGIN
         (v_org_id, v_coord_member_id, 'coordinator', TRUE);
 
     -- Valtuuskoodit
-    INSERT INTO public.organization_role_credentials (organization_id, member_id, code_hash, is_active)
+    -- Huom: organization_role_credentials ei sisällä is_active-saraketta.
+    -- Aktiivisuus määräytyy: revoked_at IS NULL AND (locked_until IS NULL OR locked_until <= now())
+    INSERT INTO public.organization_role_credentials (organization_id, member_id, code_hash)
     VALUES
-        (v_org_id, v_chair_member_id, encode(digest(v_chair_code, 'sha256'), 'hex'), TRUE),
-        (v_org_id, v_hj_member_id, encode(digest(v_member_code, 'sha256'), 'hex'), TRUE),
-        (v_org_id, v_secr_member_id, encode(digest(v_secr_code, 'sha256'), 'hex'), TRUE),
-        (v_org_id, v_coord_member_id, encode(digest(v_coord_code, 'sha256'), 'hex'), TRUE);
+        (v_org_id, v_chair_member_id, encode(digest(v_chair_code, 'sha256'), 'hex')),
+        (v_org_id, v_hj_member_id, encode(digest(v_member_code, 'sha256'), 'hex')),
+        (v_org_id, v_secr_member_id, encode(digest(v_secr_code, 'sha256'), 'hex')),
+        (v_org_id, v_coord_member_id, encode(digest(v_coord_code, 'sha256'), 'hex'));
 
     -- Istunnot
     v_res := public.begin_role_session(v_org_id, v_chair_code);
@@ -104,8 +106,11 @@ BEGIN
     v_coord_token := v_res->>'session_token';
 
     -- Legacy org publisher session
-    INSERT INTO public.org_publishers (organization_id, publish_key_hash, label, is_active)
-    VALUES (v_org_id, encode(digest(v_legacy_pin, 'sha256'), 'hex'), 'Legacy Test PIN 076', TRUE);
+    -- Huom: julkaisuavaimet tallennetaan organization_publish_credentials-tauluun.
+    -- Sarakkeet: organization_id, code_hash (ei label, ei is_active).
+    -- begin_org_session normalisoi avaimen: UPPER + poistaa erikoismerkit.
+    INSERT INTO public.organization_publish_credentials (organization_id, code_hash)
+    VALUES (v_org_id, encode(digest(UPPER(REGEXP_REPLACE(v_legacy_pin, '[^A-Z0-9]', '', 'g')), 'sha256'), 'hex'));
 
     v_res := public.begin_org_session(v_org_id, v_legacy_pin);
     v_legacy_token := v_res->>'session_token';

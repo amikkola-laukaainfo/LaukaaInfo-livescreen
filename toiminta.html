@@ -277,6 +277,25 @@
         .stage-decided { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
         .stage-in_progress { background: rgba(244, 63, 94, 0.15); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.3); }
         .stage-done { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
+        .stage-archived { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+        .decision-box {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #a7f3d0;
+            line-height: 1.5;
+        }
+        .decision-box-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #34d399;
+            margin-bottom: 0.4rem;
+        }
 
         .item-title {
             font-size: 1.15rem;
@@ -695,6 +714,9 @@
             </button>
             <button class="tab-btn" onclick="setFilter('decided', this)">
                 ✅ Päätetty <span class="tab-count" id="count-decided">0</span>
+            </button>
+            <button class="tab-btn" id="tab-archive" onclick="setFilter('archived', this)">
+                📦 Arkisto <span class="tab-count" id="count-archived">–</span>
             </button>
         </div>
 
@@ -1272,7 +1294,21 @@
                 case 'decided': return '✅';
                 case 'in_progress': return '🛠️';
                 case 'done': return '📦';
+                case 'archived': return '🗃️';
                 default: return '📌';
+            }
+        }
+
+        function getStageName(stage) {
+            switch(stage) {
+                case 'idea': return 'Uusi idea';
+                case 'discussion': return 'Keskustelussa';
+                case 'vote': return 'Äänestyksessä';
+                case 'decided': return 'Päätetty';
+                case 'in_progress': return 'Toteutuksessa';
+                case 'done': return 'Valmis';
+                case 'archived': return 'Arkistoitu';
+                default: return stage;
             }
         }
 
@@ -1300,13 +1336,147 @@
             document.getElementById('count-vote').innerText = items.filter(i => i.stage === 'vote').length;
             document.getElementById('count-disc').innerText = items.filter(i => i.stage === 'discussion' || i.stage === 'idea').length;
             document.getElementById('count-decided').innerText = items.filter(i => i.stage === 'decided').length;
+            // Arkistoitujen lukumäärä näytetään erikseen arkistokierrokselta
         }
 
         function setFilter(filter, el) {
             currentFilter = filter;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             if (el) el.classList.add('active');
-            renderBoard();
+            if (filter === 'archived') {
+                renderArchivedBoard();
+            } else {
+                renderBoard();
+            }
+        }
+
+        // =========================================================================
+        // ARKISTON NÄKYMÄ
+        // =========================================================================
+        let ARCHIVED_ITEMS = [];
+
+        async function renderArchivedBoard() {
+            const container = document.getElementById('items-container');
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) return;
+
+            container.innerHTML = '<div class="loading-wrap"><div class="loading-spinner"></div><p>Ladataan arkistoa...</p></div>';
+
+            try {
+                const { data, error } = await sb.rpc('get_archived_board_items', {
+                    p_organization_id: CURRENT_ORG_ID
+                });
+
+                if (error || !data || !data.success) {
+                    container.innerHTML = `<div style="text-align:center;padding:2.5rem;"><p style="color:#fda4af;">Arkiston lataus epäonnistui.</p></div>`;
+                    return;
+                }
+
+                ARCHIVED_ITEMS = data.items || [];
+                const count = data.count || 0;
+                const countEl = document.getElementById('count-archived');
+                if (countEl) countEl.innerText = count;
+
+                if (ARCHIVED_ITEMS.length === 0) {
+                    container.innerHTML = `<div style="text-align:center;padding:3rem;background:rgba(255,255,255,0.02);border-radius:16px;"><p style="color:var(--text-muted);">🗃️ Arkisto on tyhjä. Arkistoidut asiat ilmestyvät tänne.</p></div>`;
+                    return;
+                }
+
+                container.innerHTML = ARCHIVED_ITEMS.map(item => `
+                    <article class="item-card" onclick="openArchivedDetail('${item.id}')" style="opacity:0.75;">
+                        <div class="item-card-top">
+                            <span class="item-seq">${escapeHtml(item.seq)}</span>
+                            <span class="stage-pill stage-archived">🗃️ Arkistoitu</span>
+                        </div>
+                        <h3 class="item-title">${escapeHtml(item.title)}</h3>
+                        <p class="item-desc">${escapeHtml(item.description || '')}</p>
+                        <div class="item-footer">
+                            <div class="item-footer-badges">
+                                ${item.decision_summary ? `<div class="item-badge-pill" style="color:#6ee7b7;"><span>✅</span> <span>Päätös kirjattu</span></div>` : ''}
+                                <div class="item-badge-pill"><span>💬</span> <span>${item.comments_count || 0} kommenttia</span></div>
+                            </div>
+                            <span class="item-action-link">Avaa &rarr;</span>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                console.error('renderArchivedBoard failed:', err);
+            }
+        }
+
+        async function openArchivedDetail(id) {
+            // Etsitään arkistoiduista tai tavallisesta listasta
+            const item = ARCHIVED_ITEMS.find(i => i.id === id) || BOARD_DATA.items.find(i => i.id === id);
+            if (!item) return;
+            activeItemId = id;
+
+            const modal = document.getElementById('detail-modal');
+            const content = document.getElementById('modal-content');
+
+            const decisionHtml = item.decision_summary ? `
+                <div class="decision-box">
+                    <div class="decision-box-label">✅ Päätöskirjaus</div>
+                    ${escapeHtml(item.decision_summary)}
+                </div>
+            ` : '';
+
+            const votes = item.votes || { yes: 0, no: 0, cond: 0, total: 0 };
+            const yesPct = votes.total > 0 ? (votes.yes / votes.total) * 100 : 0;
+            const noPct = votes.total > 0 ? (votes.no / votes.total) * 100 : 0;
+            const condPct = votes.total > 0 ? (votes.cond / votes.total) * 100 : 0;
+
+            const voteHtml = votes.total > 0 ? `
+                <div class="modal-section">
+                    <div class="modal-section-title">🗳️ Äänestystulos</div>
+                    <div class="vote-box">
+                        <div style="display:flex;justify-content:space-between;font-size:0.85rem;">
+                            <span>Ääniä: <strong>${votes.total}</strong></span>
+                        </div>
+                        <div class="vote-progress-bar">
+                            <div class="vote-segment-yes" style="width:${yesPct}%"></div>
+                            <div class="vote-segment-cond" style="width:${condPct}%"></div>
+                            <div class="vote-segment-no" style="width:${noPct}%"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.35rem;">
+                            <span>🟢 Kyllä (${votes.yes})</span>
+                            <span>🟡 Ehdollisena (${votes.cond})</span>
+                            <span>🔴 Ei (${votes.no})</span>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+
+            const adminActions = IS_ADMIN ? `
+                <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+                    <button class="btn-admin-action" onclick="printDecisionExcerpt('${item.id}')" style="background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.3);color:#7dd3fc;">🖨️ Tulosta päätösote</button>
+                    <button class="btn-admin-action" onclick="deleteItem('${item.id}')" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;">🗑️ Poista pysyvästi</button>
+                </div>
+            ` : '';
+
+            content.innerHTML = `
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;">
+                    <span class="item-seq">${escapeHtml(item.seq)}</span>
+                    <span class="stage-pill stage-archived">🗃️ Arkistoitu</span>
+                </div>
+                <h2 style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">${escapeHtml(item.title)}</h2>
+                <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;">${escapeHtml(item.description || '')}</p>
+                <div style="font-size:0.8rem;color:var(--text-muted);display:flex;gap:1rem;flex-wrap:wrap;">
+                    <span>👤 Vastuu: <strong>${escapeHtml(item.lead || 'Ei nimetty')}</strong></span>
+                    <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
+                </div>
+                ${decisionHtml}
+                ${adminActions}
+                ${voteHtml}
+                <div class="modal-section">
+                    <div class="modal-section-title">💬 Arkistoitu kommenttikeskustelu (${item.comments_count || 0})</div>
+                    <div class="comments-list" id="comments-container">
+                        <p style="font-size:0.8rem;color:var(--text-muted);">Ladataan...</p>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('open');
+            loadItemComments(item.id);
         }
 
         function toggleAdminMode() {
@@ -1410,21 +1580,50 @@
                 `;
             }
 
+            // Päätösote (jos kirjattu)
+            let decisionHtml = '';
+            if (item.decision_summary) {
+                decisionHtml = `
+                    <div class="decision-box">
+                        <div class="decision-box-label">✅ Päätöskirjaus</div>
+                        ${escapeHtml(item.decision_summary)}
+                    </div>
+                `;
+            }
+
             // Ylläpitäjän ohjauspaneeli
             let adminHtml = '';
             if (IS_ADMIN) {
+                const hasRole = !!(ROLE_SESSION && ROLE_SESSION.session_token);
+                const isArchived = item.stage === 'archived';
                 adminHtml = `
                     <div class="admin-controls">
                         <div class="admin-controls-title">⚙️ Ylläpitäjän toiminnot (Hallitus)</div>
-                        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;">Voit muuttaa asian tilaa, vahvistaa päätöksen tai julkaista tiedotteen suoraan LaukaaInfon Seinälle.</p>
+                        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;">Muuta tilaa tai hallinnoi asiaa. Arkistointi, päätöksen kirjaus ja poisto vaativat henkilökohtaisen hallitusroolin.</p>
                         <div class="admin-btn-row">
+                            ${!isArchived ? `
                             <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'discussion')">💬 Siirrä keskusteluun</button>
                             <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'vote')">🗳️ Avaa äänestys</button>
-                            <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'decided')">✅ Kirjaa päätös</button>
+                            <button class="btn-admin-action" onclick="openDecisionModal('${item.id}')">✅ Kirjaa päätös</button>
                             <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'in_progress')">🛠️ Avaa tehtävät</button>
-                            <button class="btn-admin-action btn-publish-wall" onclick="openWallPublishModal('${item.id}')">📢 Valmistele Seinä-julkaisu</button>
+                            <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'done')">📦 Merkitse valmiiksi</button>
+                            <button class="btn-admin-action" onclick="archiveItem('${item.id}')" style="background:rgba(100,116,139,0.2);border-color:rgba(100,116,139,0.4);">🗃️ Arkistoi</button>
+                            <button class="btn-admin-action btn-publish-wall" onclick="openWallPublishModal('${item.id}')">📢 Seinä-julkaisu</button>
+                            ` : ''}
+                            <button class="btn-admin-action" onclick="deleteItem('${item.id}')" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;">🗑️ Poista pysyvästi</button>
                         </div>
+                        ${hasRole ? '' : '<p style="font-size:0.75rem;color:#fbbf24;margin-top:0.6rem;">⚠️ Arkistointi, päätöksen kirjaus ja poisto vaativat rooli-istunnon.</p>'}
                     </div>
+                `;
+            }
+
+            // PDF-painike sihteerille (decided tai archived)
+            let pdfBtnHtml = '';
+            if ((item.stage === 'decided' || item.stage === 'done' || item.stage === 'archived') && IS_ADMIN) {
+                pdfBtnHtml = `
+                    <button class="btn-admin-action" onclick="printDecisionExcerpt('${item.id}')" style="background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.3);color:#7dd3fc;margin-top:0.5rem;">
+                        🖨️ Tulosta päätösote (PDF)
+                    </button>
                 `;
             }
 
@@ -1440,6 +1639,8 @@
                     <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
                 </div>
 
+                ${decisionHtml}
+                ${pdfBtnHtml}
                 ${adminHtml}
                 ${voteHtml}
                 ${tasksHtml}
@@ -1607,26 +1808,46 @@
             }
         }
 
-        async function changeItemStage(itemId, newStage) {
+        async function changeItemStage(itemId, newStage, decisionSummary) {
             const sb = window.LaukaaSupabase || window.supabaseClient;
             if (!sb) return;
 
-            // Varmistetaan istunto
-            await ensureAdminSession();
+            // Priorisoidaan henkilökohtainen rooli-istunto; fallback legacy PIN
+            let token = null;
+            if (ROLE_SESSION && ROLE_SESSION.session_token) {
+                token = ROLE_SESSION.session_token;
+            } else {
+                await ensureAdminSession();
+                token = ORG_SESSION_TOKEN || null;
+            }
+
+            if (!token) return;
 
             try {
                 const { data, error } = await sb.rpc('manage_board_item', {
-                    p_session_token: ORG_SESSION_TOKEN || 'dummy',
+                    p_session_token: token,
                     p_item_id: itemId,
-                    p_stage: newStage
+                    p_stage: newStage,
+                    p_decision_summary: decisionSummary || null
                 });
 
                 if (error) {
                     alert('Tilan muuttaminen epäonnistui: ' + error.message);
                 } else if (data && !data.success) {
-                    alert('Toiminto vaatii voimassaolevan julkaisuavaimen: ' + data.error);
+                    const msg = data.error || 'Toiminto epäonnistui.';
+                    if (msg.toLowerCase().includes('rooli') || msg.toLowerCase().includes('valtuus') || msg.toLowerCase().includes('istunto')) {
+                        if (ROLE_SESSION) { logoutRoleSession(); }
+                        alert('Istunto vanhentunut. Kirjaudu uudelleen hallitusroolilla.');
+                        openRoleAuthModal(() => changeItemStage(itemId, newStage, decisionSummary));
+                    } else {
+                        alert(msg);
+                    }
                 } else {
                     await fetchBoardData();
+                    if (activeItemId) {
+                        const updated = BOARD_DATA.items.find(i => i.id === activeItemId);
+                        if (updated) openDetail(activeItemId);
+                    }
                 }
             } catch (err) {
                 console.error('changeItemStage error', err);
@@ -1649,10 +1870,225 @@
             if (!error && data && data.success) {
                 ORG_SESSION_TOKEN = data.session_token;
                 localStorage.setItem(`org_session_${CURRENT_ORG_ID}`, ORG_SESSION_TOKEN);
-                alert('Istunto aktivoitu onnistuneesti!');
             } else {
                 alert('Virheellinen julkaisuavain.');
             }
+        }
+
+        // =========================================================================
+        // PÄÄTÖKSEN KIRJAUS -DIALOGI
+        // =========================================================================
+        let _pendingDecisionItemId = null;
+
+        function openDecisionModal(itemId) {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => openDecisionModal(itemId));
+                return;
+            }
+            _pendingDecisionItemId = itemId;
+            const el = document.getElementById('decision-modal');
+            const txt = document.getElementById('decision-text');
+            const err = document.getElementById('decision-error');
+            const btn = document.getElementById('btn-submit-decision');
+            if (txt) txt.value = '';
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (btn) { btn.disabled = false; btn.innerText = '✅ Kirjaa päätös'; }
+            if (el) el.classList.add('open');
+            setTimeout(() => { if (txt) txt.focus(); }, 100);
+        }
+
+        function closeDecisionModal() {
+            const el = document.getElementById('decision-modal');
+            if (el) el.classList.remove('open');
+            _pendingDecisionItemId = null;
+        }
+
+        async function submitDecision() {
+            if (!_pendingDecisionItemId) return;
+            const txt = document.getElementById('decision-text');
+            const btn = document.getElementById('btn-submit-decision');
+            const err = document.getElementById('decision-error');
+            const summary = (txt?.value || '').trim();
+
+            if (summary.length < 5) {
+                if (err) { err.innerText = 'Kirjoita vähintään 5 merkkiä pitkä päätösteksti.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Tallennetaan...'; }
+            closeDecisionModal();
+            await changeItemStage(_pendingDecisionItemId, 'decided', summary);
+        }
+
+        // =========================================================================
+        // ARKISTOINTI
+        // =========================================================================
+        async function archiveItem(itemId) {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => archiveItem(itemId));
+                return;
+            }
+            const item = BOARD_DATA.items.find(i => i.id === itemId);
+            const title = item ? `"${item.title}"` : 'tämä asia';
+            if (!confirm(`Haluatko varmasti arkistoida ${title}?\n\nArkistoitu asia poistetaan aktiivisesta näkymästä, mutta säilyy arkistossa.`)) return;
+            await changeItemStage(itemId, 'archived', null);
+        }
+
+        // =========================================================================
+        // PYSYVÄ POISTO
+        // =========================================================================
+        async function deleteItem(itemId) {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => deleteItem(itemId));
+                return;
+            }
+
+            const item = BOARD_DATA.items.find(i => i.id === itemId)
+                      || ARCHIVED_ITEMS.find(i => i.id === itemId);
+            const title = item ? `"${item.title}"` : 'tämä asia';
+
+            if (!confirm(`⚠️ PYSYVÄ POISTO\n\nOlet poistamassa ${title}.\nToimintoa ei voi peruuttaa – kaikki kommentit, äänet ja tehtävät poistuvat.\n\nJatketaanko?`)) return;
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) return;
+
+            try {
+                const { data, error } = await sb.rpc('delete_board_item', {
+                    p_session_token: ROLE_SESSION.session_token,
+                    p_item_id: itemId
+                });
+
+                if (error || (data && !data.success)) {
+                    const msg = (data && data.error) || (error && error.message) || 'Poisto epäonnistui.';
+                    alert('Poisto epäonnistui: ' + msg);
+                } else {
+                    // Suljetaan modaali ja päivitetään näkymä
+                    document.getElementById('detail-modal').classList.remove('open');
+                    activeItemId = null;
+                    await fetchBoardData();
+                    if (currentFilter === 'archived') await renderArchivedBoard();
+                    alert(`Asia ${title} poistettu pysyvästi.`);
+                }
+            } catch (err) {
+                console.error('deleteItem error:', err);
+                alert('Odottamaton virhe: ' + err.message);
+            }
+        }
+
+        // =========================================================================
+        // PDF / TULOSTA PÄÄTÖSOTE (Vaihe 3)
+        // =========================================================================
+        async function printDecisionExcerpt(itemId) {
+            const item = BOARD_DATA.items.find(i => i.id === itemId)
+                      || ARCHIVED_ITEMS.find(i => i.id === itemId);
+            if (!item) { alert('Asiatietoja ei löydy tulostusta varten.'); return; }
+
+            // Haetaan kommentit erikseen, jos ei jo ladattu
+            let comments = [];
+            try {
+                const sb = window.LaukaaSupabase || window.supabaseClient;
+                if (sb) {
+                    const { data } = await sb
+                        .from('board_comments')
+                        .select('id, author_name, content, created_at')
+                        .eq('item_id', itemId)
+                        .order('created_at', { ascending: true });
+                    comments = data || [];
+                }
+            } catch (e) { /* kommentit ei pakollisia */ }
+
+            const votes = item.votes || { yes: 0, no: 0, cond: 0, total: 0 };
+            const orgName = BOARD_DATA.organization_name || 'Organisaatio';
+            const printDate = new Date().toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' });
+            const roleLabel = (ROLE_SESSION && ROLE_SESSION.member_name)
+                ? `${ROLE_SESSION.member_name} (${getStageName(ROLE_SESSION.active_roles?.[0]?.role || '')})`
+                : 'Sihteeri';
+
+            const commentsHtml = comments.length > 0
+                ? comments.map(c => `
+                    <tr>
+                        <td style="padding:4px 8px;font-size:11px;color:#555;white-space:nowrap;">${new Date(c.created_at).toLocaleDateString('fi-FI')}</td>
+                        <td style="padding:4px 8px;font-size:11px;font-weight:600;">${c.author_name || '-'}</td>
+                        <td style="padding:4px 8px;font-size:11px;">${c.content || ''}</td>
+                    </tr>
+                `).join('')
+                : '<tr><td colspan="3" style="padding:8px;font-size:11px;color:#888;">Ei kommentteja.</td></tr>';
+
+            const printWindow = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
+            printWindow.document.write(`
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<title>Päätösote: ${item.title}</title>
+<style>
+  @page { margin: 18mm 22mm; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Georgia', serif; color: #111; font-size: 12px; line-height: 1.55; }
+  .header { border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 16px; }
+  .header h1 { font-size: 18px; margin: 0 0 2px 0; }
+  .header p { margin: 0; font-size: 11px; color: #444; }
+  .meta-row { display: flex; gap: 24px; font-size: 11px; color: #555; margin-bottom: 14px; }
+  .section-title { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 2px; margin: 14px 0 6px 0; }
+  .description { font-size: 12px; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+  .decision-box { background: #f0fdf4; border: 1px solid #86efac; border-radius: 4px; padding: 10px 14px; margin: 12px 0; font-size: 12px; line-height: 1.55; white-space: pre-wrap; }
+  .votes-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+  .votes-table td, .votes-table th { border: 1px solid #ddd; padding: 5px 8px; font-size: 11px; }
+  .votes-table th { background: #f5f5f5; }
+  .comments-table { width: 100%; border-collapse: collapse; }
+  .comments-table td { border: 1px solid #e5e5e5; vertical-align: top; }
+  .signatures { margin-top: 32px; display: flex; gap: 40px; }
+  .sig-line { flex: 1; border-top: 1px solid #111; padding-top: 4px; font-size: 10px; color: #555; }
+  @media print { .no-print { display: none; } }
+</style>
+</head>
+<body>
+<button class="no-print" onclick="window.print()" style="position:fixed;top:12px;right:12px;padding:8px 18px;background:#0284c7;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">🖨️ Tulosta / Tallenna PDF</button>
+<div class="header">
+  <h1>Päätösote</h1>
+  <p>${orgName}</p>
+</div>
+<div class="meta-row">
+  <span><strong>Asia:</strong> ${item.seq || ''}</span>
+  <span><strong>Vaihe:</strong> ${getStageName(item.stage)}</span>
+  <span><strong>Päätösote laadittu:</strong> ${printDate}</span>
+  <span><strong>Laatija:</strong> ${roleLabel}</span>
+</div>
+<div class="section-title">Asian otsikko</div>
+<div style="font-size:14px;font-weight:bold;margin-bottom:8px;">${item.title || ''}</div>
+
+<div class="section-title">Tausta ja kuvaus</div>
+<div class="description">${item.description || 'Ei kuvausta.'}</div>
+
+<div class="section-title">Vastuuhenkilö ja määräaika</div>
+<div style="font-size:11px;margin-bottom:12px;">${item.lead || 'Ei nimetty'} &nbsp;|&nbsp; ${item.deadline_label || 'Avoin'}</div>
+
+${item.decision_summary ? `
+<div class="section-title">Päätös</div>
+<div class="decision-box">${item.decision_summary}</div>
+` : ''}
+
+${votes.total > 0 ? `
+<div class="section-title">Äänestystulos</div>
+<table class="votes-table">
+  <tr><th>Kyllä</th><th>Ehdollisena</th><th>Ei</th><th>Yhteensä</th></tr>
+  <tr><td>${votes.yes}</td><td>${votes.cond}</td><td>${votes.no}</td><td>${votes.total}</td></tr>
+</table>
+` : ''}
+
+<div class="section-title">Käsitelty keskustelu (${comments.length} merkintää)</div>
+<table class="comments-table">
+  <thead><tr style="background:#f5f5f5;"><th style="padding:5px 8px;font-size:11px;">Pvm</th><th style="padding:5px 8px;font-size:11px;">Kommentoija</th><th style="padding:5px 8px;font-size:11px;">Sisältö</th></tr></thead>
+  <tbody>${commentsHtml}</tbody>
+</table>
+
+<div class="signatures">
+  <div class="sig-line">Puheenjohtaja / allekirjoitus</div>
+  <div class="sig-line">Sihteeri / allekirjoitus</div>
+</div>
+</body>
+</html>`);
+            printWindow.document.close();
         }
 
         // =========================================================================

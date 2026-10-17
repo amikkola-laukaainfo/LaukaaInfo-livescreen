@@ -281,7 +281,10 @@ async function generateSitemap() {
     console.log(`  → Lähetä tämä Search Consolessa propertyyn: https://laukaainfo.fi/`);
 
     // ── Kirjoitetaan sitemap-mediazoo.xml (www.mediazoo.fi) laukaainfo-web/-kansioon ─
-    const mediazooSitemapPath = path.join(__dirname, 'laukaainfo-web', 'sitemap-mediazoo.xml');
+    // Varmistetaan että kohdekansio on olemassa (mkdirSync estää ENOENT-kaatumisen).
+    const mediazooDir = path.join(__dirname, 'laukaainfo-web');
+    fs.mkdirSync(mediazooDir, { recursive: true });
+    const mediazooSitemapPath = path.join(mediazooDir, 'sitemap-mediazoo.xml');
     fs.writeFileSync(mediazooSitemapPath, xml2, 'utf8');
     console.log(`✓ sitemap-mediazoo.xml generoitu → www.mediazoo.fi (place.php + teema.php URL:it).`);
     console.log(`  → Kopioi MediaZoolle: mediazoo.fi/laukaainfo-web/sitemap-mediazoo.xml`);
