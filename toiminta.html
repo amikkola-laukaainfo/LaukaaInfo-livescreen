@@ -1200,13 +1200,16 @@
             if (!sb) return;
 
             try {
-                const { error } = await sb.rpc('post_board_comment', {
+                const { data, error } = await sb.rpc('post_board_comment', {
                     p_item_id: itemId,
                     p_author_name: USER_NAME,
-                    p_content: content
+                    p_content: content,
+                    p_session_token: ORG_SESSION_TOKEN || null
                 });
                 if (error) {
                     alert('Kommentin tallennuksessa tapahtui virhe: ' + error.message);
+                } else if (data && !data.success) {
+                    alert(data.error);
                 } else {
                     input.value = '';
                     await loadItemComments(itemId);
@@ -1311,18 +1314,41 @@
                 const sb = window.LaukaaSupabase || window.supabaseClient;
                 if (!sb) return;
 
-                const { data, error } = await sb.rpc('publish_board_item_to_wall', {
+                let { data, error } = await sb.rpc('publish_board_item_to_wall', {
                     p_session_token: ORG_SESSION_TOKEN || 'dummy',
                     p_item_id: activeItemId,
                     p_wall_title: item.title,
                     p_wall_content: item.description,
-                    p_target_type: 'event'
+                    p_target_type: 'event',
+                    p_force_relink: false
                 });
 
                 if (error) {
                     alert('Seinä-julkaisu epäonnistui: ' + error.message);
                 } else if (data && !data.success) {
-                    alert('Julkaisu vaatii voimassaolevan julkaisuavaimen: ' + data.error);
+                    if (data.error && data.error.includes('Rikkoutunut julkaisulinkki')) {
+                        const force = confirm(data.error + '\n\nHaluatko luoda uuden korjaavan julkaisun ja linkittää sen tähän kohteeseen?');
+                        if (force) {
+                            const retry = await sb.rpc('publish_board_item_to_wall', {
+                                p_session_token: ORG_SESSION_TOKEN || 'dummy',
+                                p_item_id: activeItemId,
+                                p_wall_title: item.title,
+                                p_wall_content: item.description,
+                                p_target_type: 'event',
+                                p_force_relink: true
+                            });
+                            if (retry.data && retry.data.success) {
+                                alert('Uusi julkaisu luotu ja linkitetty onnistuneesti! (Post ID: ' + retry.data.wall_post_id + ')');
+                                closeWallModal();
+                                await fetchBoardData();
+                                return;
+                            } else {
+                                alert('Uudelleenjulkaisu epäonnistui: ' + (retry.data?.error || retry.error?.message));
+                            }
+                        }
+                    } else {
+                        alert('Julkaisu epäonnistui: ' + data.error);
+                    }
                 } else {
                     const actionText = data.action === 'updated' 
                         ? 'Olemassa oleva julkaisu päivitetty Seinälle!' 

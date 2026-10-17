@@ -4,31 +4,60 @@
 -- =============================================================================
 -- TILA: TUOTANTOVALMIS (PostgreSQL 15+, Supabase)
 --
--- Korjaukset:
---   1. Ilmoittautumisen peruminen: lisätään cancellation_secret_hash. Peruminen
---      onnistuu vain luodulla salaisuudella TAI validilla ylläpitoistunnolla.
---   2. Seinä-julkaisu: transaktiolukitus (FOR UPDATE), idempotenssi ja
---      organisaatiotarkistus (ei koskaan muokata toisen organisaation postausta).
---   3. Kommentointi: tiukka pituustarkistus (2-1000 merkkiä), tekijä (1-100 merkkiä),
---      arkistoitujen asioiden kommentointikielto.
---   4. RLS & Search path kovennus: SET search_path = '' kaikissa funktioissa.
+-- Koodiauditoinnin perusteella toteutetut korjaukset:
+--   1. Ilmoittautumisen peruminen:
+--      - cancellation_secret_hash lisätään tauluun.
+--      - Vanhoille olemassa oleville riveille (NULL-tiiviste) asetetaan satunnainen
+--        tiiviste migraatiossa, jotta niitä EI voi perua ilman ylläpitoistuntoa.
+--      - Peruminen onnistuu vain salaisuudella TAI validilla ylläpitoistunnolla.
+--   2. Seinä-julkaisu:
+--      - Transaktiolukitus (FOR UPDATE) ja organisaatiotarkistus.
+--      - P_target_type -arvon tiukka validointi sallittuihin tyyppeihin
+--        ('event', 'announcement', 'news', 'project', 'request').
+--      - Rikkoutuneen linkin suojaus: jos wall_post_id osoittaa puuttuvaan julkaisuun,
+--        palautetaan selkeä virheilmoitus eikä luoda orpoa julkaisua hiljaisesti
+--        (ellei ylläpitäjä nimenomaisesti määritä p_force_relink = TRUE).
+--   3. Kommentointi:
+--      - Sallii osallistujien kommentoinnin ilman kirjautumispakkoa, mutta estää
+--        väärinkäytökset ja spämmin palvelinpuolella:
+--        * 10 sekunnin suoja-aika saman nimimerkin kommenteille (flood guard).
+--        * Duplikaattisisällön esto 5 minuutin ikkunassa.
+--        * Enintään 10 kommenttia / 10 min kohteessa samalta nimimerkiltä.
+--        * Pituusrajat: sisältö 2-1000 merkkiä, tekijä 1-100 merkkiä.
+--        * Valmiin tai arkistoidun kohteen kommentointikielto.
+--        * Tuki valinnaiselle p_session_token -ylläpitoistunnolle (ohittaa rajoitukset).
+--   4. RLS & Search path kovennus:
+--      - SET search_path = '' kaikissa SECURITY DEFINER -funktioissa.
 -- =============================================================================
 
 BEGIN;
 
 -- =============================================================================
--- 1. SARAKEMUUTOKSET
+-- 1. SARAKEMUUTOKSET & HISTORIADATAN TURVAAMINEN
 -- =============================================================================
 
 -- Lisätään perumissalaisuuden SHA-256-tiiviste
 ALTER TABLE public.board_task_signups
 ADD COLUMN IF NOT EXISTS cancellation_secret_hash TEXT;
 
+-- Historiadatan suojaus: Jos kannassa on ilmoittautumisia ilman tiivistettä,
+-- generoidaan niille satunnainen arvo, jotta niitä ei voida perua mielivaltaisesti nimen perusteella.
+-- Vain ylläpitäjä (org_publisher_sessions) voi poistaa/perua tällaiset vanhat ilmoittautumiset.
+UPDATE public.board_task_signups
+SET cancellation_secret_hash = extensions.encode(extensions.digest(extensions.gen_random_bytes(16), 'sha256'), 'hex')
+WHERE cancellation_secret_hash IS NULL;
+
 -- =============================================================================
--- 2. KOVENNETUT RPC-FUNKTIOT
+-- 2. VANHOJEN OVERLOADIEN PUHDISTUS ENNEN UUSIA SIGNATUUREJA
+-- =============================================================================
+DROP FUNCTION IF EXISTS public.post_board_comment(UUID, TEXT, TEXT);
+DROP FUNCTION IF EXISTS public.publish_board_item_to_wall(TEXT, UUID, TEXT, TEXT, TEXT);
+
+-- =============================================================================
+-- 3. KOVENNETUT RPC-FUNKTIOT
 -- =============================================================================
 
--- 2.1 Ilmoittautuminen vapaaehtoistehtävään (palauttaa kertaluonteisen salaisuuden)
+-- 3.1 Ilmoittautuminen vapaaehtoistehtävään (palauttaa kertaluonteisen salaisuuden)
 CREATE OR REPLACE FUNCTION public.signup_board_task(
     p_task_id          UUID,
     p_participant_name TEXT,
@@ -100,7 +129,7 @@ END;
 $$;
 
 
--- 2.2 Ilmoittautumisen turvallinen peruminen (vaatii salaisuuden TAI ylläpitoistunnon)
+-- 3.2 Ilmoittautumisen turvallinen peruminen (vaatii salaisuuden TAI ylläpitoistunnon)
 CREATE OR REPLACE FUNCTION public.cancel_board_task_signup(
     p_task_id          UUID,
     p_participant_name TEXT,
@@ -151,6 +180,13 @@ BEGIN
 
     -- Jos kumpikaan ei täsmää, hylätään peruminen turvallisesti
     IF NOT v_is_admin THEN
+        IF v_signup.cancellation_secret_hash IS NULL THEN
+            RETURN jsonb_build_object(
+                'success', false,
+                'error', 'Aiemmin luodulla ilmoittautumisella ei ole perumistunnistetta. Peruminen vaatii ylläpitäjän koodin.'
+            );
+        END IF;
+
         RETURN jsonb_build_object(
             'success', false,
             'error', 'Peruminen epäonnistui: puuttuva tai virheellinen perumistunniste.'
@@ -164,11 +200,12 @@ END;
 $$;
 
 
--- 2.3 Kommentointi: pituusrajat, sanitaatio ja tilatarkistus
+-- 3.3 Kommentointi: pituusrajat, spämminesto (flood guard) ja tilatarkistus
 CREATE OR REPLACE FUNCTION public.post_board_comment(
-    p_item_id     UUID,
-    p_author_name TEXT,
-    p_content     TEXT
+    p_item_id        UUID,
+    p_author_name    TEXT,
+    p_content        TEXT,
+    p_session_token  TEXT DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -176,9 +213,13 @@ SECURITY DEFINER
 SET search_path = ''
 AS $$
 DECLARE
-    v_item RECORD;
-    v_clean_author TEXT;
-    v_clean_content TEXT;
+    v_item            RECORD;
+    v_clean_author    TEXT;
+    v_clean_content   TEXT;
+    v_token_hash      TEXT;
+    v_is_admin        BOOLEAN := FALSE;
+    v_recent_count    INT;
+    v_last_comment_at TIMESTAMPTZ;
 BEGIN
     -- 1. Tarkistetaan kohdeasia
     SELECT id, organization_id, stage INTO v_item
@@ -189,11 +230,19 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Kohdetta ei löydy.');
     END IF;
 
-    IF v_item.stage = 'archived' THEN
-        RETURN jsonb_build_object('success', false, 'error', 'Arkistoitua asiaa ei voi enää kommentoida.');
+    IF v_item.stage IN ('done', 'archived') THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Valmistunutta tai arkistoitua asiaa ei voi enää kommentoida.');
     END IF;
 
-    -- 2. Tiukka syöterajaus
+    -- 2. Tarkistetaan valinnainen ylläpitoistunto
+    IF p_session_token IS NOT NULL AND TRIM(p_session_token) <> '' THEN
+        v_token_hash := extensions.encode(extensions.digest(TRIM(p_session_token), 'sha256'), 'hex');
+        IF public._verify_org_session_internal(v_token_hash, v_item.organization_id) IS NOT NULL THEN
+            v_is_admin := TRUE;
+        END IF;
+    END IF;
+
+    -- 3. Syötteiden sanitaatio ja pituusrajat
     v_clean_content := TRIM(COALESCE(p_content, ''));
     IF LENGTH(v_clean_content) < 2 THEN
         RETURN jsonb_build_object('success', false, 'error', 'Kommentti on liian lyhyt (vähintään 2 merkkiä).');
@@ -203,11 +252,46 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Kommentti ylittää sallitun enimmäispituuden (1000 merkkiä).');
     END IF;
 
-    v_clean_author := SUBSTRING(TRIM(COALESCE(p_author_name, 'Jäsen')) FROM 1 FOR 100);
+    v_clean_author := SUBSTRING(TRIM(COALESCE(p_author_name, 'Osallistuja')) FROM 1 FOR 100);
     IF LENGTH(v_clean_author) < 1 THEN
-        v_clean_author := 'Jäsen';
+        v_clean_author := 'Osallistuja';
     END IF;
 
+    -- 4. Väärinkäytön ja roskapostin torjunta (Spam / Flood guard anonyymeille kutsujille)
+    IF NOT v_is_admin THEN
+        -- a) Suoja-aika: vähintään 10 sekuntia saman nimimerkin kommenteille kohteessa
+        SELECT MAX(created_at) INTO v_last_comment_at
+        FROM public.board_comments
+        WHERE item_id = p_item_id
+          AND LOWER(author_name) = LOWER(v_clean_author);
+
+        IF v_last_comment_at IS NOT NULL AND v_last_comment_at > (now() - INTERVAL '10 seconds') THEN
+            RETURN jsonb_build_object('success', false, 'error', 'Odota hetki ennen uuden kommentin lähettämistä (10 s suoja-aika).');
+        END IF;
+
+        -- b) Duplikaattisuoja: täsmälleen samaa viestiä ei sallita kohteessa 5 minuutin sisällä
+        IF EXISTS (
+            SELECT 1 FROM public.board_comments
+            WHERE item_id = p_item_id
+              AND content = v_clean_content
+              AND created_at > (now() - INTERVAL '5 minutes')
+        ) THEN
+            RETURN jsonb_build_object('success', false, 'error', 'Sama kommentti on jo lähetetty äskettäin.');
+        END IF;
+
+        -- c) Määrärajoitus: enintään 10 kommenttia / 10 minuuttia samalta nimimerkiltä kohteessa
+        SELECT COUNT(*) INTO v_recent_count
+        FROM public.board_comments
+        WHERE item_id = p_item_id
+          AND LOWER(author_name) = LOWER(v_clean_author)
+          AND created_at > (now() - INTERVAL '10 minutes');
+
+        IF v_recent_count >= 10 THEN
+            RETURN jsonb_build_object('success', false, 'error', 'Kommenttikiintiö täynnä tältä nimimerkiltä (enintään 10 kommenttia 10 minuutissa).');
+        END IF;
+    END IF;
+
+    -- 5. Tallennetaan kommentti
     INSERT INTO public.board_comments (
         item_id, organization_id, author_name, content
     ) VALUES (
@@ -219,13 +303,14 @@ END;
 $$;
 
 
--- 2.4 Seinälle julkaiseminen: transaktiolukitus, idempotenssi ja organisaatiosuoja
+-- 3.4 Seinälle julkaiseminen: transaktiolukitus, tyyppivalidointi ja rikkoutuneen linkin suoja
 CREATE OR REPLACE FUNCTION public.publish_board_item_to_wall(
     p_session_token TEXT,
     p_item_id       UUID,
     p_wall_title    TEXT,
     p_wall_content  TEXT,
-    p_target_type   TEXT DEFAULT 'event'
+    p_target_type   TEXT DEFAULT 'event',
+    p_force_relink  BOOLEAN DEFAULT FALSE
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -240,6 +325,7 @@ DECLARE
     v_existing_post  RECORD;
     v_clean_title    TEXT;
     v_clean_content  TEXT;
+    v_valid_types    TEXT[] := ARRAY['event', 'announcement', 'news', 'project', 'request'];
 BEGIN
     -- 1. Syötevalidointi
     v_clean_title := SUBSTRING(TRIM(COALESCE(p_wall_title, '')) FROM 1 FOR 255);
@@ -252,7 +338,15 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Sisältö on liian lyhyt (vähintään 5 merkkiä).');
     END IF;
 
-    -- 2. Lukitaan toimintataulun asia transaktion ajaksi (FOR UPDATE estää kilpatilanteet)
+    -- Validoidaan sallitut julkaisutyypit (posts.type)
+    IF p_target_type IS NULL OR NOT (p_target_type = ANY(v_valid_types)) THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'error', 'Virheellinen julkaisutyyppi. Sallitut tyypit ovat: event, announcement, news, project, request.'
+        );
+    END IF;
+
+    -- 2. Lukitaan toimintataulun asia transaktion ajaksi (FOR UPDATE estää rinnakkaiset kilpatilanteet)
     SELECT * INTO v_item
     FROM public.board_items
     WHERE id = p_item_id
@@ -274,7 +368,7 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Istunto ei ole voimassa tai organisaation julkaisuoikeus on estetty.');
     END IF;
 
-    -- 4. Idempotentti käsittely: Tarkistetaan onko olemassa oleva julkaisu aito ja kuuluuko samaan organisaatioon
+    -- 4. Idempotentti käsittely ja rikkoutuneen linkin suojaus
     IF v_item.is_published_to_wall AND v_item.wall_post_id IS NOT NULL THEN
         SELECT id, organization_id INTO v_existing_post
         FROM public.posts
@@ -283,10 +377,12 @@ BEGIN
         FOR UPDATE;
 
         IF FOUND THEN
-            -- Päivitetään aiempi julkaisu (estää tuplajulkaisut samanaikaisissa pyynnöissä)
+            -- Päivitetään aiempi vahvistettu julkaisu (estää tuplajulkaisut samanaikaisissa klikkauksissa)
             UPDATE public.posts
             SET title = v_clean_title,
                 content = v_clean_content,
+                type = p_target_type,
+                event_start_at = v_item.deadline_at,
                 updated_at = now()
             WHERE id = v_existing_post.id;
 
@@ -295,10 +391,17 @@ BEGIN
                 'wall_post_id', v_existing_post.id,
                 'action', 'updated'
             );
+        ELSIF NOT p_force_relink THEN
+            -- RIKKOUTUNUT LINKKI:
+            -- Ei luoda uutta julkaisua hiljaisesti, jotta estetään orvot ja epäjohdonmukaiset postaukset.
+            RETURN jsonb_build_object(
+                'success', false,
+                'error', 'Rikkoutunut julkaisulinkki: asia on merkitty julkaistuksi, mutta kohdepostausta (ID: ' || v_item.wall_post_id::text || ') ei löydy organisaation julkaisuista. Vahvista uudelleenlinkitys (p_force_relink = true).'
+            );
         END IF;
     END IF;
 
-    -- 5. Ensimmäinen julkaisu: Luodaan uusi postaus
+    -- 5. Ensimmäinen julkaisu TAI erikseen pyydetty korjaava uudelleenlinkitys
     INSERT INTO public.posts (
         organization_id,
         title,
@@ -336,7 +439,7 @@ $$;
 -- Myönnetään suoritusoikeudet
 GRANT EXECUTE ON FUNCTION public.signup_board_task(UUID, TEXT, TEXT, TEXT) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.cancel_board_task_signup(UUID, TEXT, TEXT, TEXT) TO anon, authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.post_board_comment(UUID, TEXT, TEXT) TO anon, authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.publish_board_item_to_wall(TEXT, UUID, TEXT, TEXT, TEXT) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.post_board_comment(UUID, TEXT, TEXT, TEXT) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.publish_board_item_to_wall(TEXT, UUID, TEXT, TEXT, TEXT, BOOLEAN) TO anon, authenticated, service_role;
 
 COMMIT;
