@@ -637,6 +637,9 @@
                 <div class="role-pill" id="user-role-badge" onclick="promptChangeUserName()" title="Klikkaa vaihtaaksesi nimeä">
                     <span>🟢</span> <span id="current-user-name">Matti K.</span>
                 </div>
+                <div class="role-pill" id="gov-role-badge" style="display:none;background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;cursor:pointer;" onclick="promptSwitchRoleAuth()" title="Klikkaa nähdäksesi rooli-istunnon tai kirjautuaksesi ulos">
+                    <span>👑</span> <span id="gov-role-name">Hallitus</span>
+                </div>
                 <button class="btn-toggle-admin" id="btn-admin-toggle" onclick="toggleAdminMode()" title="Vaihda ylläpitäjän ja jäsenen näkymän välillä">
                     🛡️ Ylläpito
                 </button>
@@ -724,6 +727,37 @@
         </div>
     </div>
 
+    <!-- HENKILÖKOHTAISEN VALTUUSKOODIN TODENNUSMODAALI -->
+    <div class="modal-overlay" id="role-auth-modal">
+        <div class="modal-card" style="max-width: 460px;">
+            <button class="modal-close" onclick="closeRoleAuthModal()">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(37,99,235,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🔐</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Hallituksen valtuutus</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Seinälle julkaiseminen vaatii henkilökohtaisen roolin</p>
+                </div>
+            </div>
+            
+            <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
+                Toimintataulun asian julkaiseminen LaukaaInfon Seinälle on hallintotoiminto. Syötä henkilökohtainen valtuuskoodisi (puheenjohtaja tai hallituksen jäsen).
+            </p>
+
+            <div style="margin-bottom:1.25rem;">
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">Henkilökohtainen valtuuskoodi</label>
+                <input type="text" id="input-role-code" placeholder="esim. PJ-3F8E... tai BM-9A2C..." 
+                       style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-family:monospace;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;"
+                       onkeydown="if(event.key==='Enter') submitRoleAuth();" />
+                <div id="role-auth-error" style="display:none;color:#f87171;font-size:0.8rem;margin-top:0.5rem;line-height:1.4;"></div>
+            </div>
+
+            <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                <button class="btn-toggle-admin" onclick="closeRoleAuthModal()">Peruuta</button>
+                <button class="btn-signup" id="btn-submit-role-auth" style="background:#2563eb;" onclick="submitRoleAuth()">Todenna ja jatka →</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SUPABASE JS & CONFIG -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
@@ -744,6 +778,24 @@
 
         let ORG_SESSION_TOKEN = localStorage.getItem(`org_session_${CURRENT_ORG_ID}`) || null;
         let IS_ADMIN = localStorage.getItem(`toiminta_is_admin_${CURRENT_ORG_ID}`) === 'true';
+
+        // Henkilökohtainen rooli-istunto (governance-toiminnot kuten publish_wall)
+        let ROLE_SESSION = null;
+        try {
+            const rawRoleSession = localStorage.getItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+            if (rawRoleSession) {
+                const parsed = JSON.parse(rawRoleSession);
+                if (parsed && parsed.expires_at && new Date(parsed.expires_at) > new Date()) {
+                    ROLE_SESSION = parsed;
+                } else {
+                    localStorage.removeItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+                }
+            }
+        } catch (e) {
+            ROLE_SESSION = null;
+        }
+
+        let pendingRoleAuthCallback = null;
 
         let BOARD_DATA = {
             organization_id: CURRENT_ORG_ID,
@@ -767,6 +819,138 @@
 
         function updateUserBadge() {
             document.getElementById('current-user-name').innerText = USER_NAME;
+            updateRoleBadge();
+        }
+
+        function updateRoleBadge() {
+            const badge = document.getElementById('gov-role-badge');
+            const nameEl = document.getElementById('gov-role-name');
+            if (!badge || !nameEl) return;
+
+            if (ROLE_SESSION && ROLE_SESSION.session_token) {
+                badge.style.display = 'inline-flex';
+                let roleLabel = 'Hallitus';
+                if (ROLE_SESSION.active_roles && ROLE_SESSION.active_roles.length > 0) {
+                    const r = ROLE_SESSION.active_roles[0].role;
+                    if (r === 'board_chair') roleLabel = 'Puheenjohtaja';
+                    else if (r === 'board_member') roleLabel = 'Hallituksen jäsen';
+                    else if (r === 'secretary') roleLabel = 'Sihteeri';
+                    else if (r === 'coordinator') roleLabel = 'Koordinaattori';
+                    else if (r === 'lead') roleLabel = 'Vetäjä';
+                }
+                nameEl.innerText = `${ROLE_SESSION.member_name || 'Jäsen'} (${roleLabel})`;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function promptSwitchRoleAuth() {
+            if (!ROLE_SESSION) return;
+            const roleTitle = (ROLE_SESSION.active_roles && ROLE_SESSION.active_roles[0]?.role) || 'Hallitus';
+            const choice = confirm(
+                `Kirjautunut sisään valtuuskoodilla:\n` +
+                `Nimi: ${ROLE_SESSION.member_name || '-'}\n` +
+                `Rooli: ${roleTitle}\n\n` +
+                `Haluatko kirjautua ulos rooli-istunnosta?`
+            );
+            if (choice) {
+                logoutRoleSession();
+            }
+        }
+
+        function logoutRoleSession() {
+            ROLE_SESSION = null;
+            localStorage.removeItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+            updateRoleBadge();
+        }
+
+        function openRoleAuthModal(callback) {
+            pendingRoleAuthCallback = callback;
+            const input = document.getElementById('input-role-code');
+            const err = document.getElementById('role-auth-error');
+            const btn = document.getElementById('btn-submit-role-auth');
+            if (input) input.value = '';
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (btn) { btn.disabled = false; btn.innerText = 'Todenna ja jatka →'; }
+
+            document.getElementById('role-auth-modal').classList.add('open');
+            setTimeout(() => { if (input) input.focus(); }, 100);
+        }
+
+        function closeRoleAuthModal() {
+            document.getElementById('role-auth-modal').classList.remove('open');
+            pendingRoleAuthCallback = null;
+        }
+
+        function showRoleAuthError(msg) {
+            const err = document.getElementById('role-auth-error');
+            const btn = document.getElementById('btn-submit-role-auth');
+            if (err) {
+                err.innerText = msg;
+                err.style.display = 'block';
+            }
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = 'Todenna ja jatka →';
+            }
+        }
+
+        async function submitRoleAuth() {
+            const input = document.getElementById('input-role-code');
+            const btn = document.getElementById('btn-submit-role-auth');
+            if (!input) return;
+
+            const code = input.value.trim().toUpperCase();
+            if (code.length < 10) {
+                showRoleAuthError('Koodi on liian lyhyt. Syötä vähintään 10-merkkinen valtuuskoodi (esim. PJ-3F8E... tai BM-9A2C...).');
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'Tarkistetaan...';
+            }
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                showRoleAuthError('Tietokantayhteys ei ole käytettävissä.');
+                return;
+            }
+
+            try {
+                const { data, error } = await sb.rpc('begin_role_session', {
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_role_code: code
+                });
+
+                if (error || (data && !data.success)) {
+                    const msg = (data && data.error) || (error && error.message) || 'Virheellinen valtuuskoodi tai organisaatio.';
+                    showRoleAuthError(msg);
+                    return;
+                }
+
+                ROLE_SESSION = {
+                    session_token: data.session_token,
+                    session_id: data.session_id,
+                    member_id: data.member_id,
+                    member_name: data.member_name,
+                    active_roles: data.active_roles,
+                    expires_at: data.expires_at
+                };
+
+                localStorage.setItem(`toiminta_role_session_${CURRENT_ORG_ID}`, JSON.stringify(ROLE_SESSION));
+                updateRoleBadge();
+                closeRoleAuthModal();
+
+                if (typeof pendingRoleAuthCallback === 'function') {
+                    const cb = pendingRoleAuthCallback;
+                    pendingRoleAuthCallback = null;
+                    cb();
+                }
+            } catch (err) {
+                console.error('submitRoleAuth error:', err);
+                showRoleAuthError('Tunnistus epäonnistui: ' + err.message);
+            }
         }
 
         // =========================================================================
@@ -1303,10 +1487,38 @@
             document.getElementById('wall-modal').classList.remove('open');
         }
 
+        function handlePublishError(errorMsg) {
+            if (!errorMsg) {
+                alert('Julkaisu epäonnistui tuntemattomasta syystä.');
+                return;
+            }
+
+            const lower = errorMsg.toLowerCase();
+            if (lower.includes('istunto ei ole voimassa') || lower.includes('henkilökohtaista roolia') || lower.includes('valtuuskoodi on peruutettu') || lower.includes('henkilö ei ole enää aktiivinen')) {
+                alert('Istuntosi tai valtuuskoodisi ei ole enää voimassa.\n\nTodenna itsesi uudelleen henkilökohtaisella valtuuskoodilla.');
+                logoutRoleSession();
+                openRoleAuthModal(() => confirmWallPublish());
+            } else if (lower.includes('publish_wall') || lower.includes('käyttöoikeus evätty') || lower.includes('toimivaltaa')) {
+                alert('Käyttöoikeus evätty:\n\nToimintataulun asian julkaiseminen Seinälle vaatii puheenjohtajan tai hallituksen jäsenen henkilökohtaisen valtuutuksen.');
+            } else if (lower.includes('suljettua') || lower.includes('arkistoitua')) {
+                alert('Tilan rajoitus:\n\nSuljettua, arkistoitua tai virheellisessä tilassa olevaa asiaa ei voi julkaista Seinälle.');
+            } else if (lower.includes('ristiriitainen julkaisuviite') || lower.includes('eri kohteeseen')) {
+                alert('Viiteristiriita:\n\nJulkaisuviite osoittaa toiseen kohteeseen tai toiselle organisaatiolle. Toiminto on estetty turvallisuussyistä.');
+            } else {
+                alert('Seinä-julkaisu epäonnistui: ' + errorMsg);
+            }
+        }
+
         async function confirmWallPublish() {
             if (!activeItemId) return;
             const item = BOARD_DATA.items.find(i => i.id === activeItemId);
             if (!item) return;
+
+            // Seinälle julkaisu vaatii aina henkilökohtaisen rooli-istunnon (publish_wall: board_chair / board_member)
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => confirmWallPublish());
+                return;
+            }
 
             const btn = document.querySelector('#wall-modal .btn-signup');
             if (btn) {
@@ -1315,13 +1527,11 @@
             }
 
             try {
-                await ensureAdminSession();
-
                 const sb = window.LaukaaSupabase || window.supabaseClient;
                 if (!sb) return;
 
                 let { data, error } = await sb.rpc('publish_board_item_to_wall', {
-                    p_session_token: ORG_SESSION_TOKEN || 'dummy',
+                    p_session_token: ROLE_SESSION.session_token,
                     p_item_id: activeItemId,
                     p_wall_title: item.title,
                     p_wall_content: item.description,
@@ -1330,41 +1540,50 @@
                 });
 
                 if (error) {
-                    alert('Seinä-julkaisu epäonnistui: ' + error.message);
+                    handlePublishError(error.message);
                 } else if (data && !data.success) {
-                    if (data.error && data.error.includes('p_force_relink = true')) {
-                        const force = confirm(data.error + '\n\nHaluatko vahvistaa tämän toimenpiteen ja julkaista kohteen Seinälle?');
+                    if (data.requires_force_relink || (data.error && data.error.includes('p_force_relink = true'))) {
+                        const force = confirm(
+                            (data.error || 'Postaus vaatii linkityksen vahvistuksen.') +
+                            '\n\nHaluatko vahvistaa tämän toimenpiteen ja julkaista kohteen Seinälle?'
+                        );
                         if (force) {
                             const retry = await sb.rpc('publish_board_item_to_wall', {
-                                p_session_token: ORG_SESSION_TOKEN || 'dummy',
+                                p_session_token: ROLE_SESSION.session_token,
                                 p_item_id: activeItemId,
                                 p_wall_title: item.title,
                                 p_wall_content: item.description,
                                 p_target_type: 'event',
                                 p_force_relink: true
                             });
+
                             if (retry.data && retry.data.success) {
-                                alert('Toiminto vahvistettu onnistuneesti! (Post ID: ' + retry.data.wall_post_id + ')');
+                                const postId = retry.data.wall_post_id || retry.data.post_id || '';
+                                alert('Toiminto vahvistettu onnistuneesti! (Post ID: ' + postId + ')');
                                 closeWallModal();
                                 await fetchBoardData();
                                 return;
                             } else {
-                                alert('Toiminto epäonnistui: ' + (retry.data?.error || retry.error?.message));
+                                handlePublishError(retry.data?.error || retry.error?.message);
                             }
                         }
                     } else {
-                        alert('Julkaisu epäonnistui: ' + data.error);
+                        handlePublishError(data.error);
                     }
                 } else {
                     const actionText = data.action === 'updated' 
                         ? 'Olemassa oleva julkaisu päivitetty Seinälle!' 
-                        : 'Uusi julkaisu viety onnistuneesti LaukaaInfon Seinälle!';
-                    alert(actionText + ' (Post ID: ' + data.wall_post_id + ')');
+                        : (data.action === 'republished'
+                            ? 'Julkaisu palautettu ja päivitetty Seinälle!'
+                            : 'Uusi julkaisu viety onnistuneesti LaukaaInfon Seinälle!');
+                    const postId = data.wall_post_id || data.post_id || '';
+                    alert(actionText + ' (Post ID: ' + postId + ')');
                     closeWallModal();
                     await fetchBoardData();
                 }
             } catch (err) {
                 console.error('confirmWallPublish failed', err);
+                alert('Odottamaton virhe julkaisussa: ' + err.message);
             } finally {
                 if (btn) {
                     btn.disabled = false;
