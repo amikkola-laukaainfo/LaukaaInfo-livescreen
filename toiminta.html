@@ -1069,8 +1069,8 @@
                         <p style="font-size:0.8rem;color:var(--text-muted);">Ladataan kommentteja...</p>
                     </div>
                     <div class="comment-input-row">
-                        <input type="text" id="new-comment-input" class="comment-input" placeholder="Kirjoita kommentti tai kysymys...">
-                        <button class="btn-send-comment" onclick="postComment('${item.id}')">Lähetä</button>
+                        <input type="text" id="new-comment-input" class="comment-input" maxlength="1000" placeholder="Kirjoita kommentti tai kysymys (max 1000 merkkiä)...">
+                        <button class="btn-send-comment" id="btn-post-comment" onclick="postComment('${item.id}')">Lähetä</button>
                     </div>
                 </div>
             `;
@@ -1144,15 +1144,20 @@
             if (!sb) return;
 
             try {
-                const { error } = await sb.rpc('signup_board_task', {
+                const { data, error } = await sb.rpc('signup_board_task', {
                     p_task_id: taskId,
                     p_participant_name: USER_NAME,
                     p_role: 'participant'
                 });
                 if (error) {
                     alert('Ilmoittautumisessa tapahtui virhe: ' + error.message);
-                } else {
+                } else if (data && data.success) {
+                    if (data.signup_secret) {
+                        localStorage.setItem('task_secret_' + taskId, data.signup_secret);
+                    }
                     await fetchBoardData();
+                } else {
+                    alert(data?.error || 'Ilmoittautuminen epäonnistui.');
                 }
             } catch (err) {
                 console.error('joinTask error', err);
@@ -1163,15 +1168,23 @@
             const sb = window.LaukaaSupabase || window.supabaseClient;
             if (!sb) return;
 
+            const secret = localStorage.getItem('task_secret_' + taskId) || null;
+
             try {
-                const { error } = await sb.rpc('cancel_board_task_signup', {
+                const { data, error } = await sb.rpc('cancel_board_task_signup', {
                     p_task_id: taskId,
-                    p_participant_name: USER_NAME
+                    p_participant_name: USER_NAME,
+                    p_signup_secret: secret,
+                    p_session_token: ORG_SESSION_TOKEN || null
                 });
+
                 if (error) {
                     alert('Perumisessa tapahtui virhe: ' + error.message);
-                } else {
+                } else if (data && data.success) {
+                    localStorage.removeItem('task_secret_' + taskId);
                     await fetchBoardData();
+                } else {
+                    alert(data?.error || 'Peruminen epäonnistui.');
                 }
             } catch (err) {
                 console.error('leaveTask error', err);
@@ -1286,12 +1299,18 @@
             const item = BOARD_DATA.items.find(i => i.id === activeItemId);
             if (!item) return;
 
-            await ensureAdminSession();
-
-            const sb = window.LaukaaSupabase || window.supabaseClient;
-            if (!sb) return;
+            const btn = document.querySelector('#wall-modal .btn-signup');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'Julkaistaan...';
+            }
 
             try {
+                await ensureAdminSession();
+
+                const sb = window.LaukaaSupabase || window.supabaseClient;
+                if (!sb) return;
+
                 const { data, error } = await sb.rpc('publish_board_item_to_wall', {
                     p_session_token: ORG_SESSION_TOKEN || 'dummy',
                     p_item_id: activeItemId,
@@ -1305,12 +1324,20 @@
                 } else if (data && !data.success) {
                     alert('Julkaisu vaatii voimassaolevan julkaisuavaimen: ' + data.error);
                 } else {
-                    alert('Julkaisu viety onnistuneesti LaukaaInfon Seinälle! ID: ' + data.wall_post_id);
+                    const actionText = data.action === 'updated' 
+                        ? 'Olemassa oleva julkaisu päivitetty Seinälle!' 
+                        : 'Uusi julkaisu viety onnistuneesti LaukaaInfon Seinälle!';
+                    alert(actionText + ' (Post ID: ' + data.wall_post_id + ')');
                     closeWallModal();
                     await fetchBoardData();
                 }
             } catch (err) {
                 console.error('confirmWallPublish failed', err);
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = 'Vahvista ja julkaise Seinälle →';
+                }
             }
         }
 
