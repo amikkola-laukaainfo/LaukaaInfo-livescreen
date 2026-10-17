@@ -59,6 +59,10 @@
           <span class="text-base tracking-tight font-bold">LaukaaInfo</span>
         </a>
         <div class="flex items-center gap-2">
+          <a href="toiminta.html" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1" title="Päätös- ja toimintataulu">
+            <span>📋</span>
+            <span>Toimintataulu</span>
+          </a>
           <a href="seina.html" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
             <span>🧱</span>
             <span>Yleinen seinä</span>
@@ -729,7 +733,7 @@
             ${desc ? `<div class="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">${desc}</div>` : ''}
             ${renderMediaHTML(post.post_media || [])}
             ${typeof renderPdfPillsHTML === 'function' ? renderPdfPillsHTML(post.post_attachments || []) : ''}
-            ${renderLinksHTML(post.post_links || [], post.target_id, post.target_type)}
+            ${renderLinksHTML(post.post_links || [], post.target_id, post.target_type, post.organization_id)}
           </div>
         `;
 
@@ -1340,7 +1344,7 @@
 
           // Pinned Links Slot
           const linksSlot = document.getElementById('pinnedLinksSlot');
-          if (linksSlot) linksSlot.innerHTML = renderLinksHTML(pinnedPost.post_links, pinnedPost.target_id, pinnedPost.target_type);
+          if (linksSlot) linksSlot.innerHTML = renderLinksHTML(pinnedPost.post_links, pinnedPost.target_id, pinnedPost.target_type, pinnedPost.organization_id);
         } else {
           pinnedSection.classList.add('hidden');
         }
@@ -1443,7 +1447,7 @@
               </div>
 
               <!-- CTA Links Slot -->
-              ${renderLinksHTML(p.post_links, p.target_id, p.target_type)}
+              ${renderLinksHTML(p.post_links, p.target_id, p.target_type, p.organization_id)}
 
               <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-100 flex-wrap gap-2">
                 <div class="flex items-center gap-2">
@@ -1686,15 +1690,27 @@
       }
 
       // 10. Links & CTA Rendering Helper
-      function renderLinksHTML(linksList, targetId, targetType) {
+      function renderLinksHTML(linksList, targetId, targetType, orgId) {
         let html = '';
 
-        // Render target link if attached (e.g. Project / Event)
+        // Render target link if attached (e.g. Project / Event / Board Item)
         if (targetId) {
-          const targetUrl = targetType === 'project' ? `projekti.html?id=${targetId}` : `tapahtuma.html?id=${targetId}`;
+          let targetUrl = '';
+          let targetLabel = '';
+          if (targetType === 'board_item') {
+            const orgParam = orgId ? `org=${encodeURIComponent(orgId)}&` : '';
+            targetUrl = `toiminta.html?${orgParam}item=${encodeURIComponent(targetId)}`;
+            targetLabel = '📋 Siirry toimintatauluun';
+          } else if (targetType === 'project') {
+            targetUrl = `projekti.html?id=${encodeURIComponent(targetId)}`;
+            targetLabel = '🚀 Katso projekti';
+          } else {
+            targetUrl = `tapahtuma.html?id=${encodeURIComponent(targetId)}`;
+            targetLabel = '📅 Katso liittyvä kohde';
+          }
           html += `
             <a href="${targetUrl}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all">
-              🚀 Katso liittyvä kohde (${targetType || 'sisältö'}) →
+              ${targetLabel} →
             </a>
           `;
         }
