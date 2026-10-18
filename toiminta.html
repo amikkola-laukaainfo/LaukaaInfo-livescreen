@@ -659,7 +659,10 @@
                 <div class="role-pill" id="gov-role-badge" style="display:none;background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;cursor:pointer;" onclick="promptSwitchRoleAuth()" title="Klikkaa nähdäksesi rooli-istunnon tai kirjautuaksesi ulos">
                     <span>👑</span> <span id="gov-role-name">Hallitus</span>
                 </div>
-                <button class="btn-signup" id="btn-create-item" onclick="openCreateItemModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #0284c7, #38bdf8);" title="Luo uusi asia tai ehdotus toimintataululle">
+                <button class="btn-signup" id="btn-suggest-item" onclick="openSuggestionModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #f59e0b, #d97706);color:#fff;" title="Jätä kehitysehdotus tai idea yhdistyksen hallitukselle ilman salasanaa">
+                    <span>💡</span> <span>Ehdota ideaa</span>
+                </button>
+                <button class="btn-signup" id="btn-create-item" onclick="openCreateItemModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #0284c7, #38bdf8);" title="Luo uusi asia suoraan asialistalle (vaatii hallitusroolin)">
                     <span>➕</span> <span>Uusi asia</span>
                 </button>
                 <button class="btn-toggle-admin" id="btn-admin-toggle" onclick="toggleAdminMode()" title="Vaihda ylläpitäjän ja jäsenen näkymän välillä">
@@ -714,6 +717,9 @@
             </button>
             <button class="tab-btn" onclick="setFilter('decided', this)">
                 ✅ Päätetty <span class="tab-count" id="count-decided">0</span>
+            </button>
+            <button class="tab-btn" id="tab-suggestions" onclick="setFilter('suggestions', this)">
+                📥 Ehdotusjono <span class="tab-count" id="count-suggestions">0</span>
             </button>
             <button class="tab-btn" id="tab-archive" onclick="setFilter('archived', this)">
                 📦 Arkisto <span class="tab-count" id="count-archived">–</span>
@@ -847,6 +853,58 @@
         </div>
     </div>
 
+    <!-- KUNTALAISEN / JÄSENEN EHDOTUSMODAALI (ILMAN KOODIA) -->
+    <div class="modal-overlay" id="suggestion-modal">
+        <div class="modal-card" style="max-width: 520px;">
+            <button class="modal-close" onclick="closeSuggestionModal()">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(245,158,11,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">💡</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Jätä kehitysehdotus tai idea</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Toimitetaan suoraan yhdistyksen hallituksen käsittelyjonoon</p>
+                </div>
+            </div>
+
+            <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
+                Onko sinulla idea tapahtumasta, kehityskohteesta tai talkoista? Jätä ehdotuksesi alla olevalla lomakkeella. Et tarvitse salasanaa tai koodia.
+            </p>
+
+            <form onsubmit="event.preventDefault(); submitSuggestion();" style="display:flex;flex-direction:column;gap:0.85rem;">
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Aihe / Idean otsikko *</label>
+                    <input type="text" id="suggest-item-title" required minlength="3" maxlength="255" placeholder="esim. Kesän rantatalkoot tai uusi opastetaulu" 
+                           style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.9rem;" />
+                </div>
+
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Perustelut &amp; Kuvaus</label>
+                    <textarea id="suggest-item-desc" rows="4" maxlength="10000" placeholder="Kerro tarkemmin mitä ehdotat, kenelle siitä olisi iloa ja voisitko itse osallistua järjestelyihin..." 
+                              style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;resize:vertical;line-height:1.4;"></textarea>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Nimesi</label>
+                        <input type="text" id="suggest-item-name" maxlength="100" placeholder="esim. Matti K." 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Yhteystieto (valinnainen)</label>
+                        <input type="text" id="suggest-item-contact" maxlength="150" placeholder="Sähköposti tai puhelin" 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                </div>
+
+                <div id="suggest-item-error" style="display:none;color:#f87171;font-size:0.8rem;line-height:1.4;background:rgba(239,68,68,0.1);padding:0.6rem 0.8rem;border-radius:8px;border:1px solid rgba(239,68,68,0.2);"></div>
+
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:0.5rem;">
+                    <button type="button" class="btn-toggle-admin" onclick="closeSuggestionModal()">Peruuta</button>
+                    <button type="submit" class="btn-signup" id="btn-submit-suggest" style="background:#f59e0b;color:#fff;">🚀 Lähetä ehdotus hallitukselle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- SUPABASE JS & CONFIG -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
@@ -856,7 +914,7 @@
         // KÄYTTÄJÄN TUNNISTE JA SORMENJÄLKI
         // =========================================================================
         const urlParams = new URLSearchParams(window.location.search);
-        const CURRENT_ORG_ID = urlParams.get('org') || 'laukaan-yrittajat';
+        const CURRENT_ORG_ID = urlParams.get('org') || 'laukaan-testaajat';
 
         let USER_NAME = localStorage.getItem('toiminta_user_name') || 'Matti K.';
         let USER_FINGERPRINT = localStorage.getItem('toiminta_user_fp');
@@ -888,7 +946,7 @@
 
         let BOARD_DATA = {
             organization_id: CURRENT_ORG_ID,
-            organization_name: 'Laukaan Yrittäjät',
+            organization_name: 'Laukaan Testaajat ry',
             items: []
         };
 
@@ -1202,7 +1260,7 @@
                 }
 
                 if (data && data.success) {
-                    BOARD_DATA.organization_name = data.organization_name || 'Laukaan Yrittäjät';
+                    BOARD_DATA.organization_name = data.organization_name || 'Laukaan Testaajat ry';
                     BOARD_DATA.items = data.items || [];
                     document.getElementById('header-org-name').innerText = BOARD_DATA.organization_name;
                     renderBoard();
@@ -1345,6 +1403,8 @@
             if (el) el.classList.add('active');
             if (filter === 'archived') {
                 renderArchivedBoard();
+            } else if (filter === 'suggestions') {
+                renderSuggestionsBoard();
             } else {
                 renderBoard();
             }
@@ -1401,6 +1461,228 @@
                 `).join('');
             } catch (err) {
                 console.error('renderArchivedBoard failed:', err);
+            }
+        }
+
+        // =========================================================================
+        // EHDOTUSJONO (KUNTALAISET & JÄSENET -> HALLITUS)
+        // =========================================================================
+        let SUGGESTION_ITEMS = [];
+
+        function openSuggestionModal() {
+            const titleInput = document.getElementById('suggest-item-title');
+            const descInput = document.getElementById('suggest-item-desc');
+            const nameInput = document.getElementById('suggest-item-name');
+            const contactInput = document.getElementById('suggest-item-contact');
+            const err = document.getElementById('suggest-item-error');
+            const btn = document.getElementById('btn-submit-suggest');
+
+            if (titleInput) titleInput.value = '';
+            if (descInput) descInput.value = '';
+            if (nameInput) nameInput.value = USER_NAME || '';
+            if (contactInput) contactInput.value = '';
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (btn) { btn.disabled = false; btn.innerText = '🚀 Lähetä ehdotus hallitukselle'; }
+
+            document.getElementById('suggestion-modal').classList.add('open');
+            setTimeout(() => { if (titleInput) titleInput.focus(); }, 100);
+        }
+
+        function closeSuggestionModal() {
+            document.getElementById('suggestion-modal').classList.remove('open');
+        }
+
+        async function submitSuggestion() {
+            const title = (document.getElementById('suggest-item-title')?.value || '').trim();
+            const desc = (document.getElementById('suggest-item-desc')?.value || '').trim();
+            const name = (document.getElementById('suggest-item-name')?.value || '').trim();
+            const contact = (document.getElementById('suggest-item-contact')?.value || '').trim();
+            const err = document.getElementById('suggest-item-error');
+            const btn = document.getElementById('btn-submit-suggest');
+
+            if (title.length < 3 || title.length > 255) {
+                if (err) { err.innerText = 'Kirjoita vähintään 3 merkkiä pitkä otsikko.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Lähetetään...'; }
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                if (err) { err.innerText = 'Tietokantayhteys ei ole käytettävissä.'; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.innerText = '🚀 Lähetä ehdotus hallitukselle'; }
+                return;
+            }
+
+            try {
+                const { data, error } = await sb.rpc('submit_board_suggestion', {
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_title: title,
+                    p_description: desc || null,
+                    p_author_name: name || null,
+                    p_author_contact: contact || null
+                });
+
+                if (error || (data && !data.success)) {
+                    const msg = (data && data.error) || error?.message || 'Lähetys epäonnistui.';
+                    if (err) { err.innerText = msg; err.style.display = 'block'; }
+                    if (btn) { btn.disabled = false; btn.innerText = '🚀 Lähetä ehdotus hallitukselle'; }
+                } else {
+                    closeSuggestionModal();
+                    alert(data.message || 'Kiitos! Ehdotuksesi on vastaanotettu ja toimitettu hallituksen käsittelyjonoon.');
+                    if (currentFilter === 'suggestions') {
+                        await renderSuggestionsBoard();
+                    }
+                }
+            } catch (e) {
+                if (err) { err.innerText = 'Odottamaton virhe: ' + e.message; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.innerText = '🚀 Lähetä ehdotus hallitukselle'; }
+            }
+        }
+
+        async function renderSuggestionsBoard() {
+            const container = document.getElementById('items-container');
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) return;
+
+            const hasRole = !!(ROLE_SESSION && ROLE_SESSION.session_token);
+            if (!hasRole && !IS_ADMIN) {
+                container.innerHTML = `
+                    <div style="text-align:center;padding:3rem 1.5rem;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:16px;max-width:560px;margin:2rem auto;">
+                        <div style="font-size:2.5rem;margin-bottom:0.8rem;">📥</div>
+                        <h3 style="font-family:'Outfit',sans-serif;font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:0.5rem;">Ehdotusjono on hallituksen käsittelytila</h3>
+                        <p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:1.25rem;">
+                            Kuntalaisten ja jäsenten jättämät uudet ideat kootaan tähän jonoon. Hallitus käsittelee ne ja nostaa soveltuvat asiat päätöstaululle.
+                        </p>
+                        <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+                            <button class="btn-signup" onclick="openSuggestionModal()" style="background:#f59e0b;">💡 Jätä uusi idea</button>
+                            <button class="btn-toggle-admin" onclick="openRoleAuthModal(() => renderSuggestionsBoard())">🔐 Todenna hallituskoodi</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '<div class="loading-wrap"><div class="loading-spinner"></div><p>Ladataan ehdotusjonoa...</p></div>';
+
+            try {
+                const token = (ROLE_SESSION && ROLE_SESSION.session_token) ? ROLE_SESSION.session_token : null;
+                const { data, error } = await sb.rpc('get_board_suggestions', {
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_session_token: token,
+                    p_status: 'pending'
+                });
+
+                if (error || !data || !data.success) {
+                    container.innerHTML = `<div style="text-align:center;padding:2.5rem;"><p style="color:#fda4af;">Ehdotusten lataus epäonnistui: ${escapeHtml(error?.message || data?.error || '')}</p></div>`;
+                    return;
+                }
+
+                SUGGESTION_ITEMS = data.suggestions || [];
+                const countEl = document.getElementById('count-suggestions');
+                if (countEl) countEl.innerText = SUGGESTION_ITEMS.length;
+
+                if (SUGGESTION_ITEMS.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align:center;padding:3.5rem 1rem;background:rgba(255,255,255,0.02);border-radius:16px;">
+                            <div style="font-size:2rem;margin-bottom:0.5rem;">🎉</div>
+                            <h4 style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:0.35rem;">Käsittelyjono on tyhjä</h4>
+                            <p style="color:var(--text-muted);font-size:0.85rem;">Kaikki saapuneet ehdotukset on käsitelty tai uusia ei ole vielä jätetty.</p>
+                            <button class="btn-signup" onclick="openSuggestionModal()" style="margin-top:1rem;background:#f59e0b;">💡 Jätä uusi idea</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = SUGGESTION_ITEMS.map(sug => `
+                    <article class="item-card" style="border-left: 4px solid #f59e0b;">
+                        <div class="item-card-top">
+                            <span class="stage-pill" style="background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);">
+                                💡 Kuntalaisen / jäsenen ehdotus
+                            </span>
+                            <span style="font-size:0.75rem;color:var(--text-muted);">${formatTimestamp(sug.created_at)}</span>
+                        </div>
+                        <h3 class="item-title" style="margin-top:0.4rem;">${escapeHtml(sug.title)}</h3>
+                        <p class="item-desc" style="white-space:pre-wrap;">${escapeHtml(sug.description || 'Ei tarkempaa kuvausta.')}</p>
+                        
+                        <div style="font-size:0.8rem;color:var(--text-muted);margin:0.75rem 0;background:rgba(255,255,255,0.03);padding:0.6rem 0.8rem;border-radius:8px;">
+                            👤 Ehdottaja: <strong style="color:#fff;">${escapeHtml(sug.author_name || 'Anonyymi')}</strong>
+                            ${sug.author_contact ? ` &nbsp;·&nbsp; ✉️ <span style="color:#93c5fd;">${escapeHtml(sug.author_contact)}</span>` : ''}
+                        </div>
+
+                        <div class="item-footer" style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;">
+                            <button class="btn-admin-action" onclick="rejectSuggestion('${sug.id}')" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;padding:0.4rem 0.75rem;font-size:0.75rem;">
+                                ✕ Hylkää
+                            </button>
+                            <button class="btn-signup" onclick="promoteSuggestion('${sug.id}')" style="background:#10b981;font-size:0.78rem;padding:0.45rem 1rem;">
+                                ➕ Nosta asialistalle →
+                            </button>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                console.error('renderSuggestionsBoard failed:', err);
+            }
+        }
+
+        async function promoteSuggestion(sugId) {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => promoteSuggestion(sugId));
+                return;
+            }
+            const sug = SUGGESTION_ITEMS.find(s => s.id === sugId);
+            const title = sug ? `"${sug.title}"` : 'tämä ehdotus';
+            if (!confirm(`Haluatko siirtää ehdotuksen ${title} Toimintataulun asialistalle keskusteltavaksi?`)) return;
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) return;
+
+            try {
+                const { data, error } = await sb.rpc('promote_board_suggestion_to_item', {
+                    p_suggestion_id: sugId,
+                    p_session_token: ROLE_SESSION.session_token,
+                    p_stage: 'discussion',
+                    p_lead_name: sug ? sug.author_name : null
+                });
+
+                if (error || (data && !data.success)) {
+                    alert('Nosto epäonnistui: ' + ((data && data.error) || error?.message));
+                } else {
+                    alert('Ehdotus nostettu asialistalle asiana #' + (data.seq_num || ''));
+                    await fetchBoardData();
+                    await renderSuggestionsBoard();
+                }
+            } catch (err) {
+                alert('Odottamaton virhe: ' + err.message);
+            }
+        }
+
+        async function rejectSuggestion(sugId) {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => rejectSuggestion(sugId));
+                return;
+            }
+            const reason = prompt('Kirjaa lyhyt hylkäyssyy tai perustelu (valinnainen):');
+            if (reason === null) return;
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) return;
+
+            try {
+                const { data, error } = await sb.rpc('reject_board_suggestion', {
+                    p_suggestion_id: sugId,
+                    p_session_token: ROLE_SESSION.session_token,
+                    p_reason: reason.trim() || null
+                });
+
+                if (error || (data && !data.success)) {
+                    alert('Hylkäys epäonnistui: ' + ((data && data.error) || error?.message));
+                } else {
+                    alert('Ehdotus merkitty hylätyksi.');
+                    await renderSuggestionsBoard();
+                }
+            } catch (err) {
+                alert('Odottamaton virhe: ' + err.message);
             }
         }
 

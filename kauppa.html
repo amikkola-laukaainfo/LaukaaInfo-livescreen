@@ -746,7 +746,7 @@
                 <a href="#profiili-section" class="shortcut-btn">
                     <span class="icon">👤</span>
                     <strong>Yritys tai Yhdistys</strong>
-                    <span>Luo oma profiili ja Oma Seinä</span>
+                    <span>Profiili, Oma Seinä & Toimintataulu</span>
                 </a>
                 <a href="#seina-section" class="shortcut-btn">
                     <span class="icon">📢</span>
@@ -839,22 +839,105 @@
                     <button type="button" onclick="openInquiryModal('Yritysprofiili + Oma Seinä (149 €/v)');" class="btn-payment btn-primary-action">Tilaa Yritysprofiili (149 €/v)</button>
                 </div>
 
-                <!-- Yhdistysprofiili -->
-                <div class="plan-card">
-                    <h3>🤝 Yhdistysprofiili</h3>
-                    <div class="desc">Yhdistykselle ja seuralle oma pysyvä näkyvyys ja tapahtumakanava.</div>
+                <!-- Yhdistysprofiili & Toimintataulu -->
+                <div class="plan-card" style="border-color: #3b82f6; position: relative;">
+                    <span class="badge-featured" style="background:#2563eb;">YHDISTYKSELLE</span>
+                    <h3>🤝 Yhdistysprofiili &amp; Toimintataulu</h3>
+                    <div class="desc">Yhdistyksen täysi toimintakokonaisuus: sisäinen Toimintataulu hallitukselle, vapaaehtoistehtävät sekä julkinen Oma Seinä ja profiili.</div>
+                    
+                    <!-- Kokeilujakso-nostolaatikko -->
+                    <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
+                        <div style="font-size: 0.72rem; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">✨ UUTUUS — KOKEILUJAKSO</div>
+                        <div style="display: flex; align-items: baseline; gap: 0.35rem;">
+                            <span style="font-size: 1.6rem; font-weight: 800; color: #1e3a8a;">29 €</span>
+                            <span style="font-size: 0.88rem; font-weight: 600; color: #3b82f6;">/ 1 kuukausi</span>
+                        </div>
+                        <div style="font-size: 0.78rem; color: #475569; margin-top: 0.2rem;">Kokeile täyttä Toimintataulua ja Oma Seinää kuukausi ilman pitkää sitoutumista!</div>
+                    </div>
+
                     <div class="price">149 € <span>/ vuosi</span></div>
-                    <div class="vat-info">sis. ALV 25,5%</div>
+                    <div class="vat-info">sis. ALV 25,5% (kaikki hinnat)</div>
                     <ul>
-                        <li><span class="check-icon">✓</span> <span><strong>Yhdistyksen perustiedot:</strong> Toiminnan esittely ja arvot</span></li>
-                        <li><span class="check-icon">✓</span> <span><strong>Yhteystiedot:</strong> Yhteyshenkilöt ja toimitilat</span></li>
-                        <li><span class="check-icon">✓</span> <span><strong>Jäsenyys & osallistuminen:</strong> Ohjeet mukaan tulemiseen</span></li>
-                        <li><span class="check-icon">✓</span> <span><strong>Viestintäkanavat:</strong> Verkkosivu ja sosiaalisen median kanavat</span></li>
-                        <li><span class="check-icon">✓</span> <span><strong>Tapahtumien hallinta:</strong> Tuo seuran tapahtumat näkyviin</span></li>
-                        <li><span class="check-icon">✓</span> <span><strong>Näkyvyys:</strong> LaukaaInfo.fi & Android-sovellus</span></li>
-                        <li><span class="check-icon">✓</span> <span><strong>Sisältää Oma Seinä -alustan:</strong> Tiedota jäsenille ja kuntalaisille</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>Toimintataulu (toiminta.html):</strong> Hallituksen asiat, äänestykset, päätökset ja arkisto</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>Valtuuskoodit ja roolit:</strong> Henkilökohtaiset koodit puheenjohtajalle, sihteerille ja hallitukselle</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>Kuntalaisten ideajono:</strong> Julkinen ehdotuskanava ilman kirjautumista</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>Talkoo- ja vapaaehtoistehtävät:</strong> Tehtävien jako ja tekijöiden ilmoittautuminen</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>PDF-päätösote sihteerille:</strong> Virallinen ote pöytäkirjan liitteeksi yhdellä klikkauksella</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>Sisältää Oma Seinä -alustan:</strong> Tiedota asioista ja tapahtumista LaukaaInfon Seinälle</span></li>
+                        <li><span class="check-icon">✓</span> <span><strong>Yhdistyksen profiili:</strong> Näkyvyys LaukaaInfo.fi -palvelussa &amp; Android-sovelluksessa</span></li>
                     </ul>
-                    <button type="button" onclick="openInquiryModal('Yhdistysprofiili + Oma Seinä (149 €/v)');" class="btn-payment btn-secondary-action">Tilaa Yhdistysprofiili (149 €/v)</button>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: auto;">
+                        <button type="button" onclick="openInquiryModal('Yhdistyksen Toimintataulu - Kokeilu 1 kk (29 €)');" class="btn-payment btn-primary-action" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); box-shadow: 0 4px 12px rgba(37,99,235,0.3);">
+                            🚀 Kokeile Toimintataulua 1 kk (29 €)
+                        </button>
+                        <button type="button" onclick="openInquiryModal('Yhdistysprofiili + Toimintataulu (149 €/v)');" class="btn-payment btn-secondary-action">
+                            Tilaa vuodeksi (149 €/v)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- YHDISTYKSEN TOIMINTATAULU ESITTELYOSIO -->
+        <section id="toimintataulu-section" class="section-block" style="border: 2px solid #3b82f6; background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);">
+            <div class="section-header" style="text-align: center;">
+                <span class="tag" style="background: #2563eb; color: #fff;">UUTTA YHDISTYKSILLE &amp; SEUROILLE</span>
+                <h2 style="color: #1e3a8a; font-size: 2.1rem;">💼 Yhdistyksen Toimintataulu</h2>
+                <p style="color: #475569; font-size: 1.05rem; max-width: 750px; margin: 0 auto;">
+                    Hallituksen asiat, äänestykset, talkootehtävät ja kuntalaisten ehdotukset kootusti yhdessä turvallisessa työkalussa — ilman hajanaisia sähköposteja tai WhatsApp-kaaosta.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                <div style="background: #fff; padding: 1.35rem; border-radius: 16px; border: 1px solid #dbeafe; box-shadow: 0 4px 12px rgba(37,99,235,0.04);">
+                    <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🗳️</div>
+                    <h3 style="color: #1e3a8a; font-size: 1.1rem; margin-bottom: 0.35rem; font-family: 'Outfit', sans-serif;">Päätöksenteko &amp; Äänestys</h3>
+                    <p style="color: #64748b; font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                        Käsittele asiat ideasta keskusteluun, avaa äänestys hallitukselle ja kirjaa virallinen päätös. Sihteeri tulostaa valmiin PDF-päätösotteen pöytäkirjaan.
+                    </p>
+                </div>
+                
+                <div style="background: #fff; padding: 1.35rem; border-radius: 16px; border: 1px solid #dbeafe; box-shadow: 0 4px 12px rgba(37,99,235,0.04);">
+                    <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🛠️</div>
+                    <h3 style="color: #1e3a8a; font-size: 1.1rem; margin-bottom: 0.35rem; font-family: 'Outfit', sans-serif;">Talkoot &amp; Vapaaehtoistehtävät</h3>
+                    <p style="color: #64748b; font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                        Jaa tapahtuman tai talkoiden järjestelyt selkeiksi tehtäviksi. Jäsenet ja kuntalaiset voivat ilmoittautua tekijöiksi suoraan selaimella.
+                    </p>
+                </div>
+
+                <div style="background: #fff; padding: 1.35rem; border-radius: 16px; border: 1px solid #dbeafe; box-shadow: 0 4px 12px rgba(37,99,235,0.04);">
+                    <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">💡</div>
+                    <h3 style="color: #1e3a8a; font-size: 1.1rem; margin-bottom: 0.35rem; font-family: 'Outfit', sans-serif;">Kuntalaisten ideajono</h3>
+                    <p style="color: #64748b; font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                        Avoin postilaatikko ideoille ilman salasanoja. Hallitus käsittelee ehdotukset omassa jonossaan ja nostaa parhaat suoraan asialistalle.
+                    </p>
+                </div>
+
+                <div style="background: #fff; padding: 1.35rem; border-radius: 16px; border: 1px solid #dbeafe; box-shadow: 0 4px 12px rgba(37,99,235,0.04);">
+                    <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">📢</div>
+                    <h3 style="color: #1e3a8a; font-size: 1.1rem; margin-bottom: 0.35rem; font-family: 'Outfit', sans-serif;">Yhteys LaukaaInfon Seinälle</h3>
+                    <p style="color: #64748b; font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                        Nosta tehty päätös tai tapahtuma suoraan Toimintataulusta LaukaaInfon julkiselle Seinälle yhdellä klikkauksella tiedotteeksi kuntalaisille.
+                    </p>
+                </div>
+            </div>
+
+            <div style="background: #fff; border-radius: 18px; padding: 1.75rem 2rem; border: 1.5px solid #bfdbfe; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem;">
+                <div>
+                    <span style="display: inline-block; background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.4rem;">RISKITÖN KOKEILU</span>
+                    <h3 style="margin: 0 0 0.35rem 0; color: #1e293b; font-size: 1.35rem; font-family: 'Outfit', sans-serif;">Aloita 1 kuukauden kokeilujaksolla</h3>
+                    <p style="margin: 0; color: #64748b; font-size: 0.95rem;">
+                        Ota Toimintataulu käyttöön yhdistyksellesi heti. Kokeilujakso <strong>29 € sis. ALV 25,5%</strong> — ei automaattista jatkosidonnaisuutta.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <button type="button" onclick="openInquiryModal('Yhdistyksen Toimintataulu - Kokeilu 1 kk (29 €)');" class="btn-payment btn-primary-action" style="padding: 0.9rem 1.8rem; font-size: 1rem; background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+                        Kokeile 1 kk (29 €) 🚀
+                    </button>
+                    <a href="toiminta.html?org=laukaan-yrittajat" target="_blank" class="btn-payment btn-secondary-action" style="padding: 0.9rem 1.4rem; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        <span>Tutustu demoon</span> <span>↗</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -1124,10 +1207,22 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Kuka olen?</strong> (Läsnäolo & Kanava)</td>
-                            <td>Yritys- / Yhdistysprofiili + Oma Seinä</td>
+                            <td><strong>Kuka olen?</strong> (Yritys)</td>
+                            <td>🏢 Yritysprofiili + Oma Seinä</td>
                             <td><strong>149 €</strong> / v</td>
-                            <td><button type="button" onclick="openInquiryModal('Yritys-/yhdistysprofiili + Seinä (149 €/v)');" class="btn-payment btn-secondary-action" style="padding:0.4rem 0.8rem; font-size:0.85rem;">Valitse</button></td>
+                            <td><button type="button" onclick="openInquiryModal('Yritysprofiili + Seinä (149 €/v)');" class="btn-payment btn-secondary-action" style="padding:0.4rem 0.8rem; font-size:0.85rem;">Valitse</button></td>
+                        </tr>
+                        <tr style="background: #eff6ff;">
+                            <td><strong>Yhdistyksen kokeilu</strong> (1 kk)</td>
+                            <td>🤝 Toimintataulu + Oma Seinä (Kokeilujakso)</td>
+                            <td><strong style="color: #1e40af;">29 €</strong> / 1 kk</td>
+                            <td><button type="button" onclick="openInquiryModal('Yhdistyksen Toimintataulu - Kokeilu 1 kk (29 €)');" class="btn-payment btn-primary-action" style="padding:0.4rem 0.8rem; font-size:0.85rem; background:#2563eb;">Kokeile 1 kk 🚀</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Yhdistyksen koko vuosi</strong></td>
+                            <td>🤝 Yhdistysprofiili + Toimintataulu + Oma Seinä</td>
+                            <td><strong>149 €</strong> / v</td>
+                            <td><button type="button" onclick="openInquiryModal('Yhdistysprofiili + Toimintataulu (149 €/v)');" class="btn-payment btn-secondary-action" style="padding:0.4rem 0.8rem; font-size:0.85rem;">Valitse</button></td>
                         </tr>
                         <tr>
                             <td><strong>Missä olen näkyvissä?</strong> (Kohde)</td>
@@ -1303,7 +1398,11 @@
             const modal = document.getElementById('inquiry-modal');
             const form = document.getElementById('inquiry-form');
             
-            if (window.location.hash === '#kysy' || window.location.hash === '#inquiry' || window.location.search.includes('kysy') || window.location.search.includes('seina')) {
+            if (window.location.hash === '#toiminta' || window.location.hash === '#toimintataulu' || window.location.search.includes('toiminta') || window.location.search.includes('kokeilu')) {
+                setTimeout(function() {
+                    openInquiryModal('Yhdistyksen Toimintataulu - Kokeilu 1 kk (29 €)');
+                }, 200);
+            } else if (window.location.hash === '#kysy' || window.location.hash === '#inquiry' || window.location.search.includes('kysy') || window.location.search.includes('seina')) {
                 setTimeout(function() {
                     openInquiryModal('LaukaaInfo Seinä - Yhteydenotto / Tilauskysely');
                 }, 200);
