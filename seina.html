@@ -740,11 +740,18 @@
         // Share & Copy Bar for Single Post: suora linkki julkaisuun leikepöydälle
         const postUrl = `seina.html?post=${encodeURIComponent(post.id)}`;
         const fullPostUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + postUrl;
+        const suggestUrl = orgId ? `toiminta.html?org=${encodeURIComponent(orgId)}&mode=suggest&ref_post=${encodeURIComponent(post.id)}&ref_title=${encodeURIComponent(post.title || '')}` : null;
+
         document.getElementById('singlePostShareBar').innerHTML = `
           <div class="flex flex-wrap items-center gap-2">
             <button onclick="copyToClipboard('${fullPostUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5" title="Kopioi linkki julkaisuun">
               <span>🔗</span> <span>Kopioi linkki</span>
             </button>
+            ${suggestUrl ? `
+              <a href="${suggestUrl}" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5 no-underline" title="Ehdota tätä asiaa yhdistyksen toimintataululle käsiteltäväksi">
+                <span>💡</span> <span>Ehdota asialistalle</span>
+              </a>
+            ` : ''}
           </div>
         `;
 
@@ -1454,6 +1461,11 @@
                   ${orgUrl ? `<a href="${orgUrl}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>` : '<span class="text-slate-400 font-medium">LaukaaInfo Stream</span>'}
                 </div>
                 <div class="flex items-center gap-1.5">
+                  ${cardOrgId ? `
+                    <a href="toiminta.html?org=${encodeURIComponent(cardOrgId)}&mode=suggest&ref_post=${encodeURIComponent(p.id)}&ref_title=${encodeURIComponent(p.title || '')}" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg font-bold transition-all flex items-center gap-1 no-underline" title="Ehdota tätä asiaa yhdistyksen toimintataululle">
+                      <span>💡</span> <span class="hidden sm:inline">Ehdota</span>
+                    </a>
+                  ` : ''}
                   <button onclick="copyToClipboard(window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + 'seina.html?post=${encodeURIComponent(p.id)}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-bold transition-all flex items-center gap-1" title="Kopioi suora linkki julkaisuun">
                     <span>🔗</span>
                   </button>

@@ -638,6 +638,244 @@
             .stat-badge { flex: 1; min-width: 0; }
             .vote-options-row { flex-direction: column; }
         }
+
+        /* ── GATEWAY-NÄKYMÄN TYYLIT ───────────────────────────────────── */
+        .gateway-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            padding: 1rem 0 3rem;
+            grid-column: 1 / -1;
+        }
+        .gateway-hero {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.85rem;
+        }
+        .gateway-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: #38bdf8;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .gateway-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        .gateway-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .gateway-paths-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+        .gateway-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .gateway-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: transparent;
+            transition: background 0.25s;
+        }
+        .gateway-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+        .gateway-card-suggest:hover::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .gateway-card-member:hover::before { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+        .gateway-card-board:hover::before { background: linear-gradient(90deg, #818cf8, #a855f7); }
+
+        .gateway-card-icon {
+            font-size: 2.2rem;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .gateway-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 0;
+            line-height: 1.3;
+        }
+        .gateway-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            flex: 1;
+            margin: 0;
+        }
+        .gateway-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+        }
+        .gateway-btn-amber { background: #f59e0b; color: #000; }
+        .gateway-btn-amber:hover { background: #fbbf24; }
+        .gateway-btn-blue { background: #0284c7; color: #fff; }
+        .gateway-btn-blue:hover { background: #38bdf8; color: #000; }
+        .gateway-btn-purple { background: #6366f1; color: #fff; }
+        .gateway-btn-purple:hover { background: #818cf8; }
+
+        .gateway-orgs-section {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .gateway-orgs-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .gateway-search-box {
+            position: relative;
+            min-width: 260px;
+        }
+        .gateway-search-box input {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .gateway-search-box input:focus {
+            border-color: var(--primary);
+        }
+        .gateway-orgs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .gateway-org-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+        .gateway-org-card:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            background: rgba(15, 23, 42, 0.9);
+            transform: translateY(-2px);
+        }
+        .gateway-org-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+        .gateway-org-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            display: inline-block;
+        }
+        .gateway-org-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 0.5rem;
+        }
+        .gateway-org-link-main {
+            flex: 1;
+            text-align: center;
+            padding: 0.55rem 0.8rem;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            font-weight: 700;
+            font-size: 0.82rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .gateway-org-link-main:hover {
+            background: rgba(56, 189, 248, 0.25);
+        }
+        .gateway-org-link-suggest {
+            padding: 0.55rem 0.8rem;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.82rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .gateway-org-link-suggest:hover {
+            background: rgba(245, 158, 11, 0.25);
+        }
+
+        @media (max-width: 860px) {
+            .gateway-paths-grid { grid-template-columns: 1fr; }
+            .gateway-title { font-size: 1.75rem; }
+        }
     </style>
 </head>
 <body>
@@ -865,6 +1103,16 @@
                 </div>
             </div>
 
+            <div id="suggest-ref-post-banner" style="display:none;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:10px;padding:0.65rem 0.85rem;margin-bottom:0.85rem;font-size:0.82rem;color:#7dd3fc;">
+                <span>🔗</span> <strong>Viitaten julkaisuun:</strong> <span id="suggest-ref-post-title-text"></span>
+            </div>
+
+            <div id="suggest-org-select-container" style="display:none;margin-bottom:0.85rem;">
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Kohdejärjestö / Yhdistys *</label>
+                <select id="suggest-item-org-select" style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.9);color:#fff;font-size:0.85rem;outline:none;">
+                </select>
+            </div>
+
             <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
                 Onko sinulla idea tapahtumasta, kehityskohteesta tai talkoista? Jätä ehdotuksesi alla olevalla lomakkeella. Et tarvitse salasanaa tai koodia.
             </p>
@@ -886,12 +1134,12 @@
                     <div>
                         <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Nimesi</label>
                         <input type="text" id="suggest-item-name" maxlength="100" placeholder="esim. Matti K." 
-                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                                style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
                     </div>
                     <div>
-                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Yhteystieto (valinnainen)</label>
-                        <input type="text" id="suggest-item-contact" maxlength="150" placeholder="Sähköposti tai puhelin" 
-                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Yhteystieto (sähköposti tai puhelin) *</label>
+                        <input type="text" id="suggest-item-contact" required minlength="5" maxlength="150" placeholder="Sähköposti tai puhelin" 
+                                style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
                     </div>
                 </div>
 
@@ -914,7 +1162,13 @@
         // KÄYTTÄJÄN TUNNISTE JA SORMENJÄLKI
         // =========================================================================
         const urlParams = new URLSearchParams(window.location.search);
-        const CURRENT_ORG_ID = urlParams.get('org') || 'laukaan-testaajat';
+        const CURRENT_ORG_ID = urlParams.get('org') || null;
+        const INITIAL_MODE = urlParams.get('mode') || null;
+        const REF_POST_ID = urlParams.get('ref_post') || null;
+        const REF_POST_TITLE = urlParams.get('ref_title') || null;
+
+        let ACTIVE_REF_POST_ID = REF_POST_ID;
+        let PUBLIC_ORGANIZATIONS = [];
 
         let USER_NAME = localStorage.getItem('toiminta_user_name') || 'Matti K.';
         let USER_FINGERPRINT = localStorage.getItem('toiminta_user_fp');
@@ -923,23 +1177,25 @@
             localStorage.setItem('toiminta_user_fp', USER_FINGERPRINT);
         }
 
-        let ORG_SESSION_TOKEN = localStorage.getItem(`org_session_${CURRENT_ORG_ID}`) || null;
-        let IS_ADMIN = localStorage.getItem(`toiminta_is_admin_${CURRENT_ORG_ID}`) === 'true';
+        let ORG_SESSION_TOKEN = CURRENT_ORG_ID ? (localStorage.getItem(`org_session_${CURRENT_ORG_ID}`) || null) : null;
+        let IS_ADMIN = CURRENT_ORG_ID ? (localStorage.getItem(`toiminta_is_admin_${CURRENT_ORG_ID}`) === 'true') : false;
 
         // Henkilökohtainen rooli-istunto (governance-toiminnot kuten publish_wall)
         let ROLE_SESSION = null;
-        try {
-            const rawRoleSession = localStorage.getItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
-            if (rawRoleSession) {
-                const parsed = JSON.parse(rawRoleSession);
-                if (parsed && parsed.expires_at && new Date(parsed.expires_at) > new Date()) {
-                    ROLE_SESSION = parsed;
-                } else {
-                    localStorage.removeItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+        if (CURRENT_ORG_ID) {
+            try {
+                const rawRoleSession = localStorage.getItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+                if (rawRoleSession) {
+                    const parsed = JSON.parse(rawRoleSession);
+                    if (parsed && parsed.expires_at && new Date(parsed.expires_at) > new Date()) {
+                        ROLE_SESSION = parsed;
+                    } else {
+                        localStorage.removeItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+                    }
                 }
+            } catch (e) {
+                ROLE_SESSION = null;
             }
-        } catch (e) {
-            ROLE_SESSION = null;
         }
 
         let pendingRoleAuthCallback = null;
@@ -1469,20 +1725,42 @@
         // =========================================================================
         let SUGGESTION_ITEMS = [];
 
-        function openSuggestionModal() {
+        function openSuggestionModal(opts = {}) {
             const titleInput = document.getElementById('suggest-item-title');
             const descInput = document.getElementById('suggest-item-desc');
             const nameInput = document.getElementById('suggest-item-name');
             const contactInput = document.getElementById('suggest-item-contact');
             const err = document.getElementById('suggest-item-error');
             const btn = document.getElementById('btn-submit-suggest');
+            const refBanner = document.getElementById('suggest-ref-post-banner');
+            const refTitleEl = document.getElementById('suggest-ref-post-title-text');
+            const orgSelectCont = document.getElementById('suggest-org-select-container');
+            const orgSelect = document.getElementById('suggest-item-org-select');
 
-            if (titleInput) titleInput.value = '';
-            if (descInput) descInput.value = '';
+            ACTIVE_REF_POST_ID = opts.ref_post_id || REF_POST_ID || null;
+            const refTitle = opts.ref_title || REF_POST_TITLE || null;
+
+            if (titleInput) titleInput.value = opts.prefill_title || '';
+            if (descInput) descInput.value = opts.prefill_desc || '';
             if (nameInput) nameInput.value = USER_NAME || '';
             if (contactInput) contactInput.value = '';
             if (err) { err.innerText = ''; err.style.display = 'none'; }
             if (btn) { btn.disabled = false; btn.innerText = '🚀 Lähetä ehdotus hallitukselle'; }
+
+            if (ACTIVE_REF_POST_ID && refTitle) {
+                if (refTitleEl) refTitleEl.innerText = decodeURIComponent(refTitle);
+                if (refBanner) refBanner.style.display = 'block';
+            } else {
+                if (refBanner) refBanner.style.display = 'none';
+            }
+
+            // Jos organisaatiota ei ole URL-parametrissa, näytetään pudotusvalikko
+            if (!CURRENT_ORG_ID) {
+                if (orgSelectCont) orgSelectCont.style.display = 'block';
+                populateOrgSelect(orgSelect, opts.target_org_id);
+            } else {
+                if (orgSelectCont) orgSelectCont.style.display = 'none';
+            }
 
             document.getElementById('suggestion-modal').classList.add('open');
             setTimeout(() => { if (titleInput) titleInput.focus(); }, 100);
@@ -1500,8 +1778,20 @@
             const err = document.getElementById('suggest-item-error');
             const btn = document.getElementById('btn-submit-suggest');
 
+            const targetOrgId = CURRENT_ORG_ID || document.getElementById('suggest-item-org-select')?.value;
+
+            if (!targetOrgId) {
+                if (err) { err.innerText = 'Valitse kohdejärjestö.'; err.style.display = 'block'; }
+                return;
+            }
+
             if (title.length < 3 || title.length > 255) {
-                if (err) { err.innerText = 'Kirjoita vähintään 3 merkkiä pitkä otsikko.'; err.style.display = 'block'; }
+                if (err) { err.innerText = 'Kirjoita vähintään 3 ja enintään 255 merkkiä pitkä otsikko.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (!contact || contact.length < 5 || contact.length > 150) {
+                if (err) { err.innerText = 'Anna toimiva yhteystieto (sähköposti tai puhelinnumero, 5–150 merkkiä).'; err.style.display = 'block'; }
                 return;
             }
 
@@ -1516,11 +1806,12 @@
 
             try {
                 const { data, error } = await sb.rpc('submit_board_suggestion', {
-                    p_organization_id: CURRENT_ORG_ID,
+                    p_organization_id: targetOrgId,
                     p_title: title,
                     p_description: desc || null,
                     p_author_name: name || null,
-                    p_author_contact: contact || null
+                    p_author_contact: contact,
+                    p_ref_post_id: ACTIVE_REF_POST_ID || null
                 });
 
                 if (error || (data && !data.success)) {
@@ -1529,8 +1820,8 @@
                     if (btn) { btn.disabled = false; btn.innerText = '🚀 Lähetä ehdotus hallitukselle'; }
                 } else {
                     closeSuggestionModal();
-                    alert(data.message || 'Kiitos! Ehdotuksesi on vastaanotettu ja toimitettu hallituksen käsittelyjonoon.');
-                    if (currentFilter === 'suggestions') {
+                    alert(data?.message || 'Kiitos! Ehdotuksesi on vastaanotettu ja toimitettu hallituksen käsittelyjonoon.');
+                    if (CURRENT_ORG_ID && currentFilter === 'suggestions') {
                         await renderSuggestionsBoard();
                     }
                 }
@@ -2527,15 +2818,245 @@ ${votes.total > 0 ? `
                 .replace(/'/g, '&#039;');
         }
 
+        // =========================================================================
+        // GATEWAY-NÄKYMÄ (SISÄÄNTULO ILMAN ORG-PARAMETRIA)
+        // =========================================================================
+        async function showGatewayView() {
+            document.getElementById('header-org-name').innerText = 'LaukaaInfo Toimintataulut';
+            const orgMetaP = document.querySelector('.org-meta p');
+            if (orgMetaP) orgMetaP.innerText = 'Ideoista päätöksiin – valitse roolisi';
+
+            const btnSuggest = document.getElementById('btn-suggest-item');
+            const btnCreate = document.getElementById('btn-create-item');
+            const btnAdmin = document.getElementById('btn-admin-toggle');
+            const userBadge = document.getElementById('user-role-badge');
+            const govBadge = document.getElementById('gov-role-badge');
+            const banner = document.querySelector('.workspace-banner');
+            const filterTabs = document.querySelector('.filter-tabs');
+
+            if (btnSuggest) btnSuggest.style.display = 'none';
+            if (btnCreate) btnCreate.style.display = 'none';
+            if (btnAdmin) btnAdmin.style.display = 'none';
+            if (govBadge) govBadge.style.display = 'none';
+            if (banner) banner.style.display = 'none';
+            if (filterTabs) filterTabs.style.display = 'none';
+
+            const container = document.getElementById('items-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="gateway-container">
+                    <div class="gateway-hero">
+                        <div class="gateway-badge">✨ LaukaaInfon Toimintataulut</div>
+                        <h1 class="gateway-title">Ideoista päätöksiin ja käytännön tekoihin</h1>
+                        <p class="gateway-subtitle">
+                            Toimintataulu kokoaa yhteen Laukaan paikallisyhdistysten ja yhteisöjen ideat, päätökset ja vapaaehtoistehtävät ilman viestikaaosta.
+                        </p>
+                    </div>
+
+                    <div class="gateway-paths-grid">
+                        <!-- Polku 1: Ehdota ideaa -->
+                        <div class="gateway-card gateway-card-suggest">
+                            <div class="gateway-card-icon">💡</div>
+                            <h3>Minulla on idea tai aloite</h3>
+                            <p>Haluatko ehdottaa uutta toimintaa, talkoita tai kehityskohdetta paikallisyhdistykselle? Et tarvitse salasanaa tai koodia.</p>
+                            <button class="gateway-btn gateway-btn-amber" onclick="startSuggestFlow()">
+                                <span>Valitse yhdistys ja ehdota</span> <span>→</span>
+                            </button>
+                        </div>
+
+                        <!-- Polku 2: Jäsen / Vapaaehtoinen -->
+                        <div class="gateway-card gateway-card-member">
+                            <div class="gateway-card-icon">🤝</div>
+                            <h3>Olen jäsen tai talkoolainen</h3>
+                            <p>Selaa yhdistyksen käynnissä olevia asioita, äänestä tai ilmoittaudu mukaan tapahtumien talkootehtäviin.</p>
+                            <button class="gateway-btn gateway-btn-blue" onclick="scrollToGatewayOrgs()">
+                                <span>Selaa yhdistysten tauluja</span> <span>→</span>
+                            </button>
+                        </div>
+
+                        <!-- Polku 3: Hallitus -->
+                        <div class="gateway-card gateway-card-board">
+                            <div class="gateway-card-icon">🛡️</div>
+                            <h3>Olen hallituksen jäsen</h3>
+                            <p>Käsittele saapuneet ehdotukset, tee päätöksiä, hallinnoi tehtäviä ja julkaise asioita suoraan Seinälle.</p>
+                            <button class="gateway-btn gateway-btn-purple" onclick="startBoardFlow()">
+                                <span>Kirjaudu hallitukselle</span> <span>→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Yhdistykset & Pikahaku -->
+                    <div class="gateway-orgs-section" id="gateway-orgs-section">
+                        <div class="gateway-orgs-header">
+                            <div>
+                                <h2 style="font-family:'Outfit',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;margin:0;">Laukaan yhteisöt ja toimintataulut</h2>
+                                <p style="font-size:0.85rem;color:var(--text-muted);margin:0.25rem 0 0 0;">Valitse yhdistys siirtyäksesi sen omalle toimintataululle</p>
+                            </div>
+                            <div class="gateway-search-box">
+                                <input type="text" id="gateway-search-input" placeholder="🔍 Etsi yhdistystä..." oninput="filterGatewayOrgs(this.value)" />
+                            </div>
+                        </div>
+
+                        <div class="gateway-orgs-grid" id="gateway-orgs-list">
+                            <div class="loading-wrap" style="grid-column: 1 / -1;"><div class="loading-spinner"></div><p>Ladataan yhdistyksiä...</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            await loadGatewayOrganizations();
+        }
+
+        async function loadGatewayOrganizations() {
+            const listEl = document.getElementById('gateway-orgs-list');
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+
+            if (!sb) {
+                if (listEl) listEl.innerHTML = '<p style="color:#fda4af;padding:1rem;">Tietokantayhteys puuttuu.</p>';
+                return;
+            }
+
+            try {
+                const { data, error } = await sb.rpc('get_public_organizations');
+                if (error) {
+                    console.error('get_public_organizations failed:', error);
+                    if (listEl) listEl.innerHTML = `<p style="color:#fda4af;padding:1rem;">Yhdistysten lataus epäonnistui: ${escapeHtml(error.message)}</p>`;
+                    return;
+                }
+
+                PUBLIC_ORGANIZATIONS = Array.isArray(data) ? data : [];
+                renderGatewayOrgCards(PUBLIC_ORGANIZATIONS);
+            } catch (err) {
+                console.error('loadGatewayOrganizations error:', err);
+                if (listEl) listEl.innerHTML = '<p style="color:#fda4af;padding:1rem;">Virhe haettaessa tietoja.</p>';
+            }
+        }
+
+        function renderGatewayOrgCards(orgs) {
+            const listEl = document.getElementById('gateway-orgs-list');
+            if (!listEl) return;
+
+            if (!orgs || orgs.length === 0) {
+                listEl.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <p>Ei löytynyt yhtään toimintataulua käyttävää yhdistystä hakuehdoilla.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = orgs.map(o => {
+                const typeLabel = o.type === 'municipality' ? 'Kunta' : (o.type === 'company' ? 'Yritys' : 'Yhdistys');
+                const acceptsSug = !!o.accept_public_suggestions;
+
+                return `
+                    <article class="gateway-org-card">
+                        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;">
+                            <h3 class="gateway-org-title">${escapeHtml(o.name)}</h3>
+                            <span class="gateway-org-badge" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);">${typeLabel}</span>
+                        </div>
+                        <p style="font-size:0.83rem;color:var(--text-muted);line-height:1.45;margin:0;flex:1;">
+                            ${escapeHtml(o.description || 'Aktiivinen toimija Laukaassa.')}
+                        </p>
+                        <div style="font-size:0.75rem;display:flex;align-items:center;gap:0.4rem;color:${acceptsSug ? '#fbbf24' : '#64748b'};">
+                            <span>${acceptsSug ? '💡' : '🔒'}</span>
+                            <span>${acceptsSug ? 'Ottaa vastaan julkisia ideoita' : 'Ehdotukset vain jäsenille'}</span>
+                        </div>
+                        <div class="gateway-org-actions">
+                            <a href="toiminta.html?org=${encodeURIComponent(o.id)}" class="gateway-org-link-main">
+                                Avaa taulu →
+                            </a>
+                            ${acceptsSug ? `
+                                <a href="toiminta.html?org=${encodeURIComponent(o.id)}&mode=suggest" class="gateway-org-link-suggest" title="Ehdota suoraan tälle yhdistykselle">
+                                    💡 Ehdota
+                                </a>
+                            ` : ''}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function filterGatewayOrgs(query) {
+            const q = (query || '').toLowerCase().trim();
+            if (!q) {
+                renderGatewayOrgCards(PUBLIC_ORGANIZATIONS);
+                return;
+            }
+            const filtered = PUBLIC_ORGANIZATIONS.filter(o => 
+                (o.name && o.name.toLowerCase().includes(q)) ||
+                (o.description && o.description.toLowerCase().includes(q)) ||
+                (o.id && o.id.toLowerCase().includes(q))
+            );
+            renderGatewayOrgCards(filtered);
+        }
+
+        function scrollToGatewayOrgs() {
+            const sec = document.getElementById('gateway-orgs-section');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function startSuggestFlow() {
+            if (PUBLIC_ORGANIZATIONS.length === 0) {
+                await loadGatewayOrganizations();
+            }
+            openSuggestionModal();
+        }
+
+        function startBoardFlow() {
+            scrollToGatewayOrgs();
+            const input = document.getElementById('gateway-search-input');
+            if (input) {
+                input.placeholder = '🔍 Valitse hallinnoitava yhdistys...';
+                input.focus();
+            }
+        }
+
+        function populateOrgSelect(selectEl, selectedId) {
+            if (!selectEl) return;
+            const openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions);
+            if (openOrgs.length === 0) {
+                selectEl.innerHTML = '<option value="">Ei ehdotuksia vastaanottavia yhdistyksiä</option>';
+                return;
+            }
+            selectEl.innerHTML = openOrgs.map(o => `
+                <option value="${escapeHtml(o.id)}" ${o.id === selectedId ? 'selected' : ''}>
+                    ${escapeHtml(o.name)}
+                </option>
+            `).join('');
+        }
+
+        function handleUrlModes() {
+            if (!CURRENT_ORG_ID) return;
+
+            if (INITIAL_MODE === 'suggest') {
+                openSuggestionModal({
+                    ref_post_id: REF_POST_ID,
+                    ref_title: REF_POST_TITLE
+                });
+            } else if (INITIAL_MODE === 'board' || INITIAL_MODE === 'member') {
+                if (!ROLE_SESSION) {
+                    openRoleAuthModal();
+                }
+            }
+        }
+
         // Alustus
         document.addEventListener('DOMContentLoaded', () => {
             updateUserBadge();
-            const btn = document.getElementById('btn-admin-toggle');
-            if (IS_ADMIN) {
-                btn.classList.add('active');
-                btn.innerText = '🛡️ Ylläpito (Päällä)';
+
+            if (!CURRENT_ORG_ID) {
+                showGatewayView();
+            } else {
+                const btn = document.getElementById('btn-admin-toggle');
+                if (IS_ADMIN && btn) {
+                    btn.classList.add('active');
+                    btn.innerText = '🛡️ Ylläpito (Päällä)';
+                }
+                fetchBoardData();
+                handleUrlModes();
             }
-            fetchBoardData();
 
             // Sulje modaalit taustaklikkauksesta tai ESC-näppäimellä
             window.addEventListener('click', (e) => {
