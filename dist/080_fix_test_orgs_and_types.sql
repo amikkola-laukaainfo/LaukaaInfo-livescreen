@@ -22,7 +22,7 @@ SET name = 'Laukaan Testaajat ry',
 
 -- 2. Korjataan Laukaan Yrittäjät ry omalle nimelleen
 UPDATE public.organizations
-SET name = 'Laukaan Yrittäjät ry',
+SET name = 'Laukaan Yritykset ry',
     type = 'association',
     board_enabled = TRUE,
     accept_public_suggestions = TRUE,

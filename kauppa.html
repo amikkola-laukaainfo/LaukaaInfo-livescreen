@@ -773,6 +773,11 @@
                     <strong>Mediazoo</strong>
                     <span>Drone, Video & Kotisivut</span>
                 </a>
+                <a href="javascript:void(0)" onclick="openPrivacyInfoModal()" class="shortcut-btn" style="border-color: #3b82f6; background: #eff6ff;">
+                    <span class="icon">🛡️</span>
+                    <strong>Tietosuoja & GDPR</strong>
+                    <span>Anonyymi Toimintataulu</span>
+                </a>
             </div>
         </section>
 
@@ -860,6 +865,7 @@
                     <ul>
                         <li><span class="check-icon">✓</span> <span><strong>Toimintataulu (toiminta.html):</strong> Hallituksen asiat, äänestykset, päätökset ja arkisto</span></li>
                         <li><span class="check-icon">✓</span> <span><strong>Valtuuskoodit ja roolit:</strong> Henkilökohtaiset koodit puheenjohtajalle, sihteerille ja hallitukselle</span></li>
+                        <li><span class="check-icon">🛡️</span> <span><strong>Tietosuoja &amp; Anonymiteetti:</strong> Ei pakollista henkilörekisteriä. <a href="javascript:void(0)" onclick="openPrivacyInfoModal()" style="color: #2563eb; text-decoration: underline; font-weight: 700;">Lue tietosuojakoonti →</a></span></li>
                         <li><span class="check-icon">✓</span> <span><strong>Kuntalaisten ideajono:</strong> Julkinen ehdotuskanava ilman kirjautumista</span></li>
                         <li><span class="check-icon">✓</span> <span><strong>Talkoo- ja vapaaehtoistehtävät:</strong> Tehtävien jako ja tekijöiden ilmoittautuminen</span></li>
                         <li><span class="check-icon">✓</span> <span><strong>PDF-päätösote sihteerille:</strong> Virallinen ote pöytäkirjan liitteeksi yhdellä klikkauksella</span></li>
@@ -884,9 +890,14 @@
             <div class="section-header" style="text-align: center;">
                 <span class="tag" style="background: #2563eb; color: #fff;">UUTTA YHDISTYKSILLE &amp; SEUROILLE</span>
                 <h2 style="color: #1e3a8a; font-size: 2.1rem;">💼 Yhdistyksen Toimintataulu</h2>
-                <p style="color: #475569; font-size: 1.05rem; max-width: 750px; margin: 0 auto;">
+                <p style="color: #475569; font-size: 1.05rem; max-width: 750px; margin: 0 auto 1.25rem;">
                     Hallituksen asiat, äänestykset, talkootehtävät ja kuntalaisten ehdotukset kootusti yhdessä turvallisessa työkalussa — ilman hajanaisia sähköposteja tai WhatsApp-kaaosta.
                 </p>
+                <div>
+                    <button type="button" onclick="openPrivacyInfoModal()" style="background: #ffffff; border: 1.5px solid #3b82f6; color: #1e40af; padding: 0.5rem 1.2rem; border-radius: 20px; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 8px rgba(37,99,235,0.1); transition: all 0.2s;" onmouseover="this.style.background='#eff6ff'; this.style.borderColor='#1d4ed8';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#3b82f6';">
+                        <span>🛡️ Miten tietosuoja ja anonymiteetti toimivat?</span> <strong style="text-decoration: underline;">Lue koonti →</strong>
+                    </button>
+                </div>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
@@ -1355,6 +1366,91 @@
         </div>
     </div>
 
+    <!-- Yhdistysten Tietosuoja & Anonymiteetti Modal -->
+    <div id="privacy-info-modal" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem;">
+        <div style="background: white; border-radius: 22px; max-width: 620px; width: 100%; padding: 2.25rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); position: relative; max-height: 90vh; overflow-y: auto; border: 1px solid #e2e8f0;">
+            
+            <!-- Sulje-nappi -->
+            <button id="close-privacy-modal" type="button" onclick="closePrivacyInfoModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0';" onmouseout="this.style.background='#f1f5f9';" aria-label="Sulje">&times;</button>
+            
+            <!-- Otsikkoalue -->
+            <div style="margin-bottom: 1.5rem; text-align: center;">
+                <span style="display: inline-block; background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.6rem;">
+                    🛡️ YHDISTYKSEN TOIMINTATAULU · TIETOSUOJA
+                </span>
+                <h2 style="margin: 0; color: #0f172a; font-family: 'Outfit', sans-serif; font-size: 1.65rem; line-height: 1.25;">
+                    Anonyymi hallitus ja GDPR-kevyt toimintamalli
+                </h2>
+                <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0; line-height: 1.5;">
+                    Toimintataulu on suunniteltu <em>Privacy by Design</em> -periaatteella. Yhdistys voi hoitaa asiat, äänestykset ja talkoot turvallisesti ilman, että LaukaaInfolle luovutetaan jäsenten henkilötietoja.
+                </p>
+            </div>
+            
+            <!-- Sisältökortit / Periaatteet -->
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
+                
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem; display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <div style="font-size: 1.6rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem;">👤</div>
+                    <div>
+                        <strong style="color: #1e293b; font-size: 0.98rem; display: block; margin-bottom: 0.2rem;">1. Nimimerkit ja roolit – Ei pakollisia henkilötietoja</strong>
+                        <p style="color: #475569; font-size: 0.88rem; line-height: 1.45; margin: 0;">
+                            Jäseniä ei tarvitse kirjata virallisilla nimillä. Järjestelmässä voidaan käyttää nimimerkkejä tai tehtävänimikkeitä (esim. <em>”Puheenjohtaja”</em>, <em>”Vastaava 1”</em>, <em>”Talkoolainen A”</em>). Sähköposti ja puhelin ovat täysin vapaaehtoisia.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem; display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <div style="font-size: 1.6rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem;">🔐</div>
+                    <div>
+                        <strong style="color: #1e293b; font-size: 0.98rem; display: block; margin-bottom: 0.2rem;">2. SHA-256 kryptografiset valtuuskoodit</strong>
+                        <p style="color: #475569; font-size: 0.88rem; line-height: 1.45; margin: 0;">
+                            Kirjautumiskoodit suojataan yksisuuntaisella tiivisteellä. Selväkielisiä valtuuskoodeja ei koskaan tallenneta kantaan, joten edes palvelimen ylläpitäjä tai tietokanta-admin ei voi niitä nähdä tai urkkia.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem; display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <div style="font-size: 1.6rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem;">📋</div>
+                    <div>
+                        <strong style="color: #1e293b; font-size: 0.98rem; display: block; margin-bottom: 0.2rem;">3. Yhdistyksen oma sisäinen vastuurajapinta (Offline)</strong>
+                        <p style="color: #475569; font-size: 0.88rem; line-height: 1.45; margin: 0;">
+                            Tieto siitä, kuka fyysinen henkilö käyttää mitäkin koodia tai roolia, säilyy ainoastaan yhdistyksen omassa hallussa (esim. puheenjohtajan omassa offline-listassa). LaukaaInfolle ei synny lainmukaista keskitettyä henkilörekisteriä.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem; display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <div style="font-size: 1.6rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem;">💡</div>
+                    <div>
+                        <strong style="color: #1e293b; font-size: 0.98rem; display: block; margin-bottom: 0.2rem;">4. Avoin ideajono ilman rekisteröitymispakkoa</strong>
+                        <p style="color: #475569; font-size: 0.88rem; line-height: 1.45; margin: 0;">
+                            Kuntalaiset voivat jättää yhdistykselle ehdotuksia matalalla kynnyksellä ilman rekisteröitymistä tai tilin luomista. Kanavassa on sisäänrakennettu 24 tunnin flood- ja häirintäsuojaus.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Koontinosto -->
+            <div style="background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.5rem;">
+                <p style="margin: 0; font-size: 0.88rem; color: #1e40af; line-height: 1.45;">
+                    ✨ <strong>Yhdistykselle tämä tarkoittaa huojennusta:</strong> Ei huolta raskaan GDPR-rekisteriselosteen laatimisesta tai jäsentietovuodoista, mutta täysi hyöty digitaalisesta päätöksenteosta ja talkoiden hallinnasta.
+                </p>
+            </div>
+            
+            <!-- Painikkeet -->
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap;">
+                <button type="button" onclick="closePrivacyInfoModal()" style="padding: 0.75rem 1.3rem; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 10px; font-weight: 600; font-size: 0.92rem; cursor: pointer;">
+                    Sulje
+                </button>
+                <a href="toiminta.html?org=laukaan-yrittajat" target="_blank" style="padding: 0.75rem 1.3rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 0.92rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Tutustu Toimintatauluun ↗
+                </a>
+            </div>
+
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -1393,12 +1489,34 @@
             }
         }
 
+        function openPrivacyInfoModal() {
+            const modal = document.getElementById('privacy-info-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePrivacyInfoModal() {
+            const modal = document.getElementById('privacy-info-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const closeBtn = document.getElementById('close-inquiry-modal');
             const modal = document.getElementById('inquiry-modal');
+            const privacyModal = document.getElementById('privacy-info-modal');
+            const closePrivacyBtn = document.getElementById('close-privacy-modal');
             const form = document.getElementById('inquiry-form');
             
-            if (window.location.hash === '#toiminta' || window.location.hash === '#toimintataulu' || window.location.search.includes('toiminta') || window.location.search.includes('kokeilu')) {
+            if (window.location.hash === '#tietosuoja' || window.location.hash === '#anonymiteetti' || window.location.search.includes('tietosuoja')) {
+                setTimeout(function() {
+                    openPrivacyInfoModal();
+                }, 200);
+            } else if (window.location.hash === '#toiminta' || window.location.hash === '#toimintataulu' || window.location.search.includes('toiminta') || window.location.search.includes('kokeilu')) {
                 setTimeout(function() {
                     openInquiryModal('Yhdistyksen Toimintataulu - Kokeilu 1 kk (29 €)');
                 }, 200);
@@ -1414,6 +1532,20 @@
                     if (e.target === modal) closeInquiryModal();
                 });
             }
+
+            if (closePrivacyBtn) closePrivacyBtn.addEventListener('click', closePrivacyInfoModal);
+            if (privacyModal) {
+                privacyModal.addEventListener('click', function(e) {
+                    if (e.target === privacyModal) closePrivacyInfoModal();
+                });
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeInquiryModal();
+                    closePrivacyInfoModal();
+                }
+            });
             
             if (form) {
                 form.addEventListener('submit', async function(e) {
