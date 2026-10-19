@@ -1612,13 +1612,35 @@
                     p_organization_id: CURRENT_ORG_ID
                 });
 
-                if (error) {
-                    console.error('get_board_data RPC error:', error);
+                if (error || (data && !data.success)) {
+                    const errMsg = (data && data.error) || (error && error.message) || 'Tietojen lataus epäonnistui.';
+                    console.warn('get_board_data notice:', errMsg);
+
+                    // Piilotetaan yhdistyskohtaiset toimintonapit jos kyseessä on yritys tai taulu ei ole käytössä
+                    const btnSuggest = document.getElementById('btn-suggest-item');
+                    const btnCreate = document.getElementById('btn-create-item');
+                    const filterTabs = document.querySelector('.filter-tabs');
+                    const workspaceBanner = document.querySelector('.workspace-banner');
+                    if (btnSuggest) btnSuggest.style.display = 'none';
+                    if (btnCreate) btnCreate.style.display = 'none';
+                    if (filterTabs) filterTabs.style.display = 'none';
+                    if (workspaceBanner) workspaceBanner.style.display = 'none';
+
                     container.innerHTML = `
-                        <div style="text-align:center;padding:2.5rem;background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:16px;">
-                            <p style="color:#fda4af;font-weight:700;">Tietojen lataus epäonnistui.</p>
-                            <p style="color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem;">${escapeHtml(error.message)}</p>
-                            <button class="btn-signup" style="margin-top:1rem;" onclick="fetchBoardData()">Yritä uudelleen</button>
+                        <div style="max-width: 620px; margin: 3rem auto; text-align: center; padding: 2.5rem 2rem; background: rgba(30,41,59,0.85); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
+                            <div style="font-size: 2.8rem; margin-bottom: 0.8rem;">🏢</div>
+                            <h2 style="font-family:'Outfit',sans-serif; color: #fff; font-size: 1.4rem; font-weight: 800; margin: 0 0 0.5rem 0;">Toimintataulu on rajattu vain yhdistyksille</h2>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0 auto 1.6rem auto; max-width: 500px;">
+                                ${escapeHtml(errMsg)}
+                            </p>
+                            <div style="display:flex; justify-content:center; gap: 0.75rem; flex-wrap: wrap;">
+                                <a href="seina.html?org=${encodeURIComponent(CURRENT_ORG_ID)}" class="gateway-btn gateway-btn-purple" style="text-decoration:none;">
+                                    <span>🧱 Siirry organisaation Seinälle</span> <span>→</span>
+                                </a>
+                                <a href="toiminta.html" class="gateway-btn gateway-btn-blue" style="text-decoration:none;">
+                                    <span>📋 Selaa yhdistysten toimintatauluja</span> <span>→</span>
+                                </a>
+                            </div>
                         </div>
                     `;
                     return;
@@ -3046,7 +3068,10 @@ ${votes.total > 0 ? `
             const listEl = document.getElementById('gateway-orgs-list');
             if (!listEl) return;
 
-            if (!orgs || orgs.length === 0) {
+            // Rajaus: näytetään Toimintataulu-sisääntulossa ainoastaan yhdistykset
+            const assocOrgs = (orgs || []).filter(o => o.type === 'association' || (!o.type && !o.id?.includes('yritys') && !o.id?.includes('mediazoo')));
+
+            if (!assocOrgs || assocOrgs.length === 0) {
                 listEl.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
                         <p>Ei löytynyt yhtään toimintataulua käyttävää yhdistystä hakuehdoilla.</p>
@@ -3055,8 +3080,8 @@ ${votes.total > 0 ? `
                 return;
             }
 
-            listEl.innerHTML = orgs.map(o => {
-                const typeLabel = o.type === 'municipality' ? 'Kunta' : (o.type === 'company' ? 'Yritys' : 'Yhdistys');
+            listEl.innerHTML = assocOrgs.map(o => {
+                const typeLabel = 'Yhdistys';
                 const acceptsSug = !!o.accept_public_suggestions;
 
                 return `
@@ -3126,7 +3151,7 @@ ${votes.total > 0 ? `
 
         function populateOrgSelect(selectEl, selectedId) {
             if (!selectEl) return;
-            let openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions);
+            let openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions && (o.type === 'association' || !o.type));
             if (openOrgs.length === 0) {
                 openOrgs = [
                     { id: 'laukaan-testaajat', name: 'Laukaan Testaajat ry' },

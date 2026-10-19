@@ -740,7 +740,8 @@
         // Share & Copy Bar for Single Post: suora linkki julkaisuun leikepöydälle
         const postUrl = `seina.html?post=${encodeURIComponent(post.id)}`;
         const fullPostUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + postUrl;
-        const suggestUrl = orgId ? `toiminta.html?org=${encodeURIComponent(orgId)}&mode=suggest&ref_post=${encodeURIComponent(post.id)}&ref_title=${encodeURIComponent(post.title || '')}` : null;
+        const isPostAssoc = isOrgAssociation(orgId, orgName);
+        const suggestUrl = (orgId && isPostAssoc) ? `toiminta.html?org=${encodeURIComponent(orgId)}&mode=suggest&ref_post=${encodeURIComponent(post.id)}&ref_title=${encodeURIComponent(post.title || '')}` : null;
 
         document.getElementById('singlePostShareBar').innerHTML = `
           <div class="flex flex-wrap items-center gap-2">
@@ -761,7 +762,7 @@
 
         document.getElementById('singlePostOrgSnippet').innerHTML = `
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-800 font-black flex items-center justify-center text-lg shrink-0">🏢</div>
+            <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-800 font-black flex items-center justify-center text-lg shrink-0">${isPostAssoc ? '🤝' : '🏢'}</div>
             <div>
               <div class="font-bold text-slate-900 text-xs">${escapeHtml(orgName)}</div>
               <div class="text-[11px] text-slate-500">Katso organisaation muut ajankohtaiset julkaisut</div>
@@ -866,7 +867,7 @@
           copyBtn.onclick = () => window.copyToClipboard(orgWallUrl);
         }
 
-        const isAssoc = orgName.toLowerCase().endsWith('ry') || (orgData && orgData.type === 'association');
+        const isAssoc = isOrgAssociation(resolvedOrgId || targetOrgParam, orgName) || (orgData && orgData.type === 'association' && !orgName.toLowerCase().includes('mediazoo'));
         document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
         
         // Fetch and display organization logo
@@ -950,6 +951,40 @@
         'company-101': 'Peurunka'
       };
 
+      // Cache for organization types ('association' vs 'company')
+      let orgTypesCache = {
+        'company-313': 'association',
+        'company-2': 'company',
+        'mediazoo': 'company',
+        'laukaan-yrittajat': 'association',
+        'laukaan-testaajat': 'association'
+      };
+
+      function isOrgAssociation(orgId, orgName) {
+        if (!orgId && !orgName) return false;
+        const nameLower = (orgName || '').toLowerCase().trim();
+        const idLower = (orgId || '').toLowerCase().trim();
+        
+        // Mediazoo ja sen tunnisteet ovat aina yritys (ei yhdistys)
+        if (idLower === 'company-2' || idLower === 'mediazoo' || nameLower.includes('mediazoo')) {
+          return false;
+        }
+
+        if (orgTypesCache[orgId] === 'company' || orgTypesCache[idLower] === 'company') {
+          return false;
+        }
+
+        if (orgTypesCache[orgId] === 'association' || orgTypesCache[idLower] === 'association') {
+          return true;
+        }
+
+        if (nameLower.endsWith('ry') || nameLower.endsWith('ry.') || nameLower.includes('yhdistys') || nameLower.includes('seura')) {
+          return true;
+        }
+
+        return false;
+      }
+
       function getOrgNameSync(orgId, fallbackName) {
         if (fallbackName && fallbackName !== 'Organisaatio' && fallbackName !== 'undefined') return fallbackName;
         if (orgId && orgNamesCache[orgId]) return orgNamesCache[orgId];
@@ -1014,11 +1049,19 @@
               // Bulk fetch organization names for all posts
               if (rawOrgIds.length > 0) {
                 try {
-                  const { data: orgsData } = await supabaseClient.from('organizations').select('id, name').in('id', rawOrgIds);
-                  if (orgsData) orgsData.forEach(o => { if (o.id && o.name) orgNamesCache[o.id] = o.name; });
+                  const { data: orgsData } = await supabaseClient.from('organizations').select('id, name, type').in('id', rawOrgIds);
+                  if (orgsData) orgsData.forEach(o => { 
+                    if (o.id && o.name) orgNamesCache[o.id] = o.name;
+                    if (o.id && o.type) orgTypesCache[o.id] = o.type;
+                  });
 
                   const { data: compsData } = await supabaseClient.from('companies').select('id, name, nimi').in('id', rawOrgIds);
-                  if (compsData) compsData.forEach(c => { if (c.id) orgNamesCache[c.id] = c.name || c.nimi || orgNamesCache[c.id]; });
+                  if (compsData) compsData.forEach(c => { 
+                    if (c.id) {
+                      orgNamesCache[c.id] = c.name || c.nimi || orgNamesCache[c.id];
+                      orgTypesCache[c.id] = 'company';
+                    }
+                  });
                 } catch (orgErr) {
                   console.warn('Bulk org name fetch notice:', orgErr);
                 }
@@ -1461,7 +1504,7 @@
                   ${orgUrl ? `<a href="${orgUrl}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>` : '<span class="text-slate-400 font-medium">LaukaaInfo Stream</span>'}
                 </div>
                 <div class="flex items-center gap-1.5">
-                  ${cardOrgId ? `
+                  ${(cardOrgId && isOrgAssociation(cardOrgId, p.org_name)) ? `
                     <a href="toiminta.html?org=${encodeURIComponent(cardOrgId)}&mode=suggest&ref_post=${encodeURIComponent(p.id)}&ref_title=${encodeURIComponent(p.title || '')}" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg font-bold transition-all flex items-center gap-1 no-underline" title="Ehdota tätä asiaa yhdistyksen toimintataululle">
                       <span>💡</span> <span class="hidden sm:inline">Ehdota</span>
                     </a>
