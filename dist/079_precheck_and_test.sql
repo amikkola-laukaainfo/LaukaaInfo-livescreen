@@ -191,17 +191,18 @@ BEGIN
     RAISE NOTICE 'TESTI 8 OK: board_enabled = FALSE esti ehdotuksen oikein.';
 
     -- TESTI 9: updated_at -triggeri päivittää aikaleiman automaattisesti
-    SELECT created_at, updated_at INTO v_created_ts, v_updated_ts
-    FROM public.board_suggestions WHERE id = v_sugg_id;
-    
-    PERFORM pg_sleep(0.05);
-    UPDATE public.board_suggestions SET title = 'Muokattu otsikko' WHERE id = v_sugg_id;
+    -- PostgreSQL:ssä now() pysyy vakiona koko transaktion ajan (transaction_timestamp).
+    -- Testataan, että BEFORE UPDATE -triggeri ylikirjoittaa annetun vanhan aikaleiman nykyhetkellä (now()).
+    UPDATE public.board_suggestions 
+    SET title = 'Muokattu otsikko',
+        updated_at = '2000-01-01 00:00:00+00'
+    WHERE id = v_sugg_id;
     
     SELECT updated_at INTO v_updated_ts FROM public.board_suggestions WHERE id = v_sugg_id;
-    IF v_updated_ts <= v_created_ts THEN
-        RAISE EXCEPTION 'TESTI 9 VIRHE: updated_at triggeri ei päivittänyt aikaleimaa!';
+    IF v_updated_ts = '2000-01-01 00:00:00+00'::TIMESTAMPTZ THEN
+        RAISE EXCEPTION 'TESTI 9 VIRHE: updated_at triggeri ei lauennut eikä asettanut now()!';
     END IF;
-    RAISE NOTICE 'TESTI 9 OK: trg_board_suggestions_updated_at toimii automaattisesti.';
+    RAISE NOTICE 'TESTI 9 OK: trg_board_suggestions_updated_at ylikirjoittaa aikaleiman automaattisesti (nykyhetki: %).', v_updated_ts;
 
     -- TESTI 10: update_organization_board_settings p_update_guidelines -logiikka ja validointi
     v_res := public.update_organization_board_settings(

@@ -871,6 +871,27 @@
         .gateway-org-link-suggest:hover {
             background: rgba(245, 158, 11, 0.25);
         }
+        .gateway-org-link-board {
+            padding: 0.55rem 0.8rem;
+            background: rgba(99, 102, 241, 0.14);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            color: #a5b4fc;
+            font-weight: 700;
+            font-size: 0.82rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            font-family: inherit;
+        }
+        .gateway-org-link-board:hover {
+            background: rgba(99, 102, 241, 0.28);
+            color: #fff;
+            border-color: rgba(129, 140, 248, 0.5);
+        }
 
         @media (max-width: 860px) {
             .gateway-paths-grid { grid-template-columns: 1fr; }
@@ -998,19 +1019,27 @@
 
     <!-- HENKILÖKOHTAISEN VALTUUSKOODIN TODENNUSMODAALI -->
     <div class="modal-overlay" id="role-auth-modal">
-        <div class="modal-card" style="max-width: 460px;">
+        <div class="modal-card" style="max-width: 480px;">
             <button class="modal-close" onclick="closeRoleAuthModal()">&times;</button>
             <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
-                <div style="font-size:1.6rem;background:rgba(37,99,235,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🔐</div>
+                <div style="font-size:1.6rem;background:rgba(99,102,241,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🔐</div>
                 <div>
-                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Hallituksen valtuutus</h3>
-                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Seinälle julkaiseminen vaatii henkilökohtaisen roolin</p>
+                    <h3 id="role-auth-title" style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Hallituksen valtuutus</h3>
+                    <p id="role-auth-subtitle" style="font-size:0.78rem;color:var(--text-muted);margin:0;">Kirjaudu yhdistyksen hallituksen työtilaan</p>
                 </div>
             </div>
             
-            <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
-                Toimintataulun asian julkaiseminen LaukaaInfon Seinälle on hallintotoiminto. Syötä henkilökohtainen valtuuskoodisi (puheenjohtaja, hallituksen jäsen tai sihteeri).
+            <p id="role-auth-desc" style="font-size:0.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
+                Hallinnointi ja Seinälle julkaiseminen vaativat henkilökohtaisen valtuutuksen. Syötä valtuuskoodisi (puheenjohtaja, hallituksen jäsen tai sihteeri).
             </p>
+
+            <!-- Organisaation valinta (näkyy Gateway-tilassa) -->
+            <div id="role-auth-org-cont" style="display:none;margin-bottom:1.1rem;">
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">Valitse hallinnoitava yhdistys</label>
+                <select id="role-auth-org-select" 
+                        style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.85);color:#fff;font-size:0.9rem;outline:none;">
+                </select>
+            </div>
 
             <div style="margin-bottom:1.25rem;">
                 <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">Henkilökohtainen valtuuskoodi</label>
@@ -1022,7 +1051,7 @@
 
             <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
                 <button class="btn-toggle-admin" onclick="closeRoleAuthModal()">Peruuta</button>
-                <button class="btn-signup" id="btn-submit-role-auth" style="background:#2563eb;" onclick="submitRoleAuth()">Todenna ja jatka →</button>
+                <button class="btn-signup" id="btn-submit-role-auth" style="background:#6366f1;" onclick="submitRoleAuth()">Kirjaudu hallitukselle →</button>
             </div>
         </div>
     </div>
@@ -1267,17 +1296,82 @@
             updateRoleBadge();
         }
 
-        function openRoleAuthModal(callback) {
+        async function openRoleAuthModal(opts) {
+            let callback = null;
+            let targetOrgId = null;
+
+            if (typeof opts === 'function') {
+                callback = opts;
+            } else if (opts && typeof opts === 'object') {
+                callback = opts.callback || null;
+                targetOrgId = opts.targetOrgId || null;
+            }
+
             pendingRoleAuthCallback = callback;
             const input = document.getElementById('input-role-code');
             const err = document.getElementById('role-auth-error');
             const btn = document.getElementById('btn-submit-role-auth');
+            const titleEl = document.getElementById('role-auth-title');
+            const subEl = document.getElementById('role-auth-subtitle');
+            const descEl = document.getElementById('role-auth-desc');
+            const orgCont = document.getElementById('role-auth-org-cont');
+            const orgSelect = document.getElementById('role-auth-org-select');
+
             if (input) input.value = '';
             if (err) { err.innerText = ''; err.style.display = 'none'; }
-            if (btn) { btn.disabled = false; btn.innerText = 'Todenna ja jatka →'; }
+            if (btn) { btn.disabled = false; btn.innerText = 'Kirjaudu hallitukselle →'; }
+
+            // Gateway-moodissa (ei orgia URLissa) näytetään organisaatiovalitsin
+            if (!CURRENT_ORG_ID) {
+                if (titleEl) titleEl.innerText = 'Kirjaudu hallituksen työtilaan';
+                if (subEl) subEl.innerText = 'Valitse yhdistys ja syötä valtuuskoodi';
+                if (descEl) descEl.innerText = 'Kirjautuminen avaa yhdistyksen hallituksen näkymän ja antaa päätös-, tehtävä- ja Seinä-julkaisuoikeudet.';
+                if (orgCont) orgCont.style.display = 'block';
+
+                if (PUBLIC_ORGANIZATIONS.length === 0) {
+                    await loadGatewayOrganizations();
+                }
+                populateRoleAuthOrgSelect(orgSelect, targetOrgId);
+            } else {
+                if (titleEl) titleEl.innerText = 'Hallituksen valtuutus';
+                if (subEl) subEl.innerText = 'Seinälle julkaiseminen vaatii henkilökohtaisen roolin';
+                if (descEl) descEl.innerText = 'Toimintataulun asian julkaiseminen LaukaaInfon Seinälle on hallintotoiminto. Syötä henkilökohtainen valtuuskoodisi.';
+                if (orgCont) orgCont.style.display = 'none';
+                if (btn) btn.innerText = 'Todenna ja jatka →';
+            }
 
             document.getElementById('role-auth-modal').classList.add('open');
-            setTimeout(() => { if (input) input.focus(); }, 100);
+            setTimeout(() => {
+                if (!CURRENT_ORG_ID && !targetOrgId && orgSelect) {
+                    orgSelect.focus();
+                } else if (input) {
+                    input.focus();
+                }
+            }, 100);
+        }
+
+        function populateRoleAuthOrgSelect(selectEl, selectedId) {
+            if (!selectEl) return;
+            const orgs = (PUBLIC_ORGANIZATIONS && PUBLIC_ORGANIZATIONS.length > 0)
+                ? PUBLIC_ORGANIZATIONS
+                : [
+                    { id: 'laukaan-testaajat', name: 'Laukaan Testaajat ry', type: 'association' },
+                    { id: 'laukaan-yrittajat', name: 'Laukaan Yrittäjät ry', type: 'association' }
+                  ];
+
+            // Varmistetaan että Laukaan Testaajat ry on aina mukana valinnoissa
+            const hasTestaajat = orgs.some(o => o.id === 'laukaan-testaajat' || (o.name && o.name.toLowerCase().includes('testaajat')));
+            let displayOrgs = [...orgs];
+            if (!hasTestaajat) {
+                displayOrgs.unshift({ id: 'laukaan-testaajat', name: 'Laukaan Testaajat ry', type: 'association' });
+            }
+
+            selectEl.innerHTML = displayOrgs.map(o => {
+                const typeLabel = o.type === 'municipality' ? 'Kunta' : (o.type === 'company' ? 'Yritys' : 'Yhdistys');
+                const isSel = (selectedId && (o.id === selectedId || o.name === selectedId)) 
+                    || (!selectedId && (o.id === 'laukaan-testaajat' || o.id === 'laukaan-yrittajat'));
+                return `<option value="${escapeHtml(o.id)}" ${isSel ? 'selected' : ''}>${escapeHtml(o.name)} (${typeLabel})</option>`;
+            }).join('');
         }
 
         function closeRoleAuthModal() {
@@ -1294,14 +1388,21 @@
             }
             if (btn) {
                 btn.disabled = false;
-                btn.innerText = 'Todenna ja jatka →';
+                btn.innerText = 'Kirjaudu hallitukselle →';
             }
         }
 
         async function submitRoleAuth() {
             const input = document.getElementById('input-role-code');
             const btn = document.getElementById('btn-submit-role-auth');
+            const orgSelect = document.getElementById('role-auth-org-select');
             if (!input) return;
+
+            const targetOrgId = CURRENT_ORG_ID || (orgSelect ? orgSelect.value : null);
+            if (!targetOrgId) {
+                showRoleAuthError('Valitse hallinnoitava yhdistys.');
+                return;
+            }
 
             const code = input.value.trim().toUpperCase();
             if (code.length < 10) {
@@ -1322,7 +1423,7 @@
 
             try {
                 const { data, error } = await sb.rpc('begin_role_session', {
-                    p_organization_id: CURRENT_ORG_ID,
+                    p_organization_id: targetOrgId,
                     p_role_code: code
                 });
 
@@ -1341,7 +1442,15 @@
                     expires_at: data.expires_at
                 };
 
-                localStorage.setItem(`toiminta_role_session_${CURRENT_ORG_ID}`, JSON.stringify(ROLE_SESSION));
+                localStorage.setItem(`toiminta_role_session_${targetOrgId}`, JSON.stringify(ROLE_SESSION));
+                
+                // Jos oltiin Gateway-tilassa, siirrytään kyseisen yhdistyksen taululle hallitusroolissa
+                if (!CURRENT_ORG_ID) {
+                    closeRoleAuthModal();
+                    window.location.href = `toiminta.html?org=${encodeURIComponent(targetOrgId)}&mode=board`;
+                    return;
+                }
+
                 updateRoleBadge();
                 closeRoleAuthModal();
 
@@ -2972,6 +3081,9 @@ ${votes.total > 0 ? `
                                     💡 Ehdota
                                 </a>
                             ` : ''}
+                            <button onclick="openRoleAuthModal({ targetOrgId: '${escapeHtml(o.id)}' })" class="gateway-org-link-board" title="Kirjaudu tämän yhdistyksen hallitukselle">
+                                🛡️ Hallitus
+                            </button>
                         </div>
                     </article>
                 `;
@@ -3004,24 +3116,31 @@ ${votes.total > 0 ? `
             openSuggestionModal();
         }
 
-        function startBoardFlow() {
-            scrollToGatewayOrgs();
-            const input = document.getElementById('gateway-search-input');
-            if (input) {
-                input.placeholder = '🔍 Valitse hallinnoitava yhdistys...';
-                input.focus();
+        async function startBoardFlow() {
+            if (PUBLIC_ORGANIZATIONS.length === 0) {
+                await loadGatewayOrganizations();
             }
+            // Avataan heti hallitusroolin todennusmodaali organisaatiovalitsimella
+            openRoleAuthModal({ targetOrgId: 'laukaan-testaajat' });
         }
 
         function populateOrgSelect(selectEl, selectedId) {
             if (!selectEl) return;
-            const openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions);
+            let openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions);
             if (openOrgs.length === 0) {
-                selectEl.innerHTML = '<option value="">Ei ehdotuksia vastaanottavia yhdistyksiä</option>';
-                return;
+                openOrgs = [
+                    { id: 'laukaan-testaajat', name: 'Laukaan Testaajat ry' },
+                    { id: 'laukaan-yrittajat', name: 'Laukaan Yrittäjät ry' }
+                ];
             }
+            // Varmistetaan että Laukaan Testaajat ry on aina mukana
+            const hasTestaajat = openOrgs.some(o => o.id === 'laukaan-testaajat' || (o.name && o.name.toLowerCase().includes('testaajat')));
+            if (!hasTestaajat) {
+                openOrgs.unshift({ id: 'laukaan-testaajat', name: 'Laukaan Testaajat ry' });
+            }
+
             selectEl.innerHTML = openOrgs.map(o => `
-                <option value="${escapeHtml(o.id)}" ${o.id === selectedId ? 'selected' : ''}>
+                <option value="${escapeHtml(o.id)}" ${(selectedId && o.id === selectedId) || (!selectedId && (o.id === 'laukaan-testaajat' || o.id === 'laukaan-yrittajat')) ? 'selected' : ''}>
                     ${escapeHtml(o.name)}
                 </option>
             `).join('');
