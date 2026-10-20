@@ -109,6 +109,96 @@ const PILOT_PLACES = [
         area: "Tarvaala",
         seo_indexed: true,
         seo_slug: "tarvaala"
+    },
+    {
+        place_id: "laukaan-kirkko",
+        name: "Laukaan kirkko",
+        seo_title: "Laukaan kirkko – Keski-Suomen vanhin kivikirkko | LaukaaInfo",
+        description: "Laukaan harmaakivikirkko on Keski-Suomen vanhin kirkkorakennus, joka on toiminut seurakunnan sydämenä keskiajalta lähtien.",
+        history_text: "Laukaan kivikirkko rakennettiin 1400-luvulla ja se on yksi Keski-Suomen arvostetuimmista kulttuurihistoriallisista kohteista. Kirkko ympäristöineen muodostaa ikiaikaisen kokonaisuuden Laukaan kirkonkylässä.",
+        area: "Laukaa Kirkonkylä",
+        seo_indexed: true,
+        seo_slug: "laukaan-kirkko"
+    },
+    {
+        place_id: "leppavesi",
+        name: "Leppävesi",
+        seo_title: "Leppävesi – rauhallinen ranta-taajama Laukaassa | LaukaaInfo",
+        description: "Leppävesi on idyllinen taajama Leppäveden rannalla, jota ympäröivät metsät, veneilyreitit ja maalaismaisema.",
+        history_text: "Leppävesi kehittyi rautatieyhteyden myötä ja on tänä päivänä suosittu asuinalue lähellä Jyväskylää, säilyttäen silti maaseutumaisen luonteensa.",
+        area: "Leppävesi",
+        seo_indexed: true,
+        seo_slug: "leppavesi"
+    },
+    {
+        place_id: "vehnia",
+        name: "Vehniä",
+        seo_title: "Vehniä – maaseutukylä Laukaan pohjoisosassa | LaukaaInfo",
+        description: "Vehniä on rauhallinen maaseutukylä Laukaan pohjoisosassa, joka tunnetaan peltoaukeistaan, kyläyhteisöstään ja perinteisestä maaseutumaisemastaan.",
+        history_text: "Vehniä on vanha maatalouskylä, jonka historia ulottuu kauas. Nykyään se tarjoaa rauhallisen asuinympäristön hyvien yhteyksien varrella.",
+        area: "Vehniä",
+        seo_indexed: true,
+        seo_slug: "vehnia"
+    },
+    {
+        place_id: "laukaan-uimahalli",
+        name: "Laukaan uimahalli",
+        seo_title: "Laukaan uimahalli – perheille ja liikkujille | LaukaaInfo",
+        description: "Laukaan uimahalli on koko perheen liikuntapaikka, jossa on uima-allas, lasten allas ja saunaoastot.",
+        history_text: "Uimahalli on palvellut laukaalaisperheitä jo vuosikymmeniä ja on keskeinen kokoontumispaikka kirkonkylässä.",
+        area: "Laukaa Kirkonkylä",
+        seo_indexed: true,
+        seo_slug: "laukaan-uimahalli"
+    },
+    {
+        place_id: "vihtavuori-ruutitehdas",
+        name: "Vihtavuoren ruutitehdas",
+        seo_title: "Vihtavuoren ruutitehdas – teollisuushistorian merkkipaikka | LaukaaInfo",
+        description: "Vihtavuoren ruutitehdas on Suomen puolustushistorian kannalta merkittävä laitos, joka on toiminut Laukaassa 1920-luvulta asti.",
+        history_text: "Vuonna 1923 perustettu Vihtavuoren räjähdysainetehdas (nykyinen Nammo Finland Oy) on Suomen puolustusvoimien ja kotimaisen teollisuuden peruspilari. Laitos sijaitsee ainutlaatuisessa metsäisessä ympäristössä ja on osa Vihtavuoren taajaman identiteettiä.",
+        area: "Vihtavuori",
+        seo_indexed: true,
+        seo_slug: "vihtavuori-ruutitehdas"
+    },
+    {
+        place_id: "peurunka-luonto",
+        name: "Peurungan luontoreitit",
+        seo_title: "Peurungan luontoreitit – vaellus ja retkeily Laukaassa | LaukaaInfo",
+        description: "Peurungan ympäristössä on laaja luontoreitti- ja vaellusverkosto järvimaisemassa.",
+        history_text: "Peurungan ympäristön luontoreitit kulkevat rehevien metsien, harjujen ja järvimaisemien halki. Reitit sopivat kaikenikäisille liikkujille.",
+        area: "Peurunka",
+        seo_indexed: true,
+        seo_slug: "peurunka-luonto"
+    },
+    {
+        place_id: "laukaan-kirkonkyla",
+        name: "Laukaan kirkonkylä",
+        seo_title: "Laukaan kirkonkylä – kunnan sydän Saraaveden rannalla | LaukaaInfo",
+        description: "Laukaan kirkonkylä on kunnan hallinnollinen keskus, jossa sijaitsevat palvelut, kirkko, satama ja kulttuurihistorialliset kohteet.",
+        history_text: "Laukaan kirkonkylä on toiminut alueen keskuksena jo vuosisatoja. Se sijaitsee Saraaveden rannalla ja yhdistää luonnonläheisyyden, palvelut ja historian.",
+        area: "Laukaa Kirkonkylä",
+        seo_indexed: true,
+        seo_slug: "laukaan-kirkonkyla"
+    },
+    {
+        place_id: "varjola",
+        name: "Varjola ja Koskikara",
+        seo_title: "Varjola ja Koskikara – kalastajanelämää Kuusankoskella | LaukaaInfo",
+        description: "Varjola Farm ja Koskikara ovat luonnonläheisiä kohtaamis- ja elämyspaikkoja Kuusankosken rannalla Laukaassa.",
+        history_text: "Varjola on toiminut pitkään maatilamatkailun ja tapahtumien pitopaikkana. Koskikara puolestaan on kalastukseen erikoistunut leirikeskus ainutlaatuisella koskipaikalla.",
+        area: "Kuusa",
+        seo_indexed: true,
+        seo_slug: "varjola"
+    },
+    {
+        place_id: "laukaan-tori",
+        name: "Laukaan tori",
+        seo_title: "Laukaan tori – kirkonkylän kohtaamispaikka | LaukaaInfo",
+        description: "Laukaan tori on kirkonkylän perinteinen kohtaamispaikka, jossa järjestetään torielämää, tapahtumia ja markkinoita.",
+        history_text: "Laukaan tori on ollut kirkonkylän yhteisöllinen sydän jo pitkään. Siellä kohtaavat paikalliset asukkaat, yrittäjät ja tapahtumat ympäri vuoden.",
+        area: "Laukaa Kirkonkylä",
+        seo_indexed: true,
+        seo_slug: "laukaan-tori"
     }
 ];
 
@@ -190,12 +280,10 @@ async function generateSeoPages() {
 
     const rootDir = __dirname;
     const paikkaDir = path.join(rootDir, 'paikka');
-    const kohteetDir = path.join(rootDir, 'kohteet');
     const teematDir = path.join(rootDir, 'teemat');
 
     // Create directories if not existing
     if (!fs.existsSync(paikkaDir)) fs.mkdirSync(paikkaDir, { recursive: true });
-    if (!fs.existsSync(kohteetDir)) fs.mkdirSync(kohteetDir, { recursive: true });
     if (!fs.existsSync(teematDir)) fs.mkdirSync(teematDir, { recursive: true });
 
     // 1. Fetch Places from Supabase (or fallback to PILOT_PLACES)
@@ -247,14 +335,10 @@ async function generateSeoPages() {
             areaName: placeArea
         });
 
-        // A) Puhdas URL-muoto: /paikka/[slug]/index.html
+        // Puhdas URL-muoto: /paikka/[slug]/index.html
         const placeSubDir = path.join(paikkaDir, slug);
         if (!fs.existsSync(placeSubDir)) fs.mkdirSync(placeSubDir, { recursive: true });
         fs.writeFileSync(path.join(placeSubDir, 'index.html'), html, 'utf8');
-
-        // B) Yhteensopivuus: /kohteet/[slug].html
-        const kohteetFilePath = path.join(kohteetDir, `${slug}.html`);
-        fs.writeFileSync(kohteetFilePath, html, 'utf8');
 
         console.log(`   + Created: /paikka/${slug}/ (${place.name})`);
         placeCount++;
@@ -290,7 +374,7 @@ async function generateSeoPages() {
 
     console.log('\n====================================================');
     console.log(`✅ SEO Generation Complete!`);
-    console.log(`   - Generated ${placeCount} Place pages in /kohteet/`);
+    console.log(`   - Generated ${placeCount} Place pages in /paikka/`);
     console.log(`   - Generated ${themeCount} Theme pages in /teemat/`);
     console.log('====================================================\n');
 }
