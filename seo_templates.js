@@ -515,7 +515,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
         <main class="main-content">
             ${place.history_text || place.long_description ? `
             <section>
-                <h2>Yleiskatsaus ja historia</h2>
+                <h2>${escapeHtml(place.section_title || `${place.name} ja sen ympäristö`)}</h2>
                 <div class="text-body">
                     <p>${escapeHtml(place.history_text || place.long_description || place.description)}</p>
                 </div>
@@ -524,16 +524,21 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
 
             <!-- DYNAAMINEN KOHTAAMISET & AJANKOHTAISTA -WIDGETTI -->
             <section id="live-encounters-section" style="margin-top: 2rem;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                    <h2 style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 50%;"></span>
-                        Tuoreimmat kohtaamiset & kuulumiset
-                    </h2>
-                    <span style="font-size: 0.8rem; color: #94a3b8;">Reaaliaikainen</span>
+                <div style="margin-bottom: 0.75rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                        <h2 style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 50%;"></span>
+                            Ajankohtaista: ${escapeHtml(place.name)}
+                        </h2>
+                        <span style="font-size: 0.8rem; color: #94a3b8;">Reaaliaikainen</span>
+                    </div>
+                    <p style="margin: 0; color: #94a3b8; font-size: 0.95rem;">
+                        Tältä sivulta löydät paikkaan liittyviä ajankohtaisia kuulumisia, ilmoituksia ja muita julkaisuja. Sisältö päivittyy LaukaaInfon kautta.
+                    </p>
                 </div>
                 <div id="live-encounters-container">
                     <div style="padding: 1.5rem; background: #1e293b; border: 1px solid #334155; border-radius: 12px; color: #94a3b8; font-size: 0.95rem;">
-                        Ladataan ajankohtaisia kuulumisia kohteesta...
+                        Tarkistetaan ajankohtaisia julkaisuja...
                     </div>
                 </div>
             </section>
@@ -585,17 +590,17 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
 
         <aside class="sidebar">
             <div class="sidebar-widget action-box">
-                <h3>Interaktiivinen kartta & toiminnot</h3>
-                <p>Tutustu kohteen <strong>${escapeHtml(place.name)}</strong> sijaintiin, reitteihin ja lähipalveluihin LaukaaInfon interaktiivisessa näkymässä.</p>
+                <h3>Kartta, reitit ja lähipalvelut</h3>
+                <p>Tutustu kohteen <strong>${escapeHtml(place.name)}</strong> sijaintiin kartalla ja löydä lähialueen palvelut sekä muut kiinnostavat kohteet. LaukaaInfon paikkaverkosto yhdistää sijainnit niihin liittyviin palveluihin, tapahtumiin ja paikalliseen tietoon.</p>
                 <a href="${interactiveUrl}" class="cta-button" style="width: 100%; justify-content: center;">
-                    Siirry sovellukseen
+                    Avaa kartta ja palvelut &rarr;
                 </a>
             </div>
 
             <div class="sidebar-widget">
-                <h3>Alue</h3>
-                <p><strong>Alue:</strong> ${escapeHtml(areaName)}</p>
-                <p style="margin-top: 0.5rem;"><a href="../../laukaa.html">Katso kaikki Laukaan kohteet &rarr;</a></p>
+                <h3>Tutustu myös lähialueeseen</h3>
+                <p>Löydä lisää alueen <strong>${escapeHtml(areaName)}</strong> kohteita, palveluja ja paikallisia tarinoita LaukaaInfosta.</p>
+                <p style="margin-top: 0.75rem;"><a href="../../laukaa.html">Katso kaikki Laukaan kohteet &rarr;</a></p>
             </div>
         </aside>
     </div>
@@ -623,9 +628,9 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
             if (error || !encounters || encounters.length === 0) {
                 container.innerHTML = \`
                     <div style="padding: 1.25rem; background: #1e293b; border: 1px solid #334155; border-radius: 12px; color: #94a3b8;">
-                        <p style="margin: 0 0 0.5rem 0;">Ei vielä julkisia kohtaamisviestejä tässä kohteessa.</p>
+                        <p style="margin: 0 0 0.5rem 0;">Ei uusia kohteeseen liittyviä julkaisuja juuri nyt.</p>
                         <a href="\${${JSON.stringify(interactiveUrl)}}" style="color: #38bdf8; font-weight: 500; font-size: 0.9rem;">
-                            Jätä ensimmäinen viesti tai havainto LaukaaInfossa &rarr;
+                            Jätä ilmoitus tai avaa kaikki alueen julkaisut LaukaaInfossa &rarr;
                         </a>
                     </div>
                 \`;

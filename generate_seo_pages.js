@@ -26,23 +26,26 @@ const PILOT_PLACES = [
         cover_image: "../hero-kuva.webp"
     },
     {
+        id: "b3b3a0e1-4c12-4c63-b8e7-2c1b82a34567",
         place_id: "laukaan-satama",
-        name: "Laukaan Satama",
-        description: "Laukaan Satama on Kirkonkylän sydämessä sijaitseva suosittu kohtauspaikka, joka tarjoaa veneilypalveluita, ravintola-elämyksiä ja tapahtumia Saraaveden rannalla.",
-        history_text: "Saraaveden rannalla sijaitseva Laukaan satama-alue on pitkään toiminut vesiliikenteen ja vapaa-ajan keskiönä. Satama yhdistää Laukaan kirkonkylän palvelut ja vesistöretkeilyn.",
+        name: "Laukaan satama",
+        seo_title: "Laukaan satama – Saraaveden rannalla | LaukaaInfo",
+        description: "Laukaan satama sijaitsee kirkonkylässä Saraaveden rannalla. Satama-alue yhdistää vesillä liikkumisen, rannan ympäristön ja Laukaan keskustan läheiset palvelut. Se on luonteva lähtöpaikka vesistöön tutustumiseen ja yksi Laukaan tunnetuista rantakohteista.",
+        history_text: "Saraaveden rannalla sijaitseva satama kuuluu Laukaan kirkonkylän vesistöympäristöön. Sataman ja sen lähiympäristön merkitys liittyy vesillä liikkumiseen, vapaa-aikaan ja rannan palveluihin. Alueeseen tutustuessa voi samalla tarkastella, mitä palveluja, tapahtumia ja muita kohteita sataman läheisyydestä löytyy.",
         area: "Laukaa Kirkonkylä",
         seo_indexed: true,
         seo_slug: "laukaan-satama",
         cover_image: "../laukaan_ravintolat_header.png"
     },
     {
-        place_id: "haaralan-tehdas",
-        name: "Haarlan tehdas",
-        description: "Haarlan entinen paperitehdas Lievestuoreella on merkittävä osa Laukaan ja Keski-Suomen teollisuushistoriaa.",
-        history_text: "Haarlan selleritehdas ja paperiteollisuus Lievestuoreella vaikuttivat vuosikymmenien ajan alueen kehitykseen. Alueen historia ja tarinat ovat keskeinen osa Laukaan teollisuusperintöä.",
+        place_id: "haarlan-tehdashistoria",
+        name: "Haarlan tehdashistoria",
+        seo_title: "Haarlan tehdashistoria Lievestuoreella – teollisuusperintö ja tarinat | LaukaaInfo",
+        description: "Haarlan selluloosatehtaan historia Lievestuoreella on merkittävä osa Laukaan ja Keski-Suomen teollisuusperintöä.",
+        history_text: "Rafael Haarlan vuonna 1927 perustama selluloosatehdas Lievestuoreella oli vuosikymmenten ajan alueen merkittävin teollinen työllistäjä ja taajaman kehityksen moottori. Tehtaan vaiheet, kyläyhteisön elämä ja teollisuushistoria ovat keskeinen osa Lievestuoreen ja Laukaan identiteettiä.",
         area: "Lievestuore",
         seo_indexed: true,
-        seo_slug: "haaralan-tehdas"
+        seo_slug: "haarlan-tehdashistoria"
     },
     {
         place_id: "saraakallio",
