@@ -44,6 +44,7 @@ function renderHead({ title, description, canonicalUrl, ogImage, jsonLd, baseDep
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}">
     <link rel="canonical" href="${escapeHtml(canonicalUrl)}">
+    <link rel="icon" href="${baseDepth}logo.png">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Social Media -->
@@ -126,18 +127,32 @@ function renderHead({ title, description, canonicalUrl, ogImage, jsonLd, baseDep
             justify-content: space-between;
         }
 
-        .brand-logo {
+        .nav-logo {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.15rem;
             font-weight: 800;
-            color: #ffffff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
         }
 
-        .brand-logo span {
-            color: #2dd4bf;
+        .nav-logo img {
+            height: 32px;
+            width: 32px;
+            max-width: 32px !important;
+            flex-shrink: 0;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .nav-logo:hover {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.95;
         }
 
         .nav-links {
@@ -415,7 +430,10 @@ function renderHead({ title, description, canonicalUrl, ogImage, jsonLd, baseDep
 <body>
     <header class="site-header">
         <div class="nav-container">
-            <a href="${baseDepth}index.html" class="brand-logo">Laukaa<span>Info</span></a>
+            <a href="${baseDepth}index.html" class="nav-logo">
+                <img src="${baseDepth}logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
             <ul class="nav-links">
                 <li><a href="${baseDepth}index.html">Etusivu</a></li>
                 <li><a href="${baseDepth}laukaa.html">Paikat</a></li>
@@ -433,7 +451,10 @@ function renderFooter(baseDepth = '../') {
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-brand">
-                <h4>LaukaaInfo</h4>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem;">
+                    <img src="${baseDepth}logo.png" alt="LaukaaInfo Logo" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover;">
+                    <h4 style="margin: 0; font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #ffffff;">LaukaaInfo</h4>
+                </div>
                 <p>Laukaan paikkojen, teemojen ja kokemusten digitaalinen hakemisto ja interaktiivinen palvelu.</p>
             </div>
             <div>
