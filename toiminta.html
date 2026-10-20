@@ -1056,6 +1056,99 @@
         </div>
     </div>
 
+    <!-- ROOLI-ISTUNNON HALLINTA JA VALTUUSKOODIN VAIHTOMODAALI -->
+    <div class="modal-overlay" id="role-manage-modal">
+        <div class="modal-card" style="max-width: 480px;">
+            <button class="modal-close" onclick="closeRoleManageModal()">&times;</button>
+            
+            <!-- NÄKYMÄ 1: ISTUNNON TIEDOT & VALIKKO -->
+            <div id="role-manage-view-profile">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                    <div style="font-size:1.6rem;background:rgba(37,99,235,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">👑</div>
+                    <div>
+                        <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;" id="role-manage-name">-</h3>
+                        <p style="font-size:0.78rem;color:var(--text-muted);margin:0;" id="role-manage-role">-</p>
+                    </div>
+                </div>
+
+                <div style="padding:0.85rem;background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:10px;margin-bottom:1.25rem;font-size:0.8rem;color:var(--text-muted);line-height:1.5;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;">
+                        <span>Yhdistys:</span>
+                        <strong style="color:#fff;" id="role-manage-org">-</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;">
+                        <span>Istunnon tila:</span>
+                        <span style="color:#34d399;font-weight:700;">🟢 Voimassa (24h)</span>
+                    </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:0.65rem;">
+                    <button class="btn-signup" style="background:#2563eb;width:100%;justify-content:center;padding:0.75rem;" onclick="showRoleRotateView()">
+                        🔑 Vaihda oma valtuuskoodi
+                    </button>
+                    <button class="btn-toggle-admin" style="width:100%;justify-content:center;padding:0.75rem;border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="logoutRoleSession(); closeRoleManageModal();">
+                        🚪 Kirjaudu ulos istunnosta
+                    </button>
+                </div>
+            </div>
+
+            <!-- NÄKYMÄ 2: KOODIN VAIHTO (SYÖTÄ NYKYINEN KOODI) -->
+            <div id="role-manage-view-rotate" style="display:none;">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                    <div style="font-size:1.6rem;background:rgba(16,185,129,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🔑</div>
+                    <div>
+                        <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Vaihda valtuuskoodi</h3>
+                        <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Luo uusi henkilökohtainen valtuuskoodi</p>
+                    </div>
+                </div>
+
+                <p style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem;">
+                    Syötä nykyinen valtuuskoodisi turvallisuusvahvistukseksi. Järjestelmä luo sinulle välittömästi uuden koodin ja mitätöi vanhan.
+                </p>
+
+                <div style="margin-bottom:1.25rem;">
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">Nykyinen valtuuskoodi</label>
+                    <input type="text" id="input-rotate-current-code" placeholder="esim. PJ-8A7B-6C5D"
+                           style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-family:monospace;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;"
+                           onkeydown="if(event.key==='Enter') submitRotateCode();" />
+                    <div id="rotate-code-error" style="display:none;color:#f87171;font-size:0.8rem;margin-top:0.5rem;line-height:1.4;"></div>
+                </div>
+
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                    <button class="btn-toggle-admin" onclick="showRoleProfileView()">Peruuta</button>
+                    <button class="btn-signup" id="btn-submit-rotate-code" style="background:#10b981;" onclick="submitRotateCode()">Vahvista ja vaihda koodi →</button>
+                </div>
+            </div>
+
+            <!-- NÄKYMÄ 3: ONNISTUNUT VAIHTO JA UUDEN KOODIN NÄYTTÖ -->
+            <div id="role-manage-view-success" style="display:none;">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                    <div style="font-size:1.6rem;background:rgba(16,185,129,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">✅</div>
+                    <div>
+                        <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Uusi koodi aktivoitu!</h3>
+                        <p style="font-size:0.78rem;color:#34d399;margin:0;">Vanha koodisi on mitätöity.</p>
+                    </div>
+                </div>
+
+                <div style="margin:1rem 0;padding:1rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;text-align:center;">
+                    <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:0.25rem;">Uusi henkilökohtainen valtuuskoodisi:</div>
+                    <div id="new-rotated-code-display" style="font-family:monospace;font-size:1.5rem;font-weight:800;color:#34d399;letter-spacing:0.1em;padding:0.4rem 0;">-</div>
+                    <button class="btn-toggle-admin" id="btn-copy-rotated-code" onclick="copyRotatedCode()" style="margin-top:0.5rem;font-size:0.8rem;padding:0.4rem 1rem;">
+                        📋 Kopioi koodi leikepöydälle
+                    </button>
+                </div>
+
+                <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:1.25rem;">
+                    ⚠️ <strong>Tärkeää:</strong> Ota koodi talteen nyt. Koodia ei voi nähdä uudestaan. Jos kadotat sen, yhdistyksen puheenjohtaja voi luoda sinulle uuden koodin.
+                </p>
+
+                <div style="display:flex;justify-content:flex-end;">
+                    <button class="btn-signup" style="background:#2563eb;" onclick="closeRoleManageModal()">Sulje ikkuna</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- UUSI ASIA MODAALI -->
     <div class="modal-overlay" id="create-item-modal">
         <div class="modal-card" style="max-width: 540px;">
@@ -1278,16 +1371,135 @@
 
         function promptSwitchRoleAuth() {
             if (!ROLE_SESSION) return;
-            const roleTitle = (ROLE_SESSION.active_roles && ROLE_SESSION.active_roles[0]?.role) || 'Hallitus';
-            const choice = confirm(
-                `Kirjautunut sisään valtuuskoodilla:\n` +
-                `Nimi: ${ROLE_SESSION.member_name || '-'}\n` +
-                `Rooli: ${roleTitle}\n\n` +
-                `Haluatko kirjautua ulos rooli-istunnosta?`
-            );
-            if (choice) {
-                logoutRoleSession();
+            openRoleManageModal();
+        }
+
+        function openRoleManageModal() {
+            if (!ROLE_SESSION) return;
+            const modal = document.getElementById('role-manage-modal');
+            if (!modal) return;
+
+            let roleLabel = 'Hallitus';
+            if (ROLE_SESSION.active_roles && ROLE_SESSION.active_roles.length > 0) {
+                const r = ROLE_SESSION.active_roles[0].role;
+                if (r === 'board_chair') roleLabel = 'Puheenjohtaja';
+                else if (r === 'board_member') roleLabel = 'Hallituksen jäsen';
+                else if (r === 'secretary') roleLabel = 'Sihteeri';
+                else if (r === 'coordinator') roleLabel = 'Koordinaattori';
+                else if (r === 'lead') roleLabel = 'Vetäjä';
             }
+
+            const nameEl = document.getElementById('role-manage-name');
+            const roleEl = document.getElementById('role-manage-role');
+            const orgEl = document.getElementById('role-manage-org');
+
+            if (nameEl) nameEl.innerText = ROLE_SESSION.member_name || 'Jäsen';
+            if (roleEl) roleEl.innerText = roleLabel;
+            if (orgEl) orgEl.innerText = (CURRENT_ORG_DATA && (CURRENT_ORG_DATA.name || CURRENT_ORG_DATA.nimi)) || CURRENT_ORG_ID || 'Yhdistys';
+
+            showRoleProfileView();
+            modal.classList.add('open');
+        }
+
+        function closeRoleManageModal() {
+            const modal = document.getElementById('role-manage-modal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function showRoleProfileView() {
+            const p = document.getElementById('role-manage-view-profile');
+            const r = document.getElementById('role-manage-view-rotate');
+            const s = document.getElementById('role-manage-view-success');
+            if (p) p.style.display = 'block';
+            if (r) r.style.display = 'none';
+            if (s) s.style.display = 'none';
+        }
+
+        function showRoleRotateView() {
+            const p = document.getElementById('role-manage-view-profile');
+            const r = document.getElementById('role-manage-view-rotate');
+            const s = document.getElementById('role-manage-view-success');
+            if (p) p.style.display = 'none';
+            if (r) r.style.display = 'block';
+            if (s) s.style.display = 'none';
+
+            const input = document.getElementById('input-rotate-current-code');
+            const err = document.getElementById('rotate-code-error');
+            const btn = document.getElementById('btn-submit-rotate-code');
+            if (input) { input.value = ''; input.focus(); }
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (btn) { btn.disabled = false; btn.innerText = 'Vahvista ja vaihda koodi →'; }
+        }
+
+        async function submitRotateCode() {
+            const input = document.getElementById('input-rotate-current-code');
+            const err = document.getElementById('rotate-code-error');
+            const btn = document.getElementById('btn-submit-rotate-code');
+            const currentCode = input ? input.value.trim() : '';
+
+            if (!currentCode) {
+                if (err) { err.innerText = 'Syötä nykyinen valtuuskoodisi.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                if (err) { err.innerText = 'Istunto ei ole voimassa. Kirjaudu sisään uudelleen.'; err.style.display = 'block'; }
+                return;
+            }
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                if (err) { err.innerText = 'Tietokantayhteys ei ole käytettävissä.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Vaihdetaan koodia...'; }
+            if (err) err.style.display = 'none';
+
+            try {
+                const { data, error } = await sb.rpc('rotate_my_role_credential', {
+                    p_session_token: ROLE_SESSION.session_token,
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_current_code: currentCode
+                });
+
+                if (error || (data && !data.success)) {
+                    const msg = (data && data.error) || (error && error.message) || 'Koodin vaihto epäonnistui.';
+                    if (err) { err.innerText = msg; err.style.display = 'block'; }
+                    if (btn) { btn.disabled = false; btn.innerText = 'Vahvista ja vaihda koodi →'; }
+                    return;
+                }
+
+                // Näytetään uusi koodi
+                const displayEl = document.getElementById('new-rotated-code-display');
+                if (displayEl) displayEl.innerText = data.new_role_code;
+
+                const p = document.getElementById('role-manage-view-profile');
+                const r = document.getElementById('role-manage-view-rotate');
+                const s = document.getElementById('role-manage-view-success');
+                if (p) p.style.display = 'none';
+                if (r) r.style.display = 'none';
+                if (s) s.style.display = 'block';
+            } catch (ex) {
+                if (err) { err.innerText = 'Virhe: ' + ex.message; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.innerText = 'Vahvista ja vaihda koodi →'; }
+            }
+        }
+
+        function copyRotatedCode() {
+            const displayEl = document.getElementById('new-rotated-code-display');
+            const code = displayEl ? displayEl.innerText.trim() : '';
+            if (!code || code === '-') return;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('btn-copy-rotated-code');
+                if (btn) {
+                    const orig = btn.innerText;
+                    btn.innerText = '✅ Kopioitu!';
+                    setTimeout(() => { btn.innerText = orig; }, 3000);
+                }
+            }).catch(() => {
+                alert('Kopioitu koodi: ' + code);
+            });
         }
 
         function logoutRoleSession() {
