@@ -29,9 +29,12 @@ function escapeHtml(str) {
 /**
  * Common Header and Head elements for SEO pages
  */
-function renderHead({ title, description, canonicalUrl, ogImage, jsonLd }) {
+function renderHead({ title, description, canonicalUrl, ogImage, jsonLd, baseDepth = '../' }) {
     const defaultOgImage = 'https://laukaainfo.fi/hero-kuva.webp';
-    const imageToUse = ogImage || defaultOgImage;
+    let imageToUse = ogImage || defaultOgImage;
+    if (!imageToUse.startsWith('http')) {
+        imageToUse = `https://laukaainfo.fi/${imageToUse.replace(/^(\.\.\/)+/, '')}`;
+    }
 
     return `<!DOCTYPE html>
 <html lang="fi">
@@ -412,20 +415,20 @@ function renderHead({ title, description, canonicalUrl, ogImage, jsonLd }) {
 <body>
     <header class="site-header">
         <div class="nav-container">
-            <a href="../index.html" class="brand-logo">Laukaa<span>Info</span></a>
+            <a href="${baseDepth}index.html" class="brand-logo">Laukaa<span>Info</span></a>
             <ul class="nav-links">
-                <li><a href="../index.html">Etusivu</a></li>
-                <li><a href="../laukaa.html">Paikat</a></li>
-                <li><a href="../asiahaku.html">Teemat</a></li>
-                <li><a href="../ajankohtaista.html">Ajankohtaista</a></li>
-                <li><a href="../tarinakartta.html">Tarinat</a></li>
+                <li><a href="${baseDepth}index.html">Etusivu</a></li>
+                <li><a href="${baseDepth}laukaa.html">Paikat</a></li>
+                <li><a href="${baseDepth}asiahaku.html">Teemat</a></li>
+                <li><a href="${baseDepth}ajankohtaista.html">Ajankohtaista</a></li>
+                <li><a href="${baseDepth}tarinakartta.html">Tarinat</a></li>
             </ul>
         </div>
     </header>
 `;
 }
 
-function renderFooter() {
+function renderFooter(baseDepth = '../') {
     return `
     <footer class="site-footer">
         <div class="footer-container">
@@ -434,7 +437,7 @@ function renderFooter() {
                 <p>Laukaan paikkojen, teemojen ja kokemusten digitaalinen hakemisto ja interaktiivinen palvelu.</p>
             </div>
             <div>
-                <p>&copy; ${new Date().getFullYear()} LaukaaInfo • <a href="../tietosuoja.html">Tietosuoja</a> • <a href="../index.html">Palaa LaukaaInfoon</a></p>
+                <p>&copy; ${new Date().getFullYear()} LaukaaInfo • <a href="${baseDepth}tietosuoja.html">Tietosuoja</a> • <a href="${baseDepth}index.html">Palaa LaukaaInfoon</a></p>
             </div>
         </div>
     </footer>
@@ -450,12 +453,12 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
     const slug = place.seo_slug || slugify(place.name);
     const title = place.seo_title || `${place.name} – historia, kohteet ja elämykset | LaukaaInfo`;
     const description = place.seo_description || place.description || `${place.name} sijaitsee alueella ${areaName}. Tutustu kohteen historiaan, teemoihin, reitteihin ja kokemuksiin LaukaaInfossa.`;
-    const canonicalUrl = `https://laukaainfo.fi/kohteet/${slug}.html`;
+    const canonicalUrl = `https://laukaainfo.fi/paikka/${slug}/`;
 
-    const heroImage = place.cover_image || place.image_url || (placeImages.length > 0 ? placeImages[0].url : '../hero-kuva.webp');
+    const heroImage = place.cover_image || place.image_url || (placeImages.length > 0 ? placeImages[0].url : '../../hero-kuva.webp');
     
     // Interactive URL link
-    const interactiveUrl = `../tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}`;
+    const interactiveUrl = `../../tietoa-paikasta.html?id=${encodeURIComponent(place.id || place.place_id || slug)}`;
 
     // Schema.org JSON-LD
     const jsonLd = {
@@ -465,7 +468,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
                 "@type": "BreadcrumbList",
                 "itemListElement": [
                     { "@type": "ListItem", "position": 1, "name": "Etusivu", "item": "https://laukaainfo.fi/" },
-                    { "@type": "ListItem", "position": 2, "name": "Kohteet", "item": "https://laukaainfo.fi/kohteet/" },
+                    { "@type": "ListItem", "position": 2, "name": "Paikat", "item": "https://laukaainfo.fi/laukaa.html" },
                     { "@type": "ListItem", "position": 3, "name": place.name, "item": canonicalUrl }
                 ]
             },
@@ -473,7 +476,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
                 "@type": "Place",
                 "name": place.name,
                 "description": description,
-                "image": heroImage.startsWith('http') ? heroImage : `https://laukaainfo.fi/${heroImage.replace(/^\.\//, '')}`,
+                "image": heroImage.startsWith('http') ? heroImage : `https://laukaainfo.fi/${heroImage.replace(/^\.\.\//, '')}`,
                 "address": {
                     "@type": "PostalAddress",
                     "addressLocality": areaName || "Laukaa",
@@ -489,11 +492,11 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
         ]
     };
 
-    let html = renderHead({ title, description, canonicalUrl, ogImage: heroImage, jsonLd });
+    let html = renderHead({ title, description, canonicalUrl, ogImage: heroImage, jsonLd, baseDepth: '../../' });
 
     html += `
     <nav class="breadcrumb-section" aria-label="Murupolku">
-        <a href="../index.html">Etusivu</a> &gt; <a href="../laukaa.html">Kohteet</a> &gt; <span>${escapeHtml(place.name)}</span>
+        <a href="../../index.html">Etusivu</a> &gt; <a href="../../laukaa.html">Paikat</a> &gt; <span>${escapeHtml(place.name)}</span>
     </nav>
 
     <div class="hero" style="background-image: url('${escapeHtml(heroImage)}');">
@@ -519,13 +522,29 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
             </section>
             ` : ''}
 
+            <!-- DYNAAMINEN KOHTAAMISET & AJANKOHTAISTA -WIDGETTI -->
+            <section id="live-encounters-section" style="margin-top: 2rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                    <h2 style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 50%;"></span>
+                        Tuoreimmat kohtaamiset & kuulumiset
+                    </h2>
+                    <span style="font-size: 0.8rem; color: #94a3b8;">Reaaliaikainen</span>
+                </div>
+                <div id="live-encounters-container">
+                    <div style="padding: 1.5rem; background: #1e293b; border: 1px solid #334155; border-radius: 12px; color: #94a3b8; font-size: 0.95rem;">
+                        Ladataan ajankohtaisia kuulumisia kohteesta...
+                    </div>
+                </div>
+            </section>
+
             ${relatedThemes.length > 0 ? `
             <section>
                 <h2>Liittyvät teemat</h2>
                 <p>Tutustu aihealueisiin ja teemoihin, joihin ${escapeHtml(place.name)} liittyy:</p>
                 <div class="tag-cloud">
                     ${relatedThemes.map(theme => `
-                        <a href="../teemat/${theme.seo_slug || slugify(theme.name)}.html" class="tag-chip">
+                        <a href="../../teemat/${theme.seo_slug || slugify(theme.name)}.html" class="tag-chip">
                             # ${escapeHtml(theme.name)}
                         </a>
                     `).join('')}
@@ -541,7 +560,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
                         <div class="content-card">
                             <h3>${escapeHtml(route.title || route.name)}</h3>
                             <p>${escapeHtml(route.description || 'Kokemusreitti Laukaan alueella.')}</p>
-                            <a href="../reitti.html?id=${encodeURIComponent(route.id)}">Katso reitti &rarr;</a>
+                            <a href="../../reitti.html?id=${encodeURIComponent(route.id)}">Katso reitti &rarr;</a>
                         </div>
                     `).join('')}
                 </div>
@@ -556,7 +575,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
                         <div class="content-card">
                             <h3>${escapeHtml(story.title || story.name)}</h3>
                             <p>${escapeHtml(story.excerpt || story.content || '')}</p>
-                            <a href="../tarinakartta.html">Lue tarina &rarr;</a>
+                            <a href="../../tarinakartta.html">Lue tarina &rarr;</a>
                         </div>
                     `).join('')}
                 </div>
@@ -566,8 +585,8 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
 
         <aside class="sidebar">
             <div class="sidebar-widget action-box">
-                <h3>Interaktiivinen kartta</h3>
-                <p>Tutustu kohteen <strong>${escapeHtml(place.name)}</strong> sijaintiin, reitteihin ja lähipalveluihin interaktiivisella kartallamme.</p>
+                <h3>Interaktiivinen kartta & toiminnot</h3>
+                <p>Tutustu kohteen <strong>${escapeHtml(place.name)}</strong> sijaintiin, reitteihin ja lähipalveluihin LaukaaInfon interaktiivisessa näkymässä.</p>
                 <a href="${interactiveUrl}" class="cta-button" style="width: 100%; justify-content: center;">
                     Siirry sovellukseen
                 </a>
@@ -576,13 +595,73 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
             <div class="sidebar-widget">
                 <h3>Alue</h3>
                 <p><strong>Alue:</strong> ${escapeHtml(areaName)}</p>
-                <p style="margin-top: 0.5rem;"><a href="../laukaa.html">Katso kaikki Laukaan kohteet &rarr;</a></p>
+                <p style="margin-top: 0.5rem;"><a href="../../laukaa.html">Katso kaikki Laukaan kohteet &rarr;</a></p>
             </div>
+        </aside>
+    </div>
+
+    <!-- Kevyt Supabase JS ja dynaamisen sisällön alustus -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    (async function initLiveEncounters() {
+        const placeId = ${JSON.stringify(place.id || place.place_id || 'b3b3a0e1-4c12-4c63-b8e7-2c1b82a34567')};
+        const container = document.getElementById('live-encounters-container');
+        if (!container) return;
+
+        try {
+            const sbUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+            const sbKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+            const sb = window.supabase.createClient(sbUrl, sbKey);
+
+            // Haetaan tuoreimmat kohtaamiset tai julkaisut kohteesta
+            const { data: encounters, error } = await sb
+                .from('encounters_public')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(4);
+
+            if (error || !encounters || encounters.length === 0) {
+                container.innerHTML = \`
+                    <div style="padding: 1.25rem; background: #1e293b; border: 1px solid #334155; border-radius: 12px; color: #94a3b8;">
+                        <p style="margin: 0 0 0.5rem 0;">Ei vielä julkisia kohtaamisviestejä tässä kohteessa.</p>
+                        <a href="\${${JSON.stringify(interactiveUrl)}}" style="color: #38bdf8; font-weight: 500; font-size: 0.9rem;">
+                            Jätä ensimmäinen viesti tai havainto LaukaaInfossa &rarr;
+                        </a>
+                    </div>
+                \`;
+                return;
+            }
+
+            container.innerHTML = encounters.map(enc => \`
+                <div style="padding: 1rem 1.25rem; background: #1e293b; border: 1px solid #334155; border-radius: 12px; margin-bottom: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem;">
+                        <strong style="color: #f8fafc; font-size: 1rem;">\${enc.title || 'Kohtaaminen'}</strong>
+                        <span style="font-size: 0.75rem; color: #64748b;">\${new Date(enc.created_at).toLocaleDateString('fi-FI')}</span>
+                    </div>
+                    <p style="margin: 0; color: #cbd5e1; font-size: 0.9rem;">\${enc.description || enc.content || ''}</p>
+                </div>
+            \`).join('') + \`
+                <div style="text-align: right; margin-top: 0.5rem;">
+                    <a href="\${${JSON.stringify(interactiveUrl)}}" style="color: #38bdf8; font-size: 0.85rem; font-weight: 600;">
+                        Katso kaikki kuulumiset ja osallistu &rarr;
+                    </a>
+                </div>
+            \`;
+        } catch (e) {
+            console.warn('Live encounters fetch failed:', e);
+            container.innerHTML = \`
+                <div style="padding: 1rem; background: #1e293b; border: 1px solid #334155; border-radius: 12px; color: #94a3b8; font-size: 0.85rem;">
+                    Ajankohtaisia kuulumisia ei voitu juuri nyt ladata.
+                </div>
+            \`;
+        }
+    })();
+    </script>
         </aside>
     </div>
     `;
 
-    html += renderFooter();
+    html += renderFooter('../../');
     return html;
 }
 

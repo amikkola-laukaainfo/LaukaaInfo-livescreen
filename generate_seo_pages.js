@@ -186,10 +186,12 @@ async function generateSeoPages() {
     console.log('====================================================');
 
     const rootDir = __dirname;
+    const paikkaDir = path.join(rootDir, 'paikka');
     const kohteetDir = path.join(rootDir, 'kohteet');
     const teematDir = path.join(rootDir, 'teemat');
 
     // Create directories if not existing
+    if (!fs.existsSync(paikkaDir)) fs.mkdirSync(paikkaDir, { recursive: true });
     if (!fs.existsSync(kohteetDir)) fs.mkdirSync(kohteetDir, { recursive: true });
     if (!fs.existsSync(teematDir)) fs.mkdirSync(teematDir, { recursive: true });
 
@@ -218,8 +220,8 @@ async function generateSeoPages() {
         themesToGenerate = PILOT_THEMES;
     }
 
-    // 3. Generate Place HTML Pages (/kohteet/*.html)
-    console.log('\n📄 Generating place SEO pages (/kohteet/)...');
+    // 3. Generate Place HTML Pages (/paikka/[slug]/index.html & /kohteet/[slug].html)
+    console.log('\n📄 Generating place SEO pages (/paikka/...)...');
     let placeCount = 0;
     placesToGenerate.forEach(place => {
         const slug = place.seo_slug || slugify(place.name);
@@ -242,9 +244,16 @@ async function generateSeoPages() {
             areaName: placeArea
         });
 
-        const filePath = path.join(kohteetDir, `${slug}.html`);
-        fs.writeFileSync(filePath, html, 'utf8');
-        console.log(`   + Created: /kohteet/${slug}.html (${place.name})`);
+        // A) Puhdas URL-muoto: /paikka/[slug]/index.html
+        const placeSubDir = path.join(paikkaDir, slug);
+        if (!fs.existsSync(placeSubDir)) fs.mkdirSync(placeSubDir, { recursive: true });
+        fs.writeFileSync(path.join(placeSubDir, 'index.html'), html, 'utf8');
+
+        // B) Yhteensopivuus: /kohteet/[slug].html
+        const kohteetFilePath = path.join(kohteetDir, `${slug}.html`);
+        fs.writeFileSync(kohteetFilePath, html, 'utf8');
+
+        console.log(`   + Created: /paikka/${slug}/ (${place.name})`);
         placeCount++;
     });
 

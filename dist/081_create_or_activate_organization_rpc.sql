@@ -317,12 +317,21 @@ BEGIN
                 FROM public.board_tasks t
                 WHERE t.item_id = i.id
             ), '[]'::jsonb)
-        ) ORDER BY i.sort_order ASC, i.created_at DESC
+        ) ORDER BY 
+            CASE i.stage
+                WHEN 'in_progress' THEN 1
+                WHEN 'vote' THEN 2
+                WHEN 'discussion' THEN 3
+                WHEN 'idea' THEN 4
+                WHEN 'decided' THEN 5
+                ELSE 6
+            END ASC,
+            i.updated_at DESC
     ), '[]'::jsonb)
     INTO v_items
     FROM public.board_items i
     WHERE i.organization_id = p_organization_id
-      AND i.is_archived = false;
+      AND i.stage <> 'archived';
 
     RETURN jsonb_build_object(
         'success', true,
