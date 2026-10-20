@@ -141,70 +141,22 @@ async function generateSitemap() {
             console.log(`✓ Lisätty /teemat/: ${teemaFiles.length} temasivua (0.90).`);
     }
 
-    // ── 2. Yritykset kolmesta lähteestä ─────────────────────────────────────────
-    //    A) Supabase companies-taulu (kaikki aktiiviset)
-    //    B) Fallback / täydennys: companies_data.json
-    //    C) Staattiset /yritys/*.html -tiedostot
-    const supabaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-    const supabaseKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-    const companySlugsSeen = new Set();
-    let companyUrlCount = 0;
-
-    const addCompanyUrl = (name) => {
-        if (!name) return;
-        const slug = slugify(name);
-        if (!slug || companySlugsSeen.has(slug)) return;
-        companySlugsSeen.add(slug);
-        xml += `<url>\n  <loc>${baseUrl}yritys/${slug}.html</loc>\n  <lastmod>${currentDate}</lastmod>\n  <changefreq>monthly</changefreq>\n  <priority>0.85</priority>\n</url>\n`;
-        companyUrlCount++;
-    };
-
-    // A) Supabase: kaikki aktiiviset yritykset
-    try {
-        const supaCompanies = await fetchSupabase(
-            supabaseUrl, supabaseKey,
-            '/rest/v1/companies?select=name,nimi&status=eq.active&limit=2000'
-        );
-        if (Array.isArray(supaCompanies)) {
-            supaCompanies.forEach(c => addCompanyUrl(c.name || c.nimi));
-            console.log(`✓ Supabase companies: ${supaCompanies.length} haettu, ${companyUrlCount} uniikkia URL:ia.`);
-        }
-    } catch (e) {
-        console.warn('⚠️  Supabase companies-haku epäonnistui:', e.message);
-    }
-
-    // B) Fallback / täydennys: companies_data.json
-    const companiesFile = path.join(__dirname, 'companies_data.json');
-    if (fs.existsSync(companiesFile)) {
-        try {
-            let rawJson = fs.readFileSync(companiesFile, 'utf8');
-            if (rawJson.charCodeAt(0) === 0xFEFF) rawJson = rawJson.slice(1);
-            const data = JSON.parse(rawJson);
-            const before = companyUrlCount;
-            (data.results || []).forEach(c => addCompanyUrl(c.nimi || c.name));
-            if (companyUrlCount > before)
-                console.log(`✓ companies_data.json: +${companyUrlCount - before} uutta URL:ia (yht. ${companyUrlCount}).`);
-        } catch (e) {
-            console.error('Virhe companies_data.json lukemisessa:', e.message);
-        }
-    }
-
-    // C) Staattiset /yritys/*.html (esim. manuaalisesti generoidut premium-sivut)
+    // ── 2. Yrityssivut – vain olemassa olevat staattiset /yritys/*.html ──────────
+    //    Sitemapiin lisätään AINOASTAAN tiedostot jotka oikeasti löytyvät levyltä.
+    //    Supabase-yrityksiä ei lisätä ennen kuin niille generoidaan staattiset sivut.
     const yritysDir = path.join(__dirname, 'yritys');
     if (fs.existsSync(yritysDir)) {
-        const staticFiles = fs.readdirSync(yritysDir).filter(f => f.endsWith('.html'));
-        staticFiles.forEach(file => {
-            const slug = file.replace('.html', '');
-            if (!companySlugsSeen.has(slug)) {
-                companySlugsSeen.add(slug);
-                xml += `<url>\n  <loc>${baseUrl}yritys/${file}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.90</priority>\n</url>\n`;
-                companyUrlCount++;
-            }
+        const yritysFiles = fs.readdirSync(yritysDir).filter(f => f.endsWith('.html'));
+        yritysFiles.forEach(file => {
+            xml += `<url>\n  <loc>${baseUrl}yritys/${file}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <changefreq>monthly</changefreq>\n  <priority>0.90</priority>\n</url>\n`;
         });
-        if (staticFiles.length > 0)
-            console.log(`✓ Staattiset /yritys/*.html: ${staticFiles.length} tarkistettu.`);
+        console.log(`✓ Lisätty /yritys/: ${yritysFiles.length} staattista yrityssivua (vain olemassa olevat).`);
+    } else {
+        console.log('ℹ️  /yritys/-kansiota ei löydy, ei yrityssivuja sitemapissa.');
     }
-    console.log(`✓ Yrityssivuja sitemapissa yhteensä: ${companyUrlCount}.`);
+
+    const supabaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+    const supabaseKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
 
     // ── 3. Haetaan Place ID:t Supabasesta → mediazoo-sitemapiin place.php -URL:it
     // HUOM: Nämä URL:it ovat www.mediazoo.fi -domainilla, joten ne kuuluvat xml2:een.
