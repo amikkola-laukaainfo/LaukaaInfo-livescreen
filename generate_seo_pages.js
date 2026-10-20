@@ -372,10 +372,109 @@ async function generateSeoPages() {
         themeCount++;
     });
 
+    // 5. Update sitemap.xml – merge existing static URLs + generated paikka & teemat pages
+    console.log('\n📍 Updating sitemap.xml...');
+    const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
+    const sitemapPath = path.join(rootDir, 'sitemap.xml');
+
+    // Static core pages (preserved as-is, /kohteet/ replaced by /paikka/)
+    const staticUrls = [
+        { loc: 'https://laukaainfo.fi/', priority: '1.00' },
+        { loc: 'https://laukaainfo.fi/index.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelun-esittely.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/ilmoittaudu.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/kauppa.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/lisaa-yritys.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/laukaa.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/leppavesi.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/lievestuore.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/vehnia.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/vihtavuori.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/ajankohtaista.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/asiahaku.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/kohdekartta.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/tarinakartta.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/muistokartta.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/kadonneet.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/ilmoitukset.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/verkostokartta.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/pikahaku.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/laukaan-ravintolat.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/laukaan-autohuollot.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/laukaan-parturit-ja-kauneus.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/tietoa-paikasta.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/laatu.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/tietosuoja.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/maksuehto.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/seina-esittely.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/alusta.html', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/pikahaku.html?id=vuokrauspalvelut', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=haat', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=yritysjuhlat', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=yritystilaisuudet', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=syntymapaivat', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=muutto', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=remontti', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=mokkipalvelut', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=hautajaiset', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=yrityksen-perustaminen', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=yrityksen-kehittaminen', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=vakituinen-palvelukumppani', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=kiinteistopalvelut', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=paivystavat-palvelut', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=terveys-ja-hyvinvointi', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=liikunta-ja-vapaaaika', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=elaimet', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=lapset-ja-perhe', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/palvelu.html?id=autohuollot', priority: '0.80' },
+        { loc: 'https://laukaainfo.fi/paikka/', priority: '0.95' },   // hakemisto
+        { loc: 'https://laukaainfo.fi/yritys/terveys-ja-hyvinvointipalvelu-riina-raitio.html', priority: '0.90' },
+        { loc: 'https://laukaainfo.fi/yritys/vuonteen-helmi.html', priority: '0.90' },
+        { loc: 'https://laukaainfo.fi/yritys/mediazoo.html', priority: '0.90' },
+        { loc: 'https://laukaainfo.fi/yritys/keski-suomen-parvekelasitus-oy.html', priority: '0.90' }
+    ];
+
+    // Dynamic paikka pages
+    const paikkaUrls = placesToGenerate.map(p => ({
+        loc: `https://laukaainfo.fi/paikka/${p.seo_slug || slugify(p.name)}/`,
+        priority: '0.90',
+        changefreq: 'weekly'
+    }));
+
+    // Dynamic teemat pages
+    const teematUrls = themesToGenerate.map(t => ({
+        loc: `https://laukaainfo.fi/teemat/${t.seo_slug || slugify(t.name)}.html`,
+        priority: '0.90',
+        changefreq: 'monthly'
+    }));
+
+    const allUrls = [...staticUrls, ...paikkaUrls, ...teematUrls];
+
+    const urlEntries = allUrls.map(u => {
+        const cf = u.changefreq ? `\n  <changefreq>${u.changefreq}</changefreq>` : '';
+        return `<url>\n  <loc>${u.loc}</loc>\n  <lastmod>${today}</lastmod>${cf}\n  <priority>${u.priority}</priority>\n</url>`;
+    }).join('\n');
+
+    const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- Generated by LaukaaInfo SEO Generator – ${new Date().toISOString()} -->
+
+${urlEntries}
+
+</urlset>
+`;
+    fs.writeFileSync(sitemapPath, sitemapXml, 'utf8');
+    console.log(`   ✓ sitemap.xml updated: ${allUrls.length} URLs (${paikkaUrls.length} paikka + ${teematUrls.length} teemat + ${staticUrls.length} static)`);
+
     console.log('\n====================================================');
     console.log(`✅ SEO Generation Complete!`);
     console.log(`   - Generated ${placeCount} Place pages in /paikka/`);
     console.log(`   - Generated ${themeCount} Theme pages in /teemat/`);
+    console.log(`   - sitemap.xml updated with ${allUrls.length} URLs`);
     console.log('====================================================\n');
 }
 
