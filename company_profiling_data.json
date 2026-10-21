@@ -769,8 +769,8 @@
             "name": "Tertan kahvila- ja puoti",
             "category": "Kaupat ja ostokset",
             "package": "perus",
-            "lat": 62.325583,
-            "lon": 25.994593,
+            "lat": 62.325,
+            "lon": 25.996,
             "address": "Antinniementie 1, 41330 Laukaa"
         },
         "group-juhlat-ja-merkkipäivät": {
@@ -879,8 +879,8 @@
             "name": "Fysioterapiapalvelu Hannele Kerkelä",
             "category": "Hyvinvointi ja terveys",
             "package": "perus",
-            "lat": 62.4107,
-            "lon": 25.91018,
+            "lat": 62.412,
+            "lon": 25.95,
             "address": "Arwidssonintie, 41340 Laukaa"
         },
         "company-9": {
@@ -3229,7 +3229,7 @@
         "company-239": {
             "type": "company",
             "name": "WoodIT",
-            "category": "Rakentaminen ja remontointi",
+            "category": "Palvelut",
             "package": "perus",
             "lat": 62.319046,
             "lon": 25.837189,
@@ -3350,11 +3350,11 @@
         "company-253": {
             "type": "company",
             "name": "Laukaan Autohuoltamo Oy (ST1 KAHVILA)",
-            "category": "Auto ja kuljetus",
-            "package": "perus",
-            "lat": 62.419092,
-            "lon": 25.943997,
-            "address": "Yläniementie 51, 41340 Laukaa"
+            "category": "",
+            "package": "",
+            "lat": null,
+            "lon": null,
+            "address": ""
         },
         "company-254": {
             "type": "company",
@@ -3590,9 +3590,9 @@
             "name": "Vuonteen Helmi",
             "category": "Juhlatilat",
             "package": "perus",
-            "lat": 62.3410007,
-            "lon": 26.0291409,
-            "address": "Tarvaalantie 22, Vuontee"
+            "lat": 62.3169,
+            "lon": 25.98618,
+            "address": "Tarvaalantie 22, 41330 Vihtavuori, Laukaa"
         },
         "intent-EVT_PARTY": {
             "type": "intent",
@@ -3675,7 +3675,7 @@
             "type": "company",
             "name": "Laukaan Tuulenväre",
             "category": "Juhlatilat",
-            "package": "perus",
+            "package": "ilmainen",
             "lat": 62.401075,
             "lon": 25.9511854,
             "address": "Ristonniementie 2, 41340 Laukaa"
@@ -3727,11 +3727,11 @@
         "company-295": {
             "type": "company",
             "name": "Naissaaren Upee kahvila",
-            "category": "Kahvila",
-            "package": "perus",
-            "lat": 62.2450238,
-            "lon": 25.8850797,
-            "address": "Naissaarentie 2, 40800 Vaajakoski, Jyväskylä, Suomi"
+            "category": "",
+            "package": "",
+            "lat": null,
+            "lon": null,
+            "address": ""
         },
         "nodelink-VAAJAKOSKI": {
             "type": "nodelink",
@@ -3744,7 +3744,7 @@
             "package": "perus",
             "lat": 62.2196874,
             "lon": 25.7672757,
-            "address": "Pellonreuna 11 B 13, 40520 Jyväskylä, Suomi"
+            "address": "Pellonreuna 11 B, 40520 Jyväskylä, Suomi"
         },
         "company-301": {
             "type": "company",
@@ -3847,62 +3847,62 @@
         "company-312": {
             "type": "company",
             "name": "Päivin pieni kukkapuoti",
-            "category": "",
-            "package": "",
-            "lat": null,
-            "lon": null,
-            "address": ""
+            "category": "Muu",
+            "package": "perus",
+            "lat": 62.2585044,
+            "lon": 26.2321966,
+            "address": "Puhakantie 107, Lievestuore"
         },
         "company-311": {
             "type": "company",
             "name": "Suunnittelu- ja rakennuttamispalvelu Marko Viik",
-            "category": "",
-            "package": "",
-            "lat": null,
-            "lon": null,
-            "address": ""
+            "category": "Rakentaminen ja remontointi",
+            "package": "perus",
+            "lat": 62.241672,
+            "lon": 25.7495806,
+            "address": "Jyväskylä"
         },
         "company-313": {
             "type": "company",
             "name": "Laukaan Kädenjälki ry",
-            "category": "",
-            "package": "",
-            "lat": null,
-            "lon": null,
-            "address": ""
+            "category": "Yhdistys",
+            "package": "perus",
+            "lat": 62.4151247,
+            "lon": 25.9519273,
+            "address": "Laukaantie 26, 41340 Laukaa"
         },
         "company-316": {
             "type": "company",
             "name": "Laukaan Pitopalvelu",
-            "category": "",
-            "package": "",
-            "lat": null,
-            "lon": null,
-            "address": ""
+            "category": "Juhlatilat",
+            "package": "perus",
+            "lat": 62.4315115,
+            "lon": 25.9381628,
+            "address": "Ahotie 20, 41340 Laukaa"
         },
         "company-315": {
             "type": "company",
             "name": "Äijäparkki",
-            "category": "",
-            "package": "",
-            "lat": null,
-            "lon": null,
-            "address": ""
+            "category": "Juhlatilat",
+            "package": "perus",
+            "lat": 62.3025797,
+            "lon": 25.8375288,
+            "address": "Saksalantie 25, 41310 Leppävesi, Suomi"
         },
         "company-314": {
             "type": "company",
             "name": "Valkolan kyläyhdistys ry",
-            "category": "",
-            "package": "",
-            "lat": null,
-            "lon": null,
-            "address": ""
+            "category": "Juhlatilat",
+            "package": "perus",
+            "lat": 62.4681516,
+            "lon": 25.8249414,
+            "address": "Puralanharjuntie 76, 41360 Valkola"
         },
         "company-243": {
             "type": "company",
             "name": "Laukaan Tupaswilla Oy",
             "category": "Ruokailu",
-            "package": "perus",
+            "package": "ilmainen",
             "lat": 62.458337,
             "lon": 25.943189,
             "address": "Äijäläntie 202, 41370 Laukaa"
