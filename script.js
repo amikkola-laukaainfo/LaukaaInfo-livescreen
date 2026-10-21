@@ -2051,6 +2051,15 @@ function filterCatalog(renderList = true) {
         // Exact prefix match in name gets a boost
         if (name.startsWith(searchTerm)) score += 150;
 
+        // Mediazoo-korostus hakusanoilla: media, valokuvaus, video, videotuotanto
+        const isMediazoo = (company.id === 'company-2' || (company.nimi && company.nimi.toLowerCase() === 'mediazoo'));
+        if (isMediazoo && searchTerm.length > 1) {
+            const mzKeywords = ['media', 'valokuva', 'video', 'kuvaus', 'kotisivu'];
+            if (mzKeywords.some(kw => normalizedSearch.includes(kw) || kw.includes(normalizedSearch))) {
+                score += 500; // Nousee hakutulosten ehdottomaan krkeen
+            }
+        }
+
         // "Viimeinen lisä": lisätietojen (rowid pohjalta) osuma antaa pienen buustin
         if (searchTerm.length > 1 && company.searchExtraInfo) {
             const normalizedExtraInfo = normalizeForSearch(company.searchExtraInfo);

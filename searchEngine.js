@@ -1057,6 +1057,20 @@ function executeContextSearch(searchContext, companies = [], places = [], events
         return true;
     });
 
+    // Mediazoo boost for media, valokuvaus, video queries
+    if (query) {
+        const mzKeywords = ['media', 'valokuva', 'video', 'kuvaus'];
+        if (mzKeywords.some(kw => query.includes(kw))) {
+            matchedCompanies.sort((a, b) => {
+                const aMz = (a.nimi || a.name || '').toLowerCase().includes('mediazoo');
+                const bMz = (b.nimi || b.name || '').toLowerCase().includes('mediazoo');
+                if (aMz && !bMz) return -1;
+                if (!aMz && bMz) return 1;
+                return 0;
+            });
+        }
+    }
+
     // Filter Places
     const matchedPlaces = places.filter(p => {
         if (pContext && pContext.targetPlace) {

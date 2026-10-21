@@ -977,6 +977,14 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
                              visEntry?.visibility_type === 'THEME_PARTNER' ? 'Teemakumppani' : 'Kumppani';
             reasons.push({ type: 'VISIBILITY', label: visLabel });
         }
+
+        // Taso 1+: Aktiivinen kumppani (featured_partner === 'yes')
+        const isFeaturedPartner = String(company.featured_partner || '').toLowerCase().trim() === 'yes';
+        if (isFeaturedPartner) {
+            score += 250;
+            tier = 1;
+            reasons.unshift({ type: 'FEATURED_PARTNER', label: 'Aktiivinen kumppani' });
+        }
         
         if (tier <= 99 && score > 0) {
             seenIds.add(compId);
@@ -1935,6 +1943,13 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         if (compSection && tier1and2.length > 0) compSection.style.display = 'block';
     } else {
         tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
+            const aFeatured = String(a.featured_partner || '').toLowerCase().trim() === 'yes' ||
+                              (a.reasons && a.reasons.some(r => r.type === 'FEATURED_PARTNER'));
+            const bFeatured = String(b.featured_partner || '').toLowerCase().trim() === 'yes' ||
+                              (b.reasons && b.reasons.some(r => r.type === 'FEATURED_PARTNER'));
+            if (aFeatured && !bFeatured) return -1;
+            if (!aFeatured && bFeatured) return 1;
+
             if (a.tier !== b.tier) return a.tier - b.tier;
 
             const aIsPartner = a.reasons && a.reasons.some(r => r.type === 'VISIBILITY');
@@ -1962,7 +1977,9 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     
     // Yleinen HTML generaattori korteille
     const generateCardHtml = (item, isSemantic = false) => {
-        const isPartner = item.reasons && item.reasons.some(r => r.type === 'VISIBILITY');
+        const isFeatured = String(item.featured_partner || '').toLowerCase().trim() === 'yes' ||
+                           (item.reasons && item.reasons.some(r => r.type === 'FEATURED_PARTNER'));
+        const isPartner = isFeatured || (item.reasons && item.reasons.some(r => r.type === 'VISIBILITY'));
         const subTier = item.subscription_tier || 1;
         
         let linkUrl = '?id=' + item.id;
@@ -1971,7 +1988,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         }
         
         const displayName = item.nimi || item.name || item.id;
-        const displayIcon = isPartner ? '⭐' : (subTier === 2 ? '💎' : '');
+        const displayIcon = isFeatured ? '⭐' : (isPartner ? '⭐' : (subTier === 2 ? '💎' : ''));
         const displayTitle = `${displayName} ${displayIcon}`;
         
         let thumbUrl = item.logo || (item.images && item.images[0]) || item.image || null;
@@ -2029,8 +2046,10 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         `;
 
         const isPlaceRelation = item.reasons && item.reasons.some(r => r.type !== 'NEAR' && r.type !== 'AREA');
-        const isHighlight = hasExtraContent || isPlaceRelation;
-        const highlightStyle = isHighlight ? ' background: #f0f9ff; border-color: #bae6fd;' : '';
+        const isHighlight = isFeatured || hasExtraContent || isPlaceRelation;
+        const highlightStyle = isFeatured
+            ? ' background: #f0f7ff; border: 2px solid #3b82f6; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15);'
+            : (isHighlight ? ' background: #f0f9ff; border-color: #bae6fd;' : '');
 
         if (!hasExtraContent) {
             return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;${highlightStyle}">${headerHtml}</a>`;

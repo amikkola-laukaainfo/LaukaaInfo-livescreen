@@ -363,13 +363,15 @@
 
         // Probabilistic Weighted Sort for Premium Companies
         // Higher karusellipaino (0-100) increases the chance of being at the top
+        // Featured partners (featured_partner === 'yes') always get highest priority (1000+)
         premium = premium.map(c => {
+            const isFeatured = String(c.featured_partner || '').toLowerCase().trim() === 'yes';
             const weight = parseFloat(c.karusellipaino) || 0;
-            // sortScore is a combination of weight-biased random and a baseline random
-            // Companies with 100 weight will have scores in range [10, 20]
-            // Companies with 0 weight will have scores in range [0, 10]
-            const sortScore = (Math.random() * 10) + (weight / 10);
-            return { ...c, sortScore };
+            const partnerPrio = parseInt(c.featured_order, 10) || 1;
+            const sortScore = isFeatured
+                ? (1000 + (100 - partnerPrio))
+                : ((Math.random() * 10) + (weight / 10));
+            return { ...c, sortScore, isFeaturedPartner: isFeatured };
         }).sort((a, b) => b.sortScore - a.sortScore);
 
         // First 5 go to carousel, the rest to the directory list
@@ -655,12 +657,14 @@
                 const sanitizedUrl = cleanUrl(c.nettisivu || '', true);
                 const websiteShow = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-                const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
-                const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+                const isFeatured = String(c.featured_partner || '').toLowerCase().trim() === 'yes' || c.isFeaturedPartner;
+                const badgeHtml = isFeatured
+                    ? `<span class="premium-badge" style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); color: white; border: 1px solid #60a5fa; box-shadow: 0 2px 8px rgba(37,99,235,0.35);">⭐ SUOSITELTU KUMPPANI ${distHtml}</span>`
+                    : `<span class="premium-badge">SUOSITELTU ${distHtml}</span>`;
 
                 item.innerHTML = `
                 <a href="${cardUrl}" style="text-decoration: none; color: inherit; display: block;">
-                    <span class="premium-badge">SUOSITELTU ${distHtml}</span>
+                    ${badgeHtml}
                     ${mediaHtml}
                     <h3>${c.nimi}</h3>
                     <p>${description}</p>
@@ -752,14 +756,23 @@
             ? `<div style="margin-top:0.5rem;"><strong>${websiteShow}</strong></div>`
             : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
 
-        const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
-        const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+        const isFeatured = String(c.featured_partner || '').toLowerCase().trim() === 'yes' || c.isFeaturedPartner;
+        const partnerBadge = isFeatured
+            ? `<div style="margin-bottom: 8px;"><span style="display:inline-block; background:linear-gradient(135deg, #1e40af 0%, #2563eb 100%); color:#fff; padding:3px 10px; border-radius:15px; font-size:0.75rem; font-weight:800; letter-spacing:0.04em; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">⭐ SUOSITELTU KUMPPANI</span></div>`
+            : '';
+
+        if (isFeatured) {
+            card.style.border = '2px solid #3b82f6';
+            card.style.background = '#f8fafc';
+            card.style.boxShadow = '0 4px 16px rgba(59, 130, 246, 0.12)';
+        }
 
         card.setAttribute('data-card-url', cardUrl);
         card.style.cursor = 'pointer';
         card.onclick = () => { window.location.href = cardUrl; };
 
         card.innerHTML = `
+        ${partnerBadge}
         ${distBadge}
         <h3>${c.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h3>
         ${c.service_mode === 'SERVICE_AREA' ? '<div style="margin-bottom: 10px;"><span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; border: 1px solid #ffccbc; font-weight: bold; display: inline-block;">🟠 PALVELEE ALUEELLA</span></div>' : ''}
