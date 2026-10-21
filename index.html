@@ -761,6 +761,191 @@
 
         </section>
 
+<!-- ===== AKTIIVISET KUMPPANIT -OSIO (pilotti 60 pv) ===== -->
+<section id="active-partners-section" style="display:none; padding: 3rem 0; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+    <div class="section-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
+
+        <div style="text-align: center; margin-bottom: 1.75rem;">
+            <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.4rem;">LaukaaInfon yhteistyö</div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #0a2540; margin: 0 0 0.4rem;">Aktiiviset kumppanit</h2>
+            <p style="color: #64748b; font-size: 0.95rem; margin: 0;">Nämä toimijat ovat mukana LaukaaInfon kehityksessä ja paikallisessa näkyvyydessä.</p>
+        </div>
+
+        <div id="active-partners-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;">
+            <!-- Kortit renderöidään JS:ssä -->
+        </div>
+
+        <!-- Mediazoo – pysyvä kehityskumppanikortti -->
+        <div id="mediazoo-partner-card" style="margin-top: 1.5rem; padding: 1.25rem 1.5rem;
+             background: linear-gradient(135deg, #0a2540 0%, #1e40af 100%);
+             border-radius: 16px; display: flex; align-items: center; gap: 1.25rem;
+             flex-wrap: wrap; box-shadow: 0 4px 20px rgba(10,37,64,0.15);">
+            <div style="flex: 1; min-width: 200px;">
+                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+                            color: #93c5fd; margin-bottom: 0.3rem;">LaukaaInfon kehitys- ja toteutuskumppani</div>
+                <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.25rem;">Mediazoo</div>
+                <div style="font-size: 0.88rem; color: #bfdbfe;">Media-, kuvaus- ja digipalvelut Laukaassa.</div>
+            </div>
+            <a href="https://mediazoo.fi" target="_blank" rel="noopener"
+               data-partner-click="mediazoo" data-partner-type="developer"
+               style="display: inline-block; padding: 0.6rem 1.4rem;
+                      background: #fff; color: #1e40af; border-radius: 50px;
+                      text-decoration: none; font-weight: 700; font-size: 0.9rem;
+                      white-space: nowrap; transition: opacity 0.2s;"
+               onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                Tutustu palveluihin →
+            </a>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+            <p style="font-size: 0.78rem; color: #94a3b8; margin: 0;">
+                Kiinnostutko kumppanuudesta? <a href="mailto:info@mediazoo.fi" style="color: #3b82f6;">Ota yhteyttä →</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+    'use strict';
+
+    // --- Klikkausmittaus ---
+    function trackPartnerClick(companyId, type) {
+        try {
+            const key = 'lki_partner_clicks';
+            const stored = JSON.parse(localStorage.getItem(key) || '{}');
+            const today = new Date().toISOString().slice(0, 10);
+            if (!stored[today]) stored[today] = {};
+            stored[today][companyId] = (stored[today][companyId] || 0) + 1;
+            localStorage.setItem(key, JSON.stringify(stored));
+        } catch (e) {}
+    }
+
+    document.addEventListener('click', function (e) {
+        const el = e.target.closest('[data-partner-click]');
+        if (el) trackPartnerClick(el.dataset.partnerClick, el.dataset.partnerType || 'featured');
+    });
+
+    // --- Kumppanien renderöinti ---
+    function isFeaturedPartner(c) {
+        if (!c || c.is_expired) return false;
+        const fp = String(c.featured_partner || '').toLowerCase().trim();
+        if (fp !== 'yes') return false;
+        // Päättymispäivä: jos kenttä löytyy ja on mennyt, ei näytetä
+        if (c.featured_until) {
+            try {
+                if (new Date(c.featured_until) < new Date()) return false;
+            } catch (e) {}
+        }
+        return true;
+    }
+
+    function partnerOrder(c) {
+        const n = parseInt(c.featured_order, 10);
+        return Number.isNaN(n) ? 99 : n;
+    }
+
+    function escHtml(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function getImageUrl(c) {
+        if (c.logo && c.logo !== '-') return c.logo;
+        if (c.media && c.media.length) {
+            const img = c.media.find(m => m.type === 'image' && m.url) || c.media[0];
+            if (img && img.url) return img.url;
+        }
+        return null;
+    }
+
+    function getTeaser(c) {
+        let t = c.mainoslause || c.esittely || '';
+        if (t.includes('@@')) t = t.split('@@')[0].trim();
+        t = t.replace(/#[\wåäöÅÄÖ]+/gi, '').replace(/\s+/g, ' ').trim();
+        return t.length > 110 ? t.slice(0, 107) + '…' : (t || c.kategoria || '');
+    }
+
+    function getCardUrl(c) {
+        const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid' ||
+                       c.taso === 'premium' || (c.subscription_tier || 0) >= 2;
+        const slug = typeof slugify === 'function' ? slugify(c.nimi) : String(c.id || '').replace('company-', '');
+        return isPaid ? `yritys/${slug}.html` : `yrityskortti.html?id=${encodeURIComponent(c.id || slug)}`;
+    }
+
+    function buildPartnerCard(c) {
+        const imgUrl = getImageUrl(c);
+        const cardUrl = getCardUrl(c);
+        const teaser = escHtml(getTeaser(c));
+        const name = escHtml(c.nimi || '');
+        const kategoria = escHtml(c.kategoria || '');
+        const imgHtml = imgUrl
+            ? `<div style="width:72px;height:72px;border-radius:12px;background:url('${imgUrl.replace(/'/g,"\\'") }') center/cover no-repeat;flex-shrink:0;"></div>`
+            : `<div style="width:72px;height:72px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">🏢</div>`;
+
+        const div = document.createElement('div');
+        div.style.cssText = 'background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;padding:1.25rem;display:flex;gap:1rem;align-items:flex-start;box-shadow:0 2px 12px rgba(0,0,0,0.05);transition:box-shadow 0.2s;';
+        div.onmouseenter = () => div.style.boxShadow = '0 6px 24px rgba(0,0,0,0.1)';
+        div.onmouseleave = () => div.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)';
+        div.innerHTML = `
+            ${imgHtml}
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#3b82f6;margin-bottom:0.2rem;">Aktiivinen kumppani</div>
+                <div style="font-size:1.05rem;font-weight:800;color:#0a2540;margin-bottom:0.15rem;">${name}</div>
+                <div style="font-size:0.8rem;color:#64748b;margin-bottom:0.5rem;">${kategoria}</div>
+                <p style="font-size:0.88rem;color:#475569;margin:0 0 0.75rem;line-height:1.45;">${teaser}</p>
+                <a href="${escHtml(cardUrl)}" data-partner-click="${escHtml(c.id || '')}" data-partner-type="featured"
+                   style="display:inline-block;padding:0.45rem 1.1rem;background:#3b82f6;color:#fff;border-radius:50px;text-decoration:none;font-size:0.82rem;font-weight:700;"
+                   onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                    Tutustu yritykseen →
+                </a>
+            </div>`;
+        return div;
+    }
+
+    function renderPartners(companies) {
+        const section = document.getElementById('active-partners-section');
+        const grid = document.getElementById('active-partners-grid');
+        if (!section || !grid) return;
+
+        const partners = companies
+            .filter(isFeaturedPartner)
+            .sort((a, b) => partnerOrder(a) - partnerOrder(b));
+
+        grid.innerHTML = '';
+        partners.forEach(c => grid.appendChild(buildPartnerCard(c)));
+
+        // Näytä osio vain jos kumppaneita tai aina (Mediazoo-kortti on aina)
+        section.style.display = 'block';
+    }
+
+    // Odota allCompanies
+    function waitAndRender(maxMs) {
+        const start = Date.now();
+        const tick = () => {
+            if (window.allCompanies && window.allCompanies.length > 0) {
+                renderPartners(window.allCompanies);
+                return;
+            }
+            if (Date.now() - start > maxMs) {
+                // Näytä silti Mediazoo-kortti
+                const s = document.getElementById('active-partners-section');
+                if (s) s.style.display = 'block';
+                return;
+            }
+            setTimeout(tick, 300);
+        };
+        tick();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => waitAndRender(10000));
+    } else {
+        waitAndRender(10000);
+    }
+})();
+</script>
+<!-- ===== /AKTIIVISET KUMPPANIT ===== -->
+
 <section id="search-section" class="search-section bg-full-blue"
             style="padding: 2.5rem 0 3.5rem; position: relative; z-index: 50;">
 

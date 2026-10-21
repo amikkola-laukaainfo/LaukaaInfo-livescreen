@@ -37,6 +37,15 @@
         localStorage.setItem(STORAGE_HIDE_UNTIL, String(Date.now() + HIDE_DAYS * 24 * 60 * 60 * 1000));
     }
 
+    function isFeaturedPartner(c) {
+        if (!c || c.is_expired) return false;
+        if (String(c.featured_partner || '').toLowerCase().trim() !== 'yes') return false;
+        if (c.featured_until) {
+            try { if (new Date(c.featured_until) < new Date()) return false; } catch (e) {}
+        }
+        return true;
+    }
+
     function isPremiumCompany(c) {
         const pkg = String(c.package || c.paketti || c.tyyppi || c.taso || '').toLowerCase();
         return ['basic', 'plus', 'pro', 'paid', 'maksu', 'premium'].includes(pkg);
@@ -167,6 +176,21 @@
     function tryShow() {
         if (!document.getElementById('home-region-select')) return;
         if (isHiddenByUser()) return;
+
+        // 1. Kumppaniprioriteetti: featured_partner=yes ensin (erillinen sääntö, ei koske karusellipaino)
+        const partnerPool = (window.allCompanies || []).filter(isFeaturedPartner);
+        if (partnerPool.length > 0) {
+            // Valitaan järjestyksessä featured_order – pienin ensin, tasapelissä satunnainen
+            partnerPool.sort((a, b) => {
+                const oa = parseInt(a.featured_order, 10) || 99;
+                const ob = parseInt(b.featured_order, 10) || 99;
+                return oa !== ob ? oa - ob : Math.random() - 0.5;
+            });
+            showWidget(partnerPool[0]);
+            return;
+        }
+
+        // 2. Normaali painotettu satunnaisvalinta muille yrityksille
         const pool = (window.allCompanies || []).filter(isEligible);
         const company = pickWeighted(pool);
         if (!company) return;
