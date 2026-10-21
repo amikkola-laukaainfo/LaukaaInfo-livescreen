@@ -1247,7 +1247,7 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     // joka hakee oikeat hyväksytyt havainnot Supabasesta ja näyttää ne oletuksena suljetussa haitarissa.
 
     // Verkostoyhteydet ja Yritykset (4-tasomalli)
-    renderCompanies(scoredCompanies, allSources, allContents, place);
+    renderCompanies(scoredCompanies, allSources, allContents, place, allCompanies);
     renderRelations(relatedItems, allSources, allContents); // Vanha renderointi jäljelle jääville (muut kuin yritykset)
 
     // Paikan omat lisäsisällöt (place_content ilman entity_id:tä)
@@ -1885,10 +1885,38 @@ function isCompanySearchMatch(comp, searchQuery) {
 
     const haystack = fields.filter(Boolean).join(' ').toLowerCase();
 
-    return haystack.includes(q) || (qStem.length >= 4 && haystack.includes(qStem));
+    // 1. Suora osuma tai kantasanan osuma
+    if (haystack.includes(q) || (qStem.length >= 4 && haystack.includes(qStem))) {
+        return true;
+    }
+
+    // 2. Teemakohtaiset synonyymit ja toimialalaajennukset
+    const THEME_SYNONYMS = {
+        'autohuolto': ['huolto', 'korjaamo', 'rengas', 'autokorjaamo', 'autohuollot', 'autokorjaamot', 'autopalvelu', 'katsastus', 'ad-autohuolto'],
+        'autohuollot': ['huolto', 'korjaamo', 'rengas', 'autokorjaamo', 'autohuollot', 'autokorjaamot', 'autopalvelu', 'katsastus', 'ad-autohuolto'],
+        'autokorjaamo': ['huolto', 'korjaamo', 'rengas', 'autokorjaamo', 'autohuollot', 'autokorjaamot', 'autopalvelu', 'katsastus', 'ad-autohuolto'],
+        'autokorjaamot': ['huolto', 'korjaamo', 'rengas', 'autokorjaamo', 'autohuollot', 'autokorjaamot', 'autopalvelu', 'katsastus', 'ad-autohuolto'],
+        'kampaamo': ['parturi', 'kampaamo', 'parturi-kampaamo', 'hius', 'kampaaja', 'hiustenleikkaus'],
+        'parturi': ['parturi', 'kampaamo', 'parturi-kampaamo', 'hius', 'kampaaja', 'hiustenleikkaus'],
+        'ravintola': ['ravintola', 'lounas', 'ruoka', 'kahvila', 'pizzeria', 'pitsa', 'hampurilainen'],
+        'lounas': ['lounas', 'lounasravintola', 'buffet', 'ruokailu', 'ravintola']
+    };
+
+    const synList = THEME_SYNONYMS[q];
+    if (synList && synList.length > 0) {
+        const cat = (comp.kategoria || '').toLowerCase();
+        if (q.startsWith('auto') && (cat === 'autokorjaamot' || cat === 'auto ja kuljetus')) {
+            if (synList.some(s => haystack.includes(s))) return true;
+        }
+        if (synList.some(s => haystack.includes(s))) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
-function renderCompanies(scoredCompanies, allSources = [], allContents = [], currentPlace = null) {
+function renderCompanies(scoredCompanies, allSources = [], allContents = [], currentPlace = null, allCompanies = []) {
     const listTier12 = document.getElementById('companies-list');
     const containerTier3 = document.getElementById('semantic-matches-container');
     const listTier3 = document.getElementById('semantic-matches-list');
@@ -1899,9 +1927,12 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     
     let tier1and2;
     if (activeSearchQ) {
-        tier1and2 = scoredCompanies.filter(c => isCompanySearchMatch(c, activeSearchQ));
+        const sourceForSearch = (Array.isArray(allCompanies) && allCompanies.length > 0) ? allCompanies : scoredCompanies;
+        tier1and2 = sourceForSearch.filter(c => isCompanySearchMatch(c, activeSearchQ));
         const statCompaniesEl = document.getElementById('stat-companies');
         if (statCompaniesEl) statCompaniesEl.textContent = tier1and2.length;
+        const compSection = document.getElementById('companies-section');
+        if (compSection && tier1and2.length > 0) compSection.style.display = 'block';
     } else {
         tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
             if (a.tier !== b.tier) return a.tier - b.tier;
@@ -2397,7 +2428,9 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                 searchNoticeEl.style.cssText = 'background:#f0f7ff; border:1px solid #bae6fd; border-radius:10px; padding:0.6rem 1rem; margin-bottom:1rem; font-size:0.9rem; color:#0369a1; display:flex; align-items:center; justify-content:space-between; font-weight:600;';
                 container.parentNode.insertBefore(searchNoticeEl, container);
             }
-            searchNoticeEl.innerHTML = `<span>🎯 Hakusana kartalla: <strong>"${searchQuery}"</strong></span> <button onclick="window.location.href=window.location.pathname" style="background:#0284c7; color:white; border:none; border-radius:6px; padding:3px 8px; font-size:0.75rem; cursor:pointer;">Poista rajaus ✖</button>`;
+            const isAuto = ['autohuolto', 'autohuollot', 'autokorjaamo', 'autokorjaamot'].includes(searchNormalized);
+            const extraLink = isAuto ? ` <span style="font-weight:normal; margin-left:0.5rem;">🔧 <a href="laukaan-autohuollot.html" style="color:#0369a1; text-decoration:underline;">Avaa autohuoltojen teemasivu &raquo;</a></span>` : '';
+            searchNoticeEl.innerHTML = `<span>🎯 Hakusana kartalla: <strong>"${searchQuery}"</strong>${extraLink}</span> <button onclick="window.location.href=window.location.pathname" style="background:#0284c7; color:white; border:none; border-radius:6px; padding:3px 8px; font-size:0.75rem; cursor:pointer;">Poista rajaus ✖</button>`;
         }
 
         // 3. Yritykset (aluesivuilla kuten laukaa.html, lievestuore.html jne.)
