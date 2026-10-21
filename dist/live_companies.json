@@ -19,6 +19,9 @@
             "service_radius": "",
             "service_note": "Tarjoaa pitopalvelua erilaisiin juhliin ja tapahtumiin asiakkaan toiveiden mukaan. Keskittyy yksityis- ja pienyritystilaisuuksiin Laukaan ja Keski-Suomen alueella.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -41,6 +44,9 @@
             "service_radius": "",
             "service_note": "Palveluihin kuuluu tilavuokraus (juhlat ja tapahtumat), ajoneuvojen ja veneiden talvisäilytys sekä pitkäaikaismajoitus. Lisäksi maatilaan liittyvää eläin- ja pihatoimintaa.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -63,6 +69,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -85,6 +94,9 @@
             "service_radius": "100",
             "service_note": "Palvelee Laukaan lisäksi laajasti Keski-Suomen alueella.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -107,6 +119,9 @@
             "service_radius": "100",
             "service_note": "Verkkokauppa toimittaa koko Suomeen, asennuspalvelut Keski-Suomen alueella.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -129,6 +144,9 @@
             "service_radius": "200",
             "service_note": "Palvelee asiakkaita koko Suomessa, suunnittelu, valmistus ja asennus.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -151,6 +169,9 @@
             "service_radius": "50",
             "service_note": "Palvelualue kattaa Laukaan lisäksi lähialueet Keski-Suomessa sopimuksen mukaan.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -173,6 +194,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -195,6 +219,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -217,6 +244,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -239,6 +269,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -261,6 +294,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -283,6 +319,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -305,6 +344,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -327,6 +369,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -349,6 +394,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -371,6 +419,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -393,6 +444,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -415,6 +469,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -437,6 +494,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -459,6 +519,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -481,6 +544,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -503,6 +569,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -525,6 +594,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -547,6 +619,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -569,6 +644,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -591,6 +669,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -613,6 +694,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -635,6 +719,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -657,6 +744,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -679,6 +769,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -701,6 +794,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -723,6 +819,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -745,6 +844,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -767,6 +869,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -789,6 +894,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -811,6 +919,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -833,6 +944,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -855,6 +969,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -877,6 +994,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -899,6 +1019,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -921,6 +1044,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -943,6 +1069,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -965,6 +1094,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -987,6 +1119,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1009,6 +1144,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1031,6 +1169,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1053,6 +1194,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1075,6 +1219,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1097,6 +1244,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1119,6 +1269,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1141,6 +1294,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1163,6 +1319,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1185,6 +1344,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1207,6 +1369,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1229,6 +1394,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1251,6 +1419,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1273,6 +1444,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1295,6 +1469,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1317,6 +1494,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1339,6 +1519,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1361,6 +1544,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1383,6 +1569,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1405,6 +1594,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1427,6 +1619,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1449,6 +1644,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1471,6 +1669,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1493,6 +1694,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1515,6 +1719,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1537,6 +1744,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1559,6 +1769,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1581,6 +1794,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1603,6 +1819,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1625,6 +1844,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1647,6 +1869,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1669,6 +1894,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1691,6 +1919,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1713,6 +1944,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1735,6 +1969,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1757,6 +1994,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1779,6 +2019,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1801,6 +2044,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1823,6 +2069,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1845,6 +2094,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1867,6 +2119,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1889,6 +2144,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1911,6 +2169,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1933,6 +2194,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1955,6 +2219,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1977,6 +2244,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -1999,6 +2269,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2021,6 +2294,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2043,6 +2319,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2065,6 +2344,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2087,6 +2369,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2109,6 +2394,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2131,6 +2419,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2153,6 +2444,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2175,6 +2469,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2197,6 +2494,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2219,6 +2519,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2241,6 +2544,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2263,6 +2569,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2285,6 +2594,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2307,6 +2619,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2329,6 +2644,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2351,6 +2669,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2373,6 +2694,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2395,6 +2719,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2417,6 +2744,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2439,6 +2769,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2461,6 +2794,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2483,6 +2819,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2505,6 +2844,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2527,6 +2869,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2549,6 +2894,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2571,6 +2919,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2593,6 +2944,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2615,6 +2969,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2637,6 +2994,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2659,6 +3019,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2681,6 +3044,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2703,6 +3069,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2725,6 +3094,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2747,6 +3119,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2769,6 +3144,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2791,6 +3169,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2813,6 +3194,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2835,6 +3219,9 @@
             "service_radius": "",
             "service_note": "Sijaitsee Lievestuoreella ja toimii paikallisena juhla- ja kokoontumistilana varauksesta.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2857,6 +3244,9 @@
             "service_radius": "",
             "service_note": "Sijaitsee Hankasalmella luonnon keskellä. Palvelut saatavilla lomakeskuksessa ympäri vuoden.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2879,6 +3269,9 @@
             "service_radius": "",
             "service_note": "Kartanokohde Toivakassa, palvelut saatavilla varauksella. Soveltuu erityisesti juhliin, majoitukseen ja kokouksiin.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2901,6 +3294,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2923,6 +3319,9 @@
             "service_radius": "",
             "service_note": "Palvelee ryhmiä ja yksityistilaisuuksia Laukaassa.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [
                 {
                     "type": "image",
@@ -2952,6 +3351,9 @@
             "service_radius": "80",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2974,6 +3376,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -2996,6 +3401,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3018,6 +3426,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": true,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3040,6 +3451,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3062,6 +3476,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3084,6 +3501,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3106,6 +3526,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3128,6 +3551,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3150,6 +3576,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3172,6 +3601,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3194,6 +3626,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3216,6 +3651,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3238,6 +3676,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3260,6 +3701,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3282,6 +3726,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3304,6 +3751,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3326,6 +3776,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3348,6 +3801,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3370,6 +3826,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3392,6 +3851,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3414,6 +3876,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3436,6 +3901,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3458,6 +3926,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3480,6 +3951,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3502,6 +3976,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3524,6 +4001,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3546,6 +4026,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3568,6 +4051,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3590,6 +4076,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3612,6 +4101,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3634,6 +4126,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3656,6 +4151,9 @@
             "service_radius": "120",
             "service_note": "Palvelut Keski-Suomen alueella joustavasti asiakkaan kohteessa tai tapahtumapaikalla. Sopimuksen mukaan myös pidemmät keikat.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3678,6 +4176,9 @@
             "service_radius": "100",
             "service_note": "Palvelut joustavasti Keski-Suomen alueella asiakkaan tarpeen mukaan. Studiokuvaus sekä tarvittaessa kuvaus tapahtumissa ja asiakkaan tiloissa.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3700,6 +4201,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3713,7 +4217,7 @@
             "lat": "62.270133",
             "lon": "26.223957",
             "logo": "https:\/\/mediazoo.fi\/wp-content\/uploads\/2026\/03\/logo2.png",
-            "tags": "digimedia, IT-palvelut, videokuvaus, valokuvaus, graafiset palvelut, kotisivut, it-palvelut, verkkosivut, video, videotuotanto, digimarkkinointi",
+            "tags": "digimedia, IT-palvelut, videokuvaus, valokuvaus, graafiset palvelut, kotisivut",
             "palvelutapa": "toimipiste, etapalvelu",
             "alue_slug": "Lievestuore",
             "karusellipaino": 0,
@@ -3722,6 +4226,9 @@
             "service_radius": "35",
             "service_note": "projektit sopimuksesta kauemmaksikin, digitoinnit postitse",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [
                 {
                     "type": "image",
@@ -3751,6 +4258,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3773,6 +4283,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3795,6 +4308,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3817,6 +4333,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3839,6 +4358,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3861,6 +4383,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3883,6 +4408,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3905,6 +4433,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3927,6 +4458,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3949,6 +4483,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3971,6 +4508,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -3993,6 +4533,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4015,6 +4558,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4037,6 +4583,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4059,6 +4608,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4081,6 +4633,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4103,6 +4658,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4125,6 +4683,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4147,6 +4708,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4169,6 +4733,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4191,6 +4758,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4213,6 +4783,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4235,6 +4808,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4257,6 +4833,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4279,6 +4858,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4301,6 +4883,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4323,6 +4908,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4345,6 +4933,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4367,6 +4958,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4389,6 +4983,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4411,6 +5008,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4433,6 +5033,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4455,6 +5058,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4477,6 +5083,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4499,6 +5108,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4521,6 +5133,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4543,6 +5158,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4565,6 +5183,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4587,6 +5208,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4609,6 +5233,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4631,6 +5258,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4653,6 +5283,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4675,6 +5308,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4697,6 +5333,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4719,6 +5358,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4741,6 +5383,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4763,6 +5408,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4785,6 +5433,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4807,6 +5458,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4829,6 +5483,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4851,6 +5508,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4873,6 +5533,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4895,6 +5558,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4917,6 +5583,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4939,6 +5608,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4961,6 +5633,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -4983,6 +5658,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5005,6 +5683,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5027,6 +5708,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5049,6 +5733,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5071,6 +5758,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5093,6 +5783,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5115,6 +5808,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5137,6 +5833,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5159,6 +5858,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5181,6 +5883,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5203,6 +5908,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5225,6 +5933,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5247,6 +5958,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5269,6 +5983,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5291,6 +6008,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5313,6 +6033,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5335,6 +6058,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5357,6 +6083,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5379,6 +6108,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5401,6 +6133,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5423,6 +6158,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5445,6 +6183,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5467,6 +6208,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5489,6 +6233,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5511,6 +6258,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5533,6 +6283,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5555,6 +6308,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5577,6 +6333,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5599,6 +6358,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5621,6 +6383,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5643,6 +6408,9 @@
             "service_radius": "",
             "service_note": "Sijaitsee Hirviareenan urheilukeskuksessa, sopii myös ryhmille ja tapahtumiin.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5665,6 +6433,9 @@
             "service_radius": "0",
             "service_note": "Sijaitsee Laukaan satamassa Saraaveden rannalla. Kesäkauden toimipiste, tapahtumia viikonloppuisin.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5687,6 +6458,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5709,6 +6483,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5731,6 +6508,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5753,6 +6533,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": true,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5775,6 +6558,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5797,6 +6583,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5819,6 +6608,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5841,6 +6633,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5863,6 +6658,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5885,6 +6683,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5907,6 +6708,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5929,6 +6733,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5951,6 +6758,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5973,6 +6783,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -5995,6 +6808,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6017,6 +6833,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6039,6 +6858,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6061,6 +6883,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6083,6 +6908,9 @@
             "service_radius": "Keski-Suomi",
             "service_note": "Palvelut saatavilla Keski-Suomen alueella sopimuksen mukaan.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6105,6 +6933,9 @@
             "service_radius": "",
             "service_note": "Palvelu suositellaan varattavaksi etukäteen.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6127,6 +6958,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6149,6 +6983,9 @@
             "service_radius": "",
             "service_note": "Toiminta Lievestuoreen alueella Majasaarentiellä.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [
                 {
                     "type": "image",
@@ -6178,6 +7015,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6200,6 +7040,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6222,6 +7065,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6244,6 +7090,9 @@
             "service_radius": "",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6266,6 +7115,9 @@
             "service_radius": "lähialueet",
             "service_note": "Toimitus Kelkkamäen kappeliin ja lähiseudulle.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6288,6 +7140,9 @@
             "service_radius": "50",
             "service_note": "",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [],
             "images": []
         },
@@ -6310,6 +7165,9 @@
             "service_radius": "",
             "service_note": "Toiminta ja myymälä sijaitsevat Laukaan kirkonkylällä.",
             "is_expired": false,
+            "featured_partner": "",
+            "featured_order": "",
+            "featured_until": "",
             "media": [
                 {
                     "type": "image",
