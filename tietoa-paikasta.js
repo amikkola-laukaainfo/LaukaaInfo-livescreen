@@ -2471,18 +2471,19 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                 const compCat = (comp.kategoria || '').toLowerCase();
                 const compMunicipality = (comp.kunta || comp.municipality || '').toLowerCase();
 
-                const isQueryMatch = isCompanySearchMatch(comp, searchQuery);
+                const isQueryMatch = Boolean(searchNormalized && isCompanySearchMatch(comp, searchQuery));
                 if (searchNormalized && !isQueryMatch) return;
+
+                const isFeatured = String(comp.featured_partner || '').toLowerCase().trim() === 'yes';
 
                 let iconHtml, iconSize, iconAnchor;
                 if (isQueryMatch) {
                     iconHtml = `<div style="width:38px;height:38px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border:2px solid white;border-radius:50%;box-shadow:0 0 14px rgba(139,92,246,0.9);display:flex;align-items:center;justify-content:center;color:white;font-size:17px;">🎯</div>`;
                     iconSize = [38, 38]; iconAnchor = [19, 19];
                     queryMatchBounds.push([cLat, cLon]);
-                } else if (isGreyedOut) {
-                    // Himmennetty piste hakusanan ulkopuolisille yrityksille
-                    iconHtml = `<div style="width:10px;height:10px;background:#cbd5e1;border:1.5px solid #94a3b8;border-radius:50%;opacity:0.4;"></div>`;
-                    iconSize = [10, 10]; iconAnchor = [5, 5];
+                } else if (isFeatured) {
+                    iconHtml = `<div style="width:34px;height:34px;background:linear-gradient(135deg,#1e40af,#3b82f6);border:2px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(37,99,235,0.6);display:flex;align-items:center;justify-content:center;font-size:15px;color:white;">⭐</div>`;
+                    iconSize = [34, 34]; iconAnchor = [17, 17];
                 } else if (cTier >= 3) {
                     iconHtml = `<div style="width:32px;height:32px;background:#e11d48;border:2px solid white;border-radius:50%;box-shadow:0 0 10px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;">⭐</div>`;
                     iconSize = [32, 32]; iconAnchor = [16, 16];
@@ -2495,7 +2496,7 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                 }
 
                 const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
-                const popupLabel = isQueryMatch ? '🎯 Hakutulos' : `Yritys ${cTier >= 2 ? '⭐' : ''}`;
+                const popupLabel = isQueryMatch ? '🎯 Hakutulos' : (isFeatured ? '⭐ Aktiivinen kumppani' : `Yritys ${cTier >= 2 ? '⭐' : ''}`);
                 let popupHtml = `<div style="min-width:180px;">
                     <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:3px;">${popupLabel}</div>
                     <h4 style="margin:0 0 5px 0;color:#1e293b;">${comp.nimi || comp.name || ''}</h4>
