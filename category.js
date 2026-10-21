@@ -115,7 +115,15 @@
             if (!document.body.dataset.category) {
                 const nameEl = document.getElementById('category-name');
                 if (nameEl) nameEl.textContent = displayTitle;
-                document.title = `${displayTitle} – LaukaaInfo`;
+                const descEl = document.getElementById('category-description');
+                if (descEl) {
+                    descEl.textContent = `Laukaan ${category} -alan yritykset, palvelut ja yhteystiedot koottuna.`;
+                }
+                document.title = `${displayTitle} | LaukaaInfo`;
+                const metaDescEl = document.getElementById('page-description') || document.querySelector('meta[name="description"]');
+                if (metaDescEl) {
+                    metaDescEl.setAttribute('content', `Laukaan ${category} -alan yritykset, palvelut ja yhteystiedot koottuna.`);
+                }
             }
         }
 
@@ -958,8 +966,27 @@
                 <span class="cat-hub-name">${cat.name}</span>
                 <span class="cat-hub-count">${cat.count}</span>
             `;
-            grid.appendChild(a);
         });
+
+        // Nosto autohuoltojen teemasivulle, kun ollaan Auto ja kuljetus -kategoriassa
+        const existingBanner = document.getElementById('featured-theme-guide-banner');
+        if (existingBanner) existingBanner.remove();
+
+        const cleanCurrent = (currentCategory || '').trim().toLowerCase();
+        if (cleanCurrent === 'auto ja kuljetus') {
+            const banner = document.createElement('div');
+            banner.id = 'featured-theme-guide-banner';
+            banner.style.cssText = 'background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%); color: #fff; padding: 1.25rem 1.5rem; border-radius: 12px; margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 12px rgba(3,105,161,0.15);';
+            banner.innerHTML = `
+                <div>
+                    <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; font-weight: 700;">🔧 Suositeltu teemaopas</span>
+                    <h3 style="margin: 0.2rem 0; font-size: 1.15rem; color: #fff;">Laukaan autohuollot ja korjaamot</h3>
+                    <p style="margin: 0; font-size: 0.88rem; opacity: 0.95;">Katso autokorjaamojen ja rengasliikkeiden tiedot kylittäin ja ajankohtaiset edut.</p>
+                </div>
+                <a href="laukaan-autohuollot.html" style="background: #fff; color: #0369a1; padding: 0.55rem 1.2rem; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.88rem; white-space: nowrap;">Avaa autohuolto-opas &raquo;</a>
+            `;
+            grid.parentElement.appendChild(banner);
+        }
 
         // Teemat ja näkökulmat
         const themeContainer = document.getElementById('theme-pills-container');

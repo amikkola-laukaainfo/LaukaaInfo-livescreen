@@ -8,6 +8,27 @@
     <link rel="icon" href="logo.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0056b3">
+    <script>
+        // Täsmäkohdistettu hakukoneohjaus päällekkäisyyksien estämiseksi
+        (function() {
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var tag = (params.get('tag') || '').toLowerCase().trim();
+                // Kun kyseessä on nimenomaan autohuolto-suodatus, ohjataan hakukone teemasivulle
+                if (tag === 'autohuolto' || tag === 'autokorjaamot' || tag === 'autokorjaamo') {
+                    var metaRobots = document.createElement('meta');
+                    metaRobots.name = 'robots';
+                    metaRobots.content = 'noindex, follow';
+                    document.head.appendChild(metaRobots);
+
+                    var linkCanonical = document.createElement('link');
+                    linkCanonical.rel = 'canonical';
+                    linkCanonical.href = 'https://laukaainfo.fi/laukaan-autohuollot.html';
+                    document.head.appendChild(linkCanonical);
+                }
+            } catch (e) {}
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
