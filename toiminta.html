@@ -189,6 +189,11 @@
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 600;
+            line-height: 1.25;
+            display: block;
+        }
+        .mobile-break {
+            display: none;
         }
 
         /* ── SUODATTIMET / TABS ───────────────────────────────────────── */
@@ -748,9 +753,10 @@
             .main-container { padding: 1rem 0.75rem; }
             .workspace-banner { padding: 1.25rem 1rem; }
             .banner-stats { width: 100%; justify-content: space-between; }
-            .stat-badge { flex: 1; min-width: 0; padding: 0.5rem 0.35rem; }
-            .stat-badge strong { font-size: 1.15rem; }
-            .stat-badge span { font-size: 0.65rem; }
+            .stat-badge { flex: 1; min-width: 0; padding: 0.5rem 0.25rem; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+            .stat-badge strong { font-size: 1.15rem; margin-bottom: 0.15rem; }
+            .stat-badge span { font-size: 0.65rem; line-height: 1.2; }
+            .mobile-break { display: inline; }
 
             /* Modaalit mobiilissa */
             .modal-overlay {
@@ -1084,6 +1090,12 @@
             .gateway-paths-grid { grid-template-columns: 1fr; }
             .gateway-title { font-size: 1.75rem; }
         }
+
+        /* Mobiililinjatuki - oletuksena piilotettu, näkyy kapeilla ruuduilla */
+        br.mobile-break { display: none; }
+        @media (max-width: 420px) {
+            br.mobile-break { display: block; }
+        }
     </style>
 </head>
 <body>
@@ -1142,7 +1154,7 @@
                 </div>
                 <div class="stat-badge">
                     <strong id="stat-volunteers-joined">0</strong>
-                    <span>Ilmoittautunut</span>
+                    <span>Ilmoittau<br class="mobile-break">tunut</span>
                 </div>
             </div>
         </section>
