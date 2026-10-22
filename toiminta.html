@@ -32,6 +32,11 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -356,6 +361,9 @@
             align-items: center;
             justify-content: center;
             padding: 1rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
         .modal-overlay.open { display: flex; }
         .modal-card {
@@ -366,9 +374,13 @@
             max-width: 650px;
             max-height: 90vh;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 1.75rem;
             position: relative;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .modal-close {
             position: absolute;
@@ -385,6 +397,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 5;
+            transition: background 0.2s, color 0.2s;
         }
         .modal-close:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
 
@@ -392,6 +406,8 @@
             margin-top: 1.25rem;
             padding-top: 1.25rem;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .modal-section-title {
             font-size: 0.85rem;
@@ -403,6 +419,7 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            flex-wrap: wrap;
         }
 
         /* ── ÄÄNESTYSOSIO ─────────────────────────────────────────────── */
@@ -411,43 +428,82 @@
             border: 1px solid var(--card-border);
             border-radius: 14px;
             padding: 1rem;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        .vote-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .vote-progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            margin-top: 0.65rem;
+            overflow: hidden;
+            display: flex;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .vote-segment-yes { background: #10b981; transition: width 0.3s ease; }
+        .vote-segment-no { background: #f43f5e; transition: width 0.3s ease; }
+        .vote-segment-cond { background: #f59e0b; transition: width 0.3s ease; }
+        .vote-legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.45rem;
+        }
+        .vote-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
         }
         .vote-options-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 0.5rem;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
+            margin-top: 0.85rem;
+            width: 100%;
+            box-sizing: border-box;
         }
         .vote-btn {
-            flex: 1;
-            min-width: 100px;
-            padding: 0.65rem 1rem;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            padding: 0.65rem 0.5rem;
             border-radius: 10px;
             border: 1px solid var(--card-border);
             background: rgba(255, 255, 255, 0.06);
             color: #fff;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            text-align: center;
+            white-space: nowrap;
         }
         .vote-btn:hover { background: rgba(255, 255, 255, 0.15); }
+        .vote-btn:active { transform: scale(0.98); }
         .vote-btn.selected {
             background: var(--primary);
             color: #0f172a;
             border-color: var(--primary);
         }
-        .vote-progress-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 999px;
-            margin-top: 0.85rem;
-            overflow: hidden;
-            display: flex;
-        }
-        .vote-segment-yes { background: #10b981; }
-        .vote-segment-no { background: #f43f5e; }
-        .vote-segment-cond { background: #f59e0b; }
 
         /* ── TEHTÄVÄT & ILMOITTAUTUMINEN ──────────────────────────────── */
         .task-list {
@@ -550,45 +606,98 @@
             flex-direction: column;
             gap: 0.6rem;
             margin-bottom: 0.85rem;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .comment-item {
             background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            padding: 0.65rem 0.85rem;
+            padding: 0.7rem 0.85rem;
             font-size: 0.85rem;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .comment-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
             font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.25rem;
             font-weight: 600;
+        }
+        .comment-author {
+            color: #38bdf8;
+            font-weight: 700;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .comment-time {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .comment-item p {
+            margin: 0;
+            line-height: 1.5;
+            color: #e2e8f0;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .comment-input-row {
             display: flex;
             gap: 0.5rem;
+            align-items: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .comment-input {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
+            flex: 1 1 0%;
+            min-width: 0;
+            width: 0;
+            background: rgba(0, 0, 0, 0.35);
             border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            padding: 0.6rem 0.85rem;
             color: #fff;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, background 0.2s;
         }
-        .comment-input:focus { border-color: var(--primary); }
+        .comment-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.5);
+        }
         .btn-send-comment {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--card-border);
-            color: #fff;
-            border-radius: 8px;
-            padding: 0.5rem 0.85rem;
-            font-size: 0.85rem;
+            flex-shrink: 0;
+            white-space: nowrap;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            border: none;
+            color: #0f172a;
+            border-radius: 10px;
+            padding: 0.6rem 1.1rem;
+            font-size: 0.88rem;
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.2s;
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+        .btn-send-comment:hover {
+            filter: brightness(1.1);
+        }
+        .btn-send-comment:active {
+            transform: scale(0.97);
         }
 
         /* ── SEINÄ-ESIKATSELU MODAALI ─────────────────────────────────── */
@@ -633,10 +742,88 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         @media (max-width: 640px) {
-            .workspace-banner { padding: 1.25rem; }
+            .app-header { padding: 0.75rem 0.85rem; }
+            .header-inner { flex-wrap: wrap; gap: 0.6rem; }
+            .header-actions { flex-wrap: wrap; gap: 0.35rem; width: 100%; justify-content: flex-start; }
+            .main-container { padding: 1rem 0.75rem; }
+            .workspace-banner { padding: 1.25rem 1rem; }
             .banner-stats { width: 100%; justify-content: space-between; }
-            .stat-badge { flex: 1; min-width: 0; }
-            .vote-options-row { flex-direction: column; }
+            .stat-badge { flex: 1; min-width: 0; padding: 0.5rem 0.35rem; }
+            .stat-badge strong { font-size: 1.15rem; }
+            .stat-badge span { font-size: 0.65rem; }
+
+            /* Modaalit mobiilissa */
+            .modal-overlay {
+                padding: 0.6rem 0.4rem;
+            }
+            .modal-card {
+                padding: 1.25rem 0.95rem;
+                border-radius: 16px;
+                max-height: 92vh;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .modal-close {
+                top: 0.75rem;
+                right: 0.75rem;
+                width: 30px;
+                height: 30px;
+                font-size: 1.1rem;
+            }
+            .modal-section {
+                margin-top: 1rem;
+                padding-top: 1rem;
+            }
+            .vote-box {
+                padding: 0.85rem 0.75rem;
+            }
+            .vote-options-row {
+                grid-template-columns: 1fr;
+                gap: 0.45rem;
+            }
+            .vote-btn {
+                padding: 0.7rem 0.85rem;
+                font-size: 0.88rem;
+                justify-content: flex-start;
+                padding-left: 1.1rem;
+            }
+            .vote-legend-row {
+                gap: 0.3rem;
+                font-size: 0.72rem;
+            }
+            .comment-item {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.82rem;
+            }
+            .comment-input {
+                padding: 0.55rem 0.75rem;
+                font-size: 0.85rem;
+            }
+            .btn-send-comment {
+                padding: 0.55rem 0.85rem;
+                font-size: 0.85rem;
+            }
+            .admin-controls {
+                padding: 0.75rem;
+            }
+            .admin-btn-row {
+                flex-direction: column;
+            }
+            .btn-admin-action {
+                width: 100%;
+                text-align: center;
+                padding: 0.55rem 0.75rem;
+                box-sizing: border-box;
+            }
+            .task-card {
+                padding: 0.75rem;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .task-status-row {
+                justify-content: space-between;
+                margin-top: 0.4rem;
+            }
         }
 
         /* ── GATEWAY-NÄKYMÄN TYYLIT ───────────────────────────────────── */
@@ -2345,18 +2532,18 @@
                 <div class="modal-section">
                     <div class="modal-section-title">🗳️ Äänestystulos</div>
                     <div class="vote-box">
-                        <div style="display:flex;justify-content:space-between;font-size:0.85rem;">
-                            <span>Ääniä: <strong>${votes.total}</strong></span>
+                        <div class="vote-box-header">
+                            <span>Ääniä yhteensä: <strong>${votes.total}</strong></span>
                         </div>
                         <div class="vote-progress-bar">
                             <div class="vote-segment-yes" style="width:${yesPct}%"></div>
                             <div class="vote-segment-cond" style="width:${condPct}%"></div>
                             <div class="vote-segment-no" style="width:${noPct}%"></div>
                         </div>
-                        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.35rem;">
-                            <span>🟢 Kyllä (${votes.yes})</span>
-                            <span>🟡 Ehdollisena (${votes.cond})</span>
-                            <span>🔴 Ei (${votes.no})</span>
+                        <div class="vote-legend-row">
+                            <span class="vote-legend-item">🟢 Kyllä (${votes.yes})</span>
+                            <span class="vote-legend-item">🟡 Ehdollisena (${votes.cond})</span>
+                            <span class="vote-legend-item">🔴 Ei (${votes.no})</span>
                         </div>
                     </div>
                 </div>
@@ -2370,12 +2557,12 @@
             ` : '';
 
             content.innerHTML = `
-                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;">
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;padding-right:2rem;flex-wrap:wrap;">
                     <span class="item-seq">${escapeHtml(item.seq)}</span>
                     <span class="stage-pill stage-archived">🗃️ Arkistoitu</span>
                 </div>
-                <h2 style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">${escapeHtml(item.title)}</h2>
-                <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;">${escapeHtml(item.description || '')}</p>
+                <h2 style="font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;padding-right:1.5rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.title)}</h2>
+                <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.description || '')}</p>
                 <div style="font-size:0.8rem;color:var(--text-muted);display:flex;gap:1rem;flex-wrap:wrap;">
                     <span>👤 Vastuu: <strong>${escapeHtml(item.lead || 'Ei nimetty')}</strong></span>
                     <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
@@ -2435,24 +2622,24 @@
                     <div class="modal-section">
                         <div class="modal-section-title">🗳️ Äänestys ja kannanotto</div>
                         <div class="vote-box">
-                            <div style="display:flex;justify-content:space-between;font-size:0.85rem;">
+                            <div class="vote-box-header">
                                 <span>Mielipiteet: <strong>${votes.total} ääntä</strong></span>
-                                <span style="color:var(--text-muted);">${escapeHtml(item.deadline_label || '')}</span>
+                                <span class="vote-deadline" style="color:var(--text-muted);font-size:0.8rem;">${escapeHtml(item.deadline_label || '')}</span>
                             </div>
                             <div class="vote-progress-bar">
                                 <div class="vote-segment-yes" style="width:${yesPct}%" title="Kyllä: ${votes.yes}"></div>
                                 <div class="vote-segment-cond" style="width:${condPct}%" title="Ehdollisena: ${votes.cond}"></div>
                                 <div class="vote-segment-no" style="width:${noPct}%" title="Ei: ${votes.no}"></div>
                             </div>
-                            <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.35rem;">
-                                <span>🟢 Kyllä (${votes.yes})</span>
-                                <span>🟡 Ehdollisena (${votes.cond})</span>
-                                <span>🔴 Ei (${votes.no})</span>
+                            <div class="vote-legend-row">
+                                <span class="vote-legend-item">🟢 Kyllä (${votes.yes})</span>
+                                <span class="vote-legend-item">🟡 Ehdollisena (${votes.cond})</span>
+                                <span class="vote-legend-item">🔴 Ei (${votes.no})</span>
                             </div>
                             <div class="vote-options-row">
-                                <button class="vote-btn" onclick="castVote('${item.id}', 'yes')">👍 Kannatan</button>
-                                <button class="vote-btn" onclick="castVote('${item.id}', 'cond')">✋ Ehdollisena</button>
-                                <button class="vote-btn" onclick="castVote('${item.id}', 'no')">👎 Vastustan</button>
+                                <button class="vote-btn" onclick="castVote('${item.id}', 'yes')"><span>👍</span> <span>Kannatan</span></button>
+                                <button class="vote-btn" onclick="castVote('${item.id}', 'cond')"><span>✋</span> <span>Ehdollisena</span></button>
+                                <button class="vote-btn" onclick="castVote('${item.id}', 'no')"><span>👎</span> <span>Vastustan</span></button>
                             </div>
                         </div>
                     </div>
@@ -2544,12 +2731,12 @@
             }
 
             content.innerHTML = `
-                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;">
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;padding-right:2rem;flex-wrap:wrap;">
                     <span class="item-seq">${escapeHtml(item.seq)}</span>
                     <span class="stage-pill stage-${item.stage}">${getStageIcon(item.stage)} ${escapeHtml(item.stage_name)}</span>
                 </div>
-                <h2 style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">${escapeHtml(item.title)}</h2>
-                <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;">${escapeHtml(item.description)}</p>
+                <h2 style="font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;padding-right:1.5rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.title)}</h2>
+                <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.description)}</p>
                 <div style="font-size:0.8rem;color:var(--text-muted);display:flex;gap:1rem;flex-wrap:wrap;">
                     <span>👤 Vastuu: <strong>${escapeHtml(item.lead || 'Ei nimetty')}</strong></span>
                     <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
@@ -2567,8 +2754,8 @@
                         <p style="font-size:0.8rem;color:var(--text-muted);">Ladataan kommentteja...</p>
                     </div>
                     <div class="comment-input-row">
-                        <input type="text" id="new-comment-input" class="comment-input" maxlength="1000" placeholder="Kirjoita kommentti tai kysymys (max 1000 merkkiä)...">
-                        <button class="btn-send-comment" id="btn-post-comment" onclick="postComment('${item.id}')">Lähetä</button>
+                        <input type="text" id="new-comment-input" class="comment-input" maxlength="1000" placeholder="Kirjoita kommentti..." enterkeyhint="send" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();postComment('${item.id}');}">
+                        <button class="btn-send-comment" id="btn-post-comment" onclick="postComment('${item.id}')"><span>Lähetä</span> <span>✈️</span></button>
                     </div>
                 </div>
             `;
@@ -2594,8 +2781,8 @@
                     container.innerHTML = data.map(c => `
                         <div class="comment-item">
                             <div class="comment-header">
-                                <span>${escapeHtml(c.author_name)}</span>
-                                <span>${formatTimestamp(c.created_at)}</span>
+                                <span class="comment-author">${escapeHtml(c.author_name)}</span>
+                                <span class="comment-time">${formatTimestamp(c.created_at)}</span>
                             </div>
                             <p>${escapeHtml(c.content)}</p>
                         </div>
