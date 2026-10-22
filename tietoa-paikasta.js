@@ -852,9 +852,21 @@ const toSlugGlobal = (text) => text.toString().toLowerCase()
     .replace(/--+/g, '-')
     .replace(/^-+|-+$/g, '');
 
+function isCompanyFeaturedPartnerActive(c) {
+    if (!c || c.is_expired) return false;
+    if (String(c.featured_partner || '').toLowerCase().trim() !== 'yes') return false;
+    if (c.featured_until) {
+        try {
+            if (new Date(c.featured_until) < new Date()) return false;
+        } catch (e) {}
+    }
+    return true;
+}
+
 function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityData = [], parentPlace = null) {
     const results = [];
     const seenIds = new Set();
+    const externalFeaturedPartners = [];
 
     // Koostetaan näkyvyys-Set nopeaa hakua varten
     const visibilitySet = new Set((visibilityData || []).map(v => String(v.company_id)));
@@ -979,16 +991,54 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
         }
 
         // Taso 1+: Aktiivinen kumppani (featured_partner === 'yes')
-        const isFeaturedPartner = String(company.featured_partner || '').toLowerCase().trim() === 'yes';
+        const isFeaturedPartner = isCompanyFeaturedPartnerActive(company);
+        const hasLocalConnection = (score > 0);
+
         if (isFeaturedPartner) {
-            score += 250;
-            tier = 1;
-            reasons.unshift({ type: 'FEATURED_PARTNER', label: 'Aktiivinen kumppani' });
-        }
-        
-        if (tier <= 99 && score > 0) {
+            if (hasLocalConnection) {
+                // Yritys on paikan omalla lähialueella tai sillä on suora yhteys kohteeseen
+                score += 250;
+                tier = 1;
+                reasons.unshift({ type: 'FEATURED_PARTNER', label: 'Aktiivinen kumppani' });
+                seenIds.add(compId);
+                results.push({ ...company, score, tier, reasons, isFeaturedForPlace: true });
+            } else {
+                // Yrityksellä ei ole suoraa paikallisyhteyttä tähän kohteeseen (kumppaninosto yli aluerajojen).
+                // Kerätään ehdokkaisiin, joista arvotaan satunnainen nosto paikan ja kerran mukaan.
+                externalFeaturedPartners.push({ company, compId });
+            }
+        } else if (tier <= 99 && score > 0) {
             seenIds.add(compId);
             results.push({ ...company, score, tier, reasons });
+        }
+    }
+
+    // Satunnainen kumppaninosto yli aluerajojen (kohteissa, joihin kumppanilla ei ole omaa paikallisyhteyttä):
+    // Vain kaupallisesti avoimissa kohteissa (place.commercial_visibility !== false).
+    // Nosto on satunnainen sekä paikan että katselukerran mukaan (n. 40 % todennäköisyys).
+    // Näin sama pääkumppani ei dominoi jokaista paikkaa joka kerta, vaan tilaa jää paikan omille toimijoille.
+    const EXTERNAL_FEATURED_PROBABILITY = 0.40;
+    if (place.commercial_visibility !== false && externalFeaturedPartners.length > 0) {
+        const roll = Math.random();
+        if (roll < EXTERNAL_FEATURED_PROBABILITY) {
+            // Jos ehdokkaita on useampi, valitaan satunnaisesti tai featured_orderin mukaan
+            const sortedCandidates = [...externalFeaturedPartners].sort((a, b) => {
+                const oa = parseInt(a.company.featured_order, 10) || 99;
+                const ob = parseInt(b.company.featured_order, 10) || 99;
+                return oa !== ob ? oa - ob : (Math.random() - 0.5);
+            });
+            const chosen = sortedCandidates[0];
+            seenIds.add(chosen.compId);
+            results.push({
+                ...chosen.company,
+                score: 250,
+                tier: 1,
+                reasons: [{ type: 'FEATURED_PARTNER', label: 'Aktiivinen kumppani' }],
+                isFeaturedForPlace: true
+            });
+            console.debug(`[scoreCompanies] Pääkumppani '${chosen.company.nimi || chosen.company.name}' nostettu satunnaisesti kohteeseen '${place.name || place.canonical_name}' (arpa: ${roll.toFixed(2)} < ${EXTERNAL_FEATURED_PROBABILITY})`);
+        } else {
+            console.debug(`[scoreCompanies] Ei ulkoista kumppaninostoa tällä katselukerralla kohteeseen '${place.name || place.canonical_name}' (arpa: ${roll.toFixed(2)} >= ${EXTERNAL_FEATURED_PROBABILITY})`);
         }
     }
     
@@ -1943,10 +1993,8 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         if (compSection && tier1and2.length > 0) compSection.style.display = 'block';
     } else {
         tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
-            const aFeatured = String(a.featured_partner || '').toLowerCase().trim() === 'yes' ||
-                              (a.reasons && a.reasons.some(r => r.type === 'FEATURED_PARTNER'));
-            const bFeatured = String(b.featured_partner || '').toLowerCase().trim() === 'yes' ||
-                              (b.reasons && b.reasons.some(r => r.type === 'FEATURED_PARTNER'));
+            const aFeatured = Boolean(a.isFeaturedForPlace || (a.reasons && a.reasons.some(r => r.type === 'FEATURED_PARTNER')));
+            const bFeatured = Boolean(b.isFeaturedForPlace || (b.reasons && b.reasons.some(r => r.type === 'FEATURED_PARTNER')));
             if (aFeatured && !bFeatured) return -1;
             if (!aFeatured && bFeatured) return 1;
 
@@ -1977,8 +2025,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     
     // Yleinen HTML generaattori korteille
     const generateCardHtml = (item, isSemantic = false) => {
-        const isFeatured = String(item.featured_partner || '').toLowerCase().trim() === 'yes' ||
-                           (item.reasons && item.reasons.some(r => r.type === 'FEATURED_PARTNER'));
+        const isFeatured = Boolean(item.isFeaturedForPlace || (item.reasons && item.reasons.some(r => r.type === 'FEATURED_PARTNER')));
         const isPartner = isFeatured || (item.reasons && item.reasons.some(r => r.type === 'VISIBILITY'));
         const subTier = item.subscription_tier || 1;
         
@@ -2474,7 +2521,7 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                 const isQueryMatch = Boolean(searchNormalized && isCompanySearchMatch(comp, searchQuery));
                 if (searchNormalized && !isQueryMatch) return;
 
-                const isFeatured = String(comp.featured_partner || '').toLowerCase().trim() === 'yes';
+                const isFeatured = Boolean(comp.isFeaturedForPlace || (comp.reasons && comp.reasons.some(r => r.type === 'FEATURED_PARTNER')));
 
                 let iconHtml, iconSize, iconAnchor;
                 if (isQueryMatch) {
