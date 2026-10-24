@@ -333,6 +333,136 @@
             margin-bottom: 0.4rem;
         }
 
+        /* ── ASIAN ELINKAARIPALKKI (LIFECYCLE) ────────────────────────── */
+        .lifecycle-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 0.85rem 1rem;
+            margin: 0.75rem 0 1rem 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        }
+        .lifecycle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .lifecycle-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+        .lifecycle-badge {
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .lifecycle-badge-prep { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .lifecycle-badge-decided-notasks { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
+        .lifecycle-badge-progress { background: rgba(245, 158, 11, 0.15); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .lifecycle-badge-done { background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .lifecycle-badge-archived { background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+        .lifecycle-steps-wrapper {
+            position: relative;
+            margin: 0.5rem 0 0.75rem 0;
+        }
+        .lifecycle-bar-track {
+            position: absolute;
+            top: 13px;
+            left: 12.5%;
+            right: 12.5%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+            border-radius: 2px;
+        }
+        .lifecycle-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #0284c7);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        .lifecycle-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            position: relative;
+            z-index: 2;
+        }
+        .lifecycle-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .lifecycle-bubble {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+            background: #1e293b;
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.2s ease;
+        }
+        .lifecycle-step.completed .lifecycle-bubble {
+            background: #10b981;
+            color: #fff;
+            border-color: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+        }
+        .lifecycle-step.active .lifecycle-bubble {
+            background: #0284c7;
+            color: #fff;
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+        .lifecycle-step.skipped .lifecycle-bubble {
+            background: rgba(148, 163, 184, 0.1);
+            color: #64748b;
+            border: 1px dashed rgba(148, 163, 184, 0.3);
+        }
+        .lifecycle-step-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            line-height: 1.2;
+        }
+        .lifecycle-step.completed .lifecycle-step-title { color: #34d399; }
+        .lifecycle-step.active .lifecycle-step-title { color: #38bdf8; }
+        .lifecycle-step.skipped .lifecycle-step-title { color: #64748b; text-decoration: line-through; }
+        .lifecycle-step-desc {
+            font-size: 0.62rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+        .lifecycle-meta-bar {
+            font-size: 0.76rem;
+            color: #cbd5e1;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.45rem 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            line-height: 1.4;
+        }
+
         .item-title {
             font-size: 1.15rem;
             font-weight: 700;
@@ -2366,6 +2496,136 @@
             }
         }
 
+        function getLifecycleData(item) {
+            const stage = item.stage || 'idea';
+            const hasDecision = !!(item.decision_summary && item.decision_summary.trim().length >= 5);
+            const tasks = item.tasks || [];
+            const totalTasks = tasks.length;
+            const filledTasks = tasks.filter(t => (t.signups?.length || 0) >= (t.required || 1)).length;
+            const openTasks = totalTasks - filledTasks;
+            const totalSignups = tasks.reduce((sum, t) => sum + (t.signups?.length || 0), 0);
+
+            let statusKey = 'prep';
+            let statusLabel = 'Valmistelu';
+            let statusClass = 'lifecycle-badge-prep';
+            let metaText = '';
+            let fillPct = 0;
+
+            let s1 = 'active', s2 = 'pending', s3 = 'pending', s4 = 'pending';
+            let s3Desc = totalTasks > 0 ? `${totalTasks} tehtävää` : 'Ei tehtäviä';
+
+            if (stage === 'archived') {
+                statusKey = 'archived';
+                statusLabel = 'Arkistoitu';
+                statusClass = 'lifecycle-badge-archived';
+                s1 = 'completed';
+                s2 = hasDecision ? 'completed' : 'skipped';
+                s3 = totalTasks > 0 ? 'completed' : 'skipped';
+                s4 = 'completed';
+                s3Desc = totalTasks > 0 ? `${totalTasks} hoidettu` : 'Ei jatkotoimia';
+                fillPct = 100;
+                metaText = `🗃️ Asia on arkistoitu historiaan · Käsittely ja seuranta päättynyt`;
+            } else if (stage === 'done') {
+                statusKey = 'done';
+                statusLabel = 'Valmis';
+                statusClass = 'lifecycle-badge-done';
+                s1 = 'completed';
+                s2 = 'completed';
+                s3 = totalTasks > 0 ? 'completed' : 'skipped';
+                s4 = 'active';
+                s3Desc = totalTasks > 0 ? `${totalTasks} hoidettu` : 'Ei jatkotoimia';
+                fillPct = 100;
+                metaText = totalTasks > 0
+                    ? `🏁 Asia käsitelty ja kaikki ${totalTasks} jatkotehtävää saatettu päätökseen.`
+                    : `🏁 Asia käsitelty ja merkitty valmiiksi ilman erillisiä jatkotoimia.`;
+            } else if (stage === 'in_progress' || (stage === 'decided' && totalTasks > 0)) {
+                statusKey = 'progress';
+                statusLabel = 'Toteutus käynnissä';
+                statusClass = 'lifecycle-badge-progress';
+                s1 = 'completed';
+                s2 = 'completed';
+                s3 = 'active';
+                s4 = 'pending';
+                fillPct = 66;
+                s3Desc = openTasks > 0 ? `${openTasks} avoinna` : 'Miehitetty';
+                metaText = `🛠️ ${totalTasks} jatkotehtävää · ${totalSignups} tekijää ilmoittautunut${openTasks > 0 ? ` · ${openTasks} tehtävässä avoimia paikkoja` : ' · Kaikki tehtävät miehitetty'}`;
+            } else if (stage === 'decided' && totalTasks === 0) {
+                statusKey = 'decided_notasks';
+                statusLabel = 'Päätetty – ei jatkotoimia';
+                statusClass = 'lifecycle-badge-decided-notasks';
+                s1 = 'completed';
+                s2 = 'active';
+                s3 = 'skipped';
+                s4 = 'pending';
+                s3Desc = 'Ei jatkotoimia';
+                fillPct = 33;
+                metaText = `✅ Päätös on kirjattu · Asia ei edellytä erillisiä talkoo- tai jatkotehtäviä`;
+            } else {
+                // Valmistelu: 'idea', 'discussion', 'vote'
+                statusKey = 'prep';
+                statusLabel = 'Valmistelu';
+                statusClass = 'lifecycle-badge-prep';
+                s1 = 'active';
+                s2 = 'pending';
+                s3 = 'pending';
+                s4 = 'pending';
+                fillPct = 0;
+                if (stage === 'vote') {
+                    const votes = item.votes || { total: 0 };
+                    metaText = `🗳️ Mielipideäänestys ja kannanotot käynnissä · ${votes.total || 0} ääntä annettu`;
+                } else if (stage === 'discussion') {
+                    metaText = `💬 Valmistelukeskustelu ja vaihtoehtojen kartoitus käynnissä`;
+                } else {
+                    metaText = `💡 Uusi idea tai ehdotus valmistelujonossa`;
+                }
+            }
+
+            return {
+                statusKey,
+                statusLabel,
+                statusClass,
+                metaText,
+                fillPct,
+                steps: [
+                    { num: 1, title: 'Valmistelu', state: s1, desc: s1 === 'completed' ? 'Käsitelty' : 'Käynnissä', icon: s1 === 'completed' ? '✓' : '1' },
+                    { num: 2, title: 'Päätös', state: s2, desc: s2 === 'completed' ? 'Kirjattu' : (s2 === 'active' ? 'Vahvistettu' : 'Odottaa'), icon: s2 === 'completed' ? '✓' : '2' },
+                    { num: 3, title: 'Tehtävät', state: s3, desc: s3Desc, icon: s3 === 'completed' ? '✓' : (s3 === 'skipped' ? '—' : '3') },
+                    { num: 4, title: 'Valmis', state: s4, desc: s4 === 'completed' || s4 === 'active' ? 'Valmis' : 'Odottaa', icon: (s4 === 'completed' || s4 === 'active') ? '🏁' : '4' }
+                ]
+            };
+        }
+
+        function renderLifecycleBar(item) {
+            const data = getLifecycleData(item);
+            return `
+                <div class="lifecycle-card">
+                    <div class="lifecycle-header">
+                        <span class="lifecycle-tag">ASIAN TOTEUTUMISEN SEURANTA</span>
+                        <span class="lifecycle-badge ${data.statusClass}">
+                            <span>${data.statusLabel}</span>
+                        </span>
+                    </div>
+                    <div class="lifecycle-steps-wrapper">
+                        <div class="lifecycle-bar-track">
+                            <div class="lifecycle-bar-fill" style="width: ${data.fillPct}%;"></div>
+                        </div>
+                        <div class="lifecycle-steps">
+                            ${data.steps.map(s => `
+                                <div class="lifecycle-step ${s.state}">
+                                    <div class="lifecycle-bubble">${s.icon}</div>
+                                    <div class="lifecycle-step-title">${escapeHtml(s.title)}</div>
+                                    <div class="lifecycle-step-desc">${escapeHtml(s.desc)}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="lifecycle-meta-bar">
+                        <span>${escapeHtml(data.metaText)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
         function updateDecisionLevelHint() {
             const val = document.getElementById('create-item-decision-level')?.value;
             const hintEl = document.getElementById('create-item-decision-level-hint');
@@ -2823,6 +3083,7 @@
                     ${getLevelBadgeHtml(item.decision_level)}
                     <span class="stage-pill stage-archived">🗃️ Arkistoitu</span>
                 </div>
+                ${renderLifecycleBar(item)}
                 <div class="level-banner level-banner-${item.decision_level || 'choice'}">
                     ${getLevelExplanationHtml(item.decision_level)}
                 </div>
@@ -3019,6 +3280,7 @@
                     ${getLevelBadgeHtml(item.decision_level)}
                     <span class="stage-pill stage-${item.stage}">${getStageIcon(item.stage)} ${escapeHtml(item.stage_name)}</span>
                 </div>
+                ${renderLifecycleBar(item)}
                 <div class="level-banner level-banner-${item.decision_level || 'choice'}">
                     ${getLevelExplanationHtml(item.decision_level)}
                 </div>
