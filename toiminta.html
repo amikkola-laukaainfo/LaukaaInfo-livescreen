@@ -1242,6 +1242,125 @@
         </div>
     </div>
 
+    <!-- PÄÄTÖKSEN KIRJAUS JA JATKOTEHTÄVÄ -MODAALI -->
+    <div class="modal-overlay" id="decision-modal">
+        <div class="modal-card" style="max-width: 540px;">
+            <button class="modal-close" onclick="closeDecisionModal()">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(16,185,129,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">✅</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Kirjaa päätös ja jatkotoimet</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Kirjaa päätöslauselma ja luo halutessasi heti ensimmäinen jatkotehtävä</p>
+                </div>
+            </div>
+
+            <form id="decision-form" onsubmit="event.preventDefault(); submitDecision();" style="display:flex;flex-direction:column;gap:1rem;">
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Päätöslauselma / Yhteenveto *</label>
+                    <textarea id="decision-text" rows="4" required minlength="5" maxlength="5000" placeholder="Kirjoita päätöksen sisältö, perustelut ja sovitut asiat..." 
+                              style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.88rem;resize:vertical;line-height:1.45;"></textarea>
+                </div>
+
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Seuraava tila</label>
+                    <select id="decision-target-stage" style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;">
+                        <option value="decided" selected>✅ Päätetty (Käsittely valmis tai siirtyy seurantaan)</option>
+                        <option value="in_progress">🛠️ Toteutuksessa (Käynnistää käytännön jatkotoimet)</option>
+                    </select>
+                </div>
+
+                <div style="background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:12px;padding:0.85rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+                        <span style="font-size:0.8rem;font-weight:700;color:#38bdf8;text-transform:uppercase;letter-spacing:0.05em;">🛠️ Ensimmäinen jatkotehtävä (Valinnainen)</span>
+                    </div>
+                    <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.4;margin-bottom:0.65rem;">
+                        Jos päätös edellyttää välittömiä käytännön toimia, voit liittää ensimmäisen tehtävän päätöksen yhteyteen samalla kertaa.
+                    </p>
+                    
+                    <div style="display:flex;flex-direction:column;gap:0.65rem;">
+                        <div>
+                            <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--text-muted);margin-bottom:0.25rem;">Tehtävän otsikko / toiminto</label>
+                            <input type="text" id="decision-task-name" maxlength="200" placeholder="esim. Tarjousten pyytäminen urakoitsijoilta"
+                                   style="width:100%;box-sizing:border-box;padding:0.55rem 0.75rem;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.82rem;" />
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+                            <div>
+                                <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--text-muted);margin-bottom:0.25rem;">Aikataulu / Määräaika</label>
+                                <input type="text" id="decision-task-time" maxlength="100" placeholder="esim. Ennen ensi viikkoa"
+                                       style="width:100%;box-sizing:border-box;padding:0.55rem 0.75rem;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.82rem;" />
+                            </div>
+                            <div>
+                                <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--text-muted);margin-bottom:0.25rem;">Tarvittava tekijämäärä</label>
+                                <input type="number" id="decision-task-volunteers" min="1" max="100" value="1"
+                                       style="width:100%;box-sizing:border-box;padding:0.55rem 0.75rem;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.82rem;" />
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--text-muted);margin-bottom:0.25rem;">Nimetty vastuuhenkilö (Valinnainen)</label>
+                            <input type="text" id="decision-task-lead" maxlength="100" placeholder="esim. Matti K. (liitetään suoraan vetäjäksi)"
+                                   style="width:100%;box-sizing:border-box;padding:0.55rem 0.75rem;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.82rem;" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="decision-error" style="display:none;color:#f87171;font-size:0.8rem;line-height:1.4;background:rgba(239,68,68,0.1);padding:0.6rem 0.8rem;border-radius:8px;border:1px solid rgba(239,68,68,0.2);"></div>
+
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                    <button type="button" class="btn-toggle-admin" onclick="closeDecisionModal()">Peruuta</button>
+                    <button type="submit" class="btn-signup" id="btn-submit-decision" style="background:#10b981;">✅ Kirjaa päätös</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- UUSI JATKOTEHTÄVÄ -MODAALI (LISÄÄ TEHTÄVÄ MYÖHEMMIN) -->
+    <div class="modal-overlay" id="add-task-modal">
+        <div class="modal-card" style="max-width: 480px;">
+            <button class="modal-close" onclick="closeAddTaskModal()">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(56,189,248,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🛠️</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Lisää jatkotehtävä</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Jaa vastuut ja avaa vapaaehtoisille mahdollisuus ilmoittautua</p>
+                </div>
+            </div>
+
+            <form id="add-task-form" onsubmit="event.preventDefault(); submitAddTask();" style="display:flex;flex-direction:column;gap:0.85rem;">
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Tehtävän otsikko / toiminto *</label>
+                    <input type="text" id="add-task-name" required minlength="2" maxlength="200" placeholder="esim. Kahvituksen järjestely tai teltan pystytys"
+                           style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.88rem;" />
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Aikataulu / Ajankohta</label>
+                        <input type="text" id="add-task-time" maxlength="100" placeholder="esim. La klo 9:00"
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Tekijöitä tarvitaan</label>
+                        <input type="number" id="add-task-volunteers" min="1" max="100" value="1"
+                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Nimetty vastuuhenkilö (Valinnainen)</label>
+                    <input type="text" id="add-task-lead" maxlength="100" placeholder="esim. Liisa K. (merkitään vastuuhenkilöksi)"
+                           style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                </div>
+
+                <div id="add-task-error" style="display:none;color:#f87171;font-size:0.8rem;line-height:1.4;background:rgba(239,68,68,0.1);padding:0.6rem 0.8rem;border-radius:8px;border:1px solid rgba(239,68,68,0.2);"></div>
+
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:0.4rem;">
+                    <button type="button" class="btn-toggle-admin" onclick="closeAddTaskModal()">Peruuta</button>
+                    <button type="submit" class="btn-signup" id="btn-submit-add-task" style="background:#0284c7;">➕ Lisää tehtävä</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- HENKILÖKOHTAISEN VALTUUSKOODIN TODENNUSMODAALI -->
     <div class="modal-overlay" id="role-auth-modal">
         <div class="modal-card" style="max-width: 480px;">
@@ -2241,7 +2360,7 @@
             if (l.code === 'survey') {
                 return `<strong>💡 Suuntaa-antava kysely (Taso A):</strong> Kartoittaa jäsenten ja ryhmän mielipiteitä sekä toiveita. Tulos toimii valmistelun pohjana eikä yksinään sido ryhmää.`;
             } else if (l.code === 'formal') {
-                return `<strong>📜 Dokumentoitava päätös (Taso C):</strong> Yhteisön virallinen ratkaisu (esim. hankinta tai sääntöasia). Tuloksesta laaditaan päätösyhteenveto. Sitovuus edellyttää yhteisön omien toimivaltasääntöjen noudattamista.`;
+                return `<strong>📜 Dokumentoitava päätös (Taso C):</strong> Kertoo tavoitellusta käsittelytavasta (esim. hankinta- tai toimintapäätös), josta kirjataan päätös ja laaditaan päätösote. Huom: Toimintataulun äänestys ei yksin tee päätöksestä sitovaa, vaan todellinen päätösvalta ja menettelyt määräytyvät aina yhteisön sääntöjen mukaan.`;
             } else {
                 return `<strong>🤝 Ryhmän yhteinen valinta (Taso B):</strong> Auttaa ryhmää sopimaan käytännön asioista (päivämäärät, toimintatavat). Ryhmä voi etukäteen sopia, miten tulosta sovelletaan.`;
             }
@@ -2256,7 +2375,7 @@
                 hintEl.innerHTML = '💡 <strong>Suuntaa-antava kysely:</strong> Kartoittaa ryhmän toiveita tai ideoita. Tulos auttaa valmistelussa, ei sido.';
             } else if (val === 'formal') {
                 hintEl.style.color = '#34d399';
-                hintEl.innerHTML = '📜 <strong>Dokumentoitu päätös:</strong> Virallinen ratkaisu (esim. hankinta). Tuloksesta kirjataan päätös ja luodaan ote.';
+                hintEl.innerHTML = '📜 <strong>Dokumentoitu päätös:</strong> Tavoitteena määrämuotoinen ratkaisu (esim. hankinta). Huom: Sitovuus edellyttää yhteisön omien toimivaltasääntöjen noudattamista.';
             } else {
                 hintEl.style.color = '#fbbf24';
                 hintEl.innerHTML = '🤝 <strong>Yhteinen valinta:</strong> Auttaa ryhmää sopimaan käytännön asioista (päivämäärät, toimintatavat).';
@@ -2763,12 +2882,21 @@
                 `;
             }
 
-            // Tehtäväosio
+            // Tehtäväosio ja jatkotoimet
+            const taskCount = (item.tasks && item.tasks.length) || 0;
             let tasksHtml = '';
-            if (item.tasks && item.tasks.length > 0) {
+            if (taskCount > 0 || (IS_ADMIN && item.stage !== 'archived')) {
                 tasksHtml = `
                     <div class="modal-section">
-                        <div class="modal-section-title">🛠️ Osallistu järjestelyihin (Tehtävät)</div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">
+                            <div class="modal-section-title" style="margin:0;">🛠️ Jatkotoimet ja tehtävät (${taskCount})</div>
+                            ${IS_ADMIN && item.stage !== 'archived' ? `
+                                <button class="btn-signup" style="background:#0284c7;font-size:0.78rem;padding:0.35rem 0.75rem;display:inline-flex;align-items:center;gap:0.35rem;" onclick="openAddTaskModal('${item.id}')">
+                                    <span>➕</span> <span>Lisää tehtävä</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                        ${taskCount > 0 ? `
                         <div class="task-list">
                             ${item.tasks.map(t => {
                                 const signups = t.signups || [];
@@ -2796,6 +2924,11 @@
                                 `;
                             }).join('')}
                         </div>
+                        ` : `
+                        <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.12);border-radius:12px;padding:0.9rem;text-align:center;color:var(--text-muted);font-size:0.82rem;">
+                            Ei vielä kirjattuja jatkotehtäviä. Voit lisätä ensimmäisen tehtävän oikealta ylhäältä "Lisää tehtävä" -painikkeesta.
+                        </div>
+                        `}
                     </div>
                 `;
             }
@@ -2825,7 +2958,8 @@
                             <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'discussion')">💬 Siirrä keskusteluun</button>
                             <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'vote')">🗳️ Avaa äänestys</button>
                             <button class="btn-admin-action" onclick="openDecisionModal('${item.id}')">✅ Kirjaa päätös</button>
-                            <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'in_progress')">🛠️ Avaa tehtävät</button>
+                            <button class="btn-admin-action" onclick="openAddTaskModal('${item.id}')">🛠️ Lisää tehtävä</button>
+                            <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'in_progress')">🚀 Avaa toteutus</button>
                             <button class="btn-admin-action" onclick="changeItemStage('${item.id}', 'done')">📦 Merkitse valmiiksi</button>
                             <button class="btn-admin-action" onclick="archiveItem('${item.id}')" style="background:rgba(100,116,139,0.2);border-color:rgba(100,116,139,0.4);">🗃️ Arkistoi</button>
                             <button class="btn-admin-action btn-publish-wall" onclick="openWallPublishModal('${item.id}')">📢 Seinä-julkaisu</button>
@@ -3104,7 +3238,10 @@
         // =========================================================================
         // PÄÄTÖKSEN KIRJAUS -DIALOGI
         // =========================================================================
+        // PÄÄTÖKSEN KIRJAUS JA JATKOTOIMET
+        // =========================================================================
         let _pendingDecisionItemId = null;
+        let _pendingTaskItemId = null;
 
         function openDecisionModal(itemId) {
             if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
@@ -3114,9 +3251,20 @@
             _pendingDecisionItemId = itemId;
             const el = document.getElementById('decision-modal');
             const txt = document.getElementById('decision-text');
+            const stageSel = document.getElementById('decision-target-stage');
+            const taskName = document.getElementById('decision-task-name');
+            const taskTime = document.getElementById('decision-task-time');
+            const taskVol = document.getElementById('decision-task-volunteers');
+            const taskLead = document.getElementById('decision-task-lead');
             const err = document.getElementById('decision-error');
             const btn = document.getElementById('btn-submit-decision');
+
             if (txt) txt.value = '';
+            if (stageSel) stageSel.value = 'decided';
+            if (taskName) taskName.value = '';
+            if (taskTime) taskTime.value = '';
+            if (taskVol) taskVol.value = '1';
+            if (taskLead) taskLead.value = '';
             if (err) { err.innerText = ''; err.style.display = 'none'; }
             if (btn) { btn.disabled = false; btn.innerText = '✅ Kirjaa päätös'; }
             if (el) el.classList.add('open');
@@ -3132,18 +3280,196 @@
         async function submitDecision() {
             if (!_pendingDecisionItemId) return;
             const txt = document.getElementById('decision-text');
+            const stageSel = document.getElementById('decision-target-stage');
+            const taskNameInput = document.getElementById('decision-task-name');
+            const taskTimeInput = document.getElementById('decision-task-time');
+            const taskVolInput = document.getElementById('decision-task-volunteers');
+            const taskLeadInput = document.getElementById('decision-task-lead');
             const btn = document.getElementById('btn-submit-decision');
             const err = document.getElementById('decision-error');
+
             const summary = (txt?.value || '').trim();
+            const targetStage = (stageSel?.value || 'decided').trim();
+            const taskName = (taskNameInput?.value || '').trim();
+            const taskTime = (taskTimeInput?.value || '').trim();
+            const taskVol = parseInt(taskVolInput?.value, 10) || 1;
+            const taskLead = (taskLeadInput?.value || '').trim();
 
             if (summary.length < 5) {
                 if (err) { err.innerText = 'Kirjoita vähintään 5 merkkiä pitkä päätösteksti.'; err.style.display = 'block'; }
                 return;
             }
 
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                if (err) { err.innerText = 'Tietokantayhteys puuttuu.'; err.style.display = 'block'; }
+                return;
+            }
+
+            let token = ROLE_SESSION && ROLE_SESSION.session_token ? ROLE_SESSION.session_token : ORG_SESSION_TOKEN;
+            if (!token) {
+                openRoleAuthModal(() => submitDecision());
+                return;
+            }
+
             if (btn) { btn.disabled = true; btn.innerText = 'Tallennetaan...'; }
-            closeDecisionModal();
-            await changeItemStage(_pendingDecisionItemId, 'decided', summary);
+
+            try {
+                // Kokeillaan ensisijaisesti atomista RPC-kutsua (083)
+                const { data, error } = await sb.rpc('record_board_decision_with_task', {
+                    p_session_token: token,
+                    p_item_id: _pendingDecisionItemId,
+                    p_decision_summary: summary,
+                    p_new_stage: targetStage,
+                    p_task_name: taskName || null,
+                    p_task_time_slot: taskTime || null,
+                    p_task_required: taskVol,
+                    p_task_lead_name: taskLead || null
+                });
+
+                if (error) {
+                    // Jos funktiota ei vielä ole tietokannassa (42883), käytetään fallbackia
+                    if (error.code === '42883' || error.message.includes('function') || error.message.includes('does not exist')) {
+                        console.warn('record_board_decision_with_task not found, falling back to manage_board_item');
+                        const { data: fbData, error: fbError } = await sb.rpc('manage_board_item', {
+                            p_session_token: token,
+                            p_item_id: _pendingDecisionItemId,
+                            p_stage: targetStage,
+                            p_decision_summary: summary
+                        });
+
+                        if (fbError || (fbData && !fbData.success)) {
+                            throw new Error((fbData && fbData.error) || fbError.message || 'Päätöksen tallennus epäonnistui.');
+                        }
+
+                        if (taskName) {
+                            alert('Päätös kirjattiin onnistuneesti! Tehtävää ei kuitenkaan voitu luoda samalla kertaa, koska tietokantamigraatiota 083 ei ole vielä ajettu.');
+                        }
+                    } else {
+                        throw error;
+                    }
+                } else if (data && !data.success) {
+                    throw new Error(data.error || 'Päätöksen tallennus epäonnistui.');
+                }
+
+                closeDecisionModal();
+                await fetchBoardData();
+                if (activeItemId) {
+                    openDetail(activeItemId);
+                }
+            } catch (ex) {
+                console.error('submitDecision error:', ex);
+                if (err) {
+                    err.innerText = 'Virhe tallennuksessa: ' + (ex.message || ex);
+                    err.style.display = 'block';
+                }
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerText = '✅ Kirjaa päätös'; }
+            }
+        }
+
+        // =========================================================================
+        // JATKOTEHTÄVÄN LISÄYS MYÖHEMMIN
+        // =========================================================================
+        function openAddTaskModal(itemId) {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                openRoleAuthModal(() => openAddTaskModal(itemId));
+                return;
+            }
+            _pendingTaskItemId = itemId;
+            const el = document.getElementById('add-task-modal');
+            const nameInput = document.getElementById('add-task-name');
+            const timeInput = document.getElementById('add-task-time');
+            const volInput = document.getElementById('add-task-volunteers');
+            const leadInput = document.getElementById('add-task-lead');
+            const err = document.getElementById('add-task-error');
+            const btn = document.getElementById('btn-submit-add-task');
+
+            if (nameInput) nameInput.value = '';
+            if (timeInput) timeInput.value = '';
+            if (volInput) volInput.value = '1';
+            if (leadInput) leadInput.value = '';
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (btn) { btn.disabled = false; btn.innerText = '➕ Lisää tehtävä'; }
+
+            if (el) el.classList.add('open');
+            setTimeout(() => { if (nameInput) nameInput.focus(); }, 100);
+        }
+
+        function closeAddTaskModal() {
+            const el = document.getElementById('add-task-modal');
+            if (el) el.classList.remove('open');
+            _pendingTaskItemId = null;
+        }
+
+        async function submitAddTask() {
+            if (!_pendingTaskItemId) return;
+            const nameInput = document.getElementById('add-task-name');
+            const timeInput = document.getElementById('add-task-time');
+            const volInput = document.getElementById('add-task-volunteers');
+            const leadInput = document.getElementById('add-task-lead');
+            const btn = document.getElementById('btn-submit-add-task');
+            const err = document.getElementById('add-task-error');
+
+            const name = (nameInput?.value || '').trim();
+            const timeSlot = (timeInput?.value || '').trim();
+            const volunteers = parseInt(volInput?.value, 10) || 1;
+            const leadName = (leadInput?.value || '').trim();
+
+            if (name.length < 2) {
+                if (err) { err.innerText = 'Anna tehtävälle vähintään 2 merkkiä pitkä nimi.'; err.style.display = 'block'; }
+                return;
+            }
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                if (err) { err.innerText = 'Tietokantayhteys puuttuu.'; err.style.display = 'block'; }
+                return;
+            }
+
+            let token = ROLE_SESSION && ROLE_SESSION.session_token ? ROLE_SESSION.session_token : ORG_SESSION_TOKEN;
+            if (!token) {
+                openRoleAuthModal(() => submitAddTask());
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Tallennetaan...'; }
+
+            try {
+                const { data, error } = await sb.rpc('create_board_task', {
+                    p_session_token: token,
+                    p_item_id: _pendingTaskItemId,
+                    p_name: name,
+                    p_time_slot: timeSlot || null,
+                    p_required_volunteers: volunteers,
+                    p_lead_name: leadName || null
+                });
+
+                if (error) {
+                    if (error.code === '42883' || error.message.includes('create_board_task') || error.message.includes('does not exist')) {
+                        throw new Error('Tehtävien lisäystoiminto vaatii migraation 083_board_tasks_and_decisions.sql ajamisen tietokantaan.');
+                    }
+                    throw error;
+                }
+
+                if (data && !data.success) {
+                    throw new Error(data.error || 'Tehtävän luonti epäonnistui.');
+                }
+
+                closeAddTaskModal();
+                await fetchBoardData();
+                if (activeItemId) {
+                    openDetail(activeItemId);
+                }
+            } catch (ex) {
+                console.error('submitAddTask error:', ex);
+                if (err) {
+                    err.innerText = 'Virhe: ' + (ex.message || ex);
+                    err.style.display = 'block';
+                }
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerText = '➕ Lisää tehtävä'; }
+            }
         }
 
         // =========================================================================

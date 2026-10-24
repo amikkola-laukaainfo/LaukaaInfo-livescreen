@@ -49,7 +49,13 @@ $$Asian päätöstaso / käsittelyluonne:
 
 -- -----------------------------------------------------------------------------
 -- 2. Päivitetään create_board_item tukemaan valinnaista p_decision_level -arvoa
+--    Poistetaan vanha 8-parametrinen allekirjoitus, jotta PostgreSQL ei luo
+--    ristiriitaista funktioylikuormitusta (overload).
 -- -----------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS public.create_board_item(
+    TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TIMESTAMPTZ, TEXT
+);
+
 CREATE OR REPLACE FUNCTION public.create_board_item(
     p_session_token   TEXT,
     p_organization_id TEXT,
