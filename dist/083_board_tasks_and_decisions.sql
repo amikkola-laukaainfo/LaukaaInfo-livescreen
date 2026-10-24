@@ -28,6 +28,8 @@ BEGIN;
 -- =============================================================================
 -- 1. create_board_task: Tehtävän luonti olemassa olevaan asiaan
 -- =============================================================================
+DROP FUNCTION IF EXISTS public.create_board_task(TEXT, UUID, TEXT, TEXT, INT, TEXT);
+
 CREATE OR REPLACE FUNCTION public.create_board_task(
     p_session_token         TEXT,
     p_item_id               UUID,
@@ -204,6 +206,8 @@ GRANT EXECUTE ON FUNCTION public.create_board_task(TEXT, UUID, TEXT, TEXT, INT, 
 -- =============================================================================
 -- 2. record_board_decision_with_task: Atominen päätös + valinnainen tehtävä
 -- =============================================================================
+DROP FUNCTION IF EXISTS public.record_board_decision_with_task(TEXT, UUID, TEXT, TEXT, TEXT, TEXT, INT, TEXT);
+
 CREATE OR REPLACE FUNCTION public.record_board_decision_with_task(
     p_session_token         TEXT,
     p_item_id               UUID,

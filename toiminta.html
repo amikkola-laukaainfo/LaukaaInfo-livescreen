@@ -2788,6 +2788,35 @@
                 </div>
             `;
 
+            // Arkistoidut tehtävät
+            let tasksHtml = '';
+            if (item.tasks && item.tasks.length > 0) {
+                tasksHtml = `
+                    <div class="modal-section">
+                        <div class="modal-section-title">🛠️ Arkistoidut tehtävät ja järjestelyt (${item.tasks.length})</div>
+                        <div class="task-list">
+                            ${item.tasks.map(t => {
+                                const signups = t.signups || [];
+                                const signed = signups.length;
+                                return `
+                                    <div class="task-card">
+                                        <div class="task-info">
+                                            <h4>${escapeHtml(t.name)}</h4>
+                                            <p>🕒 ${escapeHtml(t.time || 'Ajankohta sovittu')} · Ilmoittautuneet: <strong>${escapeHtml(signups.join(', ')) || 'Ei ilmoittautuneita'}</strong></p>
+                                        </div>
+                                        <div class="task-status-row">
+                                            <span class="capacity-pill capacity-ok">
+                                                ${signed}/${t.required} hlö
+                                            </span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
             content.innerHTML = `
                 <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;padding-right:2rem;flex-wrap:wrap;">
                     <span class="item-seq">${escapeHtml(item.seq)}</span>
@@ -2806,6 +2835,7 @@
                 ${decisionHtml}
                 ${adminActions}
                 ${voteHtml}
+                ${tasksHtml}
                 <div class="modal-section">
                     <div class="modal-section-title">💬 Arkistoitu kommenttikeskustelu (${item.comments_count || 0})</div>
                     <div class="comments-list" id="comments-container">
@@ -3328,9 +3358,13 @@
                 });
 
                 if (error) {
-                    // Jos funktiota ei vielä ole tietokannassa (42883), käytetään fallbackia
+                    // Jos funktiota ei vielä ole tietokannassa (42883)
                     if (error.code === '42883' || error.message.includes('function') || error.message.includes('does not exist')) {
-                        console.warn('record_board_decision_with_task not found, falling back to manage_board_item');
+                        if (taskName) {
+                            // Turvallisuus: emme tee osittaista tallennusta, jos käyttäjä määritteli jatkotehtävän
+                            throw new Error('Jatkotehtävän atominen tallennus päätöksen yhteydessä vaatii tietokantamigraation 083_board_tasks_and_decisions.sql. Päätöstä ei tallennettu puolittain. Voit ajaa migraation kantaan tai tyhjentää tehtäväkentän kirjataksesi toistaiseksi pelkän päätöksen.');
+                        }
+                        console.warn('record_board_decision_with_task not found, falling back to manage_board_item for decision-only');
                         const { data: fbData, error: fbError } = await sb.rpc('manage_board_item', {
                             p_session_token: token,
                             p_item_id: _pendingDecisionItemId,
@@ -3340,10 +3374,6 @@
 
                         if (fbError || (fbData && !fbData.success)) {
                             throw new Error((fbData && fbData.error) || fbError.message || 'Päätöksen tallennus epäonnistui.');
-                        }
-
-                        if (taskName) {
-                            alert('Päätös kirjattiin onnistuneesti! Tehtävää ei kuitenkaan voitu luoda samalla kertaa, koska tietokantamigraatiota 083 ei ole vielä ajettu.');
                         }
                     } else {
                         throw error;
