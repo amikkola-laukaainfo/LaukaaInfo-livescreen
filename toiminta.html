@@ -288,6 +288,32 @@
         .stage-in_progress { background: rgba(244, 63, 94, 0.15); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.3); }
         .stage-done { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
         .stage-archived { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+        /* Päätöstasot A/B/C */
+        .level-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.22rem 0.6rem;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            letter-spacing: 0.02em;
+        }
+        .level-survey { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .level-choice { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .level-formal { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .level-banner {
+            border-radius: 8px;
+            padding: 0.55rem 0.8rem;
+            font-size: 0.8rem;
+            line-height: 1.45;
+            margin: 0.65rem 0;
+        }
+        .level-banner-survey { background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); color: #bae6fd; }
+        .level-banner-choice { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); color: #fde68a; }
+        .level-banner-formal { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); color: #a7f3d0; }
         .decision-box {
             background: rgba(16, 185, 129, 0.06);
             border: 1px solid rgba(16, 185, 129, 0.2);
@@ -1373,6 +1399,18 @@
                               style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;font-family:inherit;resize:vertical;"></textarea>
                 </div>
 
+                <div>
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Päätöstaso / Käsittelytapa</label>
+                    <select id="create-item-decision-level" onchange="updateDecisionLevelHint()" style="width:100%;box-sizing:border-box;padding:0.65rem 0.85rem;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;">
+                        <option value="survey">💡 A — Suuntaa-antava kysely (Kartoittaa mielipiteitä, ei sido)</option>
+                        <option value="choice" selected>🤝 B — Ryhmän yhteinen valinta (Käytännön sopiminen, oletus)</option>
+                        <option value="formal">📜 C — Dokumentoitava päätös (Hankinta, virallinen ratkaisu)</option>
+                    </select>
+                    <p id="create-item-decision-level-hint" style="font-size:0.75rem;color:#fbbf24;margin:0.35rem 0 0 0;line-height:1.4;">
+                        🤝 <strong>Yhteinen valinta:</strong> Auttaa ryhmää sopimaan käytännön asioista (päivämäärät, toimintatavat).
+                    </p>
+                </div>
+
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                     <div>
                         <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Aloitusvaihe</label>
@@ -1939,6 +1977,8 @@
             const deadlineLabel = (document.getElementById('create-item-deadline-label')?.value || '').trim();
             const btn = document.getElementById('btn-submit-create-item');
 
+            const decisionLevel = document.getElementById('create-item-decision-level')?.value || 'choice';
+
             if (title.length < 3 || title.length > 255) {
                 showCreateItemError('Otsikon tulee olla 3–255 merkkiä pitkä.');
                 return;
@@ -1970,7 +2010,7 @@
             }
 
             try {
-                const { data, error } = await sb.rpc('create_board_item', {
+                let rpcParams = {
                     p_session_token: ROLE_SESSION.session_token,
                     p_organization_id: CURRENT_ORG_ID,
                     p_title: title,
@@ -1978,8 +2018,19 @@
                     p_stage: stage,
                     p_lead_name: lead || null,
                     p_deadline_at: deadlineIso,
-                    p_deadline_label: deadlineLabel || null
-                });
+                    p_deadline_label: deadlineLabel || null,
+                    p_decision_level: decisionLevel
+                };
+
+                let { data, error } = await sb.rpc('create_board_item', rpcParams);
+
+                // Jos backendissä ei ole vielä 082-migraation p_decision_level -parametria, kokeillaan ilman sitä
+                if (error && (error.message?.includes('p_decision_level') || error.code === 'PGRST202')) {
+                    delete rpcParams.p_decision_level;
+                    const retry = await sb.rpc('create_board_item', rpcParams);
+                    data = retry.data;
+                    error = retry.error;
+                }
 
                 if (error || (data && !data.success)) {
                     const rawMsg = (data && data.error) || (error && error.message) || 'Uuden asian luonti epäonnistui.';
@@ -2117,7 +2168,10 @@
                 return `
                     <article class="item-card" onclick="openDetail('${item.id}')">
                         <div class="item-card-top">
-                            <span class="item-seq">${escapeHtml(item.seq)}</span>
+                            <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+                                <span class="item-seq">${escapeHtml(item.seq)}</span>
+                                ${getLevelBadgeHtml(item.decision_level)}
+                            </div>
                             <span class="stage-pill stage-${item.stage}">
                                 ${getStageIcon(item.stage)} ${escapeHtml(item.stage_name)}
                             </span>
@@ -2165,6 +2219,47 @@
                 case 'done': return 'Valmis';
                 case 'archived': return 'Arkistoitu';
                 default: return stage;
+            }
+        }
+
+        // Päätöstasot A/B/C
+        function getDecisionLevel(level) {
+            switch(level) {
+                case 'survey': return { code: 'survey', label: 'Suuntaa-antava kysely', icon: '💡', short: 'A — Kysely' };
+                case 'formal': return { code: 'formal', label: 'Dokumentoitava päätös', icon: '📜', short: 'C — Päätös' };
+                default:       return { code: 'choice', label: 'Ryhmän yhteinen valinta', icon: '🤝', short: 'B — Valinta' };
+            }
+        }
+
+        function getLevelBadgeHtml(level) {
+            const l = getDecisionLevel(level);
+            return `<span class="level-pill level-${l.code}" title="${l.label}">${l.icon} ${l.short}</span>`;
+        }
+
+        function getLevelExplanationHtml(level) {
+            const l = getDecisionLevel(level);
+            if (l.code === 'survey') {
+                return `<strong>💡 Suuntaa-antava kysely (Taso A):</strong> Kartoittaa jäsenten ja ryhmän mielipiteitä sekä toiveita. Tulos toimii valmistelun pohjana eikä yksinään sido ryhmää.`;
+            } else if (l.code === 'formal') {
+                return `<strong>📜 Dokumentoitava päätös (Taso C):</strong> Yhteisön virallinen ratkaisu (esim. hankinta tai sääntöasia). Tuloksesta laaditaan päätösyhteenveto. Sitovuus edellyttää yhteisön omien toimivaltasääntöjen noudattamista.`;
+            } else {
+                return `<strong>🤝 Ryhmän yhteinen valinta (Taso B):</strong> Auttaa ryhmää sopimaan käytännön asioista (päivämäärät, toimintatavat). Ryhmä voi etukäteen sopia, miten tulosta sovelletaan.`;
+            }
+        }
+
+        function updateDecisionLevelHint() {
+            const val = document.getElementById('create-item-decision-level')?.value;
+            const hintEl = document.getElementById('create-item-decision-level-hint');
+            if (!hintEl) return;
+            if (val === 'survey') {
+                hintEl.style.color = '#38bdf8';
+                hintEl.innerHTML = '💡 <strong>Suuntaa-antava kysely:</strong> Kartoittaa ryhmän toiveita tai ideoita. Tulos auttaa valmistelussa, ei sido.';
+            } else if (val === 'formal') {
+                hintEl.style.color = '#34d399';
+                hintEl.innerHTML = '📜 <strong>Dokumentoitu päätös:</strong> Virallinen ratkaisu (esim. hankinta). Tuloksesta kirjataan päätös ja luodaan ote.';
+            } else {
+                hintEl.style.color = '#fbbf24';
+                hintEl.innerHTML = '🤝 <strong>Yhteinen valinta:</strong> Auttaa ryhmää sopimaan käytännön asioista (päivämäärät, toimintatavat).';
             }
         }
 
@@ -2243,7 +2338,10 @@
                 container.innerHTML = ARCHIVED_ITEMS.map(item => `
                     <article class="item-card" onclick="openArchivedDetail('${item.id}')" style="opacity:0.75;">
                         <div class="item-card-top">
-                            <span class="item-seq">${escapeHtml(item.seq)}</span>
+                            <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+                                <span class="item-seq">${escapeHtml(item.seq)}</span>
+                                ${getLevelBadgeHtml(item.decision_level)}
+                            </div>
                             <span class="stage-pill stage-archived">🗃️ Arkistoitu</span>
                         </div>
                         <h3 class="item-title">${escapeHtml(item.title)}</h3>
@@ -2561,17 +2659,24 @@
                 </div>
             ` : '';
 
-            const adminActions = IS_ADMIN ? `
+            const adminActions = `
                 <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
-                    <button class="btn-admin-action" onclick="printDecisionExcerpt('${item.id}')" style="background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.3);color:#7dd3fc;">🖨️ Tulosta päätösote</button>
-                    <button class="btn-admin-action" onclick="deleteItem('${item.id}')" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;">🗑️ Poista pysyvästi</button>
+                    <button class="btn-share-wa" onclick="shareItemToWhatsApp('${item.id}')" style="background:#25D366;color:#fff;border:none;padding:0.45rem 0.85rem;border-radius:8px;font-size:0.8rem;font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+                        <span>💬</span> <span>Jaa WhatsAppiin</span>
+                    </button>
+                    <button class="btn-admin-action" onclick="printDecisionExcerpt('${item.id}')" style="background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.3);color:#7dd3fc;">📄 Päätösote ja yhteenveto (PDF)</button>
+                    ${IS_ADMIN ? `<button class="btn-admin-action" onclick="deleteItem('${item.id}')" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;">🗑️ Poista pysyvästi</button>` : ''}
                 </div>
-            ` : '';
+            `;
 
             content.innerHTML = `
                 <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;padding-right:2rem;flex-wrap:wrap;">
                     <span class="item-seq">${escapeHtml(item.seq)}</span>
+                    ${getLevelBadgeHtml(item.decision_level)}
                     <span class="stage-pill stage-archived">🗃️ Arkistoitu</span>
+                </div>
+                <div class="level-banner level-banner-${item.decision_level || 'choice'}">
+                    ${getLevelExplanationHtml(item.decision_level)}
                 </div>
                 <h2 style="font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;padding-right:1.5rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.title)}</h2>
                 <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.description || '')}</p>
@@ -2732,20 +2837,26 @@
                 `;
             }
 
-            // PDF-painike sihteerille (decided tai archived)
-            let pdfBtnHtml = '';
-            if ((item.stage === 'decided' || item.stage === 'done' || item.stage === 'archived') && IS_ADMIN) {
-                pdfBtnHtml = `
-                    <button class="btn-admin-action" onclick="printDecisionExcerpt('${item.id}')" style="background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.3);color:#7dd3fc;margin-top:0.5rem;">
-                        🖨️ Tulosta päätösote (PDF)
+            // Pika- ja jakotoiminnot (WhatsApp-jako ja Päätösote / PDF)
+            let actionRowHtml = `
+                <div class="item-quick-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:0.85rem 0 0.5rem 0;">
+                    <button class="btn-share-wa" onclick="shareItemToWhatsApp('${item.id}')" style="background:#25D366;color:#fff;border:none;padding:0.45rem 0.85rem;border-radius:8px;font-size:0.8rem;font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+                        <span>💬</span> <span>Jaa WhatsAppiin</span>
                     </button>
-                `;
-            }
+                    <button class="btn-print-summary" onclick="printDecisionExcerpt('${item.id}')" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.35);padding:0.45rem 0.85rem;border-radius:8px;font-size:0.8rem;font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;">
+                        <span>📄</span> <span>Päätösote ja yhteenveto (PDF)</span>
+                    </button>
+                </div>
+            `;
 
             content.innerHTML = `
                 <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;padding-right:2rem;flex-wrap:wrap;">
                     <span class="item-seq">${escapeHtml(item.seq)}</span>
+                    ${getLevelBadgeHtml(item.decision_level)}
                     <span class="stage-pill stage-${item.stage}">${getStageIcon(item.stage)} ${escapeHtml(item.stage_name)}</span>
+                </div>
+                <div class="level-banner level-banner-${item.decision_level || 'choice'}">
+                    ${getLevelExplanationHtml(item.decision_level)}
                 </div>
                 <h2 style="font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;padding-right:1.5rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.title)}</h2>
                 <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:0.85rem;overflow-wrap:break-word;word-break:break-word;">${escapeHtml(item.description)}</p>
@@ -2754,8 +2865,8 @@
                     <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
                 </div>
 
+                ${actionRowHtml}
                 ${decisionHtml}
-                ${pdfBtnHtml}
                 ${adminHtml}
                 ${voteHtml}
                 ${tasksHtml}
@@ -3091,11 +3202,59 @@
         }
 
         // =========================================================================
-        // PDF / TULOSTA PÄÄTÖSOTE (Vaihe 3)
+        // WHATSAPP-JAKO JA SUORALINKITYS
+        // =========================================================================
+        function shareItemToWhatsApp(itemId) {
+            const item = (BOARD_DATA.items && BOARD_DATA.items.find(i => i.id === itemId))
+                      || (ARCHIVED_ITEMS && ARCHIVED_ITEMS.find(i => i.id === itemId));
+            if (!item) {
+                alert('Asiatietoja ei löytynyt jakoa varten.');
+                return;
+            }
+
+            const orgId = CURRENT_ORG_ID || '';
+            const orgName = BOARD_DATA.organization_name || 'LaukaaInfo Toimintataulu';
+            
+            // Muodostetaan suora linkki toimintatauluun ja kyseiseen asiaan
+            const baseUrl = window.location.origin + window.location.pathname;
+            const itemUrl = `${baseUrl}?org=${encodeURIComponent(orgId)}&item=${encodeURIComponent(item.id)}`;
+
+            const stageText = getStageName(item.stage);
+            const levelInfo = getDecisionLevel(item.decision_level);
+            let message = `📌 *${item.title}* (${item.seq || 'Asia'})\n`;
+            message += `🏛️ ${orgName}\n`;
+            message += `Taso: ${levelInfo.label}\n`;
+            message += `Tilanne: ${stageText}\n`;
+            
+            if (item.lead) {
+                message += `👤 Vastuu: ${item.lead}\n`;
+            }
+            if (item.deadline_label) {
+                message += `📅 Määräaika: ${item.deadline_label}\n`;
+            }
+            
+            if (item.decision_summary) {
+                message += `\n✅ *Kirjattu päätös:*\n${item.decision_summary}\n`;
+            } else if (item.stage === 'vote') {
+                message += `\n🗳️ *Äänestys ja kannanotto avoinna!* Käy kertomassa näkemyksesi.\n`;
+            } else if (item.stage === 'in_progress') {
+                message += `\n🛠️ *Talkoo- ja vapaaehtoistehtävät avoinna!* Ilmoittaudu mukaan järjestelyihin.\n`;
+            } else {
+                message += `\n💬 *Tutustu valmisteluun ja osallistu keskusteluun:*\n`;
+            }
+
+            message += `\nAvaa Toimintataululla:\n${itemUrl}`;
+
+            const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // =========================================================================
+        // PDF / TULOSTA PÄÄTÖSOTE JA YHTEENVETO
         // =========================================================================
         async function printDecisionExcerpt(itemId) {
-            const item = BOARD_DATA.items.find(i => i.id === itemId)
-                      || ARCHIVED_ITEMS.find(i => i.id === itemId);
+            const item = (BOARD_DATA.items && BOARD_DATA.items.find(i => i.id === itemId))
+                      || (ARCHIVED_ITEMS && ARCHIVED_ITEMS.find(i => i.id === itemId));
             if (!item) { alert('Asiatietoja ei löydy tulostusta varten.'); return; }
 
             // Haetaan kommentit erikseen, jos ei jo ladattu
@@ -3117,90 +3276,415 @@
             const printDate = new Date().toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' });
             const roleLabel = (ROLE_SESSION && ROLE_SESSION.member_name)
                 ? `${ROLE_SESSION.member_name} (${getStageName(ROLE_SESSION.active_roles?.[0]?.role || '')})`
-                : 'Sihteeri';
+                : 'Sihteeri / Ylläpito';
 
+            const safeTitle = escapeHtml(item.title || 'Nimetön asia');
+            const safeSeq = escapeHtml(item.seq || 'ASIA');
+            const safeOrg = escapeHtml(orgName);
+            const safeStage = escapeHtml(getStageName(item.stage));
+            const safeLead = escapeHtml(item.lead || 'Ei nimetty');
+            const safeDeadline = escapeHtml(item.deadline_label || 'Avoin');
+            const safeDesc = escapeHtml(item.description || 'Ei kuvausta.').replace(/\n/g, '<br>');
+            const safeDecision = item.decision_summary ? escapeHtml(item.decision_summary).replace(/\n/g, '<br>') : null;
+
+            // Tehtävätaulukko
+            let tasksSectionHtml = '';
+            if (item.tasks && item.tasks.length > 0) {
+                const taskRows = item.tasks.map(t => {
+                    const signupsList = (t.signups && t.signups.length > 0)
+                        ? t.signups.map(s => `<strong>${escapeHtml(s)}</strong>`).join(', ')
+                        : '<span style="color:#64748b;font-style:italic;">Avoinna (ei vielä ilmoittautuneita)</span>';
+                    return `
+                        <tr>
+                            <td><strong>${escapeHtml(t.name)}</strong></td>
+                            <td>${escapeHtml(t.time || '-')}</td>
+                            <td style="text-align:center;">${t.signups ? t.signups.length : 0} / ${t.required || 1}</td>
+                            <td>${signupsList}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                tasksSectionHtml = `
+                    <div class="section-title">🛠️ Sovitut jatkotoimet ja tehtävävastuut (${item.tasks.length})</div>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;">Tehtävä</th>
+                                <th style="width:20%;">Aikataulu / Aika</th>
+                                <th style="width:15%;text-align:center;">Tarve</th>
+                                <th style="width:35%;">Vastuu / Ilmoittautuneet</th>
+                            </tr>
+                        </thead>
+                        <tbody>${taskRows}</tbody>
+                    </table>
+                `;
+            }
+
+            // Kommenttitaulukko
             const commentsHtml = comments.length > 0
                 ? comments.map(c => `
                     <tr>
-                        <td style="padding:4px 8px;font-size:11px;color:#555;white-space:nowrap;">${new Date(c.created_at).toLocaleDateString('fi-FI')}</td>
-                        <td style="padding:4px 8px;font-size:11px;font-weight:600;">${c.author_name || '-'}</td>
-                        <td style="padding:4px 8px;font-size:11px;">${c.content || ''}</td>
+                        <td style="white-space:nowrap;color:#64748b;">${new Date(c.created_at).toLocaleDateString('fi-FI')} ${new Date(c.created_at).toLocaleTimeString('fi-FI', {hour:'2-digit',minute:'2-digit'})}</td>
+                        <td style="font-weight:600;white-space:nowrap;">${escapeHtml(c.author_name || '-')}</td>
+                        <td>${escapeHtml(c.content || '').replace(/\n/g, '<br>')}</td>
                     </tr>
                 `).join('')
-                : '<tr><td colspan="3" style="padding:8px;font-size:11px;color:#888;">Ei kommentteja.</td></tr>';
+                : '<tr><td colspan="3" style="text-align:center;color:#64748b;padding:12px;">Ei kirjattuja valmistelukeskustelun kommentteja.</td></tr>';
 
-            const printWindow = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
-            printWindow.document.write(`
-<!DOCTYPE html>
+            const printWindow = window.open('', '_blank', 'width=880,height=960,scrollbars=yes');
+            printWindow.document.write(`<!DOCTYPE html>
 <html lang="fi">
 <head>
 <meta charset="UTF-8">
-<title>Päätösote: ${item.title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Päätösote ja yhteenveto: ${safeSeq} ${safeTitle}</title>
 <style>
-  @page { margin: 18mm 22mm; }
-  * { box-sizing: border-box; }
-  body { font-family: 'Georgia', serif; color: #111; font-size: 12px; line-height: 1.55; }
-  .header { border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 16px; }
-  .header h1 { font-size: 18px; margin: 0 0 2px 0; }
-  .header p { margin: 0; font-size: 11px; color: #444; }
-  .meta-row { display: flex; gap: 24px; font-size: 11px; color: #555; margin-bottom: 14px; }
-  .section-title { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 2px; margin: 14px 0 6px 0; }
-  .description { font-size: 12px; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
-  .decision-box { background: #f0fdf4; border: 1px solid #86efac; border-radius: 4px; padding: 10px 14px; margin: 12px 0; font-size: 12px; line-height: 1.55; white-space: pre-wrap; }
-  .votes-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
-  .votes-table td, .votes-table th { border: 1px solid #ddd; padding: 5px 8px; font-size: 11px; }
-  .votes-table th { background: #f5f5f5; }
-  .comments-table { width: 100%; border-collapse: collapse; }
-  .comments-table td { border: 1px solid #e5e5e5; vertical-align: top; }
-  .signatures { margin-top: 32px; display: flex; gap: 40px; }
-  .sig-line { flex: 1; border-top: 1px solid #111; padding-top: 4px; font-size: 10px; color: #555; }
-  @media print { .no-print { display: none; } }
+  @page {
+    size: A4 portrait;
+    margin: 16mm 18mm 18mm 18mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #0f172a;
+    background: #fff;
+    font-size: 12px;
+    line-height: 1.55;
+    padding: 24px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .no-print-bar {
+    position: fixed;
+    top: 14px;
+    right: 18px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+  }
+  .btn-print {
+    background: #0284c7;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(2,132,199,0.3);
+  }
+  .btn-close {
+    background: #e2e8f0;
+    color: #334155;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .header {
+    border-bottom: 2px solid #0284c7;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .header-titles h1 {
+    font-size: 21px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+  .header-sub {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0284c7;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .header-right {
+    text-align: right;
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+  .disclaimer-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-left: 4px solid #64748b;
+    border-radius: 4px;
+    padding: 7px 11px;
+    font-size: 10.5px;
+    color: #475569;
+    line-height: 1.45;
+    margin-bottom: 14px;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    font-size: 11px;
+  }
+  .meta-cell strong {
+    display: block;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 2px;
+  }
+  .meta-cell span {
+    color: #0f172a;
+    font-weight: 600;
+  }
+  .section-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #334155;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 4px;
+    margin: 18px 0 8px 0;
+  }
+  .item-title-box {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .description-box {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #1e293b;
+    margin-bottom: 14px;
+  }
+  .decision-callout {
+    background: #f0fdf4;
+    border: 1.5px solid #22c55e;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin: 12px 0 16px 0;
+    page-break-inside: avoid;
+  }
+  .decision-callout-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #15803d;
+    margin-bottom: 4px;
+  }
+  .decision-callout-text {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #14532d;
+    font-weight: 500;
+  }
+  .report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 11px;
+    page-break-inside: avoid;
+  }
+  .report-table th {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    padding: 6px 8px;
+    font-weight: 700;
+    text-align: left;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .report-table td {
+    border: 1px solid #e2e8f0;
+    padding: 6px 8px;
+    vertical-align: top;
+    color: #1e293b;
+  }
+  .report-table tbody tr:nth-child(even) {
+    background: #fafbfc;
+  }
+  .votes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+  .vote-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 10px;
+    text-align: center;
+    background: #f8fafc;
+  }
+  .vote-box-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    margin-bottom: 2px;
+  }
+  .vote-box-count {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .vote-box.yes { border-color: #86efac; background: #f0fdf4; }
+  .vote-box.yes .vote-box-count { color: #16a34a; }
+  .vote-box.cond { border-color: #fde047; background: #fefce8; }
+  .vote-box.cond .vote-box-count { color: #ca8a04; }
+  .vote-box.no { border-color: #fca5a5; background: #fef2f2; }
+  .vote-box.no .vote-box-count { color: #dc2626; }
+  .signatures {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    page-break-inside: avoid;
+  }
+  .sig-block {
+    border-top: 1.5px solid #0f172a;
+    padding-top: 6px;
+  }
+  .sig-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 2px;
+  }
+  .sig-sub {
+    font-size: 10px;
+    color: #64748b;
+  }
+  @media print {
+    .no-print-bar { display: none !important; }
+    body { padding: 0; }
+  }
 </style>
 </head>
 <body>
-<button class="no-print" onclick="window.print()" style="position:fixed;top:12px;right:12px;padding:8px 18px;background:#0284c7;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">🖨️ Tulosta / Tallenna PDF</button>
+<div class="no-print-bar">
+  <button class="btn-print" onclick="window.print()">🖨️ Tulosta / Tallenna PDF</button>
+  <button class="btn-close" onclick="window.close()">Sulje</button>
+</div>
+
 <div class="header">
-  <h1>Päätösote</h1>
-  <p>${orgName}</p>
+  <div class="header-titles">
+    <h1>Päätösote ja yhteenveto</h1>
+    <p class="header-sub">${safeOrg} · LaukaaInfo Toimintataulu</p>
+  </div>
+  <div class="header-right">
+    <div><strong>Tunniste:</strong> ${safeSeq}</div>
+    <div><strong>Päiväys:</strong> ${printDate}</div>
+    <div><strong>Laadittu:</strong> ${escapeHtml(roleLabel)}</div>
+  </div>
 </div>
-<div class="meta-row">
-  <span><strong>Asia:</strong> ${item.seq || ''}</span>
-  <span><strong>Vaihe:</strong> ${getStageName(item.stage)}</span>
-  <span><strong>Päätösote laadittu:</strong> ${printDate}</span>
-  <span><strong>Laatija:</strong> ${roleLabel}</span>
+
+<div class="disclaimer-box">
+  <strong>Huomautus:</strong> Tämä asiakirja on LaukaaInfon toimintataulun yhteenveto-ote ryhmän käsittelemästä asiasta. Asiakirja ei yksinään takaa päätöksen juridista pätevyyttä: yhdistyksen, taloyhtiön tai toimikunnan tulee noudattaa omia sääntöjään, toimivaltaansa ja kokousmenettelyjään.
 </div>
-<div class="section-title">Asian otsikko</div>
-<div style="font-size:14px;font-weight:bold;margin-bottom:8px;">${item.title || ''}</div>
 
-<div class="section-title">Tausta ja kuvaus</div>
-<div class="description">${item.description || 'Ei kuvausta.'}</div>
+<div class="meta-grid">
+  <div class="meta-cell">
+    <strong>Käsittelytaso</strong>
+    <span>${getDecisionLevel(item.decision_level).label}</span>
+  </div>
+  <div class="meta-cell">
+    <strong>Käsittelyvaihe</strong>
+    <span>${safeStage}</span>
+  </div>
+  <div class="meta-cell">
+    <strong>Vastuuhenkilö</strong>
+    <span>${safeLead}</span>
+  </div>
+  <div class="meta-cell">
+    <strong>Määräaika</strong>
+    <span>${safeDeadline}</span>
+  </div>
+</div>
 
-<div class="section-title">Vastuuhenkilö ja määräaika</div>
-<div style="font-size:11px;margin-bottom:12px;">${item.lead || 'Ei nimetty'} &nbsp;|&nbsp; ${item.deadline_label || 'Avoin'}</div>
+<div class="section-title">1. Asian otsikko ja tausta</div>
+<div class="item-title-box">${safeTitle}</div>
+<div class="description-box">${safeDesc}</div>
 
-${item.decision_summary ? `
-<div class="section-title">Päätös</div>
-<div class="decision-box">${item.decision_summary}</div>
-` : ''}
+${safeDecision ? `
+<div class="section-title">2. Vahvistettu ratkaisu / Päätös</div>
+<div class="decision-callout">
+  <div class="decision-callout-title">✅ Kirjattu päätös / Sovittu ratkaisu:</div>
+  <div class="decision-callout-text">${safeDecision}</div>
+</div>
+` : `
+<div class="section-title">2. Päätöksen tila</div>
+<p style="font-size:11.5px;color:#64748b;margin-bottom:12px;font-style:italic;">
+  Asialle ei ole vielä kirjattu virallista päätösyhteenvetoa. Asia on vaiheessa: <strong>${safeStage}</strong>.
+</p>
+`}
 
 ${votes.total > 0 ? `
-<div class="section-title">Äänestystulos</div>
-<table class="votes-table">
-  <tr><th>Kyllä</th><th>Ehdollisena</th><th>Ei</th><th>Yhteensä</th></tr>
-  <tr><td>${votes.yes}</td><td>${votes.cond}</td><td>${votes.no}</td><td>${votes.total}</td></tr>
-</table>
+<div class="section-title">3. Kannanottojen ja mielipideäänestyksen tulos</div>
+<p style="font-size:10.5px;color:#64748b;margin-bottom:8px;">
+  Ryhmän jäsenten antamat kannanotot asian valmistelun ja päätöksenteon tueksi (yhteensä ${votes.total} ääntä):
+</p>
+<div class="votes-grid">
+  <div class="vote-box yes">
+    <div class="vote-box-label">🟢 Kyllä / Kannatan</div>
+    <div class="vote-box-count">${votes.yes}</div>
+  </div>
+  <div class="vote-box cond">
+    <div class="vote-box-label">🟡 Ehdollisena</div>
+    <div class="vote-box-count">${votes.cond}</div>
+  </div>
+  <div class="vote-box no">
+    <div class="vote-box-label">🔴 Ei / Vastustan</div>
+    <div class="vote-box-count">${votes.no}</div>
+  </div>
+  <div class="vote-box">
+    <div class="vote-box-label">👥 Ääniä yhteensä</div>
+    <div class="vote-box-count">${votes.total}</div>
+  </div>
+</div>
 ` : ''}
 
-<div class="section-title">Käsitelty keskustelu (${comments.length} merkintää)</div>
-<table class="comments-table">
-  <thead><tr style="background:#f5f5f5;"><th style="padding:5px 8px;font-size:11px;">Pvm</th><th style="padding:5px 8px;font-size:11px;">Kommentoija</th><th style="padding:5px 8px;font-size:11px;">Sisältö</th></tr></thead>
+${tasksSectionHtml}
+
+<div class="section-title">Käsitelty valmistelukeskustelu (${comments.length} merkintää)</div>
+<table class="report-table">
+  <thead>
+    <tr>
+      <th style="width:20%;">Aika</th>
+      <th style="width:25%;">Osallistuja</th>
+      <th style="width:55%;">Kommentti</th>
+    </tr>
+  </thead>
   <tbody>${commentsHtml}</tbody>
 </table>
 
 <div class="signatures">
-  <div class="sig-line">Puheenjohtaja / allekirjoitus</div>
-  <div class="sig-line">Sihteeri / allekirjoitus</div>
+  <div class="sig-block">
+    <div class="sig-title">Puheenjohtaja / Vastuuhenkilö</div>
+    <div class="sig-sub">Nimenselvennys ja päiväys</div>
+  </div>
+  <div class="sig-block">
+    <div class="sig-title">Sihteeri / Yhteenvedon todentaja</div>
+    <div class="sig-sub">Nimenselvennys ja päiväys</div>
+  </div>
 </div>
+
 </body>
 </html>`);
             printWindow.document.close();
