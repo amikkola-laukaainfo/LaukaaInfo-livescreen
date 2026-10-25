@@ -2522,7 +2522,7 @@
                 s2 = hasDecision ? 'completed' : 'skipped';
                 s3 = totalTasks > 0 ? 'completed' : 'skipped';
                 s4 = 'completed';
-                s3Desc = totalTasks > 0 ? `${totalTasks} hoidettu` : 'Ei jatkotoimia';
+                s3Desc = totalTasks > 0 ? `${totalTasks} tehtävää` : 'Ei jatkotoimia';
                 fillPct = 100;
                 metaText = `🗃️ Asia on arkistoitu historiaan · Käsittely ja seuranta päättynyt`;
             } else if (stage === 'done') {
@@ -2533,11 +2533,11 @@
                 s2 = 'completed';
                 s3 = totalTasks > 0 ? 'completed' : 'skipped';
                 s4 = 'active';
-                s3Desc = totalTasks > 0 ? `${totalTasks} hoidettu` : 'Ei jatkotoimia';
+                s3Desc = totalTasks > 0 ? `${totalTasks} tehtävää` : 'Ei jatkotoimia';
                 fillPct = 100;
                 metaText = totalTasks > 0
-                    ? `🏁 Asia käsitelty ja kaikki ${totalTasks} jatkotehtävää saatettu päätökseen.`
-                    : `🏁 Asia käsitelty ja merkitty valmiiksi ilman erillisiä jatkotoimia.`;
+                    ? `🏁 Asia on merkitty valmiiksi · ${totalTasks} kirjattua jatkotehtävää.`
+                    : `🏁 Asia on merkitty valmiiksi ilman erillisiä jatkotoimia.`;
             } else if (stage === 'in_progress' || (stage === 'decided' && totalTasks > 0)) {
                 statusKey = 'progress';
                 statusLabel = 'Toteutus käynnissä';
@@ -2547,8 +2547,8 @@
                 s3 = 'active';
                 s4 = 'pending';
                 fillPct = 66;
-                s3Desc = openTasks > 0 ? `${openTasks} avoinna` : 'Miehitetty';
-                metaText = `🛠️ ${totalTasks} jatkotehtävää · ${totalSignups} tekijää ilmoittautunut${openTasks > 0 ? ` · ${openTasks} tehtävässä avoimia paikkoja` : ' · Kaikki tehtävät miehitetty'}`;
+                s3Desc = openTasks > 0 ? `${openTasks} avoinna` : 'Tekijät koossa';
+                metaText = `🛠️ ${totalTasks} jatkotehtävää · ${totalSignups} tekijää ilmoittautunut · ${openTasks > 0 ? `${openTasks} tehtävässä avoimia paikkoja` : 'Tekijätarve täytetty (osallistujat koossa)'}`;
             } else if (stage === 'decided' && totalTasks === 0) {
                 statusKey = 'decided_notasks';
                 statusLabel = 'Päätetty – ei jatkotoimia';
