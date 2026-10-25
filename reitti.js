@@ -49,6 +49,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // Initialize Wonderin App recommendation prompt
+    const wonderinPrompt = document.getElementById('wonderin-app-prompt');
+    const wonderinLink = document.getElementById('wonderin-app-open-link');
+    if (wonderinPrompt && wonderinLink) {
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        // Custom scheme (wonderin://reitti?id=...) works directly on devices with Wonderin
+        // On Android, an intent URI ensures the Android OS launches the app or prompts
+        const wonderinIntentUrl = isAndroid
+            ? `intent://reitti?id=${encodeURIComponent(routeId)}#Intent;scheme=wonderin;package=com.mediazoo.wonderin;action=android.intent.action.VIEW;end`
+            : `wonderin://reitti?id=${encodeURIComponent(routeId)}`;
+
+        wonderinLink.href = wonderinIntentUrl;
+
+        // Display banner unless in embedded iframe mode
+        if (!isEmbed) {
+            wonderinPrompt.style.display = 'flex';
+        }
+    }
+
     const AI_SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
     const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
     

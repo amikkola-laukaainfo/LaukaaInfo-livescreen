@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
@@ -854,6 +854,80 @@
             color: #ea580c;
             font-size: 10px;
         }
+
+        /* ─── WONDERIN APP RECOMMENDATION BANNER ───────────────────────────── */
+        .wonderin-app-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            color: #ffffff;
+            padding: 0.9rem 1.15rem;
+            border-radius: 14px;
+            margin-top: 1.25rem;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.22);
+            border: 1px solid rgba(167, 243, 208, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .wonderin-app-banner:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+        .wonderin-app-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+        .wonderin-app-icon {
+            font-size: 1.4rem;
+            background: rgba(255, 255, 255, 0.15);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .wonderin-app-title {
+            font-weight: 800;
+            font-size: 0.88rem;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+        }
+        .wonderin-app-subtitle {
+            font-size: 0.72rem;
+            color: #a7f3d0;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .wonderin-app-btn {
+            background: #ffffff;
+            color: #065f46;
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 0.55rem 0.95rem;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+        .wonderin-app-btn:hover {
+            background: #f0fdf4;
+            color: #047857;
+        }
+        body.is-embed-mode .wonderin-app-banner {
+            display: none !important;
+        }
     </style>
 
 
@@ -878,6 +952,21 @@
         </div>
         <p id="route-desc" style="margin-top: 1rem; color: var(--text-muted); line-height: 1.5;"></p>
         <div id="ticket-products-section" style="margin-top: 1.25rem; display: none;"></div>
+
+        <!-- Wonderin App Recommendation Banner -->
+        <div id="wonderin-app-prompt" class="wonderin-app-banner" style="display: none;">
+            <div class="wonderin-app-info">
+                <div class="wonderin-app-icon">🌿</div>
+                <div>
+                    <div class="wonderin-app-title">Koe maastossa Wonderin-sovelluksella</div>
+                    <div class="wonderin-app-subtitle">GPS-seuranta, lähestymisäänet ja haptiikka</div>
+                </div>
+            </div>
+            <a id="wonderin-app-open-link" href="#" class="wonderin-app-btn">
+                <span>Avaa sovelluksessa</span>
+                <span class="iconify" data-icon="material-symbols:open-in-new"></span>
+            </a>
+        </div>
     </div>
 
     <!-- LOCK SCREEN -->
