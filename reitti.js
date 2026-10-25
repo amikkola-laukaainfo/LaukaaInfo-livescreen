@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    const partnerToken = urlParams.get('partner') || urlParams.get('token') || urlParams.get('pool') || urlParams.get('partner_token');
+
     // Initialize Wonderin App recommendation prompt
     const wonderinPrompt = document.getElementById('wonderin-app-prompt');
     const wonderinLink = document.getElementById('wonderin-app-open-link');
@@ -56,9 +58,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const isAndroid = /Android/i.test(navigator.userAgent);
         // Custom scheme (wonderin://reitti?id=...) works directly on devices with Wonderin
         // On Android, an intent URI ensures the Android OS launches the app or prompts
+        const partnerParam = partnerToken ? `&token=${encodeURIComponent(partnerToken)}` : '';
         const wonderinIntentUrl = isAndroid
-            ? `intent://reitti?id=${encodeURIComponent(routeId)}#Intent;scheme=wonderin;package=com.mediazoo.wonderin;action=android.intent.action.VIEW;end`
-            : `wonderin://reitti?id=${encodeURIComponent(routeId)}`;
+            ? `intent://reitti?id=${encodeURIComponent(routeId)}${partnerParam}#Intent;scheme=wonderin;package=com.mediazoo.wonderin;action=android.intent.action.VIEW;end`
+            : `wonderin://reitti?id=${encodeURIComponent(routeId)}${partnerParam}`;
 
         wonderinLink.href = wonderinIntentUrl;
 
@@ -114,20 +117,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     window.updateRecenterBtnUI = updateRecenterBtnUI;
 
+    function showPartnerWelcome(partner) {
+        if (!partner) return;
+        const banner = document.getElementById('partner-welcome-banner');
+        if (!banner) return;
+        const nameEl = document.getElementById('partner-name-text');
+        const msgEl = document.getElementById('partner-message-text');
+        const logoWrap = document.getElementById('partner-logo-wrap');
+        if (nameEl) nameEl.textContent = partner.name || 'Yhteistyökumppani';
+        if (msgEl) msgEl.textContent = partner.welcome_message || 'Tämä reitti sisältyy vierailuusi.';
+        if (logoWrap && partner.logo_url) {
+            logoWrap.innerHTML = `<img src="${partner.logo_url}" alt="${partner.name}" style="width:100%;height:100%;object-fit:cover;">`;
+        }
+        banner.style.display = 'block';
+    }
+
     // Load initial route data (no GeoJSON if private without code)
     async function loadRoute(code = null) {
         try {
             let data = null;
             let error = null;
 
-            // 1. Try standard Supabase RPC with provided code if given
-            if (code) {
-                const res = await supabase.rpc('get_route_with_access', {
-                    route_id: routeId,
-                    provided_code: code
-                });
-                data = res.data;
-                error = res.error;
+            // 0. Try B2B partner entitlement token (from URL or localStorage)
+            const activePartnerToken = partnerToken || (function() {
+                try { return localStorage.getItem('partner_token_' + routeId); } catch(e) { return null; }
+            })();
+
+            if (activePartnerToken) {
+                try {
+                    let clientFp = null;
+                    try {
+                        clientFp = localStorage.getItem('wonderin_device_fp');
+                        if (!clientFp) {
+                            clientFp = 'fp_' + Math.random().toString(36).substring(2, 12);
+                            localStorage.setItem('wonderin_device_fp', clientFp);
+                        }
+                    } catch(e) {}
+
+                    const pRes = await supabase.rpc('redeem_partner_token', {
+                        p_token: activePartnerToken,
+                        p_fingerprint: clientFp,
+                        p_client_type: 'web'
+                    });
+
+                    if (pRes.data && pRes.data.success && pRes.data.route) {
+                        data = {
+                            ...pRes.data.route,
+                            access_granted: true,
+                            partner_info: pRes.data.partner
+                        };
+                        try { localStorage.setItem('partner_token_' + routeId, activePartnerToken); } catch(e) {}
+                        showPartnerWelcome(pRes.data.partner);
+                    }
+                } catch(pErr) {
+                    console.warn('Partner token check failed:', pErr);
+                }
+            }
+
+            // 1. Try standard Supabase RPC with provided code if given (if not already unlocked via partner)
+            if (!data || !data.access_granted) {
+                if (code) {
+                    const res = await supabase.rpc('get_route_with_access', {
+                        route_id: routeId,
+                        provided_code: code
+                    });
+                    data = res.data;
+                    error = res.error;
+                }
             }
 
             // 2. Initial load or retry if user code was not provided or not granted
