@@ -935,6 +935,46 @@ document.addEventListener('DOMContentLoaded', async () => {
             gpsLabel.textContent = '📍 Haetaan sijaintia...';
         }
 
+        // Screen Wake Lock API (keeps mobile browser awake during navigation)
+        let screenWakeLock = null;
+        async function acquireScreenWakeLock() {
+            if ('wakeLock' in navigator) {
+                try {
+                    screenWakeLock = await navigator.wakeLock.request('screen');
+                    screenWakeLock.addEventListener('release', () => {
+                        screenWakeLock = null;
+                    });
+                } catch (e) {
+                    console.warn('Wake Lock ei käytettävissä:', e);
+                }
+            }
+        }
+        function releaseScreenWakeLock() {
+            if (screenWakeLock) {
+                try { screenWakeLock.release(); } catch(e) {}
+                screenWakeLock = null;
+            }
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && gpsActive) {
+                acquireScreenWakeLock();
+            }
+        });
+
+        // Web Speech API (TTS-puhe selaimessa)
+        function speakTTS(text) {
+            if (!text || !window.speechSynthesis || !audioNotificationsEnabled) return;
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fi-FI';
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.warn('TTS-virhe:', e);
+            }
+        }
+
         // Kaksivaiheinen GPS-käynnistys (vakaampi vanhoilla Android-laitteilla):
         // 1. Pyydetään alustava sijainti (getCurrentPosition)
         // 2. Käynnistetään lennossa jatkuva watchPosition
@@ -944,6 +984,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (watchStarted) return;
             watchStarted = true;
 
+            acquireScreenWakeLock();
             gpsWatchId = navigator.geolocation.watchPosition(
                 (pos) => onPositionUpdate(pos, points),
                 (err) => handleGpsError(err, gpsBtn, gpsLabel),
@@ -1031,6 +1072,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (gpsWatchId !== null) navigator.geolocation.clearWatch(gpsWatchId);
         gpsWatchId = null;
         gpsActive = false;
+        releaseScreenWakeLock();
 
         // Nollataan poikkeamaseurannan ja puskurin tilat
         isOffRoute = false;
@@ -2226,6 +2268,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         ) {
             if (audioNotificationsEnabled && isAudioWarningAllowed) {
                 playWarningBeep();
+                const approachText = point.approach_tts || (point.point_type === 'audio' ? point.description : null);
+                if (approachText) {
+                    speakTTS(approachText);
+                }
             }
             triggerVibration('approach');
             point._audioWarningPlayed = true;
@@ -2239,6 +2285,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         ) {
             if (audioNotificationsEnabled && isAudioArrivalAllowed) {
                 playArrivalBeep();
+                const arrivalText = point.arrival_tts || (point.point_type === 'audio' ? (point.approach_tts || point.description) : null);
+                if (arrivalText) {
+                    speakTTS(arrivalText);
+                }
             }
             triggerVibration('arrival');
             point._audioArrivalPlayed = true;
@@ -2817,6 +2867,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         return false;
     }
 
+    function resolveMediaUrl(url) {
+        if (!url || typeof url !== 'string') return url;
+        const trimmed = url.trim();
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
+            return trimmed;
+        }
+        // Bare filename -> resolve against ImageKit storage
+        const cleanName = trimmed.replace(/^\/+/, '');
+        return `https://ik.imagekit.io/vowzx8znjs/reitix/images/${cleanName}`;
+    }
+
     let pointSwiperInstance = null;
 
     window.openPointModal = function(p) {
@@ -2924,8 +2985,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         rawImageSources.forEach(item => {
             let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.imageUrl);
             if (url && typeof url === 'string' && isValidImageUrl(url)) {
-                const trimmed = url.trim();
-                if (!images.includes(trimmed)) images.push(trimmed);
+                const resolved = resolveMediaUrl(url);
+                if (!images.includes(resolved)) images.push(resolved);
             }
         });
 
@@ -2938,8 +2999,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         rawAudioSources.forEach(item => {
             let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.audioUrl || item.audio_file || item.audioFile);
             if (url && typeof url === 'string' && isValidAudioUrl(url)) {
-                const trimmed = url.trim();
-                if (!audios.includes(trimmed)) audios.push(trimmed);
+                const resolved = resolveMediaUrl(url);
+                if (!audios.includes(resolved)) audios.push(resolved);
             }
         });
 
