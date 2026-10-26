@@ -505,13 +505,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return {};
             },
             pointToLayer: function (feature, latlng) {
+                const isAudio = feature.properties?.point_type === 'audio' || feature.properties?.pointType === 'audio' || feature.properties?.type === 'audio';
                 const marker = L.circleMarker(latlng, {
-                    radius: 8,
-                    fillColor: "#e11d48",
+                    radius: isAudio ? 7 : 8,
+                    fillColor: isAudio ? "#6366f1" : "#e11d48",
                     color: "#fff",
                     weight: 2,
                     opacity: 1,
-                    fillOpacity: 0.8
+                    fillOpacity: 0.85
                 });
                 return marker;
             },
@@ -599,7 +600,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const idx = window.routePoints.findIndex(pt => (pt.id || `pt_${pt._lat || pt.lat}_${pt._lng || pt.lng}`) === pointId);
                 if (idx > 0) {
                     const prevPoint = window.routePoints[idx - 1];
-                    if (!isPointUnlocked(prevPoint)) {
+                    const prevSkipped = (typeof skippedPoints !== 'undefined' && skippedPoints.has(idx - 1));
+                    if (!prevSkipped && !isPointUnlocked(prevPoint)) {
                         return false;
                     }
                 }
@@ -628,9 +630,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         pointsList.innerHTML = points.map((p, idx) => {
             const unlocked = isPointUnlocked(p);
+            const isAudioPoint = (p.point_type === 'audio' || p.pointType === 'audio' || p.type === 'audio');
+            const roleBadge = isAudioPoint
+                ? `<span class="point-role-badge audio" title="Ääniohjauspiste maastossa">🎧 Ääniopaste</span>`
+                : `<span class="point-role-badge destination" title="Kohdepiste / tarina">📍 Kohdepiste</span>`;
+
+            const rawArrivalR = Number(p.arrival_radius ?? p.unlock_radius ?? p.properties?.arrival_radius ?? 30);
+            const rawWarningR = Number(p.warning_radius ?? p.properties?.warning_radius ?? p.notificationDistance ?? (rawArrivalR * 2.5));
+            const radius = Math.max(5, rawArrivalR);
+            const hasRadiusConflict = rawArrivalR >= rawWarningR && rawWarningR > 0;
+            const conflictBadge = hasRadiusConflict
+                ? `<span class="point-radius-warning" title="Varoitus: Saapumissäde (${rawArrivalR} m) on suurempi tai yhtä suuri kuin lähestymissäde (${rawWarningR} m)">⚠️ Säteet päällekkäin</span>`
+                : '';
+            const orderTag = (p.order != null)
+                ? `<span class="point-order-tag" title="Etenemisjärjestys reitillä">#${p.order}</span>`
+                : `<span class="point-order-tag">#${idx + 1}</span>`;
 
             if (!unlocked) {
-                const radius = p.unlock_radius || p.arrival_radius || 30;
                 const hasShortcut = !!(p.shortcut_to || p.shortcutTo);
                 const shortcutBadge = hasShortcut
                     ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus">⏭ Oikaisu</span>`
@@ -661,21 +677,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
 
+                const lockedBadgeText = isAudioPoint ? '🎧 Ääniopaste kohteessa' : '🔒 Avautuu kohteessa';
+                const lockedTeaserText = isAudioPoint
+                    ? `🎧 Ääniohjaus aktivoituu kohteessa (${radius} m)`
+                    : `📍 Saavu kohteeseen (${radius} m) avataksesi tarinan`;
+
                 return `
-                <div class="point-card point-card-locked" id="point-card-${idx}" style="cursor: pointer; border-left: 4px solid #f59e0b; background: #fffbeb; padding: 12px 14px; border-radius: 10px; margin-bottom: 8px;" onclick="window.openPointModal(window.routePoints[${idx}])">
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                        <h3 style="margin:0; font-size:14px; font-weight:700; color:#1e293b;">${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
-                        <div style="display:flex; gap:4px; align-items:center; flex-shrink:0;">
+                <div class="point-card point-card-locked" id="point-card-${idx}" style="cursor: pointer; border-left: 4px solid ${isAudioPoint ? '#6366f1' : '#f59e0b'}; background: ${isAudioPoint ? '#f5f3ff' : '#fffbeb'}; padding: 12px 14px; border-radius: 10px; margin-bottom: 8px;" onclick="window.openPointModal(window.routePoints[${idx}])">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <h3 style="margin:0; font-size:14px; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:6px;">
+                            ${idx + 1}. ${p.title || p.name || (isAudioPoint ? 'Ääniohjaus ' : 'Piste ') + (idx + 1)}
+                            ${orderTag}
+                        </h3>
+                        <div style="display:flex; gap:4px; align-items:center; flex-shrink:0; flex-wrap:wrap;">
+                            ${roleBadge}
+                            ${conflictBadge}
                             ${shortcutBadge}
-                            <span class="point-locked-badge" style="font-size: 10px; font-weight: 700; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 12px; white-space: nowrap;">🔒 Avautuu kohteessa</span>
+                            <span class="point-locked-badge" style="font-size: 10px; font-weight: 700; background: ${isAudioPoint ? '#ede9fe' : '#fef3c7'}; color: ${isAudioPoint ? '#5b21b6' : '#b45309'}; padding: 2px 8px; border-radius: 12px; white-space: nowrap;">${lockedBadgeText}</span>
                         </div>
                     </div>
-                    <div class="point-locked-teaser" style="font-size: 12px; color: #78350f; margin-top: 6px;">📍 Saavu kohteeseen (${radius} m) avataksesi tarinan</div>
+                    <div class="point-locked-teaser" style="font-size: 12px; color: ${isAudioPoint ? '#5b21b6' : '#78350f'}; margin-top: 6px;">${lockedTeaserText}</div>
                 </div>
                 ${lockedConnector}`;
             }
-
-
 
             let mediaPreview = '';
             
@@ -735,9 +759,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             return `
             <div class="point-card" id="point-card-${idx}" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
-                    <h3 style="margin:0;">${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
-                    ${shortcutBadgeUnlocked}
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; flex-wrap:wrap;">
+                    <h3 style="margin:0; display:flex; align-items:center; gap:6px;">
+                        ${idx + 1}. ${p.title || p.name || (isAudioPoint ? 'Ääniohjaus ' : 'Piste ') + (idx + 1)}
+                        ${orderTag}
+                    </h3>
+                    <div style="display:flex; gap:4px; align-items:center; flex-shrink:0; flex-wrap:wrap;">
+                        ${roleBadge}
+                        ${conflictBadge}
+                        ${shortcutBadgeUnlocked}
+                    </div>
                 </div>
                 ${mediaPreview}
             </div>
@@ -1425,8 +1456,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (pLat == null || pLng == null) return;
 
         const dist = Math.round(haversineMeters(userLat, userLng, pLat, pLng));
-        const arrivalR  = p.arrival_radius  ?? p.properties?.arrival_radius ?? 30;
-        const warningR  = p.warning_radius  ?? p.properties?.warning_radius ?? p.notificationDistance ?? 100;
+        const rawArrivalR = Number(p.arrival_radius ?? p.unlock_radius ?? p.properties?.arrival_radius ?? 30);
+        const rawWarningR = Number(p.warning_radius ?? p.properties?.warning_radius ?? p.notificationDistance ?? (rawArrivalR * 2.5));
+        const arrivalR  = Math.max(5, rawArrivalR);
+        const warningR  = Math.max(rawWarningR, arrivalR + 15);
 
         // Dynamic per-point audio & vibration notifications (Web Audio API)
         handlePointAudio(p, dist);
@@ -1524,7 +1557,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const idx = pts.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
             if (idx > 0) {
                 const prev = pts[idx - 1];
-                const prevVisited = prev._unlocked || (() => {
+                const prevSkipped = (typeof skippedPoints !== 'undefined' && skippedPoints.has(idx - 1));
+                const prevVisited = prevSkipped || prev._unlocked || (() => {
                     try {
                         const prevId = prev.id || `pt_${prev._lat || prev.lat}_${prev._lng || prev.lng}`;
                         return localStorage.getItem('unlocked_point_' + prevId) === 'true';
@@ -1539,8 +1573,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Hysteresis zones:
         //  dist <= arrivalR        → firmly inside → increment count
-        //  dist <= arrivalR * 2    → jitter zone   → hold count (don't reset)
-        //  dist >  arrivalR * 2    → clearly outside → reset count
+        //  dist <= arrivalR * 1.5  → jitter zone   → hold count (don't reset)
+        //  dist >  arrivalR * 1.5  → clearly outside → reset count
         //
         // This prevents GPS jitter (readings bouncing ±10–20 m) from
         // blocking arrival when the user is physically standing at the point.
@@ -1567,15 +1601,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                         `<span class="next-dist" style="color:#059669;">📍 Seiso paikalla hetki${!accuracyOk ? ` · GPS ±${Math.round(accuracy)} m` : ''}</span>`;
                 }
             }
-        } else if (dist > arrivalR * 2) {
-            // Clearly outside zone — reset count
-            _insideCount = 0;
+        } else {
+            // Outside arrival zone
+            if (dist > arrivalR * 1.5) {
+                _insideCount = 0;
+            }
             // Show approach toast when within warning range
-            if (dist <= warningR && !approachToastVisible && Date.now() >= _arrivalCooldownUntil) {
+            if (dist <= warningR && dist > arrivalR && !approachToastVisible && Date.now() >= _arrivalCooldownUntil) {
                 showApproachingToast(p, dist);
             }
         }
-        // else: dist between arrivalR and arrivalR*2 → GPS jitter zone, hold count
 
     }
 
@@ -1620,14 +1655,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const pLng = p._lng ?? p.lng;
         if (pLat == null || pLng == null) return;
 
-        const arrivalR = p.arrival_radius ?? 30;
+        const rawArrivalR = Number(p.arrival_radius ?? p.unlock_radius ?? p.properties?.arrival_radius ?? 30);
+        const rawWarningR = Number(p.warning_radius ?? p.properties?.warning_radius ?? p.notificationDistance ?? (rawArrivalR * 2.5));
+        const arrivalR = Math.max(5, rawArrivalR);
+        const warningR = Math.max(rawWarningR, arrivalR + 15);
 
         let currentZone = 0;
         if (dist <= arrivalR) {
             currentZone = 3;
-        } else if (dist <= 50) {
+        } else if (dist <= (arrivalR + (warningR - arrivalR) * 0.45)) {
             currentZone = 2;
-        } else if (dist <= 100) {
+        } else if (dist <= warningR) {
             currentZone = 1;
         }
 
@@ -1729,6 +1767,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         points.forEach((p, idx) => {
             const card = document.getElementById(`point-card-${idx}`);
             const unlocked = isPointUnlocked(p);
+            const isAudioPoint = (p.point_type === 'audio' || p.pointType === 'audio' || p.type === 'audio');
 
             if (arrivedPoints.has(idx)) {
                 // 📍 ARRIVED — GPS on havainnut saapumisen, käyttäjä ei vielä kuittanut
@@ -1749,14 +1788,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     card.style.background = '#f0fdf4';
                     const badge = card.querySelector('.point-locked-badge');
                     if (badge) {
-                        badge.style.background = '#bbf7d0';
-                        badge.style.color = '#065f46';
-                        badge.innerHTML = '📍 Saapunut';
+                        badge.style.background = isAudioPoint ? '#ede9fe' : '#bbf7d0';
+                        badge.style.color = isAudioPoint ? '#5b21b6' : '#065f46';
+                        badge.innerHTML = isAudioPoint ? '🎧 Toistetaan ääntä' : '📍 Saapunut';
                     }
                     const teaser = card.querySelector('.point-locked-teaser');
                     if (teaser) {
-                        teaser.style.color = '#047857';
-                        teaser.innerHTML = '📖 Avaa kokemuspiste tai paina Jatka alakortista';
+                        teaser.style.color = isAudioPoint ? '#5b21b6' : '#047857';
+                        teaser.innerHTML = isAudioPoint ? '🎧 Kuuntele opaste tai paina Jatka' : '📖 Avaa kokemuspiste tai paina Jatka alakortista';
                     }
                 }
             } else if (visitedPoints.has(idx)) {
@@ -1779,19 +1818,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (badge) {
                         badge.style.background = '#dcfce7';
                         badge.style.color = '#15803d';
-                        badge.innerHTML = '🔓 Sisältö avattu';
+                        badge.innerHTML = isAudioPoint ? '🎧 Opaste kuunneltu' : '🔓 Sisältö avattu';
                     }
                     const teaser = card.querySelector('.point-locked-teaser');
                     if (teaser) {
                         teaser.style.color = '#047857';
-                        teaser.innerHTML = '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!';
+                        teaser.innerHTML = isAudioPoint ? '✓ Ääniopaste suoritettu' : '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!';
                     }
                 }
             } else if (idx === activeIdx) {
-                // 🔵 Odottamaan kohtaamista: Seuraava kohde saa sinisen erottuvan markkerin & sykkivän renkaan!
+                // 🔵 Odottamaan kohtaamista: Seuraava kohde saa sinisen/indigon erottuvan markkerin & sykkivän renkaan!
                 if (p._layer && p._layer.setStyle) {
                     p._layer.setStyle({
-                        fillColor: '#2563eb', // Kirkas sininen
+                        fillColor: isAudioPoint ? '#4f46e5' : '#2563eb', // Indigo audio, kirkas sininen kohde
                         color: '#ffffff',
                         weight: 3,
                         radius: 12,
@@ -1802,18 +1841,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setMarkerPulse(p, 'approach');
 
                 if (card) {
-                    card.style.borderLeft = '4px solid #2563eb';
-                    card.style.background = '#eff6ff';
+                    card.style.borderLeft = isAudioPoint ? '4px solid #4f46e5' : '4px solid #2563eb';
+                    card.style.background = isAudioPoint ? '#f5f3ff' : '#eff6ff';
                     const badge = card.querySelector('.point-locked-badge');
                     if (badge) {
-                        badge.style.background = '#dbeafe';
-                        badge.style.color = '#1e40af';
-                        badge.innerHTML = '🎯 Seuraava kohde';
+                        badge.style.background = isAudioPoint ? '#e0e7ff' : '#dbeafe';
+                        badge.style.color = isAudioPoint ? '#3730a3' : '#1e40af';
+                        badge.innerHTML = isAudioPoint ? '🎧 Seuraava ääniohjaus' : '🎯 Seuraava kohde';
                     }
                     const teaser = card.querySelector('.point-locked-teaser');
                     if (teaser) {
-                        teaser.style.color = '#1d4ed8';
-                        teaser.innerHTML = `📍 Suuntaa kohteelle (${p.unlock_radius || p.arrival_radius || 30} m) avataksesi tarinan`;
+                        teaser.style.color = isAudioPoint ? '#4338ca' : '#1d4ed8';
+                        const radius = p.unlock_radius || p.arrival_radius || 30;
+                        teaser.innerHTML = isAudioPoint
+                            ? `🎧 Siirry kohteelle (${radius} m) kuullaksesi opasteen`
+                            : `📍 Suuntaa kohteelle (${radius} m) avataksesi tarinan`;
                     }
                 }
             } else if (skippedPoints.has(idx)) {
@@ -1841,25 +1883,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (teaser) teaser.style.display = 'none';
                 }
             } else {
-                // 🔴 Tulevat lukitut pisteet: Standardi punainen karttamarkkeri
+                // 🔴 Tulevat lukitut pisteet: Standardi punainen tai indigonvärinen karttamarkkeri
                 if (p._layer && p._layer.setStyle) {
                     p._layer.setStyle({
-                        fillColor: '#e11d48',
+                        fillColor: isAudioPoint ? '#6366f1' : '#e11d48',
                         color: '#ffffff',
                         weight: 2,
-                        radius: 8,
+                        radius: isAudioPoint ? 7 : 8,
                         fillOpacity: 0.7
                     });
                 }
 
                 if (card) {
-                    card.style.borderLeft = '4px solid #f59e0b';
-                    card.style.background = '#fffbeb';
+                    card.style.borderLeft = isAudioPoint ? '4px solid #818cf8' : '4px solid #f59e0b';
+                    card.style.background = isAudioPoint ? '#faf5ff' : '#fffbeb';
                     const badge = card.querySelector('.point-locked-badge');
                     if (badge) {
-                        badge.style.background = '#fef3c7';
-                        badge.style.color = '#b45309';
-                        badge.innerHTML = '🔒 Avautuu kohteessa';
+                        badge.style.background = isAudioPoint ? '#ede9fe' : '#fef3c7';
+                        badge.style.color = isAudioPoint ? '#5b21b6' : '#b45309';
+                        badge.innerHTML = isAudioPoint ? '🎧 Ääniopaste kohteessa' : '🔒 Avautuu kohteessa';
                     }
                 }
             }
@@ -2253,11 +2295,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handlePointAudio(point, distance) {
         if (!point) return;
 
-        const warningRadius = Number(point.warning_radius ?? point.properties?.warning_radius ?? 100);
-        const arrivalRadius = Number(point.arrival_radius ?? point.properties?.arrival_radius ?? 30);
+        const rawArrivalRadius = Number(point.arrival_radius ?? point.unlock_radius ?? point.properties?.arrival_radius ?? 30);
+        const rawWarningRadius = Number(point.warning_radius ?? point.properties?.warning_radius ?? point.notificationDistance ?? (rawArrivalRadius * 2.5));
+        const arrivalRadius = Math.max(5, rawArrivalRadius);
+        const warningRadius = Math.max(rawWarningRadius, arrivalRadius + 15);
 
         const isAudioWarningAllowed = (point.audio_warning ?? point.properties?.audio_warning) !== false;
         const isAudioArrivalAllowed = (point.audio_arrival ?? point.properties?.audio_arrival) !== false;
+
+        const isAudioPoint = (point.point_type === 'audio' || point.pointType === 'audio' || point.type === 'audio');
 
         // 1. Warning audio & vibration - played when arrivalRadius < distance <= warningRadius
         if (
@@ -2268,7 +2314,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ) {
             if (audioNotificationsEnabled && isAudioWarningAllowed) {
                 playWarningBeep();
-                const approachText = point.approach_tts || (point.point_type === 'audio' ? point.description : null);
+                const approachText = point.approach_tts || (isAudioPoint ? point.description : null);
                 if (approachText) {
                     speakTTS(approachText);
                 }
@@ -2285,7 +2331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ) {
             if (audioNotificationsEnabled && isAudioArrivalAllowed) {
                 playArrivalBeep();
-                const arrivalText = point.arrival_tts || (point.point_type === 'audio' ? (point.approach_tts || point.description) : null);
+                const arrivalText = point.arrival_tts || (isAudioPoint ? (point.approach_tts || point.description) : null);
                 if (arrivalText) {
                     speakTTS(arrivalText);
                 }
@@ -2301,13 +2347,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     function showApproachingToast(p, distMeters) {
         approachToastVisible = true;
         const name = p.title || p.name || 'Kohde';
-        document.getElementById('toast-label').textContent = 'Kohde lähestyy';
-        document.getElementById('toast-icon').textContent = '📍';
+        const isAudio = (p.point_type === 'audio' || p.pointType === 'audio' || p.type === 'audio');
+        document.getElementById('toast-label').textContent = isAudio ? 'Ääniopaste lähestyy' : 'Kohde lähestyy';
+        document.getElementById('toast-icon').textContent = isAudio ? '🎧' : '📍';
         document.getElementById('toast-point-name').textContent = name;
         document.getElementById('toast-point-dist').textContent = `Noin ${distMeters} m päässä`;
 
         const toast = document.getElementById('proximity-toast');
-        toast.style.borderLeftColor = '#f59e0b';
+        toast.style.borderLeftColor = isAudio ? '#6366f1' : '#f59e0b';
         toast.classList.add('visible');
 
         triggerFeedback('approach');
@@ -2332,7 +2379,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         _arrivalCooldownUntil = Date.now() + 5000;
 
         const name = p.title || p.name || 'Kohde';
+        const isAudio = (p.point_type === 'audio' || p.pointType === 'audio' || p.type === 'audio');
         document.getElementById('arrival-name').textContent = name;
+        const arrivalLabelEl = document.getElementById('arrival-label');
+        if (arrivalLabelEl) {
+            arrivalLabelEl.textContent = isAudio ? 'Olet saapunut ääniopasteelle!' : 'Olet saapunut kokemuspisteelle!';
+        }
+        const arrivalIconEl = document.getElementById('arrival-icon');
+        if (arrivalIconEl) {
+            arrivalIconEl.textContent = isAudio ? '🎧' : '🎉';
+        }
         const toast = document.getElementById('arrival-toast');
         toast.classList.add('visible');
 
@@ -2429,7 +2485,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const bar = document.getElementById('arrived-bar');
         if (!bar) return;
         const name = p.title || p.name || `Piste ${idx + 1}`;
+        const isAudio = (p.point_type === 'audio' || p.pointType === 'audio' || p.type === 'audio');
         document.getElementById('arrived-bar-name').textContent = `${idx + 1}. ${name}`;
+        const barLabelEl = document.getElementById('arrived-bar-label');
+        if (barLabelEl) {
+            barLabelEl.textContent = isAudio ? 'Ääniopaste aktiivinen' : 'Saapunut kokemuspisteelle';
+        }
+        const barIconEl = document.getElementById('arrived-bar-icon');
+        if (barIconEl) {
+            barIconEl.textContent = isAudio ? '🎧' : '📍';
+        }
         bar.style.display = 'flex';
         // Animaatio käynnistyy näkyvyysmuutoksen jälkeen
         requestAnimationFrame(() => {
@@ -2564,7 +2629,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             points.forEach((p, idx) => {
                 const opt = document.createElement('option');
                 opt.value = idx;
-                opt.textContent = `${idx + 1}. ${p.title || p.name || 'Kohde ' + (idx + 1)}`;
+                const isAudio = (p.point_type === 'audio' || p.pointType === 'audio' || p.type === 'audio');
+                const role = isAudio ? '🎧 ' : '📍 ';
+                const orderStr = p.order != null ? ` (järj. ${p.order})` : '';
+                opt.textContent = `${idx + 1}. ${role}${p.title || p.name || (isAudio ? 'Ääniohjaus ' : 'Kohde ') + (idx + 1)}${orderStr}`;
                 select.appendChild(opt);
             });
         }
