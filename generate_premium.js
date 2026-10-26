@@ -94,16 +94,25 @@ function generatePremiumPages() {
             const profiling = findProfiling(company);
             const aiSeo = (profiling && profiling.ai_and_seo) || company.ai_and_seo || null;
 
+            function normalizeGoogleDriveUrl(u) {
+                if (!u || typeof u !== 'string') return u;
+                const match = u.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || u.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (match && u.includes('drive.google.com')) {
+                    return "https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=" + match[1];
+                }
+                return u;
+            }
+
             // 1. OG Image
             let ogImage = "https://laukaainfo.fi/og-yrityskortti.png";
             if (company.media && company.media.length > 0) {
                 const firstImg = company.media.find(m => m.type === 'image');
                 if (firstImg && firstImg.url) {
-                    ogImage = firstImg.url;
+                    ogImage = normalizeGoogleDriveUrl(firstImg.url);
                     if (!ogImage.startsWith('http')) ogImage = "https://www.mediazoo.fi/laukaainfo-web/" + ogImage;
                 }
             } else if (company.logo && company.logo !== '-' && company.logo !== '') {
-                ogImage = company.logo;
+                ogImage = normalizeGoogleDriveUrl(company.logo);
                 if (!ogImage.startsWith('http')) ogImage = "https://www.mediazoo.fi/laukaainfo-web/" + ogImage;
             }
             

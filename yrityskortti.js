@@ -158,9 +158,23 @@
 
             // Normalize URLs
             const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+
+            function normalizeGoogleDriveUrl(url) {
+                if (!url || typeof url !== 'string') return url;
+                const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (match && url.includes('drive.google.com')) {
+                    return baseUrl + 'get_image.php?id=' + match[1];
+                }
+                return url;
+            }
+
             companies.forEach(company => {
+                if (company.logo) {
+                    company.logo = normalizeGoogleDriveUrl(company.logo);
+                }
                 if (company.media) {
                     company.media.forEach(item => {
+                        if (item.url) item.url = normalizeGoogleDriveUrl(item.url);
                         if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
                             item.url = baseUrl + item.url;
                         }
@@ -168,6 +182,11 @@
                 }
                 if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
                     company.logo = baseUrl + company.logo;
+                }
+                if (company.rss) {
+                    if (company.rss.includes('mediazoo.fi') && (company.rss.includes('/blog/feed') || company.rss.endsWith('/feed'))) {
+                        company.rss = 'https://mediazoo.fi/blog/feed/';
+                    }
                 }
             });
 
@@ -2487,17 +2506,72 @@
 
         if (!container || !itemsContainer) return;
 
+        let targetUrl = url;
+        if (targetUrl.includes('mediazoo.fi') && (targetUrl.includes('/blog/feed') || targetUrl.endsWith('/feed'))) {
+            targetUrl = 'https://mediazoo.fi/blog/feed/';
+        }
+
         try {
-            console.log('Fetching RSS from:', url);
-            // Using rss2json service with a cache-buster. 
-            // The free tier usually works without an API key if usage is low.
-            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&t=${Date.now()}`;
+            console.log('Fetching RSS from:', targetUrl);
+            let items = [];
 
-            const response = await fetch(proxyUrl);
-            const data = await response.json();
-            console.log('RSS Status:', data.status, 'Items:', data.items?.length);
+            const proxyEndpoints = [
+                `https://www.mediazoo.fi/laukaainfo-web/proxy.php?url=${encodeURIComponent(targetUrl)}`,
+                `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+                `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(targetUrl)}&t=${Date.now()}`
+            ];
 
-            if (data.status === 'ok' && data.items && data.items.length > 0) {
+            for (const endpoint of proxyEndpoints) {
+                try {
+                    const res = await fetch(endpoint);
+                    if (!res.ok) continue;
+
+                    if (endpoint.includes('rss2json')) {
+                        const json = await res.json();
+                        if (json.status === 'ok' && json.items && json.items.length > 0) {
+                            items = json.items.map(it => ({
+                                title: it.title,
+                                link: it.link,
+                                pubDate: it.pubDate,
+                                content: it.description || it.content || ''
+                            }));
+                            break;
+                        }
+                    } else {
+                        let xmlText = '';
+                        if (endpoint.includes('allorigins.win')) {
+                            const aj = await res.json();
+                            xmlText = aj.contents || '';
+                        } else {
+                            xmlText = await res.text();
+                        }
+
+                        if (xmlText && (xmlText.includes('<rss') || xmlText.includes('<feed') || xmlText.includes('<channel'))) {
+                            const parser = new DOMParser();
+                            const xml = parser.parseFromString(xmlText, 'text/xml');
+                            if (!xml.querySelector('parsererror')) {
+                                const xmlItems = xml.querySelectorAll('item, entry');
+                                if (xmlItems.length > 0) {
+                                    items = Array.from(xmlItems).map(node => {
+                                        const title = (node.querySelector('title')?.textContent || '').trim();
+                                        const link = node.querySelector('link')?.textContent || node.querySelector('link')?.getAttribute('href') || '#';
+                                        const pubDate = node.querySelector('pubDate')?.textContent || node.querySelector('published')?.textContent || node.querySelector('dc\\:date')?.textContent || '';
+                                        const desc = node.querySelector('content\\:encoded')?.textContent || node.querySelector('description')?.textContent || node.querySelector('summary')?.textContent || '';
+                                        return { title, link, pubDate, content: desc };
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn('RSS Proxy yritys epäonnistui:', endpoint, e);
+                }
+            }
+
+            console.log('RSS ladattu, kohteita:', items.length);
+
+            if (items.length > 0) {
                 // If Käyntikortti news is not explicitly set by the entrepreneur, use the latest RSS item!
                 const bcNewsBlock = document.getElementById('bc-news-block');
                 const bcNewsTitle = document.getElementById('bc-news-title');
@@ -2506,33 +2580,35 @@
                 const bcNewsLink = document.getElementById('bc-news-link');
                 
                 if (bcNewsBlock && bcNewsBlock.style.display === 'none') {
-                    const firstItem = data.items[0];
+                    const firstItem = items[0];
                     const date = new Date(firstItem.pubDate);
-                    const dateStr = date.toLocaleDateString('fi-FI');
-                    const snippet = cleanRSSContent(firstItem.description || firstItem.content || '').substring(0, 160) + '...';
+                    const dateStr = !isNaN(date.getTime()) ? date.toLocaleDateString('fi-FI') : '';
+                    const snippet = cleanRSSContent(firstItem.content || '').substring(0, 160) + '...';
                     
-                    bcNewsTitle.textContent = firstItem.title;
-                    bcNewsDate.textContent = `📅 ${dateStr}`;
-                    bcNewsText.textContent = snippet;
-                    bcNewsLink.href = firstItem.link;
-                    bcNewsLink.style.display = 'inline-flex';
+                    if (bcNewsTitle) bcNewsTitle.textContent = firstItem.title;
+                    if (bcNewsDate) bcNewsDate.textContent = dateStr ? `📅 ${dateStr}` : '';
+                    if (bcNewsText) bcNewsText.textContent = snippet;
+                    if (bcNewsLink) {
+                        bcNewsLink.href = firstItem.link;
+                        bcNewsLink.style.display = 'inline-flex';
+                    }
                     bcNewsBlock.style.display = 'block';
                 }
 
                 container.style.display = 'block';
                 itemsContainer.innerHTML = '';
-                dropdown.innerHTML = '';
+                if (dropdown) dropdown.innerHTML = '';
 
                 // Show top 2 items with snippets
-                const topItems = data.items.slice(0, 2);
+                const topItems = items.slice(0, 2);
                 topItems.forEach(item => {
                     const date = new Date(item.pubDate);
-                    const dateStr = date.toLocaleDateString('fi-FI');
-                    const snippet = cleanRSSContent(item.description || item.content || '').substring(0, 160) + '...';
+                    const dateStr = !isNaN(date.getTime()) ? date.toLocaleDateString('fi-FI') : '';
+                    const snippet = cleanRSSContent(item.content || '').substring(0, 160) + '...';
 
                     const itemHtml = `
                         <div class="rss-item">
-                            <span class="rss-date">📅 ${dateStr}</span>
+                            ${dateStr ? `<span class="rss-date">📅 ${dateStr}</span>` : ''}
                             <h4><a href="${item.link}" target="_blank">${item.title}</a></h4>
                             <div class="rss-snippet">${snippet}</div>
                             <a href="${item.link}" target="_blank" style="color:var(--primary-blue); font-size:0.9rem; font-weight:600; text-decoration:none;">Lue koko uutinen →</a>
@@ -2542,8 +2618,8 @@
                 });
 
                 // Rest of the items in a dropdown
-                if (data.items.length > 2) {
-                    const otherItems = data.items.slice(2, 10); // Limit to 10 total items
+                if (items.length > 2 && dropdown && moreSection && toggleBtn) {
+                    const otherItems = items.slice(2, 10); // Limit to 10 total items
                     otherItems.forEach(item => {
                         const a = document.createElement('a');
                         a.href = item.link;
@@ -2556,14 +2632,14 @@
 
                     toggleBtn.onclick = () => {
                         const isOpen = dropdown.classList.toggle('open');
-                        toggleBtn.querySelector('.arrow').textContent = isOpen ? '▲' : '▼';
+                        const arrow = toggleBtn.querySelector('.arrow');
+                        if (arrow) arrow.textContent = isOpen ? '▲' : '▼';
                         toggleBtn.innerHTML = isOpen ? `Pienennä uutiset <span class="arrow">▲</span>` : `Näytä muut uutiset (n. ${otherItems.length}) <span class="arrow">▼</span>`;
                     };
                 }
             }
         } catch (error) {
             console.error('Error loading RSS feed:', error);
-            // Silently fail or minimal notice
         }
     }
 

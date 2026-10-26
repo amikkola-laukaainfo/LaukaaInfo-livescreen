@@ -4216,7 +4216,7 @@
       "osoite": "Salmelantie, 41400 Lievestuore",
       "lat": "62.270133",
       "lon": "26.223957",
-      "logo": "https://mediazoo.fi/wp-content/uploads/2026/03/logo2.png",
+      "logo": "get_image.php?id=1V5ZiTYtfZVTzj9BYk8Rz-HxT5YISOD9h",
       "tags": "digimedia, IT-palvelut, videokuvaus, valokuvaus, graafiset palvelut, kotisivut, media, valokuvaaja, video, videotuotanto, kuvaus",
       "palvelutapa": "toimipiste, etapalvelu",
       "alue_slug": "Lievestuore",
@@ -4237,7 +4237,8 @@
       ],
       "images": [
         "get_image.php?id=1Mhuy-3N-KH7FcT88MbgOCjj5k-5i2LGc"
-      ]
+      ],
+      "rss": "https://mediazoo.fi/blog/feed/"
     },
     {
       "id": "company-53",
