@@ -3888,12 +3888,12 @@ async function performV4Search(query, dropdown) {
     let html = '';
 
     if (matchedAreas.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0056b3; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🏞️ TAAJAMAT & ALUEET</div>`;
+        html += `<div style="font-size: 0.75rem; font-weight: 700; color: #0056b3; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Taajamat & Alueet</div>`;
         matchedAreas.forEach(a => {
             html += `
-                <a href="${a.url}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #0056b3; font-size: 0.95rem; font-weight: 700; background: #f0f7ff; margin-bottom: 4px;" onmouseover="this.style.background='#e0f2fe';" onmouseout="this.style.background='#f0f7ff';">
-                    <span>🏞️ ${escapeHtml(a.name)}</span>
-                    <span style="font-size: 0.75rem; background: #0056b3; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 600;">${escapeHtml(a.type)}</span>
+                <a href="${a.url}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #0056b3; font-size: 0.95rem; font-weight: 600; background: #f0f7ff; margin-bottom: 4px;" onmouseover="this.style.background='#e0f2fe';" onmouseout="this.style.background='#f0f7ff';">
+                    <span>${escapeHtml(a.name)}</span>
+                    <span style="font-size: 0.75rem; background: #0056b3; color: white; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 600;">${escapeHtml(a.type)}</span>
                 </a>
             `;
         });
@@ -3901,14 +3901,14 @@ async function performV4Search(query, dropdown) {
     }
 
     if (matchedPlaces.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 PAIKAT & KOHTEET</div>`;
+        html += `<div style="font-size: 0.75rem; font-weight: 700; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Paikat & Kohteet</div>`;
         matchedPlaces.forEach(p => {
             const themesBadge = (p.genuineThemes && p.genuineThemes.length > 0)
-                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 2px;">🏷️ ${escapeHtml(p.genuineThemes.join(' · '))}</div>`
+                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 2px;">${escapeHtml(p.genuineThemes.join(' · '))}</div>`
                 : '';
             html += `
                 <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                    <div>📍 ${escapeHtml(p.name || p.canonical_name)}</div>
+                    <div>${escapeHtml(p.name || p.canonical_name)}</div>
                     ${themesBadge}
                 </a>
             `;
@@ -3917,16 +3917,16 @@ async function performV4Search(query, dropdown) {
     }
 
     if (matchedThemes.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🌲 NÄKÖKULMAT</div>`;
+        html += `<div style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Näkökulmat</div>`;
         matchedThemes.forEach(t => {
             const displayName = formatThemeName(t) || t.name || t.tag_id;
             const count = (t.places_count && t.places_count > 0)
                 ? t.places_count
                 : (window.allCompanies ? window.allCompanies.filter(c => (c.tags || '').toLowerCase().includes((t.tag_id || t.name || '').toLowerCase())).length : 0);
-            const countBadge = count > 0 ? `<span style="font-size: 0.8rem; color: #64748b;">📍 ${count}</span>` : '';
+            const countBadge = count > 0 ? `<span style="font-size: 0.8rem; color: #64748b;">${count}</span>` : '';
             html += `
                 <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                    <span>🌲 ${escapeHtml(displayName)}</span>
+                    <span>${escapeHtml(displayName)}</span>
                     ${countBadge}
                 </a>
             `;
@@ -3935,13 +3935,13 @@ async function performV4Search(query, dropdown) {
     }
 
     if (matchedEncounters.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🤝 KOHTAAMISET & ILMOITUKSET</div>`;
+        html += `<div style="font-size: 0.75rem; font-weight: 700; color: #a855f7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Kohtaamiset & Ilmoitukset</div>`;
         matchedEncounters.forEach(e => {
             html += `
                 <a href="kohtaamiset.html?id=${encodeURIComponent(e.id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
                     <div>
-                        <span>🤝 ${escapeHtml(e.title)}</span>
-                        ${e.location ? `<span style="display: block; font-size: 0.76rem; color: #64748b; font-weight: 500;">📍 ${escapeHtml(e.location)}</span>` : ''}
+                        <span>${escapeHtml(e.title)}</span>
+                        ${e.location ? `<span style="display: block; font-size: 0.76rem; color: #64748b; font-weight: 500;">${escapeHtml(e.location)}</span>` : ''}
                     </div>
                     ${e.price_info ? `<span style="font-size: 0.8rem; color: #a855f7; font-weight: 700;">${escapeHtml(e.price_info)}</span>` : ''}
                 </a>
@@ -3951,7 +3951,7 @@ async function performV4Search(query, dropdown) {
     }
 
     if (matchedCompanies.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🛠 PALVELUT & YRITYKSET</div>`;
+        html += `<div style="font-size: 0.75rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Palvelut & Yritykset</div>`;
         matchedCompanies.forEach(c => {
             const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
             const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi' || window.location.hostname.includes('github.io');
@@ -3964,7 +3964,7 @@ async function performV4Search(query, dropdown) {
 
             html += `
                 <a href="${cardUrl}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                    <span>🏢 ${escapeHtml(c.nimi || c.name)}</span>
+                    <span>${escapeHtml(c.nimi || c.name)}</span>
                     <span style="font-size: 0.8rem; color: #64748b;">${escapeHtml(c.kategoria || '')}</span>
                 </a>
             `;
@@ -4083,16 +4083,16 @@ async function openV4SearchModal(query) {
 
     if (matchedThemes.length > 0) {
         html += `<div>
-            <h3 style="font-size: 0.85rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">🌲 Näkökulmat (${matchedThemes.length})</h3>
+            <h3 style="font-size: 0.85rem; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Näkökulmat (${matchedThemes.length})</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem;">`;
         matchedThemes.forEach(t => {
             const displayName = formatThemeName(t) || t.name || t.tag_id;
             const count = (t.places_count && t.places_count > 0)
                 ? t.places_count
                 : (window.allCompanies ? window.allCompanies.filter(c => (c.tags || '').toLowerCase().includes((t.tag_id || t.name || '').toLowerCase())).length : 0);
-            const countBadge = count > 0 ? `<span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">📍 ${count}</span>` : '';
+            const countBadge = count > 0 ? `<span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">${count}</span>` : '';
             html += `
-                <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#059669'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#059669'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
                     <span>${escapeHtml(displayName)}</span>
                     ${countBadge}
                 </a>
@@ -4103,15 +4103,15 @@ async function openV4SearchModal(query) {
 
     if (matchedPlaces.length > 0) {
         html += `<div>
-            <h3 style="font-size: 0.85rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">📍 Paikat (${matchedPlaces.length})</h3>
+            <h3 style="font-size: 0.85rem; font-weight: 700; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">Paikat (${matchedPlaces.length})</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
         matchedPlaces.forEach(p => {
             const subtitle = [p.type, p.municipality].filter(Boolean).join(' · ');
             const themesBadge = (p.genuineThemes && p.genuineThemes.length > 0)
-                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 3px;">🏷️ ${escapeHtml(p.genuineThemes.join(' · '))}</div>`
+                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 3px;">${escapeHtml(p.genuineThemes.join(' · '))}</div>`
                 : '';
             html += `
-                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284c7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284c7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
                     <div style="margin-bottom: 0.15rem;">${escapeHtml(p.name || p.canonical_name)}</div>
                     ${subtitle ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">${escapeHtml(subtitle)}</div>` : ''}
                     ${themesBadge}
@@ -4123,13 +4123,13 @@ async function openV4SearchModal(query) {
 
     if (matchedEncounters.length > 0) {
         html += `<div>
-            <h3 style="font-size: 0.85rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">🤝 Kohtaamiset & Ilmoitukset (${matchedEncounters.length})</h3>
+            <h3 style="font-size: 0.85rem; font-weight: 700; color: #a855f7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">Kohtaamiset & Ilmoitukset (${matchedEncounters.length})</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
         matchedEncounters.forEach(e => {
             html += `
-                <a href="kohtaamiset.html?id=${encodeURIComponent(e.id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
-                    <div style="margin-bottom: 0.15rem;">🤝 ${escapeHtml(e.title)}</div>
-                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">📍 ${escapeHtml(e.location || 'Koko Laukaa')}${e.price_info ? ` · ${escapeHtml(e.price_info)}` : ''}</div>
+                <a href="kohtaamiset.html?id=${encodeURIComponent(e.id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                    <div style="margin-bottom: 0.15rem;">${escapeHtml(e.title)}</div>
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">${escapeHtml(e.location || 'Koko Laukaa')}${e.price_info ? ` · ${escapeHtml(e.price_info)}` : ''}</div>
                 </a>
             `;
         });
@@ -4138,7 +4138,7 @@ async function openV4SearchModal(query) {
 
     if (matchedCompanies.length > 0) {
         html += `<div>
-            <h3 style="font-size: 0.85rem; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">🛠 Palvelut & Yritykset (${matchedCompanies.length})</h3>
+            <h3 style="font-size: 0.85rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">Palvelut & Yritykset (${matchedCompanies.length})</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
         matchedCompanies.forEach(c => {
             const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
