@@ -3129,7 +3129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (ytId) {
                 innerContent = `
                     <div class="lki-modal-video-wrapper" style="width:100%; height:100%;">
-                        <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
+                        <iframe src="https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
                         <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener" class="lki-modal-yt-link">📺 Katso YouTubessa &rarr;</a>
                     </div>`;
             } else if (videoUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {

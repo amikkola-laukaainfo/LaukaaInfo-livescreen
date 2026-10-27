@@ -3714,17 +3714,11 @@ async function initV4Themes() {
 
         // Satunnaista ja näytä enintään 8 pilleriä
         const shuffled = dedupedThemes.sort(() => Math.random() - 0.5).slice(0, 8);
-        const colors = ['#059669','#0284c7','#d97706','#7c3aed','#db2777','#0891b2','#16a34a','#b45309'];
 
-        container.innerHTML = shuffled.map((t, idx) => {
-
+        container.innerHTML = shuffled.map(t => {
             const name = formatThemeName(t);
-            const color = colors[idx % colors.length];
-            return `<a href="teema.html?tag=${encodeURIComponent(t.tag_id)}"
-                style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 0.9rem;background:${color}12;color:${color};border:1.5px solid ${color}30;border-radius:50px;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s;"
-                onmouseover="this.style.background='${color}25';this.style.transform='translateY(-2px)';"
-                onmouseout="this.style.background='${color}12';this.style.transform='none';">
-                🌲 ${escapeHtml(name)}
+            return `<a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" class="btn-outline">
+                ${escapeHtml(name)}
             </a>`;
         }).join('');
 
@@ -3758,24 +3752,19 @@ async function initV4Places() {
         if (places.length === 0) {
             // Fallback: staattiset paikat
             container.innerHTML = `
-                <a href="tietoa-paikasta.html?id=vihtavuori" class="btn-outline" style="font-size:0.85rem;padding:0.4rem 0.85rem;">Vihtavuori</a>
-                <a href="tietoa-paikasta.html?id=hyyppaavuori" class="btn-outline" style="font-size:0.85rem;padding:0.4rem 0.85rem;">Hyyppäävuori</a>
-                <a href="tietoa-paikasta.html?id=haarla" class="btn-outline" style="font-size:0.85rem;padding:0.4rem 0.85rem;">Haarla</a>`;
+                <a href="tietoa-paikasta.html?id=vihtavuori" class="btn-outline">Vihtavuori</a>
+                <a href="tietoa-paikasta.html?id=hyyppaavuori" class="btn-outline">Hyyppäävuori</a>
+                <a href="tietoa-paikasta.html?id=haarla" class="btn-outline">Haarla</a>`;
             return;
         }
 
         // Satunnaista ja näytä 6 paikkaa
         const shuffled = places.sort(() => Math.random() - 0.5).slice(0, 6);
-        const colors = ['#059669','#0284c7','#d97706','#7c3aed','#db2777','#0891b2'];
 
-        container.innerHTML = shuffled.map((p, idx) => {
-            const color = colors[idx % colors.length];
+        container.innerHTML = shuffled.map(p => {
             const name = p.name || p.place_id;
-            return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}"
-                style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 0.9rem;background:${color}12;color:${color};border:1.5px solid ${color}30;border-radius:50px;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s;"
-                onmouseover="this.style.background='${color}25';this.style.transform='translateY(-2px)';"
-                onmouseout="this.style.background='${color}12';this.style.transform='none';">
-                📍 ${escapeHtml(name)}
+            return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" class="btn-outline">
+                ${escapeHtml(name)}
             </a>`;
         }).join('');
 

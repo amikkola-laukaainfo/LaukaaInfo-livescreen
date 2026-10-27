@@ -2489,26 +2489,50 @@ footer {
     /* Prevent clipping of search results */
 }
 
+.btn-outline,
+.v4-entry-card .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #334155;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.btn-outline:hover,
+.v4-entry-card .btn-outline:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #0f172a;
+    transform: translateY(-1px);
+}
+
 .region-pill {
-    color: white;
+    color: #1e293b;
     text-decoration: none;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 0.6rem 1.4rem;
-    border-radius: 50px;
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(4px);
-    transition: all 0.2s ease;
+    font-size: 0.925rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    transition: all 0.15s ease;
     display: inline-block;
 }
 
 .region-pill:hover {
-    background: rgba(255, 255, 255, 0.28);
-    border-color: white;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #0a2540;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .kauppa-hero::before {
@@ -3695,42 +3719,46 @@ footer {
 
 /* Benefit Banner */
 .benefit-banner {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
     color: white;
-    padding: 1.5rem;
-    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
     margin-bottom: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 4px 14px rgba(21, 128, 61, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .benefit-content h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.3rem;
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    font-weight: 700;
 }
 
 .benefit-content p {
     margin: 0;
     opacity: 0.9;
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
 .benefit-cta {
     background: white;
-    color: #16a34a;
-    padding: 0.7rem 1.5rem;
-    border-radius: 50px;
+    color: #166534;
+    padding: 0.65rem 1.35rem;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 800;
+    font-weight: 700;
     white-space: nowrap;
-    transition: transform 0.2s;
+    transition: transform 0.2s, background 0.2s;
+    font-size: 0.95rem;
 }
 
 .benefit-cta:hover {
-    transform: scale(1.05);
+    background: #f8fafc;
+    transform: translateY(-1px);
 }
 
 @media (max-width: 600px) {
@@ -4048,29 +4076,30 @@ footer {
 
 .share-generator-card {
     background: white;
-    border-radius: var(--border-radius);
-    padding: 2.5rem;
-    box-shadow: var(--shadow);
+    border-radius: 12px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     text-align: center;
-    border: 1px solid #eef2f7;
+    border: 1px solid #e2e8f0;
 }
 
 .share-generator-card h2 {
-    font-size: 1.5rem;
-    color: var(--primary-blue);
+    font-size: 1.4rem;
+    color: #0a2540;
+    font-weight: 700;
     justify-content: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
 }
 
 .share-generator-card p {
     color: #64748b;
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
     font-size: 0.95rem;
 }
 
 .generator-controls {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.25rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
     text-align: left;
@@ -4083,57 +4112,57 @@ footer {
 
 .gen-field label {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #334155;
-    margin-bottom: 0.5rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
 }
 
 .gen-input {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 0.7rem 0.9rem;
     border: 1px solid #cbd5e1;
-    border-radius: 12px;
+    border-radius: 8px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     outline: none;
     transition: all 0.2s;
-    background: #f8fafc;
+    background: #ffffff;
 }
 
 .gen-input:focus {
-    border-color: var(--primary-blue);
+    border-color: #0056b3;
     box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
     background: white;
 }
 
 .generator-result-area {
-    background: #f0f7ff;
-    padding: 1.5rem;
-    border-radius: 16px;
-    border: 1px solid #d0e1f9;
+    background: #f8fafc;
+    padding: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
     text-align: left;
 }
 
 .generator-result-area label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--primary-blue);
-    margin-bottom: 0.8rem;
+    color: #0a2540;
+    margin-bottom: 0.6rem;
 }
 
 .url-copy-wrapper {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 #share-result-url {
     flex: 1;
-    padding: 0.8rem;
+    padding: 0.7rem 0.85rem;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     background: white;
@@ -4144,31 +4173,33 @@ footer {
 }
 
 .btn-copy, .btn-qr {
-    background: var(--primary-blue);
+    background: #0a2540;
     color: white;
-    border: none;
-    padding: 0.8rem 1.2rem;
+    border: 1px solid #0a2540;
+    padding: 0.7rem 1.2rem;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
     font-size: 0.9rem;
 }
 
-.btn-copy:hover, .btn-qr:hover {
-    background: var(--secondary-blue);
+.btn-copy:hover {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
 }
 
 .btn-qr {
     background: white;
-    color: var(--primary-blue);
-    border: 2px solid var(--primary-blue);
+    color: #0a2540;
+    border: 1px solid #cbd5e1;
     width: 100%;
     margin-top: 0.5rem;
 }
 
 .btn-qr:hover {
-    background: var(--light-blue);
+    background: #f8fafc;
+    border-color: #94a3b8;
 }
 
 .qr-container {
@@ -5164,102 +5195,104 @@ footer {
 
 .path-card {
     background: white;
-    border-radius: 32px;
-    padding: 3rem 2.5rem;
+    border-radius: 14px;
+    padding: 2.25rem 2rem;
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     position: relative;
     overflow: hidden;
 }
 
 .path-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 50px rgba(0, 51, 102, 0.12);
-    border-color: var(--primary-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 51, 102, 0.08);
+    border-color: #cbd5e1;
 }
 
 .path-card .path-icon {
-    font-size: 3.5rem;
-    margin-bottom: 2rem;
-    width: 100px;
-    height: 100px;
-    background: #f1f5f9;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    width: 56px;
+    height: 56px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: var(--primary-blue);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 30px;
-    transition: all 0.3s ease;
+    border-radius: 10px;
+    transition: all 0.2s ease;
 }
 
 .path-card:hover .path-icon {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.05);
 }
 
-.path-card.feed-path:hover .path-icon { background: #fff7ed; color: #ff9900; }
-.path-card.brand-path:hover .path-icon { background: #eff6ff; color: #007bff; }
+.path-card.feed-path:hover .path-icon { background: #fff7ed; border-color: #fdba74; color: #ea580c; }
+.path-card.brand-path:hover .path-icon { background: #f0f7ff; border-color: #bae6fd; color: #0056b3; }
 
 .path-card h3 {
     font-family: var(--accent-font);
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    color: var(--primary-blue);
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #0a2540;
 }
 
 .path-card p {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     color: #64748b;
     line-height: 1.6;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     flex-grow: 1;
 }
 
 .path-card .path-cta {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
+    gap: 6px;
+    font-weight: 600;
     color: var(--primary-blue);
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     transition: all 0.2s;
 }
 
 .path-card:hover .path-cta {
-    gap: 15px;
+    gap: 10px;
 }
 
 .path-badge {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: #22c55e;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: #16a34a;
     color: white;
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-size: 0.85rem;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
     font-weight: 700;
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    letter-spacing: 0.02em;
 }
 
 @media (max-width: 768px) {
     .gate-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1.25rem;
     }
 
     .path-card {
-        padding: 2.5rem 2rem;
-        border-radius: 24px;
+        padding: 1.75rem 1.5rem;
+        border-radius: 12px;
     }
 
     .gate-header h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 }
 
@@ -5537,17 +5570,17 @@ footer {
 .need-card {
     position: relative;
     height: 340px;
-    border-radius: 32px;
+    border-radius: 14px;
     overflow: hidden;
     background-color: #1a2a3a; /* Fallback color */
     background-size: cover;
     background-position: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
     scroll-margin-top: 100px;
 }
 
@@ -5569,8 +5602,8 @@ footer {
 }
 
 .need-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 45px rgba(0, 51, 102, 0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 51, 102, 0.25);
 }
 
 .need-card:hover::before {
@@ -5586,27 +5619,27 @@ footer {
 }
 
 .need-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: #ffffff !important;
-    margin-bottom: 0.75rem;
-    font-weight: 800;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    line-height: 1.15;
+    line-height: 1.2;
     overflow-wrap: normal;
     word-break: normal;
 }
 
-/* White balance fix for SyntymÃ¤pÃ¤ivÃ¤t card */
+/* White balance fix for Syntymäpäivät card */
 .card-white-balance {
     background-blend-mode: screen;
     background-color: rgba(255, 255, 255, 0.05);
 }
 
 .need-card p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: rgba(255,255,255,0.9) !important;
-    margin-bottom: 2rem;
-    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    line-height: 1.45;
     text-shadow: 0 1px 5px rgba(0,0,0,0.5);
 }
 
@@ -5616,19 +5649,21 @@ footer {
     text-align: center;
     background: white;
     color: var(--primary-blue);
-    padding: 0.75rem 1.25rem;
-    border-radius: 50px;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
     text-decoration: none;
-    font-weight: 700;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .btn-need:hover {
-    background: var(--primary-blue);
+    background: #0a2540;
     color: white;
-    transform: translateY(-3px);
+    border-color: #0a2540;
+    transform: translateY(-2px);
 }
 
 .need-card .btn-need::after {
@@ -7026,8 +7061,8 @@ footer {
     }
     .region-pill {
         font-size: 0.82rem !important;
-        padding: 0.4rem 0.9rem !important;
-        border-radius: 40px !important;
+        padding: 0.4rem 0.85rem !important;
+        border-radius: 6px !important;
     }
     .hero-split-paths {
         gap: 1rem !important;
