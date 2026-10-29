@@ -574,6 +574,10 @@
                 const item = document.createElement('div');
                 item.className = 'carousel-item';
 
+                const _isPaid = c.tyyppi === 'paid' || c.tyyppi === 'maksu' || c.taso === 'premium' || (c.subscription_tier >= 2);
+                const _slug = c.slug || slugify(c.nimi);
+                const cardUrl = _isPaid ? `yritys/${_slug}.html` : `yrityskortti.html?id=${_slug}`;
+
                 let mediaHtml = '';
 
                 const defaultImages = {
@@ -732,6 +736,9 @@
         card.className = 'company-card';
 
         const isPremium = c.media && c.media.length > 0;
+        const _isPaid = c.tyyppi === 'paid' || c.tyyppi === 'maksu' || c.taso === 'premium' || (c.subscription_tier >= 2);
+        const _slug = c.slug || slugify(c.nimi);
+        const cardUrl = _isPaid ? `yritys/${_slug}.html` : `yrityskortti.html?id=${_slug}`;
         const distBadge = c.distanceText ? `<span style="display:inline-block; background:#eef; color:var(--primary-blue); padding:3px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold; margin-bottom:10px;">🚗 ${c.distanceText}</span>` : '';
 
         // Same logic as carousel for premium companies
