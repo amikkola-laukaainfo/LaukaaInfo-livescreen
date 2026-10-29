@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kadonneet tavarat – tieto tavoittaa nopeasti | LaukaaInfo</title>
-    <meta name="description" content="LaukaaInfo tarjoaa helpon tavan julkaista ilmoituksia kadonneista ja löytyneistä tavaroista Laukaan alueella. Ilmoitus näkyy sovelluksessa heti.">
+    <title>Kadonneet ja löydetyt tavarat – LaukaaInfo &amp; LostReFound</title>
+    <meta name="description" content="Löydä kadonnut tavarasi tai ilmoita löytö helposti ja nopeasti Laukaan alueella. Reaaliaikaiset ilmoitukset ja LostReFound-verkkopalvelu.">
     <link rel="icon" href="logo.png">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0056b3">
+    <meta name="theme-color" content="#1e3a8a">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,11 +17,653 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=20260420-2">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <script src="translations.js?v=20260505"></script>
+
+    <style>
+        :root {
+            --kn-primary: #1e3a8a;
+            --kn-primary-light: #2563eb;
+            --kn-accent: #0284c7;
+            --kn-success: #16a34a;
+            --kn-warning: #ea580c;
+            --kn-bg-soft: #f8fafc;
+            --kn-border: #e2e8f0;
+            --kn-text-main: #0f172a;
+            --kn-text-muted: #64748b;
+        }
+
+        /* Hero banner */
+        .kn-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 3.5rem 1.5rem 3rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .kn-hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .kn-hero-content {
+            max-width: 1040px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kn-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #bae6fd;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .kn-hero h1 {
+            font-family: var(--heading-font);
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin: 0 0 1rem;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .kn-hero p {
+            font-size: clamp(1rem, 1.8vw, 1.15rem);
+            line-height: 1.6;
+            color: #e2e8f0;
+            max-width: 780px;
+            margin: 0 0 1.75rem;
+        }
+
+        .kn-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            align-items: center;
+        }
+
+        .kn-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: var(--heading-font);
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 0.75rem 1.4rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .kn-btn-primary {
+            background: #ffffff;
+            color: #1e3a8a;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .kn-btn-primary:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            color: #1d4ed8;
+        }
+
+        .kn-btn-secondary {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+        }
+
+        .kn-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        /* Main Container */
+        .kn-container {
+            max-width: 1040px;
+            margin: -1.5rem auto 3rem;
+            padding: 0 1.25rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Card Component */
+        .kn-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid var(--kn-border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .kn-card-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kn-tag {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .kn-tag-live {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .kn-tag-info {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .kn-card h2 {
+            font-family: var(--heading-font);
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--kn-text-main);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .kn-card p.kn-lead {
+            color: var(--kn-text-muted);
+            font-size: 1.02rem;
+            line-height: 1.6;
+            margin: 0.25rem 0 0;
+        }
+
+        /* Live section specific */
+        .kn-live-card {
+            border: 2px solid #bfdbfe;
+            background: #ffffff;
+            box-shadow: 0 15px 40px -10px rgba(37, 99, 235, 0.12);
+        }
+
+        .kn-live-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .kn-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .kn-pulse-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: kn-pulse 2s infinite;
+        }
+
+        @keyframes kn-pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        .kn-toolbar-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .kn-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #1e293b;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .kn-action-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+            color: #0f172a;
+        }
+
+        .kn-action-btn-primary {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #1d4ed8;
+        }
+
+        .kn-action-btn-primary:hover {
+            background: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* Iframe wrapper */
+        .kn-iframe-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 680px;
+            height: 75vh;
+            max-height: 850px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .kn-iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .kn-iframe-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        .kn-spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: kn-spin 0.8s linear infinite;
+        }
+
+        @keyframes kn-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .kn-tip-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-top: 1.25rem;
+            color: #166534;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        /* Step cards grid */
+        .kn-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .kn-step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.35rem;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .kn-step-card:hover {
+            transform: translateY(-3px);
+            border-color: #93c5fd;
+            background: #ffffff;
+        }
+
+        .kn-step-number {
+            font-family: var(--heading-font);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #2563eb;
+            background: #eff6ff;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.9rem;
+        }
+
+        .kn-step-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 0.5rem;
+        }
+
+        .kn-step-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* 2-column feature grid */
+        .kn-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .kn-feature-box {
+            padding: 1.75rem;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .kn-feature-box-blue {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f2fe 100%);
+            border-color: #bfdbfe;
+        }
+
+        .kn-feature-box-orange {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-color: #fde68a;
+        }
+
+        .kn-feature-box h3 {
+            font-family: var(--heading-font);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin: 0 0 0.75rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .kn-feature-box p {
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.55;
+            margin: 0 0 1rem;
+        }
+
+        .kn-feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem;
+        }
+
+        .kn-feature-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+            color: #334155;
+            margin-bottom: 0.4rem;
+            line-height: 1.5;
+        }
+
+        .kn-feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: 800;
+            color: #2563eb;
+        }
+
+        .kn-feature-box-orange .kn-feature-list li::before {
+            color: #d97706;
+        }
+
+        /* Mobile App Banner */
+        .kn-app-promo {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 2.25rem;
+            color: #ffffff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.75rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 35px -5px rgba(30, 58, 138, 0.3);
+        }
+
+        .kn-app-promo-info {
+            flex: 1 1 450px;
+        }
+
+        .kn-app-promo-info h2 {
+            font-family: var(--heading-font);
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 0 0 0.75rem;
+            color: #ffffff;
+        }
+
+        .kn-app-promo-info p {
+            font-size: 1.02rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin: 0 0 1.25rem;
+        }
+
+        .kn-app-badges {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Archive Grid */
+        .kn-archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .kn-archive-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .kn-archive-card:hover {
+            border-color: #94a3b8;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .kn-archive-img-wrap {
+            height: 140px;
+            overflow: hidden;
+            background: #f1f5f9;
+        }
+
+        .kn-archive-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .kn-archive-body {
+            padding: 1.15rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .kn-archive-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .kn-badge-date {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .kn-badge-source {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .kn-archive-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+            line-height: 1.35;
+        }
+
+        .kn-archive-title a {
+            color: #0f172a;
+            text-decoration: none;
+        }
+
+        .kn-archive-title a:hover {
+            color: #2563eb;
+        }
+
+        .kn-archive-desc {
+            font-size: 0.88rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0 0 1rem;
+            flex: 1;
+        }
+
+        .kn-archive-link {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            align-self: flex-start;
+        }
+
+        .kn-archive-link:hover {
+            text-decoration: underline;
+        }
+
+        .kn-empty-text {
+            color: #64748b;
+            font-style: italic;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            .kn-hero {
+                padding: 2.5rem 1.25rem 2.25rem;
+            }
+            .kn-card {
+                padding: 1.35rem;
+                border-radius: 16px;
+            }
+            .kn-iframe-wrapper {
+                min-height: 560px;
+                height: 70vh;
+            }
+            .kn-app-promo {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-        <nav class="top-nav">
+    <!-- Top Nav -->
+    <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
                 <img src="logo.png" alt="LaukaaInfo Logo">
@@ -226,144 +868,263 @@
         </div>
     </aside>
 
-    
-
-    
-
-    
-
-    <header>
-        <div class="header-content">
-            <h1>Kadonneet tavarat – tieto tavoittaa nopeasti</h1>
-            <p>LaukaaInfo tarjoaa helpon tavan julkaista ilmoituksia kadonneista ja löytyneistä tavaroista. Ilmoitus näkyy sovelluksessa heti ja tavoittaa alueen käyttäjät nopeasti.</p>
+    <!-- Modern Hero -->
+    <header class="kn-hero">
+        <div class="kn-hero-content">
+            <div class="kn-hero-badge">
+                <span class="iconify" data-icon="material-symbols:local-shipping-outline" style="font-size: 1.1rem;"></span>
+                LaukaaInfo &amp; LostReFound
+            </div>
+            <h1>Kadonneet ja löydetyt tavarat</h1>
+            <p>
+                Laukaan ja lähialueen ajantasainen palvelu kadonneiden ja löytyneiden tavaroiden ilmoittamiseen.
+                Tieto tavoittaa paikalliset ihmiset ja tapahtumakävijät nopeasti ja luotettavasti.
+            </p>
+            <div class="kn-hero-actions">
+                <a href="#viimeisimmat" class="kn-btn kn-btn-primary">
+                    <span class="iconify" data-icon="material-symbols:search"></span>
+                    Selaa ilmoituksia alla
+                </a>
+                <a href="https://lostnfound-f0d25.web.app/" target="_blank" rel="noopener noreferrer" class="kn-btn kn-btn-secondary">
+                    <span class="iconify" data-icon="material-symbols:open-in-new"></span>
+                    Avaa LostReFound-verkkopalvelu ↗
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" rel="noopener noreferrer" class="kn-btn kn-btn-secondary">
+                    <span class="iconify" data-icon="material-symbols:android"></span>
+                    Android-sovellus
+                </a>
+            </div>
         </div>
     </header>
 
     <main>
-        <!-- INTRO SECTION -->
-        <section id="intro-section" class="card" style="margin-top: 2rem; background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%); border-left: 4px solid #0056b3;">
-            <h2>🔍 Löytyisikö kadonnut tavara nopeammin?</h2>
-            <p style="font-size: 1.05em; margin-bottom: 1.5rem;">
-                LaukaaInfo tarjoaa helpon tavan julkaista ilmoituksia <strong>kadonneista ja löytyneistä tavaroista</strong>. Ilmoitus näkyy sovelluksessa heti ja tavoittaa alueen käyttäjät nopeasti.
-            </p>
-            <p style="margin-bottom: 1.5rem;">
-                Olipa kyse avaimista, lompakosta, puhelimesta, silmälaseista tai muusta tärkeästä tavarasta, ilmoituksen avulla löytö voi palautua omistajalleen huomattavasti nopeammin.
-            </p>
-            <div style="text-align: center;">
-                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" class="btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 1.05em; color: black; margin-bottom: 10px;">
-                    📱 LostReFound-sovellus (Google Play)
-                </a>
-            </div>
-        </section>
+        <div class="kn-container">
 
-        <!-- AREA TARGETING SECTION -->
-        <section id="area-section" class="card">
-            <h2>📍 Kohdenna ilmoitus oikealle alueelle</h2>
-            <p style="margin-bottom: 1.5rem;">
-                Ilmoitus voidaan kohdistaa juuri sille alueelle, jossa tavara on kadonnut tai löytynyt.
-            </p>
-            <p style="margin-bottom: 0.75rem;">Esimerkiksi:</p>
-            <ul style="margin: 0 0 1.5rem 0; padding-left: 1.5rem; line-height: 1.9;">
-                <li>koko Laukaaseen</li>
-                <li>tiettyyn taajamaan</li>
-                <li>kylään</li>
-                <li>tapahtuma-alueelle</li>
-            </ul>
-            <p>
-                Näin tieto tavoittaa ne ihmiset, joilla on suurin mahdollisuus tunnistaa tavara tai tietää sen sijainti.
-            </p>
-        </section>
-
-        <!-- EVENTS SECTION -->
-        <section id="events-section" class="card" style="background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 100%); border-left: 4px solid #0056b3;">
-            <h2>🎪 Tapahtumille oma ilmoitusalue</h2>
-            <p style="margin-bottom: 1.5rem;">
-                Sovelluksessa voidaan luoda tapahtumille oma alue, jonka kautta kadonneista ja löytyneistä tavaroista voidaan tiedottaa tapahtuman osallistujille.
-            </p>
-            <p style="margin-bottom: 0.75rem;">Esimerkiksi:</p>
-            <ul style="margin: 0 0 1.5rem 0; padding-left: 1.5rem; line-height: 1.9;">
-                <li>kadonneet avaimet</li>
-                <li>löytynyt lompakko</li>
-                <li>kadonnut puhelin</li>
-                <li>löytyneet silmälasit</li>
-            </ul>
-            <p>
-                Näin ilmoitukset tavoittavat juuri tapahtumassa olleet henkilöt.
-            </p>
-        </section>
-
-        <!-- QR CODE SECTION -->
-        <section id="qr-section" class="card" style="background: linear-gradient(135deg, #fff5e6 0%, #fff9f0 100%); border-left: 4px solid #ff9800;">
-            <h2>📱 QR-koodilla suoraan tapahtuman ilmoituksiin</h2>
-            <p style="margin-bottom: 1.5rem;">
-                Jokaiselle tapahtumalle voidaan luoda oma <strong>QR-koodi</strong>.
-            </p>
-            <p style="margin-bottom: 1.5rem;">
-                Skannaamalla QR-koodin käyttäjä pääsee suoraan tapahtuman tietoihin ja voi seurata siihen liittyviä ilmoituksia. Jos tapahtuman aikana julkaistaan ilmoitus kadonneesta tai löytyneestä tavarasta, tieto välittyy nopeasti sovelluksen kautta.
-            </p>
-            <p style="margin-bottom: 0.75rem;">QR-koodi voidaan sijoittaa esimerkiksi:</p>
-            <ul style="margin: 0 0 0 0; padding-left: 1.5rem; line-height: 1.9;">
-                <li>tapahtuman sisäänkäynnille</li>
-                <li>infopisteeseen</li>
-                <li>julisteisiin</li>
-                <li>ohjelmalehtisiin</li>
-                <li>verkkosivuille</li>
-            </ul>
-        </section>
-
-        <!-- HOW TO CREATE A NOTICE -->
-        <section id="how-to-section" class="card">
-            <h2>✏️ Ilmoituksen tekeminen on helppoa</h2>
-            <p style="margin-bottom: 1rem;">Ilmoitukseen lisätään:</p>
-            <div class="features-grid" style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 0.5rem;">
-                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
-                    <strong>📷 Kuva tavarasta</strong> (tarvittaessa)
+            <!-- 1. VIIMEISIMMÄT ILMOITUKSET (LostReFound Live Web App) -->
+            <section id="viimeisimmat" class="kn-card kn-live-card">
+                <div class="kn-card-header">
+                    <span class="kn-tag kn-tag-live">
+                        <span class="kn-pulse-dot"></span>
+                        Reaaliaikainen ilmoitusvirta
+                    </span>
+                    <h2>
+                        <span class="iconify" data-icon="material-symbols:newspaper" style="color: #2563eb;"></span>
+                        Viimeisimmät ilmoitukset
+                    </h2>
+                    <p class="kn-lead">
+                        Selaa alla olevasta näkymästä kadonneita, löytyneitä ja havaintoja reaaliajassa suoraan LostReFound-verkkopalvelusta.
+                    </p>
                 </div>
-                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
-                    <strong>📍 Katoamis- tai löytöpaikka</strong>
-                </div>
-                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
-                    <strong>📝 Kuvaus</strong>
-                </div>
-                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
-                    <strong>📞 Yhteystiedot</strong>
-                </div>
-            </div>
-            <p style="margin-top: 1.5rem; color: #555;">
-                💡 Kun tavara on palautunut omistajalleen, ilmoitus voidaan merkitä ratkaistuksi tai poistaa helposti.
-            </p>
-        </section>
 
-        <!-- RECENT POSTS FROM BLOG -->
-        <section id="kadonneet-news" class="card">
-            <h2>📰 Viimeisimmät ilmoitukset</h2>
-            <div id="blogger-feed" class="rss-list">
-                <p>Ladataan ilmoituksia...</p>
-            </div>
-        </section>
-        <!-- Unified Business Navigation -->
-        <section class="business-nav-section">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
-            <div class="business-nav-grid">
-                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
-                    <h3>Feed-julkaisu</h3>
-                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
-                    <div class="btn-fake">Aloita tästä &raquo;</div>
-                </a>
-                <a href="kauppa.html" class="nav-box">
-                    <h3>Osta lisää näkyvyyttä</h3>
-                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
-                    <div class="btn-fake">Avaa kauppa &raquo;</div>
-                </a>
-                <a href="lisaa-yritys.html" class="nav-box">
-                    <h3>Yritysnäkyvyys</h3>
-                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
-                    <div class="btn-fake">Lue lisää &raquo;</div>
-                </a>
-            </div>
-        </section>
+                <!-- Iframe Toolbar -->
+                <div class="kn-live-toolbar">
+                    <div class="kn-toolbar-left">
+                        <span class="iconify" data-icon="material-symbols:cloud-done" style="color: #16a34a; font-size: 1.25rem;"></span>
+                        <span>Yhdistetty palveluun: <strong>lostnfound-f0d25.web.app</strong></span>
+                    </div>
+                    <div class="kn-toolbar-actions">
+                        <button type="button" class="kn-action-btn" onclick="reloadLostnfoundFrame()" title="Päivitä näkymä">
+                            <span class="iconify" data-icon="material-symbols:refresh"></span>
+                            Päivitä 🔄
+                        </button>
+                        <a href="https://lostnfound-f0d25.web.app/" target="_blank" rel="noopener noreferrer" class="kn-action-btn kn-action-btn-primary">
+                            <span class="iconify" data-icon="material-symbols:open-in-new"></span>
+                            Avaa koko ruudulla ↗
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Interactive Embedded Web App -->
+                <div class="kn-iframe-wrapper">
+                    <div class="kn-iframe-loader" id="iframe-loader">
+                        <div class="kn-spinner"></div>
+                        <p style="font-weight: 600; color: #334155; margin: 0;">Ladataan LostReFound-ilmoituspalvelua...</p>
+                    </div>
+                    <iframe 
+                        id="lostnfound-iframe" 
+                        src="https://lostnfound-f0d25.web.app/" 
+                        title="LostReFound - Kadonneet ja löydetyt tavarat"
+                        onload="handleFrameLoad()"
+                        loading="lazy">
+                    </iframe>
+                </div>
+
+                <!-- Guidance tip -->
+                <div class="kn-tip-box">
+                    <span class="iconify" data-icon="material-symbols:lightbulb-outline" style="font-size: 1.4rem; shrink-0;"></span>
+                    <div>
+                        <strong>Vinkki ilmoitusten selaamiseen:</strong>
+                        Voit suodattaa yläpuolen näkymässä ilmoituksia luokittain (Kaikki, Kadonneet, Löydetyt, Havainnot) sekä järjestää ilmoitukset uusimman tai vanhimman mukaan. Uuden ilmoituksen jättäminen ja omistajan tavoittaminen onnistuu helpoimmin avaamalla LostReFound suoraan tai puhelimen Android-sovelluksella.
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. MITEN TOIMIA - 4 ASKELEEN OPAS -->
+            <section class="kn-card">
+                <div class="kn-card-header">
+                    <span class="kn-tag kn-tag-info">Opas käyttäjälle</span>
+                    <h2>
+                        <span class="iconify" data-icon="material-symbols:checklist-rtl" style="color: #2563eb;"></span>
+                        Miten toimia, kun tavara katoaa tai löytyy?
+                    </h2>
+                    <p class="kn-lead">
+                        Näin varmistat, että kadonnut tavara tavoittaa omistajansa nopeasti ja turvallisesti.
+                    </p>
+                </div>
+
+                <div class="kn-steps-grid">
+                    <div class="kn-step-card">
+                        <div class="kn-step-number">01</div>
+                        <h3>Etsi ja tarkista</h3>
+                        <p>Tarkista ensin yläpuolen hakunäkymästä, onko tavarasta tehty jo ilmoitus tai havainto.</p>
+                    </div>
+                    <div class="kn-step-card">
+                        <div class="kn-step-number">02</div>
+                        <h3>Ota kuva ja kuvaile</h3>
+                        <p>Kirjaa selkeät tuntomerkit, väri, merkki sekä tarkka katoamis- tai löytöaika.</p>
+                    </div>
+                    <div class="kn-step-card">
+                        <div class="kn-step-number">03</div>
+                        <h3>Kohdenna alueelle</h3>
+                        <p>Määritä paikka (esim. Laukaa kk, Leppävesi, Lievestuore tai tapahtuma), jotta tieto tavoittaa oikeat ihmiset.</p>
+                    </div>
+                    <div class="kn-step-card">
+                        <div class="kn-step-number">04</div>
+                        <h3>Sovi palautuksesta</h3>
+                        <p>Viesti turvallisesti ja kuittaa ilmoitus löydetyksi heti, kun tavara on palautunut omistajalleen.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. ALUE- JA TAPAHTUMAKOHDENNUS -->
+            <section class="kn-card">
+                <div class="kn-card-header">
+                    <span class="kn-tag kn-tag-info">Kohdennettu tavoittavuus</span>
+                    <h2>
+                        <span class="iconify" data-icon="material-symbols:location-on" style="color: #2563eb;"></span>
+                        Kohdenna ilmoitus oikealle alueelle tai tapahtumaan
+                    </h2>
+                    <p class="kn-lead">
+                        Ilmoituksen ei tarvitse hukkua massaan – LostReFound mahdollistaa tarkan paikallisen kohdentamisen.
+                    </p>
+                </div>
+
+                <div class="kn-feature-grid">
+                    <div class="kn-feature-box kn-feature-box-blue">
+                        <div>
+                            <h3>
+                                <span class="iconify" data-icon="material-symbols:pin-drop"></span>
+                                Taajama- ja kyläkohdennus
+                            </h3>
+                            <p>
+                                Voit rajata ilmoituksesi suoraan sille alueelle, missä liikuttiin:
+                            </p>
+                            <ul class="kn-feature-list">
+                                <li>Laukaan kirkonkylä &amp; satama-alue</li>
+                                <li>Leppävesi &amp; lähialueet</li>
+                                <li>Lievestuore &amp; asemaseutu</li>
+                                <li>Vihtavuori &amp; Vehniä</li>
+                                <li>Tietty kylä tai ulkoilualue</li>
+                            </ul>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #475569; margin: 0; font-style: italic;">
+                            📍 Näin lähialueen asukkaat voivat heti tunnistaa tutun esineen tai paikan.
+                        </p>
+                    </div>
+
+                    <div class="kn-feature-box kn-feature-box-orange">
+                        <div>
+                            <h3>
+                                <span class="iconify" data-icon="material-symbols:festival"></span>
+                                Tapahtumien oma ilmoituskanava &amp; QR
+                            </h3>
+                            <p>
+                                Tapahtumille (esim. festivaalit, urheilukisat, Peurungan tapahtumat, markkinat) voidaan luoda oma löytötavara-alue:
+                            </p>
+                            <ul class="kn-feature-list">
+                                <li>Oma QR-koodi sisäänkäynneille ja infopisteeseen</li>
+                                <li>Kävijät pääsevät suoraan puhelimella ilmoituksiin</li>
+                                <li>Kadonneet avaimet, lompakot ja puhelimet löytyvät hetkessä</li>
+                                <li>Vähentää tapahtumajärjestäjän manuaalista selvitystyötä</li>
+                            </ul>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #92400e; margin: 0; font-style: italic;">
+                            📱 QR-koodi voidaan laittaa opasteisiin, käsiohjelmiin tai verkkosivuille.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. APPIN LATAUS (Google Play) -->
+            <section class="kn-app-promo">
+                <div class="kn-app-promo-info">
+                    <h2>LostReFound mobiilisovellus aina taskussasi</h2>
+                    <p>
+                        Lataa ilmainen LostReFound Android-sovellus Google Playsta. Saat push-ilmoitukset lähialueesi uusista ilmoituksista, voit ottaa kuvia suoraan kameralla ja viestiä reaaliaikaisesti löytäjän tai omistajan kanssa.
+                    </p>
+                    <div class="kn-app-badges">
+                        <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" rel="noopener noreferrer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                                alt="Lataa LostReFound Google Playsta" style="height: 48px; border-radius: 6px;">
+                        </a>
+                        <a href="https://lostnfound-f0d25.web.app/" target="_blank" rel="noopener noreferrer" class="kn-btn kn-btn-secondary" style="padding: 0.65rem 1.1rem;">
+                            <span class="iconify" data-icon="material-symbols:language"></span>
+                            Käytä selaimessa
+                        </a>
+                    </div>
+                </div>
+                <div style="font-size: 4.5rem; opacity: 0.85; display: flex; align-items: center; justify-content: center;">
+                    📱
+                </div>
+            </section>
+
+            <!-- 5. ARKISTO & TIEDOTTEET -->
+            <section class="kn-card">
+                <div class="kn-card-header">
+                    <span class="kn-tag kn-tag-info">Tiedotearkisto</span>
+                    <h2>
+                        <span class="iconify" data-icon="material-symbols:history-edu" style="color: #2563eb;"></span>
+                        Arkisto ja aikaisemmat tiedotteet
+                    </h2>
+                    <p class="kn-lead">
+                        Aikaisemmin julkaistuja löytötavaratiedotteita ja ilmoituksia LaukaaInfon kanavasta.
+                    </p>
+                </div>
+
+                <div id="blogger-feed">
+                    <div style="display: flex; align-items: center; justify-content: center; padding: 2rem; gap: 0.75rem; color: #64748b;">
+                        <div class="kn-spinner" style="width: 24px; height: 24px; border-width: 3px;"></div>
+                        <span>Haetaan arkistoituja ilmoituksia...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. UNIFIED BUSINESS NAVIGATION -->
+            <section class="business-nav-section" style="margin-top: 1rem;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
+                <div class="business-nav-grid">
+                    <a href="ilmoittaudu.html#ilm-form" class="nav-box">
+                        <h3>Feed-julkaisu</h3>
+                        <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
+                        <div class="btn-fake">Aloita tästä &raquo;</div>
+                    </a>
+                    <a href="kauppa.html" class="nav-box">
+                        <h3>Osta lisää näkyvyyttä</h3>
+                        <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
+                        <div class="btn-fake">Avaa kauppa &raquo;</div>
+                    </a>
+                    <a href="lisaa-yritys.html" class="nav-box">
+                        <h3>Yritysnäkyvyys</h3>
+                        <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
+                        <div class="btn-fake">Lue lisää &raquo;</div>
+                    </a>
+                </div>
+            </section>
+
+        </div>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
@@ -377,15 +1138,13 @@
                     sovellus</button>
             </div>
             <div class="app-badge">
-                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank">
+                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" rel="noopener noreferrer">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
                         alt="Lataa LostReFound Android-sovellus" style="height: 40px;">
                 </a>
             </div>
         </div>
     </footer>
-
-
 
     <!-- Scripts -->
     <script src="script.js?v=20260301-1"></script>
@@ -394,4 +1153,3 @@
 </body>
 
 </html>
-
