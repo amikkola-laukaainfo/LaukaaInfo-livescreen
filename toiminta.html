@@ -2402,10 +2402,14 @@
                     if (filterTabs) filterTabs.style.display = 'none';
                     if (workspaceBanner) workspaceBanner.style.display = 'none';
 
+                    const isCompanyNotice = errMsg.toLowerCase().includes('vain yhdistyksille') || errMsg.toLowerCase().includes('yrityksille');
+                    const errorTitle = isCompanyNotice ? 'Toimintataulu on rajattu vain yhdistyksille ja työryhmille' : 'Toimintataulun lataus epäonnistui';
+                    const errorIcon = isCompanyNotice ? '🏢' : '⚠️';
+
                     container.innerHTML = `
                         <div style="max-width: 620px; margin: 3rem auto; text-align: center; padding: 2.5rem 2rem; background: rgba(30,41,59,0.85); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
-                            <div style="font-size: 2.8rem; margin-bottom: 0.8rem;">🏢</div>
-                            <h2 style="font-family:'Outfit',sans-serif; color: #fff; font-size: 1.4rem; font-weight: 800; margin: 0 0 0.5rem 0;">Toimintataulu on rajattu vain yhdistyksille</h2>
+                            <div style="font-size: 2.8rem; margin-bottom: 0.8rem;">${errorIcon}</div>
+                            <h2 style="font-family:'Outfit',sans-serif; color: #fff; font-size: 1.4rem; font-weight: 800; margin: 0 0 0.5rem 0;">${errorTitle}</h2>
                             <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0 auto 1.6rem auto; max-width: 500px;">
                                 ${escapeHtml(errMsg)}
                             </p>
