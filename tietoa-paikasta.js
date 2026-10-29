@@ -35,6 +35,19 @@ function normalizeCompanyMedia(company) {
     return company;
 }
 
+function updateNetworkStatsVisibility() {
+    const networkStatsSection = document.getElementById('network-stats-section');
+    if (!networkStatsSection) return;
+    const companiesVal = parseInt(document.getElementById('stat-companies')?.textContent || '0', 10);
+    const observationsVal = parseInt(document.getElementById('stat-observations')?.textContent || '0', 10);
+    const encountersVal = parseInt(document.getElementById('stat-encounters')?.textContent || '0', 10);
+    const offersVal = parseInt(document.getElementById('stat-offers')?.textContent || '0', 10);
+    const projectsVal = parseInt(document.getElementById('stat-projects')?.textContent || '0', 10);
+    const ideasVal = parseInt(document.getElementById('stat-ideas')?.textContent || '0', 10);
+    const allZero = companiesVal === 0 && observationsVal === 0 && encountersVal === 0 && offersVal === 0 && projectsVal === 0 && ideasVal === 0;
+    networkStatsSection.style.display = allZero ? 'none' : 'block';
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Hae ID URL:sta tai window.PLACE_CONTEXT-alustuksesta
     const urlParams = new URLSearchParams(window.location.search);
@@ -1156,22 +1169,24 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     if (descEl) descEl.innerHTML = descHtml;
 
     // Tilastot
-    const companies = relatedItems.filter(i => i.type === 'business' || i.type === 'association' || i.type === 'service');
+    const effectiveCompanies = (Array.isArray(scoredCompanies) && scoredCompanies.length > 0)
+        ? scoredCompanies.filter(c => c.tier <= 2)
+        : relatedItems.filter(i => i.type === 'business' || i.type === 'association' || i.type === 'service');
     const others = relatedItems.filter(i => i.type !== 'business' && i.type !== 'association' && i.type !== 'service');
     
     const statCompanies = document.getElementById('stat-companies');
     const statCompaniesLabel = document.getElementById('stat-companies-label');
     const statCompaniesRow = document.getElementById('stat-companies-row') || (statCompanies ? statCompanies.closest('.place-stat-pill, .stat-row') : null);
     if (statCompanies) {
-        statCompanies.textContent = companies.length;
+        statCompanies.textContent = effectiveCompanies.length;
         if (statCompaniesLabel) {
             const isToimijaa = statCompaniesLabel.textContent.includes('toimij');
-            statCompaniesLabel.textContent = companies.length === 1 
+            statCompaniesLabel.textContent = effectiveCompanies.length === 1 
                 ? (isToimijaa ? 'toimija' : 'yritys') 
                 : (isToimijaa ? 'toimijaa' : 'yritystä');
         }
         if (statCompaniesRow) {
-            statCompaniesRow.style.display = companies.length > 0 ? '' : 'none';
+            statCompaniesRow.style.display = effectiveCompanies.length > 0 ? '' : 'none';
         }
     }
     
@@ -1187,6 +1202,8 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
             statObservationsRow.style.display = others.length > 0 ? '' : 'none';
         }
     }
+
+    updateNetworkStatsVisibility();
 
     // Teemat / Liittyy teemoihin
     const themesSection = document.getElementById('themes-section');
@@ -2849,16 +2866,8 @@ function renderEncounters(encounters) {
         }
     }
     
-    // Piilota "Verkoston tilanne" -lohko kokonaan, jos kaikki luvut ovat nollia
-    const networkStatsSection = document.getElementById('network-stats-section');
-    if (networkStatsSection) {
-        const companiesVal = parseInt(document.getElementById('stat-companies')?.textContent || '0', 10);
-        const observationsVal = parseInt(document.getElementById('stat-observations')?.textContent || '0', 10);
-        const encountersVal = parseInt(document.getElementById('stat-encounters')?.textContent || '0', 10);
-        const offersVal = parseInt(document.getElementById('stat-offers')?.textContent || '0', 10);
-        const allZero = companiesVal === 0 && observationsVal === 0 && encountersVal === 0 && offersVal === 0;
-        networkStatsSection.style.display = allZero ? 'none' : '';
-    }
+    // Päivitä "Verkoston tilanne" -lohkon näkyvyys
+    updateNetworkStatsVisibility();
     
     // Tarkistetaan aktiivisuus viikon sisällä
     const statusEl = document.getElementById('place-activity-status');
@@ -3802,6 +3811,8 @@ async function loadMixonetContentForPlace(placeData) {
                 statIdeasRow.style.display = 'flex';
             }
         }
+
+        updateNetworkStatsVisibility();
 
     } catch (err) {
         // Mixonet-integraatio ei estä muuta sivun toimintaa
