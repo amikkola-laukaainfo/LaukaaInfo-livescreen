@@ -147,10 +147,6 @@
                     <li><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" style="color: #3b82f6; font-weight: 700;">Kilpailutus</a></li>
                     <li><a href="${base}palvelun-esittely.html">Tietoa palvelusta</a></li>
                 </ul>
-            </li>
-            <li class="nav-item">
-                <a href="${base}index.html#share-generator-section" class="nav-link" style="color: #ffffff; font-weight: 700; background: rgba(255,255,255,0.22); padding: 0.35rem 0.85rem; border-radius: 20px; text-decoration: none; border: 1px solid rgba(255,255,255,0.4);">🔗 Luo jakolinkki</a>
-            </li>
         `;
     }
 
@@ -223,12 +219,6 @@
                     <li class="menu-item"><a href="${base}kauppa.html" class="sidebar-link">Julkaisupaketit &amp; Kauppa</a></li>
                     <li class="menu-item"><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" class="sidebar-link" style="color: #3b82f6; font-weight: 700;">Kilpailutus</a></li>
                     <li class="menu-item"><a href="${base}palvelun-esittely.html" class="sidebar-link">Tietoa palvelusta</a></li>
-                </ul>
-            </div>
-            <div class="menu-section" style="background: #f0f9ff; border-radius: 14px; padding: 1rem; margin-top: 1.5rem; border: 1.5px solid #bae6fd;">
-                <h3 class="section-title" style="color: #0369a1;">TYÖKALUT</h3>
-                <ul class="menu-list">
-                    <li class="menu-item"><a href="${base}index.html#share-generator-section" class="sidebar-link" style="font-weight: 700; color: #0284c7;">🔗 Luo jakolinkki LaukaaInfoon</a></li>
                 </ul>
             </div>
         `;
