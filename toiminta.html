@@ -1556,6 +1556,97 @@
         </div>
     </div>
 
+    <!-- KUTSUKOODILLA LIITTYMISEN MODAALI (WhatsApp & kutsulinkit) -->
+    <div class="modal-overlay" id="join-invite-modal">
+        <div class="modal-card" style="max-width: 500px;">
+            <button class="modal-close" onclick="closeJoinInviteModal()">&times;</button>
+            
+            <!-- NÄKYMÄ 1: LIITTYMISLOMAKE -->
+            <div id="join-invite-view-form">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                    <div style="font-size:1.6rem;background:rgba(16,185,129,0.15);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;">🎉</div>
+                    <div>
+                        <h3 style="font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin:0;">Liity mukaan toimintaan</h3>
+                        <p style="font-size:0.78rem;color:var(--text-muted);margin:0;" id="join-invite-org-subtitle">Yhdistyksen / Työryhmän kutsukoodi</p>
+                    </div>
+                </div>
+
+                <p style="font-size:0.83rem;color:var(--text-muted);line-height:1.5;margin-bottom:1.1rem;">
+                    Tervetuloa mukaan päättämään ja vaikuttamaan yhteisiin asioihin! Syötä nimesi ja aseta oma henkilökohtainen valtuuskoodisi tai PIN tulevia kirjautumisia varten.
+                </p>
+
+                <div style="margin-bottom:0.9rem;">
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Kutsukoodi *</label>
+                    <input type="text" id="join-invite-code" placeholder="esim. LIITY-CA9C9F" 
+                           style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#34d399;font-family:monospace;font-size:1rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;" />
+                </div>
+
+                <div style="margin-bottom:0.9rem;">
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Koko nimesi *</label>
+                    <input type="text" id="join-invite-name" placeholder="esim. Matti Meikäläinen" 
+                           style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.92rem;" />
+                </div>
+
+                <div style="margin-bottom:0.9rem;">
+                    <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;">Valitse oma henkilökohtainen koodi / PIN</label>
+                    <input type="text" id="join-invite-pin" placeholder="esim. oma 4-numeroinen PIN tai salasana (valinnainen)" 
+                           style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-family:monospace;font-size:0.92rem;text-transform:uppercase;" />
+                    <span style="display:block;font-size:0.72rem;color:var(--text-muted);margin-top:0.25rem;">Jos jätät tyhjäksi, järjestelmä luo sinulle koodin automaattisesti.</span>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.1rem;">
+                    <div>
+                        <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.3rem;">Puhelin (valinnainen)</label>
+                        <input type="tel" id="join-invite-phone" placeholder="040 123 4567" 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.3rem;">Sähköposti (valinnainen)</label>
+                        <input type="email" id="join-invite-email" placeholder="matti@example.com" 
+                               style="width:100%;box-sizing:border-box;padding:0.65rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.85rem;" />
+                    </div>
+                </div>
+
+                <div id="join-invite-error" style="display:none;color:#f87171;font-size:0.8rem;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);padding:0.65rem;border-radius:8px;margin-bottom:1rem;line-height:1.4;"></div>
+
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                    <button type="button" class="btn-toggle-admin" onclick="closeJoinInviteModal()">Peruuta</button>
+                    <button type="button" class="btn-signup" id="btn-submit-join-invite" style="background:#10b981;" onclick="submitJoinInvite()">Liity ja kirjaudu sisään →</button>
+                </div>
+            </div>
+
+            <!-- NÄKYMÄ 2: ONNISTUNUT LIITTYMINEN JA OMAN KOODIN NÄYTTÖ -->
+            <div id="join-invite-view-success" style="display:none;text-align:center;">
+                <div style="font-size:2.8rem;margin-bottom:0.6rem;">🎉</div>
+                <h3 style="font-family:'Outfit',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 0.35rem 0;">Tervetuloa mukaan!</h3>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin:0 0 1.25rem 0;" id="join-invite-success-org">Olet nyt liittynyt ryhmään.</p>
+
+                <div style="padding:1.25rem;background:rgba(16,185,129,0.1);border:1.5px solid rgba(16,185,129,0.3);border-radius:14px;margin-bottom:1.25rem;">
+                    <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;letter-spacing:0.05em;margin-bottom:0.4rem;">
+                        Oma henkilökohtainen valtuuskoodisi / PIN:
+                    </div>
+                    <div id="join-invite-my-code" style="font-family:monospace;font-size:1.6rem;font-weight:900;color:#34d399;letter-spacing:0.08em;margin-bottom:0.65rem;user-select:all;">
+                        -
+                    </div>
+                    <div id="join-invite-my-role" style="font-size:0.82rem;font-weight:700;color:#a78bfa;margin-bottom:0.85rem;">
+                        Rooli: Jäsen
+                    </div>
+                    <button type="button" class="btn-signup" id="btn-copy-join-code" style="background:#10b981;padding:0.5rem 1rem;font-size:0.8rem;margin:0 auto;" onclick="copyJoinCode()">
+                        📋 Kopioi koodi talteen
+                    </button>
+                </div>
+
+                <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:1.25rem;">
+                    🔒 <strong>Tärkeää:</strong> Ota koodisi talteen. Voit käyttää sitä jatkossa kirjautuaksesi suoraan toimintatauluun millä tahansa laitteella tai vaihtaaksesi sen milloin vain yläpalkin profiilistasi.
+                </p>
+
+                <button type="button" class="btn-signup" style="background:#6366f1;width:100%;justify-content:center;padding:0.75rem;font-size:0.9rem;" onclick="closeJoinInviteModal();">
+                    Siirry toimintatauluun →
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- HENKILÖKOHTAISEN VALTUUSKOODIN TODENNUSMODAALI -->
     <div class="modal-overlay" id="role-auth-modal">
         <div class="modal-card" style="max-width: 480px;">
@@ -1586,6 +1677,12 @@
                        style="width:100%;box-sizing:border-box;padding:0.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-family:monospace;font-size:0.95rem;letter-spacing:0.05em;text-transform:uppercase;"
                        onkeydown="if(event.key==='Enter') submitRoleAuth();" />
                 <div id="role-auth-error" style="display:none;color:#f87171;font-size:0.8rem;margin-top:0.5rem;line-height:1.4;"></div>
+            </div>
+
+            <div style="margin-top:0.6rem;margin-bottom:1.25rem;text-align:center;">
+                <a href="javascript:void(0)" onclick="closeRoleAuthModal(); openJoinInviteModal();" style="color:#a78bfa;font-size:0.78rem;font-weight:700;text-decoration:none;">
+                    Onko sinulla ryhmän kutsukoodi (esim. LIITY-...)? Liity tästä →
+                </a>
             </div>
 
             <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
@@ -2135,6 +2232,162 @@
                     || (!selectedId && (o.id === 'laukaan-testaajat' || o.id === 'laukaan-yrittajat'));
                 return `<option value="${escapeHtml(o.id)}" ${isSel ? 'selected' : ''}>${escapeHtml(o.name)} (${typeLabel})</option>`;
             }).join('');
+        }
+
+        // =========================================================================
+        // KUTSUKOODILLA LIITTYMINEN (WhatsApp & suorat jakolinkit)
+        // =========================================================================
+        function openJoinInviteModal(initialCode) {
+            const modal = document.getElementById('join-invite-modal');
+            if (!modal) return;
+
+            const codeInput = document.getElementById('join-invite-code');
+            const nameInput = document.getElementById('join-invite-name');
+            const pinInput = document.getElementById('join-invite-pin');
+            const err = document.getElementById('join-invite-error');
+            const subTitle = document.getElementById('join-invite-org-subtitle');
+
+            const viewForm = document.getElementById('join-invite-view-form');
+            const viewSuccess = document.getElementById('join-invite-view-success');
+            if (viewForm) viewForm.style.display = 'block';
+            if (viewSuccess) viewSuccess.style.display = 'none';
+
+            if (err) { err.innerText = ''; err.style.display = 'none'; }
+            if (codeInput) {
+                if (initialCode) codeInput.value = initialCode.toUpperCase();
+                else if (!codeInput.value) codeInput.value = '';
+            }
+            if (nameInput) {
+                nameInput.value = (USER_NAME && USER_NAME !== 'Matti K.') ? USER_NAME : '';
+            }
+            if (pinInput) pinInput.value = '';
+
+            if (subTitle && BOARD_DATA && BOARD_DATA.organization_name) {
+                subTitle.innerText = BOARD_DATA.organization_name;
+            }
+
+            modal.classList.add('open');
+            setTimeout(() => {
+                if (codeInput && !codeInput.value) codeInput.focus();
+                else if (nameInput) nameInput.focus();
+            }, 100);
+        }
+
+        function closeJoinInviteModal() {
+            const modal = document.getElementById('join-invite-modal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        async function submitJoinInvite() {
+            const codeInput = document.getElementById('join-invite-code');
+            const nameInput = document.getElementById('join-invite-name');
+            const pinInput = document.getElementById('join-invite-pin');
+            const phoneInput = document.getElementById('join-invite-phone');
+            const emailInput = document.getElementById('join-invite-email');
+            const err = document.getElementById('join-invite-error');
+            const btn = document.getElementById('btn-submit-join-invite');
+
+            const inviteCode = codeInput ? codeInput.value.trim().toUpperCase() : '';
+            const fullName = nameInput ? nameInput.value.trim() : '';
+            const personalCode = pinInput ? pinInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : null;
+            const email = emailInput ? emailInput.value.trim() : null;
+
+            if (!inviteCode) {
+                if (err) { err.innerText = 'Syötä kutsukoodi.'; err.style.display = 'block'; }
+                return;
+            }
+            if (!fullName) {
+                if (err) { err.innerText = 'Syötä koko nimesi.'; err.style.display = 'block'; }
+                return;
+            }
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                if (err) { err.innerText = 'Tietokantayhteys ei ole käytettävissä.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Liitytään...'; }
+            if (err) err.style.display = 'none';
+
+            try {
+                const { data, error } = await sb.rpc('join_organization_via_invite', {
+                    p_invite_code: inviteCode,
+                    p_full_name: fullName,
+                    p_email: email,
+                    p_phone: phone,
+                    p_personal_code: personalCode || null
+                });
+
+                if (error || (data && !data.success)) {
+                    const msg = (data && data.error) || (error && error.message) || 'Liittyminen epäonnistui.';
+                    if (err) { err.innerText = msg; err.style.display = 'block'; }
+                    if (btn) { btn.disabled = false; btn.innerText = 'Liity ja kirjaudu sisään →'; }
+                    return;
+                }
+
+                // Tallennetaan käyttäjän nimi
+                USER_NAME = data.member_name;
+                localStorage.setItem('toiminta_user_name', USER_NAME);
+
+                const orgId = data.organization_id || CURRENT_ORG_ID;
+
+                // Tallennetaan täysi rooli-istunto
+                ROLE_SESSION = {
+                    session_token: data.session_token,
+                    session_id: data.session_token,
+                    member_id: data.member_id,
+                    member_name: data.member_name,
+                    active_roles: [{ role: data.role_type || 'member' }],
+                    expires_at: new Date(Date.now() + 24 * 3600 * 1000).toISOString()
+                };
+
+                if (orgId) {
+                    localStorage.setItem(`toiminta_role_session_${orgId}`, JSON.stringify(ROLE_SESSION));
+                    localStorage.setItem(`org_session_${orgId}`, data.session_token);
+                }
+
+                updateUserBadge();
+                updateRoleBadge();
+
+                // Näytetään onnistumisnäkymä ja oma koodi
+                const viewForm = document.getElementById('join-invite-view-form');
+                const viewSuccess = document.getElementById('join-invite-view-success');
+                const myCodeEl = document.getElementById('join-invite-my-code');
+                const myRoleEl = document.getElementById('join-invite-my-role');
+                const successOrgEl = document.getElementById('join-invite-success-org');
+
+                if (viewForm) viewForm.style.display = 'none';
+                if (viewSuccess) viewSuccess.style.display = 'block';
+                if (myCodeEl) myCodeEl.innerText = data.personal_code;
+                if (myRoleEl) myRoleEl.innerText = `Rooli: ${data.role_title || 'Jäsen'}`;
+                if (successOrgEl) successOrgEl.innerText = `Olet nyt mukana organisaatiossa: ${data.organization_name || ''}`;
+
+                if (btn) { btn.disabled = false; btn.innerText = 'Liity ja kirjaudu sisään →'; }
+
+                // Päivitetään taulun tiedot
+                await fetchBoardData();
+            } catch (ex) {
+                if (err) { err.innerText = 'Virhe: ' + ex.message; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.innerText = 'Liity ja kirjaudu sisään →'; }
+            }
+        }
+
+        function copyJoinCode() {
+            const el = document.getElementById('join-invite-my-code');
+            const code = el ? el.innerText.trim() : '';
+            if (!code || code === '-') return;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('btn-copy-join-code');
+                if (btn) {
+                    const orig = btn.innerText;
+                    btn.innerText = '✅ Kopioitu!';
+                    setTimeout(() => { btn.innerText = orig; }, 3000);
+                }
+            }).catch(() => {
+                alert('Kopioitu oma koodi: ' + code);
+            });
         }
 
         function closeRoleAuthModal() {
@@ -5054,6 +5307,12 @@ ${itemsHtml}
                 }
                 fetchBoardData();
                 handleUrlModes();
+            }
+
+            // Tarkistetaan WhatsApp / kutsukoodi (?liity= tai ?invite=)
+            const inviteCode = urlParams.get('liity') || urlParams.get('invite');
+            if (inviteCode) {
+                openJoinInviteModal(inviteCode);
             }
 
             // Sulje modaalit taustaklikkauksesta tai ESC-näppäimellä
