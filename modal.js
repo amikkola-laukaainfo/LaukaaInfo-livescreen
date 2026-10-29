@@ -259,7 +259,20 @@ window.LkiModal = (function() {
         
         document.getElementById('lki-modal-description').innerHTML = linkedDesc;
         
-        const locName = company.place_name || company.location || company.location_name || company.osoite || 'Laukaa';
+        const toCleanStr = (val) => {
+            if (typeof val === 'string' && val.trim() && val.trim() !== '[object Object]') return val.trim();
+            if (val && typeof val === 'object') {
+                if (typeof val.address === 'string' && val.address.trim()) return val.address.trim();
+                if (typeof val.name === 'string' && val.name.trim()) return val.name.trim();
+            }
+            return null;
+        };
+        const locName = toCleanStr(company.osoite)
+            || toCleanStr(company.address)
+            || toCleanStr(company.place_name)
+            || toCleanStr(company.location_name)
+            || toCleanStr(company.location)
+            || 'Laukaa';
         document.getElementById('lki-modal-address').textContent = locName;
         
         const phone = company.contact_phone || company.puhelin || company.phone || '';
