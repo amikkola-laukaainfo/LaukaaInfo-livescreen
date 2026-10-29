@@ -199,13 +199,10 @@
         /* ── SUODATTIMET / TABS ───────────────────────────────────────── */
         .filter-tabs {
             display: flex;
+            flex-wrap: wrap;
             gap: 0.5rem;
-            overflow-x: auto;
-            padding-bottom: 0.75rem;
             margin-bottom: 1.25rem;
-            scrollbar-width: none;
         }
-        .filter-tabs::-webkit-scrollbar { display: none; }
         .tab-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--card-border);
