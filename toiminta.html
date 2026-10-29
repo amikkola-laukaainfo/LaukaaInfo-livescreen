@@ -1270,8 +1270,9 @@
                 <div class="role-pill" id="user-role-badge" onclick="promptChangeUserName()" title="Klikkaa vaihtaaksesi nimeä">
                     <span>🟢</span> <span id="current-user-name">Matti K.</span>
                 </div>
-                <div class="role-pill" id="gov-role-badge" style="display:none;background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;cursor:pointer;" onclick="promptSwitchRoleAuth()" title="Klikkaa nähdäksesi rooli-istunnon tai kirjautuaksesi ulos">
+                <div class="role-pill" id="gov-role-badge" style="display:none;background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;cursor:pointer;align-items:center;gap:0.4rem;" onclick="promptSwitchRoleAuth()" title="Klikkaa nähdäksesi rooli-istunnon tai vaihtaaksesi valtuuskoodin">
                     <span>👑</span> <span id="gov-role-name">Hallitus</span>
+                    <span onclick="logoutRoleSession(event);" title="Kirjaudu ulos istunnosta" style="display:inline-flex;align-items:center;justify-content:center;margin-left:0.35rem;padding:0.1rem 0.4rem;border-radius:6px;background:rgba(239,68,68,0.25);color:#fca5a5;font-weight:bold;font-size:0.75rem;cursor:pointer;">✕</span>
                 </div>
                 <button class="btn-signup" id="btn-suggest-item" onclick="openSuggestionModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #f59e0b, #d97706);color:#fff;" title="Jätä kehitysehdotus tai idea yhdistyksen hallitukselle ilman salasanaa">
                     <span>💡</span> <span>Ehdota ideaa</span>
@@ -2043,7 +2044,7 @@
 
             if (nameEl) nameEl.innerText = ROLE_SESSION.member_name || 'Jäsen';
             if (roleEl) roleEl.innerText = roleLabel;
-            if (orgEl) orgEl.innerText = (CURRENT_ORG_DATA && (CURRENT_ORG_DATA.name || CURRENT_ORG_DATA.nimi)) || CURRENT_ORG_ID || 'Yhdistys';
+            if (orgEl) orgEl.innerText = (BOARD_DATA && BOARD_DATA.organization_name) || CURRENT_ORG_ID || 'Yhdistys';
 
             showRoleProfileView();
             modal.classList.add('open');
@@ -2150,9 +2151,29 @@
             });
         }
 
-        function logoutRoleSession() {
+        function logoutRoleSession(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
             ROLE_SESSION = null;
-            localStorage.removeItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+            ORG_SESSION_TOKEN = null;
+            if (CURRENT_ORG_ID) {
+                localStorage.removeItem(`toiminta_role_session_${CURRENT_ORG_ID}`);
+                localStorage.removeItem(`org_session_${CURRENT_ORG_ID}`);
+            }
+            try {
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && (k.startsWith('toiminta_role_session_') || k.startsWith('org_session_') || k.startsWith('gov_token_'))) {
+                        keysToRemove.push(k);
+                    }
+                }
+                keysToRemove.forEach(k => localStorage.removeItem(k));
+            } catch (err) {}
+
+            closeRoleManageModal();
             updateRoleBadge();
         }
 
