@@ -1,3 +1,40 @@
+const MEDIA_BASE_URL = 'https://www.mediazoo.fi/laukaainfo-web/';
+
+function normalizeMediaUrl(url) {
+    if (!url || typeof url !== 'string') return null;
+    let u = url.trim();
+    if (!u || u === '-' || u === 'null' || u === 'undefined') return null;
+    if (u.includes('drive.google.com')) {
+        const driveMatch = u.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || u.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (driveMatch && driveMatch[1]) {
+            return `${MEDIA_BASE_URL}get_image.php?id=${driveMatch[1]}`;
+        }
+    }
+    if (u.startsWith('http://') || u.startsWith('https://') || u.startsWith('//') || u.startsWith('data:')) {
+        return u;
+    }
+    return `${MEDIA_BASE_URL}${u.replace(/^\/+/, '')}`;
+}
+
+function normalizeCompanyMedia(company) {
+    if (!company) return company;
+    if (company.logo) {
+        company.logo = normalizeMediaUrl(company.logo);
+    }
+    if (Array.isArray(company.media)) {
+        company.media.forEach(item => {
+            if (item && item.url) item.url = normalizeMediaUrl(item.url);
+        });
+    }
+    if (Array.isArray(company.images)) {
+        company.images = company.images.map(img => normalizeMediaUrl(img)).filter(Boolean);
+    }
+    if (company.image) {
+        company.image = normalizeMediaUrl(company.image);
+    }
+    return company;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Hae ID URL:sta tai window.PLACE_CONTEXT-alustuksesta
     const urlParams = new URLSearchParams(window.location.search);
@@ -185,6 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     yData.results.forEach(c => {
                         if (c.id && !seenCompanyIds.has(c.id)) {
                             seenCompanyIds.add(c.id);
+                            normalizeCompanyMedia(c);
                             yritykset.push(c);
                         }
                     });
@@ -196,6 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     tData.results.forEach(c => {
                         if (c.id && !seenCompanyIds.has(c.id)) {
                             seenCompanyIds.add(c.id);
+                            normalizeCompanyMedia(c);
                             yritykset.push(c);
                         }
                     });
@@ -971,7 +1010,12 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
         }
         
         // Relaatiot (place_company_relations + place_relations)
-        const rel = relations.find(r => String(r.entity_id) === compId || String(r.entity_id) === `company-${compId}`);
+        const cleanCompId = compId.replace(/^company-/, '');
+        const rel = relations.find(r => {
+            const eId = String(r.entity_id);
+            const cleanEId = eId.replace(/^company-/, '');
+            return eId === compId || cleanEId === cleanCompId;
+        });
         if (rel) {
             const pts = RELATION_SCORES[rel.relation_type] || 25;
             score += pts;
@@ -2030,7 +2074,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         const subTier = item.subscription_tier || 1;
         
         let linkUrl = '?id=' + item.id;
-        if (String(item.id).startsWith('yritys_') || item.type === 'business' || item.nimi) {
+        if (String(item.id).startsWith('yritys_') || String(item.id).startsWith('company-') || item.type === 'business' || item.type === 'COMPANY' || item.nimi) {
             linkUrl = 'yrityskortti.html?id=' + item.id;
         }
         
@@ -2038,7 +2082,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         const displayIcon = isFeatured ? '⭐' : (isPartner ? '⭐' : (subTier === 2 ? '💎' : ''));
         const displayTitle = `${displayName} ${displayIcon}`;
         
-        let thumbUrl = item.logo || (item.images && item.images[0]) || item.image || null;
+        let thumbUrl = normalizeMediaUrl(item.logo) || (item.images && normalizeMediaUrl(item.images[0])) || normalizeMediaUrl(item.image) || null;
         
         const itemSources = allSources.filter(s => String(s.entity_id) === String(item.id));
         const itemContents = allContents.filter(c => String(c.entity_id) === String(item.id));
@@ -2046,15 +2090,15 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
         
         if (!thumbUrl) {
             const imgSource = itemSources.find(s => s.source_type === 'PHOTO' || s.source_type === 'IMAGE');
-            if (imgSource) thumbUrl = imgSource.url;
+            if (imgSource) thumbUrl = normalizeMediaUrl(imgSource.url);
             else {
                 const imgContent = itemContents.find(c => c.content_type === 'PHOTO' && c.media_url);
-                if (imgContent) thumbUrl = imgContent.media_url;
+                if (imgContent) thumbUrl = normalizeMediaUrl(imgContent.media_url);
             }
         }
         
         const thumbWrapHtml = thumbUrl
-            ? `<div class="card-thumb-wrap card-thumb-logo"><img src="${thumbUrl}" alt="Logo" loading="lazy" /></div>`
+            ? `<div class="card-thumb-wrap card-thumb-logo"><img src="${thumbUrl}" alt="Logo" loading="lazy" onerror="this.parentElement.style.display='none';" /></div>`
             : '';
             
         let subtitleHtml = '';
@@ -2255,9 +2299,9 @@ function renderRelations(items, allSources = [], allContents = []) {
         else if (item.type === 'offer') iconName = 'material-symbols:local-offer-outline';
         else if (item.type === 'association' || item.type === 'actor' || item.type === 'actor_link') iconName = 'material-symbols:groups-outline';
         
-        const displayName = item.name || item.id;
+        const displayName = item.name || item.nimi || item.id;
         let linkUrl = '?id=' + item.id;
-        if (item.id.startsWith('yritys_') || item.type === 'business') {
+        if (String(item.id).startsWith('yritys_') || String(item.id).startsWith('company-') || item.type === 'business' || item.type === 'COMPANY' || item.nimi) {
             linkUrl = 'yrityskortti.html?id=' + item.id;
         } else if (item.type === 'observation') {
             linkUrl = '/?item=' + item.id + '&feed=open';
@@ -2271,21 +2315,21 @@ function renderRelations(items, allSources = [], allContents = []) {
 
         let thumbUrl = null;
         const imgSource = itemSources.find(s => s.source_type === 'PHOTO' || s.source_type === 'IMAGE');
-        if (imgSource) thumbUrl = imgSource.url;
+        if (imgSource) thumbUrl = normalizeMediaUrl(imgSource.url);
         else {
             const imgContent = itemContents.find(c => c.content_type === 'PHOTO' && c.media_url);
-            if (imgContent) thumbUrl = imgContent.media_url;
+            if (imgContent) thumbUrl = normalizeMediaUrl(imgContent.media_url);
         }
         
         if (!thumbUrl) {
-            if (item.logo) thumbUrl = item.logo;
-            else if (item.images && item.images.length > 0) thumbUrl = item.images[0];
-            else if (item.image) thumbUrl = item.image;
+            if (item.logo) thumbUrl = normalizeMediaUrl(item.logo);
+            else if (item.images && item.images.length > 0) thumbUrl = normalizeMediaUrl(item.images[0]);
+            else if (item.image) thumbUrl = normalizeMediaUrl(item.image);
         }
         
-        const isLogo = item.id.startsWith('yritys_') || item.type === 'business';
+        const isLogo = String(item.id).startsWith('yritys_') || String(item.id).startsWith('company-') || item.type === 'business' || item.type === 'COMPANY' || !!item.logo;
         const thumbWrapHtml = thumbUrl
-            ? `<div class="card-thumb-wrap${isLogo ? ' card-thumb-logo' : ''}"><img src="${thumbUrl}" alt="${isLogo ? 'Logo' : 'Kuva'}" loading="lazy" /></div>`
+            ? `<div class="card-thumb-wrap${isLogo ? ' card-thumb-logo' : ''}"><img src="${thumbUrl}" alt="${isLogo ? 'Logo' : 'Kuva'}" loading="lazy" onerror="this.parentElement.style.display='none';" /></div>`
             : '';
 
         const formatDateFi = (dStr) => {
@@ -2418,7 +2462,7 @@ function renderRelations(items, allSources = [], allContents = []) {
         if (item.type === 'observation') {
             extraHtml += `<div style="margin-top: 15px;"><button onclick="openObservationModal('${item.id}', '${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; border:none; cursor:pointer; font-weight:bold; font-size:0.9rem;">Näytä tiedot &rarr;</button></div>`;
         } else {
-            const btnText = (item.id.startsWith('yritys_') || item.type === 'business') ? 'Siirry yrityskortille' : 'Siirry kohdekortille';
+            const btnText = (String(item.id).startsWith('yritys_') || String(item.id).startsWith('company-') || item.type === 'business' || item.type === 'COMPANY' || item.nimi) ? 'Siirry yrityskortille' : 'Siirry kohdekortille';
             extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">${btnText} &rarr;</a></div>`;
         }
 
