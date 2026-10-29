@@ -3,19 +3,24 @@
     const wrapper = document.getElementById('media-gallery-wrapper');
     if (!wrapper) return;
 
-    // 1️⃣ Fetch feed data from Supabase posts table
+    // 1️⃣ Fetch feed data from Supabase posts table (uusimmat hyväksytyt julkaisut)
     const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
     let feedItems = [];
     try {
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
         const resp = await fetch(
-            `${SUPABASE_URL}/rest/v1/posts?select=*&status=eq.APPROVED&type=neq.pikkuilmoitus&published_at=gte.${sevenDaysAgo}&order=is_promoted.desc,published_at.desc&limit=24`,
+            `${SUPABASE_URL}/rest/v1/posts?select=*&status=eq.APPROVED&type=neq.pikkuilmoitus&order=is_promoted.desc,published_at.desc&limit=24`,
             { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
         );
         if (resp.ok) {
             const posts = await resp.json();
-            feedItems = (posts || []).map(p => ({ ...p, image: p.image_url || p.image }));
+            feedItems = (posts || []).map(p => {
+                let img = p.image_url || p.image;
+                if (!img && p.video_id) {
+                    img = `https://img.youtube.com/vi/${p.video_id}/hqdefault.jpg`;
+                }
+                return { ...p, image: img };
+            });
         }
     } catch (e) {
         console.error('Media Spotlight - Supabase feed fetch error:', e);
@@ -26,7 +31,7 @@
     try {
         const resp = await fetch('companies_data.json');
         const json = await resp.json();
-        companies = json.companies || [];
+        companies = json.companies || json.results || [];
     } catch (e) {
         console.error('Media Spotlight – companies fetch error:', e);
     }
@@ -45,7 +50,7 @@
         if (type === 'video') {
             anchor.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
         } else {
-            anchor.innerHTML = `<img src="${src}" alt="${sourceLabel}">`;
+            anchor.innerHTML = `<img src="${src}" alt="${sourceLabel}" loading="lazy" onerror="this.closest('.swiper-slide').remove()">`;
         }
         
         // badge overlay
@@ -76,48 +81,50 @@
     const media = [];
     // From feed items – expect `media` array or `image`
     feedItems.forEach(item => {
-        if (item.media && Array.isArray(item.media)) {
+        const itemLink = `index.html?item=${item.id}&feed=open`;
+        const sourceLabel = item.publisher || item.publisher_name || item.org_name || 'Laukaa';
+        if (item.media && Array.isArray(item.media) && item.media.length > 0) {
             item.media.forEach(m => {
-                if (m.url) {
-                    const itemLink = `index.html?item=${item.id}&feed=open`;
+                if (m && m.url) {
                     media.push({
                         src: m.url,
                         type: m.type || 'image',
                         link: itemLink,
-                        sourceLabel: item.publisher || 'Feed'
+                        sourceLabel: sourceLabel
                     });
                 }
             });
         } else if (item.image) {
-            const itemLink = `index.html?item=${item.id}&feed=open`;
             media.push({
                 src: item.image,
                 type: 'image',
                 link: itemLink,
-                sourceLabel: item.publisher || 'Feed'
+                sourceLabel: sourceLabel
             });
         }
     });
-    // From companies – prefer logo, then first media entry
+
+    // From companies – prefer logo, then media, then images
     companies.forEach(comp => {
         const companyLink = `yrityskortti.html?id=${slugify(comp.nimi)}`;
-        if (comp.logo && comp.logo !== '-') {
+        const sourceLabel = comp.nimi || 'Yritys';
+        let foundImg = null;
+        if (comp.logo && comp.logo !== '-' && comp.logo.trim() !== '') {
+            foundImg = comp.logo;
+        } else if (comp.media && comp.media.length) {
+            const m = comp.media.find(x => x && x.url) || comp.media[0];
+            if (m && m.url) foundImg = m.url;
+        } else if (comp.images && comp.images.length) {
+            foundImg = comp.images[0];
+        }
+
+        if (foundImg) {
             media.push({
-                src: comp.logo,
+                src: foundImg,
                 type: 'image',
                 link: companyLink,
-                sourceLabel: comp.nimi || 'Yritys'
+                sourceLabel: sourceLabel
             });
-        } else if (comp.media && comp.media.length) {
-            const m = comp.media[0];
-            if (m.url) {
-                media.push({
-                    src: m.url,
-                    type: m.type || 'image',
-                    link: companyLink,
-                    sourceLabel: comp.nimi || 'Yritys'
-                });
-            }
         }
     });
 
