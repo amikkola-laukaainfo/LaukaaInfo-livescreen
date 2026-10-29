@@ -1279,6 +1279,9 @@
                 <button class="btn-signup" id="btn-create-item" onclick="openCreateItemModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #0284c7, #38bdf8);" title="Luo uusi asia suoraan asialistalle (vaatii hallitusroolin)">
                     <span>➕</span> <span>Uusi asia</span>
                 </button>
+                <button class="btn-signup" id="btn-export-pdf" onclick="openPdfExportModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #0284c7, #0369a1);color:#fff;" title="Vie ja tulosta valitut päätökset PDF:ksi">
+                    <span>📄</span> <span>Vie PDF</span>
+                </button>
                 <button class="btn-toggle-admin" id="btn-admin-toggle" onclick="toggleAdminMode()" title="Vaihda ylläpitäjän ja jäsenen näkymän välillä">
                     🛡️ Ylläpito
                 </button>
@@ -1368,6 +1371,68 @@
             <div style="margin-top:1.25rem;display:flex;gap:0.75rem;justify-content:flex-end;">
                 <button class="btn-toggle-admin" onclick="closeWallModal()">Peruuta</button>
                 <button class="btn-signup" style="background:#10b981;" onclick="confirmWallPublish()">Vahvista ja julkaise Seinälle →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÄÄTÖSKOKONAISUUKSIEN PDF-VIENTI MODAALI (PUHEENJOHTAJA) -->
+    <div class="modal-overlay" id="pdf-export-modal" style="display:none;">
+        <div class="modal-card" style="max-width: 660px; max-height: 90vh; display: flex; flex-direction: column;">
+            <button class="modal-close" onclick="closePdfExportModal()">&times;</button>
+            
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(2,132,199,0.15);width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#38bdf8;">📄</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Tulosta päätöskooste ja yhteenveto (PDF)</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Valitse mitkä päätöskokonaisuudet otetaan mukaan viralliseen tulosteeseen</p>
+                </div>
+            </div>
+
+            <!-- VALITSE KAIKKI / PIKAVALINNAT -->
+            <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.75rem 1rem;margin-bottom:0.85rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+                <label style="display:flex;align-items:center;gap:0.55rem;font-size:0.88rem;font-weight:700;color:#fff;cursor:pointer;user-select:none;">
+                    <input type="checkbox" id="pdf-check-all" onchange="toggleSelectAllPdfItems(this.checked)" style="width:18px;height:18px;accent-color:#0284c7;cursor:pointer;" checked>
+                    <span>☑️ Valitse kaikki päätöskokonaisuudet (<span id="pdf-total-count">0</span> kpl)</span>
+                </label>
+                <div style="display:flex;gap:0.35rem;font-size:0.72rem;">
+                    <button type="button" class="btn-toggle-admin" onclick="filterPdfListByStage('all')" style="padding:0.25rem 0.5rem;font-size:0.72rem;">Kaikki</button>
+                    <button type="button" class="btn-toggle-admin" onclick="filterPdfListByStage('decided')" style="padding:0.25rem 0.5rem;font-size:0.72rem;">Päätetyt</button>
+                    <button type="button" class="btn-toggle-admin" onclick="filterPdfListByStage('active')" style="padding:0.25rem 0.5rem;font-size:0.72rem;">Aktiiviset</button>
+                </div>
+            </div>
+
+            <!-- VALINTALISTA PÄÄTÖSKOKONAISUUKSISTA -->
+            <div style="flex:1;overflow-y:auto;max-height:300px;display:flex;flex-direction:column;gap:0.45rem;padding-right:0.25rem;margin-bottom:0.85rem;" id="pdf-items-list-container">
+                <!-- Javascript täyttää dynaamisesti -->
+            </div>
+
+            <!-- TULOSTEEN VALINNAISET OSIOT -->
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.65rem 0.85rem;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:1rem;font-size:0.78rem;color:#cbd5e1;">
+                <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+                    <input type="checkbox" id="pdf-opt-decisions" checked style="accent-color:#0284c7;">
+                    <span>Päätöslauselmat &amp; äänestykset</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+                    <input type="checkbox" id="pdf-opt-tasks" checked style="accent-color:#0284c7;">
+                    <span>Tehtävät &amp; vastuut</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+                    <input type="checkbox" id="pdf-opt-comments" style="accent-color:#0284c7;">
+                    <span>Valmistelukeskustelu</span>
+                </label>
+            </div>
+
+            <!-- TOIMINNOT -->
+            <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.1);padding-top:0.85rem;">
+                <span style="font-size:0.82rem;color:var(--text-muted);">
+                    Valittuna: <strong id="pdf-selected-count-badge" style="color:#38bdf8;">0</strong> kpl
+                </span>
+                <div style="display:flex;gap:0.65rem;">
+                    <button type="button" class="btn-toggle-admin" onclick="closePdfExportModal()">Peruuta</button>
+                    <button type="button" class="btn-signup" id="btn-confirm-print-pdf" onclick="executeSelectedPdfPrint()" style="background:#0284c7;color:#fff;display:inline-flex;align-items:center;gap:0.4rem;">
+                        <span>🖨️</span> <span>Luo ja tulosta PDF →</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -3868,94 +3933,365 @@
         }
 
         // =========================================================================
-        // PDF / TULOSTA PÄÄTÖSOTE JA YHTEENVETO
+        // PDF / PÄÄTÖSKOKONAISUUKSIEN VALINTA JA TULOSTUS (PUHEENJOHTAJA)
         // =========================================================================
-        async function printDecisionExcerpt(itemId) {
-            const item = (BOARD_DATA.items && BOARD_DATA.items.find(i => i.id === itemId))
-                      || (ARCHIVED_ITEMS && ARCHIVED_ITEMS.find(i => i.id === itemId));
-            if (!item) { alert('Asiatietoja ei löydy tulostusta varten.'); return; }
+        let PDF_ALL_ITEMS = [];
 
-            // Haetaan kommentit erikseen, jos ei jo ladattu
-            let comments = [];
-            try {
-                const sb = window.LaukaaSupabase || window.supabaseClient;
-                if (sb) {
-                    const { data } = await sb
-                        .from('board_comments')
-                        .select('id, author_name, content, created_at')
-                        .eq('item_id', itemId)
-                        .order('created_at', { ascending: true });
-                    comments = data || [];
+        function getAllBoardAndArchivedItems() {
+            const list = [];
+            const seen = new Set();
+
+            if (BOARD_DATA && Array.isArray(BOARD_DATA.items)) {
+                for (const it of BOARD_DATA.items) {
+                    if (it && it.id && !seen.has(it.id)) {
+                        seen.add(it.id);
+                        list.push(it);
+                    }
                 }
-            } catch (e) { /* kommentit ei pakollisia */ }
+            }
+            if (Array.isArray(ARCHIVED_ITEMS)) {
+                for (const it of ARCHIVED_ITEMS) {
+                    if (it && it.id && !seen.has(it.id)) {
+                        seen.add(it.id);
+                        list.push(it);
+                    }
+                }
+            }
+            return list;
+        }
 
-            const votes = item.votes || { yes: 0, no: 0, cond: 0, total: 0 };
+        function openPdfExportModal(preSelectedItemId = null) {
+            PDF_ALL_ITEMS = getAllBoardAndArchivedItems();
+            const modal = document.getElementById('pdf-export-modal');
+            const cont = document.getElementById('pdf-items-list-container');
+            const totalCountEl = document.getElementById('pdf-total-count');
+            const checkAll = document.getElementById('pdf-check-all');
+
+            if (!modal || !cont) return;
+
+            if (PDF_ALL_ITEMS.length === 0) {
+                alert('Toimintataululla ei ole vielä asioita tai päätöksiä tulostettavaksi.');
+                return;
+            }
+
+            if (totalCountEl) totalCountEl.innerText = PDF_ALL_ITEMS.length;
+
+            // Jos preSelectedItemId annettu, valitaan oletuksena vain se, muutoin kaikki
+            const isSinglePreselected = !!preSelectedItemId;
+            if (checkAll) {
+                checkAll.checked = !isSinglePreselected;
+            }
+
+            renderPdfItemsList(PDF_ALL_ITEMS, preSelectedItemId);
+            modal.style.display = 'flex';
+        }
+
+        function closePdfExportModal() {
+            const modal = document.getElementById('pdf-export-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function renderPdfItemsList(itemsToRender, preSelectedItemId = null) {
+            const cont = document.getElementById('pdf-items-list-container');
+            if (!cont) return;
+
+            if (itemsToRender.length === 0) {
+                cont.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:1.5rem;font-size:0.85rem;">Ei asioita valitussa tilassa.</div>';
+                updatePdfSelectedCount();
+                return;
+            }
+
+            cont.innerHTML = itemsToRender.map(item => {
+                const isChecked = preSelectedItemId ? (item.id === preSelectedItemId) : true;
+                const hasDecision = !!item.decision_summary;
+                const stageName = escapeHtml(item.stage_name || getStageName(item.stage));
+                const levelInfo = getDecisionLevel(item.decision_level);
+
+                return `
+                    <label class="pdf-item-row" style="display:flex;align-items:flex-start;gap:0.65rem;padding:0.6rem 0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;cursor:pointer;transition:background 0.15s;user-select:none;">
+                        <input type="checkbox" class="pdf-item-check" data-item-id="${escapeHtml(item.id)}" ${isChecked ? 'checked' : ''} onchange="updatePdfSelectedCount()" style="width:17px;height:17px;accent-color:#0284c7;margin-top:2px;cursor:pointer;">
+                        <div style="flex:1;min-width:0;">
+                            <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.2rem;">
+                                <span style="font-size:0.75rem;font-weight:800;color:#38bdf8;font-family:monospace;">${escapeHtml(item.seq || 'ASIA')}</span>
+                                <span style="font-size:0.7rem;padding:0.1rem 0.4rem;border-radius:4px;background:rgba(255,255,255,0.08);color:#cbd5e1;">${levelInfo.label}</span>
+                                <span class="stage-pill stage-${escapeHtml(item.stage)}" style="font-size:0.68rem;padding:0.1rem 0.45rem;">${escapeHtml(stageName)}</span>
+                                ${hasDecision ? '<span style="font-size:0.7rem;color:#4ade80;font-weight:700;">✅ Päätös kirjattu</span>' : ''}
+                            </div>
+                            <div style="font-size:0.85rem;font-weight:700;color:#fff;line-height:1.35;word-break:break-word;">
+                                ${escapeHtml(item.title || 'Nimetön asia')}
+                            </div>
+                            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.15rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                                <span>👤 Vastuu: <strong>${escapeHtml(item.lead || 'Ei nimetty')}</strong></span>
+                                ${item.deadline_label ? `<span>🕒 Määräaika: ${escapeHtml(item.deadline_label)}</span>` : ''}
+                                ${item.tasks && item.tasks.length > 0 ? `<span>🛠️ ${item.tasks.length} tehtävää</span>` : ''}
+                            </div>
+                        </div>
+                    </label>
+                `;
+            }).join('');
+
+            updatePdfSelectedCount();
+        }
+
+        function toggleSelectAllPdfItems(checked) {
+            const checks = document.querySelectorAll('.pdf-item-check');
+            checks.forEach(c => c.checked = checked);
+            updatePdfSelectedCount();
+        }
+
+        function updatePdfSelectedCount() {
+            const checks = document.querySelectorAll('.pdf-item-check:checked');
+            const badge = document.getElementById('pdf-selected-count-badge');
+            const checkAll = document.getElementById('pdf-check-all');
+            const allChecks = document.querySelectorAll('.pdf-item-check');
+            const confirmBtn = document.getElementById('btn-confirm-print-pdf');
+
+            const count = checks.length;
+            if (badge) badge.innerText = count;
+
+            if (checkAll && allChecks.length > 0) {
+                checkAll.checked = (count === allChecks.length);
+                checkAll.indeterminate = (count > 0 && count < allChecks.length);
+            }
+
+            if (confirmBtn) {
+                confirmBtn.disabled = (count === 0);
+                confirmBtn.innerHTML = `<span>🖨️</span> <span>Luo ja tulosta PDF (${count}) →</span>`;
+            }
+        }
+
+        function filterPdfListByStage(filterType) {
+            let filtered = PDF_ALL_ITEMS;
+            if (filterType === 'decided') {
+                filtered = PDF_ALL_ITEMS.filter(i => i.stage === 'decided' || !!i.decision_summary);
+            } else if (filterType === 'active') {
+                filtered = PDF_ALL_ITEMS.filter(i => ['discussion', 'vote', 'in_progress'].includes(i.stage));
+            }
+            renderPdfItemsList(filtered);
+        }
+
+        // Avaa valintamodaalin annetulla asialla esivalittuna
+        async function printDecisionExcerpt(itemId) {
+            openPdfExportModal(itemId);
+        }
+
+        async function executeSelectedPdfPrint() {
+            const checkedBoxes = Array.from(document.querySelectorAll('.pdf-item-check:checked'));
+            const selectedIds = checkedBoxes.map(b => b.getAttribute('data-item-id')).filter(Boolean);
+
+            if (selectedIds.length === 0) {
+                alert('Valitse vähintään yksi päätöskokonaisuus tulostettavaksi.');
+                return;
+            }
+
+            const selectedItems = PDF_ALL_ITEMS.filter(i => selectedIds.includes(i.id));
+            if (selectedItems.length === 0) {
+                alert('Valittuja asioita ei löytynyt.');
+                return;
+            }
+
+            const includeDecisions = document.getElementById('pdf-opt-decisions')?.checked ?? true;
+            const includeTasks = document.getElementById('pdf-opt-tasks')?.checked ?? true;
+            const includeComments = document.getElementById('pdf-opt-comments')?.checked ?? false;
+
+            const confirmBtn = document.getElementById('btn-confirm-print-pdf');
+            if (confirmBtn) {
+                confirmBtn.disabled = true;
+                confirmBtn.innerText = 'Valmistellaan tulostetta...';
+            }
+
+            // Haetaan kommentit, jos valittu
+            const commentsByItemId = {};
+            if (includeComments) {
+                try {
+                    const sb = window.LaukaaSupabase || window.supabaseClient;
+                    if (sb) {
+                        const { data } = await sb
+                            .from('board_comments')
+                            .select('id, item_id, author_name, content, created_at')
+                            .in('item_id', selectedIds)
+                            .order('created_at', { ascending: true });
+                        if (data) {
+                            for (const c of data) {
+                                if (!commentsByItemId[c.item_id]) commentsByItemId[c.item_id] = [];
+                                commentsByItemId[c.item_id].push(c);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Kommenttien lataus epäonnistui:', e);
+                }
+            }
+
             const orgName = BOARD_DATA.organization_name || 'Organisaatio';
             const printDate = new Date().toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' });
             const roleLabel = (ROLE_SESSION && ROLE_SESSION.member_name)
                 ? `${ROLE_SESSION.member_name} (${getStageName(ROLE_SESSION.active_roles?.[0]?.role || '')})`
-                : 'Sihteeri / Ylläpito';
+                : 'Puheenjohtaja / Hallitus';
 
-            const safeTitle = escapeHtml(item.title || 'Nimetön asia');
-            const safeSeq = escapeHtml(item.seq || 'ASIA');
-            const safeOrg = escapeHtml(orgName);
-            const safeStage = escapeHtml(getStageName(item.stage));
-            const safeLead = escapeHtml(item.lead || 'Ei nimetty');
-            const safeDeadline = escapeHtml(item.deadline_label || 'Avoin');
-            const safeDesc = escapeHtml(item.description || 'Ei kuvausta.').replace(/\n/g, '<br>');
-            const safeDecision = item.decision_summary ? escapeHtml(item.decision_summary).replace(/\n/g, '<br>') : null;
-
-            // Tehtävätaulukko
-            let tasksSectionHtml = '';
-            if (item.tasks && item.tasks.length > 0) {
-                const taskRows = item.tasks.map(t => {
-                    const signupsList = (t.signups && t.signups.length > 0)
-                        ? t.signups.map(s => `<strong>${escapeHtml(s)}</strong>`).join(', ')
-                        : '<span style="color:#64748b;font-style:italic;">Avoinna (ei vielä ilmoittautuneita)</span>';
-                    return `
-                        <tr>
-                            <td><strong>${escapeHtml(t.name)}</strong></td>
-                            <td>${escapeHtml(t.time || '-')}</td>
-                            <td style="text-align:center;">${t.signups ? t.signups.length : 0} / ${t.required || 1}</td>
-                            <td>${signupsList}</td>
-                        </tr>
-                    `;
-                }).join('');
-
-                tasksSectionHtml = `
-                    <div class="section-title">🛠️ Sovitut jatkotoimet ja tehtävävastuut (${item.tasks.length})</div>
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th style="width:30%;">Tehtävä</th>
-                                <th style="width:20%;">Aikataulu / Aika</th>
-                                <th style="width:15%;text-align:center;">Tarve</th>
-                                <th style="width:35%;">Vastuu / Ilmoittautuneet</th>
-                            </tr>
-                        </thead>
-                        <tbody>${taskRows}</tbody>
-                    </table>
-                `;
-            }
-
-            // Kommenttitaulukko
-            const commentsHtml = comments.length > 0
-                ? comments.map(c => `
+            // Yhteenvetotaulukko
+            const summaryTableRows = selectedItems.map((item, idx) => {
+                const decText = item.decision_summary ? escapeHtml(item.decision_summary).substring(0, 80) + (item.decision_summary.length > 80 ? '...' : '') : '<span style="color:#64748b;font-style:italic;">Käsittelyssä</span>';
+                return `
                     <tr>
-                        <td style="white-space:nowrap;color:#64748b;">${new Date(c.created_at).toLocaleDateString('fi-FI')} ${new Date(c.created_at).toLocaleTimeString('fi-FI', {hour:'2-digit',minute:'2-digit'})}</td>
-                        <td style="font-weight:600;white-space:nowrap;">${escapeHtml(c.author_name || '-')}</td>
-                        <td>${escapeHtml(c.content || '').replace(/\n/g, '<br>')}</td>
+                        <td style="text-align:center;font-weight:700;">${idx + 1}</td>
+                        <td style="font-weight:700;font-family:monospace;">${escapeHtml(item.seq || 'ASIA')}</td>
+                        <td><strong>${escapeHtml(item.title || 'Nimetön')}</strong></td>
+                        <td>${escapeHtml(getStageName(item.stage))}</td>
+                        <td>${escapeHtml(item.lead || '-')}</td>
+                        <td style="font-size:10px;">${decText}</td>
                     </tr>
-                `).join('')
-                : '<tr><td colspan="3" style="text-align:center;color:#64748b;padding:12px;">Ei kirjattuja valmistelukeskustelun kommentteja.</td></tr>';
+                `;
+            }).join('');
 
-            const printWindow = window.open('', '_blank', 'width=880,height=960,scrollbars=yes');
+            // Asioiden yksityiskohtaiset osiot
+            const itemsHtml = selectedItems.map((item, idx) => {
+                const safeTitle = escapeHtml(item.title || 'Nimetön asia');
+                const safeSeq = escapeHtml(item.seq || 'ASIA');
+                const safeStage = escapeHtml(getStageName(item.stage));
+                const safeLead = escapeHtml(item.lead || 'Ei nimetty');
+                const safeDeadline = escapeHtml(item.deadline_label || 'Avoin');
+                const safeDesc = escapeHtml(item.description || 'Ei kuvausta.').replace(/\n/g, '<br>');
+                const safeDecision = item.decision_summary ? escapeHtml(item.decision_summary).replace(/\n/g, '<br>') : null;
+                const votes = item.votes || { yes: 0, no: 0, cond: 0, total: 0 };
+                const comments = commentsByItemId[item.id] || [];
+
+                let tasksHtml = '';
+                if (includeTasks && item.tasks && item.tasks.length > 0) {
+                    const taskRows = item.tasks.map(t => {
+                        const signupsList = (t.signups && t.signups.length > 0)
+                            ? t.signups.map(s => `<strong>${escapeHtml(s)}</strong>`).join(', ')
+                            : '<span style="color:#64748b;font-style:italic;">Avoinna</span>';
+                        return `
+                            <tr>
+                                <td><strong>${escapeHtml(t.name)}</strong></td>
+                                <td>${escapeHtml(t.time || '-')}</td>
+                                <td style="text-align:center;">${t.signups ? t.signups.length : 0} / ${t.required || 1}</td>
+                                <td>${signupsList}</td>
+                            </tr>
+                        `;
+                    }).join('');
+
+                    tasksHtml = `
+                        <div class="section-title">🛠️ Sovitut jatkotoimet ja tehtävät (${item.tasks.length})</div>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:30%;">Tehtävä</th>
+                                    <th style="width:20%;">Aikataulu</th>
+                                    <th style="width:15%;text-align:center;">Tarve</th>
+                                    <th style="width:35%;">Vastuu / Ilmoittautuneet</th>
+                                </tr>
+                            </thead>
+                            <tbody>${taskRows}</tbody>
+                        </table>
+                    `;
+                }
+
+                let commentsHtml = '';
+                if (includeComments && comments.length > 0) {
+                    const commentRows = comments.map(c => `
+                        <tr>
+                            <td style="white-space:nowrap;color:#64748b;">${new Date(c.created_at).toLocaleDateString('fi-FI')} ${new Date(c.created_at).toLocaleTimeString('fi-FI', {hour:'2-digit',minute:'2-digit'})}</td>
+                            <td style="font-weight:600;white-space:nowrap;">${escapeHtml(c.author_name || '-')}</td>
+                            <td>${escapeHtml(c.content || '').replace(/\n/g, '<br>')}</td>
+                        </tr>
+                    `).join('');
+
+                    commentsHtml = `
+                        <div class="section-title">💬 Valmistelukeskustelu (${comments.length})</div>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%;">Aika</th>
+                                    <th style="width:25%;">Osallistuja</th>
+                                    <th style="width:55%;">Kommentti</th>
+                                </tr>
+                            </thead>
+                            <tbody>${commentRows}</tbody>
+                        </table>
+                    `;
+                }
+
+                return `
+                    <div class="decision-package-block ${idx > 0 ? 'page-break-before' : ''}">
+                        <div class="item-header-bar">
+                            <span class="item-seq-badge">${safeSeq}</span>
+                            <span class="item-level-badge">${getDecisionLevel(item.decision_level).label}</span>
+                            <span class="item-stage-badge">${safeStage}</span>
+                        </div>
+
+                        <div class="item-title-box">${idx + 1}. ${safeTitle}</div>
+
+                        <div class="meta-grid">
+                            <div class="meta-cell">
+                                <strong>Tunniste</strong>
+                                <span>${safeSeq}</span>
+                            </div>
+                            <div class="meta-cell">
+                                <strong>Käsittelyvaihe</strong>
+                                <span>${safeStage}</span>
+                            </div>
+                            <div class="meta-cell">
+                                <strong>Vastuuhenkilö</strong>
+                                <span>${safeLead}</span>
+                            </div>
+                            <div class="meta-cell">
+                                <strong>Määräaika</strong>
+                                <span>${safeDeadline}</span>
+                            </div>
+                        </div>
+
+                        <div class="section-title">Asian tausta ja kuvaus</div>
+                        <div class="description-box">${safeDesc}</div>
+
+                        ${includeDecisions && safeDecision ? `
+                            <div class="decision-callout">
+                                <div class="decision-callout-title">✅ Vahvistettu päätöslauselma / Sovittu ratkaisu:</div>
+                                <div class="decision-callout-text">${safeDecision}</div>
+                            </div>
+                        ` : ''}
+
+                        ${includeDecisions && votes.total > 0 ? `
+                            <div class="section-title">Kannanottojen ja mielipideäänestyksen tulos</div>
+                            <div class="votes-grid">
+                                <div class="vote-box yes">
+                                    <div class="vote-box-label">🟢 Kyllä / Kannatan</div>
+                                    <div class="vote-box-count">${votes.yes}</div>
+                                </div>
+                                <div class="vote-box cond">
+                                    <div class="vote-box-label">🟡 Ehdollisena</div>
+                                    <div class="vote-box-count">${votes.cond}</div>
+                                </div>
+                                <div class="vote-box no">
+                                    <div class="vote-box-label">🔴 Ei / Vastustan</div>
+                                    <div class="vote-box-count">${votes.no}</div>
+                                </div>
+                                <div class="vote-box">
+                                    <div class="vote-box-label">👥 Ääniä yhteensä</div>
+                                    <div class="vote-box-count">${votes.total}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${tasksHtml}
+                        ${commentsHtml}
+                    </div>
+                `;
+            }).join('');
+
+            const isMulti = selectedItems.length > 1;
+            const docTitle = isMulti
+                ? `Päätöskooste (${selectedItems.length} asiaa): ${orgName}`
+                : `Päätösote: ${selectedItems[0].seq || ''} ${selectedItems[0].title || ''}`;
+
+            const printWindow = window.open('', '_blank', 'width=900,height=960,scrollbars=yes');
             printWindow.document.write(`<!DOCTYPE html>
 <html lang="fi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Päätösote ja yhteenveto: ${safeSeq} ${safeTitle}</title>
+<title>${escapeHtml(docTitle)}</title>
 <style>
   @page {
     size: A4 portrait;
@@ -3969,7 +4305,7 @@
     font-size: 12px;
     line-height: 1.55;
     padding: 24px;
-    max-width: 820px;
+    max-width: 840px;
     margin: 0 auto;
   }
   .no-print-bar {
@@ -4010,7 +4346,7 @@
     align-items: flex-end;
   }
   .header-titles h1 {
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 800;
     color: #0f172a;
     letter-spacing: -0.02em;
@@ -4018,7 +4354,7 @@
     margin-bottom: 3px;
   }
   .header-sub {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 700;
     color: #0284c7;
     text-transform: uppercase;
@@ -4028,7 +4364,7 @@
     text-align: right;
     font-size: 11px;
     color: #64748b;
-    line-height: 1.4;
+    line-height: 1.45;
   }
   .disclaimer-box {
     background: #f8fafc;
@@ -4039,7 +4375,55 @@
     font-size: 10.5px;
     color: #475569;
     line-height: 1.45;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
+  }
+  .summary-table-section {
+    margin-bottom: 20px;
+  }
+  .decision-package-block {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .decision-package-block:last-of-type {
+    border-bottom: none;
+  }
+  .page-break-before {
+    page-break-before: always;
+  }
+  .item-header-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .item-seq-badge {
+    font-family: monospace;
+    font-weight: 800;
+    color: #0284c7;
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+  .item-level-badge {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #334155;
+  }
+  .item-stage-badge {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
   }
   .meta-grid {
     display: grid;
@@ -4048,13 +4432,13 @@
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 10px 12px;
-    margin-bottom: 16px;
+    padding: 8px 10px;
+    margin-bottom: 12px;
     font-size: 11px;
   }
   .meta-cell strong {
     display: block;
-    font-size: 9.5px;
+    font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #64748b;
@@ -4065,46 +4449,46 @@
     font-weight: 600;
   }
   .section-title {
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #334155;
     border-bottom: 1.5px solid #cbd5e1;
-    padding-bottom: 4px;
-    margin: 18px 0 8px 0;
+    padding-bottom: 3px;
+    margin: 14px 0 6px 0;
   }
   .item-title-box {
     font-size: 15px;
     font-weight: 800;
     color: #0f172a;
     line-height: 1.35;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .description-box {
     font-size: 12px;
     line-height: 1.6;
     color: #1e293b;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .decision-callout {
     background: #f0fdf4;
     border: 1.5px solid #22c55e;
     border-radius: 6px;
-    padding: 12px 14px;
-    margin: 12px 0 16px 0;
+    padding: 10px 12px;
+    margin: 10px 0 14px 0;
     page-break-inside: avoid;
   }
   .decision-callout-title {
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #15803d;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
   .decision-callout-text {
-    font-size: 12.5px;
+    font-size: 12px;
     line-height: 1.6;
     color: #14532d;
     font-weight: 500;
@@ -4112,7 +4496,7 @@
   .report-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     font-size: 11px;
     page-break-inside: avoid;
   }
@@ -4123,13 +4507,13 @@
     padding: 6px 8px;
     font-weight: 700;
     text-align: left;
-    font-size: 10.5px;
+    font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
   .report-table td {
     border: 1px solid #e2e8f0;
-    padding: 6px 8px;
+    padding: 5px 8px;
     vertical-align: top;
     color: #1e293b;
   }
@@ -4140,25 +4524,25 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     page-break-inside: avoid;
   }
   .vote-box {
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 8px 10px;
+    padding: 6px 8px;
     text-align: center;
     background: #f8fafc;
   }
   .vote-box-label {
-    font-size: 10px;
+    font-size: 9.5px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: #64748b;
     margin-bottom: 2px;
   }
   .vote-box-count {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
     color: #0f172a;
   }
@@ -4169,7 +4553,7 @@
   .vote-box.no { border-color: #fca5a5; background: #fef2f2; }
   .vote-box.no .vote-box-count { color: #dc2626; }
   .signatures {
-    margin-top: 36px;
+    margin-top: 30px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
@@ -4203,94 +4587,40 @@
 
 <div class="header">
   <div class="header-titles">
-    <h1>Päätösote ja yhteenveto</h1>
-    <p class="header-sub">${safeOrg} · LaukaaInfo Toimintataulu</p>
+    <h1>${isMulti ? 'Päätöskooste ja pöytäkirjanote' : 'Päätösote ja yhteenveto'}</h1>
+    <p class="header-sub">${escapeHtml(orgName)} · LaukaaInfo Toimintataulu</p>
   </div>
   <div class="header-right">
-    <div><strong>Tunniste:</strong> ${safeSeq}</div>
+    <div><strong>Asiakokonaisuuksia:</strong> ${selectedItems.length} kpl</div>
     <div><strong>Päiväys:</strong> ${printDate}</div>
     <div><strong>Laadittu:</strong> ${escapeHtml(roleLabel)}</div>
   </div>
 </div>
 
 <div class="disclaimer-box">
-  <strong>Huomautus:</strong> Tämä asiakirja on LaukaaInfon toimintataulun yhteenveto-ote ryhmän käsittelemästä asiasta. Asiakirja ei yksinään takaa päätöksen juridista pätevyyttä: yhdistyksen, taloyhtiön tai toimikunnan tulee noudattaa omia sääntöjään, toimivaltaansa ja kokousmenettelyjään.
+  <strong>Huomautus:</strong> Tämä asiakirja on LaukaaInfon toimintataulun virallinen kooste ryhmän käsittelemistä päätöskokonaisuuksista. Asiakirja ei yksinään korvaa yhdistyksen tai yhteisön sääntömääräisiä kokousmenettelyjä.
 </div>
 
-<div class="meta-grid">
-  <div class="meta-cell">
-    <strong>Käsittelytaso</strong>
-    <span>${getDecisionLevel(item.decision_level).label}</span>
-  </div>
-  <div class="meta-cell">
-    <strong>Käsittelyvaihe</strong>
-    <span>${safeStage}</span>
-  </div>
-  <div class="meta-cell">
-    <strong>Vastuuhenkilö</strong>
-    <span>${safeLead}</span>
-  </div>
-  <div class="meta-cell">
-    <strong>Määräaika</strong>
-    <span>${safeDeadline}</span>
-  </div>
-</div>
-
-<div class="section-title">1. Asian otsikko ja tausta</div>
-<div class="item-title-box">${safeTitle}</div>
-<div class="description-box">${safeDesc}</div>
-
-${safeDecision ? `
-<div class="section-title">2. Vahvistettu ratkaisu / Päätös</div>
-<div class="decision-callout">
-  <div class="decision-callout-title">✅ Kirjattu päätös / Sovittu ratkaisu:</div>
-  <div class="decision-callout-text">${safeDecision}</div>
-</div>
-` : `
-<div class="section-title">2. Päätöksen tila</div>
-<p style="font-size:11.5px;color:#64748b;margin-bottom:12px;font-style:italic;">
-  Asialle ei ole vielä kirjattu virallista päätösyhteenvetoa. Asia on vaiheessa: <strong>${safeStage}</strong>.
-</p>
-`}
-
-${votes.total > 0 ? `
-<div class="section-title">3. Kannanottojen ja mielipideäänestyksen tulos</div>
-<p style="font-size:10.5px;color:#64748b;margin-bottom:8px;">
-  Ryhmän jäsenten antamat kannanotot asian valmistelun ja päätöksenteon tueksi (yhteensä ${votes.total} ääntä):
-</p>
-<div class="votes-grid">
-  <div class="vote-box yes">
-    <div class="vote-box-label">🟢 Kyllä / Kannatan</div>
-    <div class="vote-box-count">${votes.yes}</div>
-  </div>
-  <div class="vote-box cond">
-    <div class="vote-box-label">🟡 Ehdollisena</div>
-    <div class="vote-box-count">${votes.cond}</div>
-  </div>
-  <div class="vote-box no">
-    <div class="vote-box-label">🔴 Ei / Vastustan</div>
-    <div class="vote-box-count">${votes.no}</div>
-  </div>
-  <div class="vote-box">
-    <div class="vote-box-label">👥 Ääniä yhteensä</div>
-    <div class="vote-box-count">${votes.total}</div>
-  </div>
+${isMulti ? `
+<div class="summary-table-section">
+  <div class="section-title">Kooste valituista päätöskokonaisuuksista (${selectedItems.length})</div>
+  <table class="report-table">
+    <thead>
+      <tr>
+        <th style="width:5%;text-align:center;">#</th>
+        <th style="width:14%;">Tunniste</th>
+        <th style="width:36%;">Asian otsikko</th>
+        <th style="width:15%;">Tila</th>
+        <th style="width:15%;">Vastuu</th>
+        <th style="width:15%;">Päätös</th>
+      </tr>
+    </thead>
+    <tbody>${summaryTableRows}</tbody>
+  </table>
 </div>
 ` : ''}
 
-${tasksSectionHtml}
-
-<div class="section-title">Käsitelty valmistelukeskustelu (${comments.length} merkintää)</div>
-<table class="report-table">
-  <thead>
-    <tr>
-      <th style="width:20%;">Aika</th>
-      <th style="width:25%;">Osallistuja</th>
-      <th style="width:55%;">Kommentti</th>
-    </tr>
-  </thead>
-  <tbody>${commentsHtml}</tbody>
-</table>
+${itemsHtml}
 
 <div class="signatures">
   <div class="sig-block">
@@ -4298,7 +4628,7 @@ ${tasksSectionHtml}
     <div class="sig-sub">Nimenselvennys ja päiväys</div>
   </div>
   <div class="sig-block">
-    <div class="sig-title">Sihteeri / Yhteenvedon todentaja</div>
+    <div class="sig-title">Sihteeri / Pöytäkirjantarkastaja</div>
     <div class="sig-sub">Nimenselvennys ja päiväys</div>
   </div>
 </div>
@@ -4306,6 +4636,13 @@ ${tasksSectionHtml}
 </body>
 </html>`);
             printWindow.document.close();
+
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = `<span>🖨️</span> <span>Luo ja tulosta PDF (${selectedItems.length}) →</span>`;
+            }
+
+            closePdfExportModal();
         }
 
         // =========================================================================
@@ -4581,20 +4918,20 @@ ${tasksSectionHtml}
             const listEl = document.getElementById('gateway-orgs-list');
             if (!listEl) return;
 
-            // Rajaus: näytetään Toimintataulu-sisääntulossa ainoastaan yhdistykset
-            const assocOrgs = (orgs || []).filter(o => o.type === 'association' || (!o.type && !o.id?.includes('yritys') && !o.id?.includes('mediazoo')));
+            // Rajaus: näytetään Toimintataulu-sisääntulossa yhdistykset ja vapaat työryhmät
+            const assocOrgs = (orgs || []).filter(o => o.type === 'association' || o.type === 'working_group' || (!o.type && !o.id?.includes('yritys') && !o.id?.includes('mediazoo')));
 
             if (!assocOrgs || assocOrgs.length === 0) {
                 listEl.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
-                        <p>Ei löytynyt yhtään toimintataulua käyttävää yhdistystä hakuehdoilla.</p>
+                        <p>Ei löytynyt yhtään toimintataulua käyttävää yhdistystä tai työryhmää hakuehdoilla.</p>
                     </div>
                 `;
                 return;
             }
 
             listEl.innerHTML = assocOrgs.map(o => {
-                const typeLabel = 'Yhdistys';
+                const typeLabel = o.type === 'working_group' ? 'Työryhmä' : 'Yhdistys';
                 const acceptsSug = !!o.accept_public_suggestions;
 
                 return `
@@ -4664,7 +5001,7 @@ ${tasksSectionHtml}
 
         function populateOrgSelect(selectEl, selectedId) {
             if (!selectEl) return;
-            let openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions && (o.type === 'association' || !o.type));
+            let openOrgs = PUBLIC_ORGANIZATIONS.filter(o => o.accept_public_suggestions && (o.type === 'association' || o.type === 'working_group' || !o.type));
             if (openOrgs.length === 0) {
                 openOrgs = [
                     { id: 'laukaan-testaajat', name: 'Laukaan Testaajat ry' },
