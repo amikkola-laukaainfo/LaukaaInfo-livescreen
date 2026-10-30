@@ -54,10 +54,28 @@
                 }
             }
 
-            const placesRes = await fetch('paikat_laukaa.json').catch(() => null);
-            if (placesRes && placesRes.ok) {
-                const pJson = await placesRes.json();
-                placesData = Array.isArray(pJson) ? pJson : (pJson?.results || []);
+            // Haetaan kaikki oikeat paikat Supabasesta (tai fallbackina paikallinen tiedosto)
+            const sb = getSupabase();
+            if (sb) {
+                try {
+                    const { data: dbPlaces } = await sb
+                        .from('places')
+                        .select('id, place_id, name, canonical_name, type, municipality, lat, lon')
+                        .order('name');
+                    if (dbPlaces && dbPlaces.length) {
+                        placesData = dbPlaces;
+                    }
+                } catch (err) {
+                    console.warn('[SmartSearch] Paikkojen lataus Supabasesta epäonnistui:', err);
+                }
+            }
+
+            if (!placesData.length) {
+                const placesRes = await fetch('paikat_laukaa.json').catch(() => null);
+                if (placesRes && placesRes.ok) {
+                    const pJson = await placesRes.json();
+                    placesData = Array.isArray(pJson) ? pJson : (pJson?.results || []);
+                }
             }
 
             const eventsRes = await fetch('tapahtumat.json').catch(() => null);
@@ -263,28 +281,32 @@
             a.keywords.some(kw => kw.includes(qLower) || qLower.includes(kw))
         ) : [];
 
-        // ── 1. Teematäsmäys Supabase-teemoista ──────────────────────────────
+        // ── 1. Teematäsmäys Supabase-teemoista (Karsitaan pääteemoihin) ────
         const matchedThemes = qLower ? allThemes.filter(t => {
             const tagId = (t.tag_id || '').toLowerCase();
             const name = (t.name || '').toLowerCase();
-            return tagId.includes(qLower) || name.includes(qLower) || qLower.includes(tagId);
-        }).slice(0, 4) : [];
+            const isMatch = tagId.includes(qLower) || name.includes(qLower) || qLower.includes(tagId);
+            const isSignificant = (t.places_count && t.places_count > 0) || t.tag_level === 1 || ['THEME', 'SECTOR'].includes(t.category);
+            return isMatch && isSignificant;
+        }).sort((a, b) => (b.places_count || 0) - (a.places_count || 0)).slice(0, 3) : [];
 
-        // Jos suora teema löytyy (esim. retkeily), haetaan sen paikat & toimijat
+        // Teemapaikat haetaan vain jos teema on aktiivisesti valittuna (currentTheme)
         let themePlaces = [];
         let themeActors = [];
-        const primaryTheme = matchedThemes.length ? matchedThemes[0] : (currentTheme ? allThemes.find(t => t.tag_id === currentTheme || t.name === currentTheme) : null);
+        const activeThemeObj = currentTheme ? allThemes.find(t => t.tag_id === currentTheme || t.name === currentTheme) : null;
 
-        if (primaryTheme) {
-            themePlaces = await fetchThemePlaces(primaryTheme.tag_id);
-            themeActors = await fetchThemeActors(primaryTheme.tag_id, currentPlaceContext?.targetPlace?.id);
+        if (activeThemeObj) {
+            themePlaces = await fetchThemePlaces(activeThemeObj.tag_id);
+            themeActors = await fetchThemeActors(activeThemeObj.tag_id, currentPlaceContext?.targetPlace?.id);
         }
 
         // ── 2. Decoupled ContextSearch (staattinen fallback & tekstihaku) ──
+        // HUOM: themeId annetaan filtteriksi vain jos käyttäjä on valinnut sen kontekstiksi (currentTheme).
+        // Vapaassa tekstisyötteessä ei lukita hakua johonkin arvattuun teemaan, jotta paikat ja yritykset löytyvät vapaasti!
         const activeSearchContext = {
             query,
             placeContext: currentPlaceContext,
-            themeId: currentTheme || (primaryTheme ? primaryTheme.tag_id : null)
+            themeId: currentTheme || null
         };
 
         const results = (typeof window.executeContextSearch === 'function') 
@@ -324,23 +346,18 @@
             html += `</div>`;
         }
 
-        // ── SECTION 1: NÄKÖKULMAT / TEEMAT (Viralliset Supabase-teemat) ────
+        // ── SECTION 1: NÄKÖKULMAT / TEEMAT (Yhtenäinen suora linkki) ───────
         if (matchedThemes.length > 0) {
             html += `<div style="margin-bottom: 0.85rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.6rem;">`;
             html += `<div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #059669; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🌲 NÄKÖKULMAT & TEEMAT</div>`;
             
             matchedThemes.forEach(t => {
-                const countLabel = t.places_count ? `${t.places_count} kohdetta` : 'Teemasivu';
+                const countLabel = t.places_count ? `${t.places_count} kohdetta` : '';
                 html += `
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 4px;">
-                        <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="flex: 1; display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.7rem; border-radius: 8px; text-decoration: none; color: #065f46; font-size: 0.92rem; font-weight: 700; background: #ecfdf5;" onmouseover="this.style.background='#d1fae5';" onmouseout="this.style.background='#ecfdf5';">
-                            <span>🌲 ${escapeHtml(t.name || t.tag_id)}</span>
-                            <span style="font-size: 0.72rem; background: #10b981; color: white; padding: 0.15rem 0.5rem; border-radius: 12px; font-weight: 600;">${countLabel} →</span>
-                        </a>
-                        <button type="button" class="search-suggestion-item" data-type="theme" data-theme="${escapeHtml(t.tag_id)}" title="Rajaa näkymä tähän teemaan" style="border: 1px solid #a7f3d0; background: #ffffff; color: #047857; font-size: 0.75rem; font-weight: 700; padding: 0.45rem 0.65rem; border-radius: 8px; cursor: pointer;">
-                            + Rajaa
-                        </button>
-                    </div>
+                    <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 8px; text-decoration: none; color: #065f46; font-size: 0.92rem; font-weight: 700; background: #ecfdf5; margin-bottom: 4px; transition: background 0.15s ease;" onmouseover="this.style.background='#d1fae5';" onmouseout="this.style.background='#ecfdf5';">
+                        <span>🌲 ${escapeHtml(t.name || t.tag_id)}</span>
+                        ${countLabel ? `<span style="font-size: 0.72rem; color: #059669; font-weight: 600;">${countLabel} →</span>` : '<span style="font-size: 0.72rem; color: #059669; font-weight: 600;">Avaa →</span>'}
+                    </a>
                 `;
             });
             html += `</div>`;
@@ -349,11 +366,12 @@
         // ── SECTION 2: PAIKAT & KOHTEET (sis. teemaan liitetyt kohteet) ────
         if (combinedPlaces.length > 0) {
             html += `<div style="margin-bottom: 0.85rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.6rem;">`;
-            const headerTitle = primaryTheme ? `PAIKAT & KOHTEET (${primaryTheme.name || primaryTheme.tag_id}: ${combinedPlaces.length})` : `PAIKAT & KOHTEET (${combinedPlaces.length})`;
+            const headerTitle = activeThemeObj ? `PAIKAT & KOHTEET (${activeThemeObj.name || activeThemeObj.tag_id}: ${combinedPlaces.length})` : `PAIKAT & KOHTEET (${combinedPlaces.length})`;
             html += `<div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 ${escapeHtml(headerTitle)}</div>`;
             
-            combinedPlaces.slice(0, 6).forEach(p => {
-                const targetUrl = p.place_id ? `tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}` : `kohdekartta.html?id=${encodeURIComponent(p.id || p.name)}`;
+            combinedPlaces.slice(0, 8).forEach(p => {
+                const placeTargetId = p.place_id || p.id;
+                const targetUrl = placeTargetId ? `tietoa-paikasta.html?id=${encodeURIComponent(placeTargetId)}` : `kohdekartta.html?id=${encodeURIComponent(p.name)}`;
                 const typeText = p.type || p.municipality || 'Kohde';
                 html += `
                     <a href="${targetUrl}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.7rem; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 0.92rem; font-weight: 600; margin-bottom: 3px;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
@@ -368,16 +386,18 @@
         // ── SECTION 3: YRITYKSET & TOIMIJAT (sis. teematoimijat v2) ─────────
         if (combinedCompanies.length > 0) {
             html += `<div style="margin-bottom: 0.5rem;">`;
-            const compHeader = primaryTheme ? `YRITYKSET & PALVELUT (${primaryTheme.name || primaryTheme.tag_id}: ${combinedCompanies.length})` : `YRITYKSET & PALVELUT (${combinedCompanies.length})`;
+            const compHeader = activeThemeObj ? `YRITYKSET & PALVELUT (${activeThemeObj.name || activeThemeObj.tag_id}: ${combinedCompanies.length})` : `YRITYKSET & PALVELUT (${combinedCompanies.length})`;
             html += `<div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #7c3aed; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🏢 ${escapeHtml(compHeader)}</div>`;
             
-            combinedCompanies.slice(0, 5).forEach(c => {
+            combinedCompanies.slice(0, 6).forEach(c => {
                 const badge = c.is_partner ? `<span style="font-size: 0.68rem; background: #fef3c7; color: #92400e; padding: 0.15rem 0.45rem; border-radius: 6px; font-weight: 700;">★ Kumppani</span>` : '';
+                const compName = c.nimi || c.name || 'Yritys';
+                const compCat = c.kategoria || c.category || 'Palvelu · Laukaa';
                 html += `
-                    <a href="yrityskortti.html?id=${encodeURIComponent(c.id || c.name)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.7rem; border-radius: 8px; text-decoration: none; color: #0f172a; margin-bottom: 3px;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                    <a href="yrityskortti.html?id=${encodeURIComponent(c.id || compName)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.7rem; border-radius: 8px; text-decoration: none; color: #0f172a; margin-bottom: 3px;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
                         <div>
-                            <div style="font-weight: 700; color: #6d28d9; font-size: 0.92rem;">🏢 ${escapeHtml(c.name)}</div>
-                            <div style="font-size: 0.75rem; color: #64748b;">${escapeHtml(c.category || 'Palvelu · Laukaa')}</div>
+                            <div style="font-weight: 700; color: #6d28d9; font-size: 0.92rem;">🏢 ${escapeHtml(compName)}</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">${escapeHtml(compCat)}</div>
                         </div>
                         ${badge}
                     </a>

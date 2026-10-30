@@ -1046,12 +1046,18 @@ function executeContextSearch(searchContext, companies = [], places = [], events
         // Query filter
         if (query) {
             const searchHaystack = [
+                c.nimi,
                 c.name,
-                c.description,
+                c.kategoria,
                 c.category,
+                c.description,
+                c.esittely,
+                c.mainoslause,
                 c.municipality,
+                c.alue_slug,
                 c.city,
-                ...(Array.isArray(c.tags) ? c.tags : []),
+                c.osoite,
+                ...(Array.isArray(c.tags) ? c.tags : (typeof c.tags === 'string' ? c.tags.split(',') : [])),
                 ...(Array.isArray(c.actor_themes) ? c.actor_themes : [])
             ].filter(Boolean).join(' ').toLowerCase();
 
