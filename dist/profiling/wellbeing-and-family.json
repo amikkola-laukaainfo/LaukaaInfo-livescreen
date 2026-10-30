@@ -62,7 +62,8 @@
                 "tyhypäivä",
                 "hyvinvointiluento",
                 "terveyspalvelut",
-                "kuntoutus"
+                "kuntoutus",
+                "kotikaynti"
             ],
             "node_links": [],
             "intent_codes": [],
@@ -310,7 +311,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:35:38.780Z",
+            "last_updated": "2026-10-30T14:07:59.907Z",
             "verified_by": "AI-analysis-v2",
             "status": "published"
         }
@@ -368,7 +369,8 @@
                 "lasten toimintaterapia",
                 "toimintakyky",
                 "arkikuntoutus",
-                "sensorinen integraatio"
+                "sensorinen integraatio",
+                "wellbeing-and-beauty"
             ],
             "node_links": [
                 "HYVINVOINTI"
@@ -612,7 +614,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:42:33.179Z",
+            "last_updated": "2026-10-30T13:49:12.630Z",
             "verified_by": "AI-analysis-v2",
             "status": "updated"
         }
@@ -673,7 +675,10 @@
                 "yritysjuhlat",
                 "ohjattu liikunta",
                 "jooga",
-                "ravintovalmennus"
+                "ravintovalmennus",
+                "rec_gym",
+                "personal-training",
+                "wellbeing-and-beauty"
             ],
             "node_links": [],
             "intent_codes": [
@@ -931,7 +936,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:36:40.310Z",
+            "last_updated": "2026-10-30T14:14:58.723Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -998,7 +1003,10 @@
                 "hyvinvointipäivät",
                 "ryhmätoiminta",
                 "luontoelämykset",
-                "tallivierailut"
+                "tallivierailut",
+                "yrityksen-kehittaminen",
+                "elaimet",
+                "yritysjuhlat"
             ],
             "node_links": [
                 "LAUKAA",
@@ -1251,7 +1259,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-01T06:19:50.557Z",
+            "last_updated": "2026-10-30T14:11:49.424Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1870,7 +1878,9 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "catering"
+            ],
             "node_links": [
                 "CATERING"
             ],
@@ -2111,7 +2121,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-25T07:10:46.593Z",
+            "last_updated": "2026-10-30T14:11:51.926Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -2166,7 +2176,11 @@
                 "suunnittelija / arkkitehti",
                 "kertaluonteinen remontti"
             ],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "construction-and-maintenance",
+                "home_cottage",
+                "home_maintenance"
+            ],
             "node_links": [],
             "intent_codes": [
                 "SHOP_CHILDREN",
@@ -2406,7 +2420,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-18T08:49:13.453Z",
+            "last_updated": "2026-10-30T14:11:11.265Z",
             "verified_by": "AI-analysis-v2",
             "status": "updated"
         }
@@ -2474,7 +2488,10 @@
                 "ryhmävierailu",
                 "koululaisretki",
                 "teemapuisto",
-                "kesätapahtuma"
+                "kesätapahtuma",
+                "rec_amusement",
+                "vapaa-aika",
+                "evt_birthday"
             ],
             "node_links": [
                 "HUVIT",
@@ -2749,7 +2766,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T13:47:08.799Z",
+            "last_updated": "2026-10-30T14:14:03.750Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -3100,7 +3117,10 @@
             ],
             "sub_contexts": [
                 "sauna_facility",
-                "juhlatila"
+                "juhlatila",
+                "vapaa-aika",
+                "evt_wedding",
+                "majoitus"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -3522,7 +3542,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:38:36.299Z",
+            "last_updated": "2026-10-30T14:14:13.407Z",
             "verified_by": "AI-analysis-v2",
             "status": "updated"
         }
@@ -5001,7 +5021,9 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "home_moving"
+            ],
             "node_links": [],
             "intent_codes": [
                 "MOVE_TRANSPORT",
@@ -5272,7 +5294,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-25T07:16:13.412Z",
+            "last_updated": "2026-10-30T14:06:19.969Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -5327,7 +5349,9 @@
                 "vanhusten apu",
                 "muuttoapu",
                 "kodinhoito",
-                "pihatyöt"
+                "pihatyöt",
+                "home_moving",
+                "home_cleaning"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO",
@@ -5591,7 +5615,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T14:04:52.721Z",
             "verified_by": "AI-analysis-v3",
             "status": "draft"
         }
@@ -5646,7 +5670,8 @@
                 "asiointiapu",
                 "arjen tuki",
                 "tilapäishoito",
-                "perhepalvelut"
+                "perhepalvelut",
+                "events-and-celebrations"
             ],
             "node_links": [
                 "HYVINVOINTI",
@@ -5890,7 +5915,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T14:10:29.805Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -6201,7 +6226,8 @@
                 "edullinen ostaminen",
                 "muutto",
                 "kodin perustaminen",
-                "kierratys"
+                "kierratys",
+                "edullinen-ostaminen"
             ],
             "node_links": [],
             "intent_codes": [],
@@ -6432,7 +6458,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:40:24.289Z",
+            "last_updated": "2026-10-30T14:14:30.233Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -6755,9 +6781,9 @@
                 "jousiammunta",
                 "melonta",
                 "talvirieha",
-                "pitopalvelu",
                 "ruokailu",
-                "luontomatkailu"
+                "luontomatkailu",
+                "family-and-children"
             ],
             "node_links": [
                 "LAUKAA",
@@ -7069,7 +7095,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:39:52.161Z",
+            "last_updated": "2026-10-30T14:10:54.512Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }

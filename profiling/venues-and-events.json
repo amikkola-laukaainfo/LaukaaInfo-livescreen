@@ -50,7 +50,8 @@
                 "pienet juhlat",
                 "kesäilta",
                 "ulkoilu",
-                "vierasvenesatama"
+                "vierasvenesatama",
+                "padel"
             ],
             "node_links": [
                 "LAUKAA",
@@ -393,7 +394,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-07-01T13:35:17.582Z",
+            "last_updated": "2026-10-30T14:08:27.010Z",
             "verified_by": "ai-generated",
             "status": "draft"
         },
@@ -1265,7 +1266,11 @@
                 "alppiruusupuisto",
                 "paivaretkikohde",
                 "dish_rental",
-                "evt_birthday_family"
+                "evt_birthday_family",
+                "biz_catering",
+                "pyorailijoiden-taukopaikka",
+                "evt_memorial",
+                "venue_meeting"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -1587,7 +1592,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:38:23.404Z",
+            "last_updated": "2026-10-30T14:10:57.673Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -18589,7 +18594,8 @@
                 "juhlapalvelu",
                 "yritystilaisuus",
                 "kahvila",
-                "tilausruokailu"
+                "tilausruokailu",
+                "kokoustila"
             ],
             "node_links": [
                 "CATERING",
@@ -18855,7 +18861,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:36:01.688Z",
+            "last_updated": "2026-10-30T14:15:33.533Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -18901,7 +18907,11 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "astiasto",
+                "funerals-and-memorials",
+                "dish_rental"
+            ],
             "node_links": [
                 "CATERING"
             ],
@@ -19164,7 +19174,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-24T18:02:42.161Z",
+            "last_updated": "2026-10-30T14:13:52.118Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -19222,7 +19232,8 @@
                 "sauna",
                 "anniskelu",
                 "tapahtumatuotanto",
-                "live-musiikki"
+                "live-musiikki",
+                "juhlat"
             ],
             "node_links": [
                 "HUVIT",
@@ -19496,7 +19507,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T17:57:31.970Z",
+            "last_updated": "2026-10-30T14:05:39.491Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -21583,7 +21594,12 @@
                 "muistotilaisuus",
                 "luontohyvinvointi",
                 "eläinavusteinen toiminta",
-                "elaimet"
+                "elaimet",
+                "elamykset",
+                "funerals-and-memorials",
+                "evt_corporate",
+                "hyvinvointi",
+                "sauna"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -21872,7 +21888,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:36:03.955Z",
+            "last_updated": "2026-10-30T14:14:42.352Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -21937,7 +21953,11 @@
                 "iltapalabuffet",
                 "muistotilaisuuden tarjoilu",
                 "kahvitarjoilu",
-                "pitopalvelu hautajaisiin"
+                "pitopalvelu hautajaisiin",
+                "voileipakakut",
+                "biz_catering",
+                "haacatering",
+                "events-and-celebrations"
             ],
             "node_links": [
                 "CATERING",
@@ -22178,7 +22198,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:42:35.241Z",
+            "last_updated": "2026-10-30T14:07:51.029Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -24371,7 +24391,8 @@
                 "kukkakauppa",
                 "hautajaiset",
                 "hautauspalvelu",
-                "muistotilaisuus"
+                "muistotilaisuus",
+                "hautaus"
             ],
             "node_links": [
                 "LAUKAA",
@@ -24616,7 +24637,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:39:47.919Z",
+            "last_updated": "2026-10-30T13:46:21.307Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -26594,7 +26615,8 @@
                 "kukkapalvelu",
                 "hääkoristelu",
                 "juhlakukat",
-                "poytakoristeet"
+                "poytakoristeet",
+                "haakukat"
             ],
             "node_links": [
                 "KUKAT"
@@ -26881,7 +26903,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:39:05.242Z",
+            "last_updated": "2026-10-30T13:48:56.621Z",
             "verified_by": "ai-analysis-v2",
             "status": "draft"
         }
@@ -29466,7 +29488,8 @@
                 "dokumentaarinen kuvaus",
                 "hautajaiskuvaus",
                 "muotokuvaus",
-                "potrettikuvaus"
+                "potrettikuvaus",
+                "dokumentaarinen-kuvaus"
             ],
             "node_links": [
                 "LAUKAA",
@@ -29735,7 +29758,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T14:11:35.957Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -29787,7 +29810,8 @@
                 "pieneläintuhkaus",
                 "lemmikkimuistot",
                 "uurnapalvelu",
-                "surupalvelu"
+                "surupalvelu",
+                "funerals-and-memorials"
             ],
             "node_links": [
                 "HYVINVOINTI",
@@ -30028,7 +30052,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:46:40.052Z",
             "verified_by": "ai-profiling-v1",
             "status": "draft"
         }
@@ -37675,7 +37699,9 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "kokoukset"
+            ],
             "node_links": [],
             "intent_codes": [],
             "intent_scores": {}
@@ -37902,7 +37928,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T14:12:26.889Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -45819,7 +45845,8 @@
                 "yritystapahtuma",
                 "lounas",
                 "a la carte",
-                "huvit"
+                "huvit",
+                "kartano"
             ],
             "node_links": [
                 "LAUKAA",
@@ -46061,7 +46088,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-10T07:05:27.810Z",
+            "last_updated": "2026-10-30T14:05:37.443Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -48707,7 +48734,10 @@
                 "savusauna",
                 "funerals-and-memorials",
                 "yritystapahtumat",
-                "majoitus"
+                "majoitus",
+                "evt_wedding",
+                "juhlatila",
+                "juhlat"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -48984,7 +49014,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:42:52.314Z",
+            "last_updated": "2026-10-30T14:12:43.597Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -49309,7 +49339,13 @@
             "not_suitable_for": [
                 "omilla tarjoiluilla"
             ],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "table_setting_set",
+                "juhlatila",
+                "catering",
+                "pitopalvelu",
+                "evt_birthday"
+            ],
             "node_links": [
                 "JUHLATILA",
                 "CATERING",
@@ -49623,7 +49659,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-25T07:22:49.401Z",
+            "last_updated": "2026-10-30T14:10:44.839Z",
             "verified_by": "ai-analysis-v3",
             "status": "enriched"
         }
@@ -49687,7 +49723,8 @@
                 "yritystilaisuus",
                 "koulutuspäivä",
                 "työpaja",
-                "venue_party"
+                "venue_party",
+                "koulutuspaiva"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -49940,7 +49977,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:43:51.276Z",
+            "last_updated": "2026-10-30T14:13:21.334Z",
             "verified_by": "ai-analysis-v2",
             "status": "draft"
         }
@@ -50699,7 +50736,12 @@
                 "lomamökki",
                 "palju",
                 "saunamökki",
-                "venue_party"
+                "venue_party",
+                "wellbeing-and-beauty",
+                "evt_wedding",
+                "catering",
+                "juhlatila",
+                "venue_accommodation"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -51009,7 +51051,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:38:12.354Z",
+            "last_updated": "2026-10-30T14:11:05.958Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -51076,7 +51118,8 @@
                 "saunaelämys",
                 "hemmottelupaketti",
                 "luontoympäristö",
-                "tyky-paiva"
+                "tyky-paiva",
+                "luontoymparisto"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -51400,7 +51443,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:40:22.458Z",
+            "last_updated": "2026-10-30T14:05:21.552Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -51468,7 +51511,9 @@
                 "perhejuhlat",
                 "sukujuhlat",
                 "events-and-celebrations",
-                "haat"
+                "haat",
+                "evt_corporate",
+                "funerals-and-memorials"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -51761,7 +51806,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:39:08.710Z",
+            "last_updated": "2026-10-30T14:14:17.731Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -51845,7 +51890,10 @@
                 "videotykki",
                 "kahvitus",
                 "yksityistilaisuus",
-                "venue_meeting"
+                "venue_meeting",
+                "business-events",
+                "biz_seminar",
+                "venue_party"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -52137,7 +52185,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:32:42.687Z",
+            "last_updated": "2026-10-30T14:12:13.576Z",
             "verified_by": "web-research",
             "status": "updated"
         }
@@ -52210,7 +52258,11 @@
                 "omilla tarjoiluilla"
             ],
             "sub_contexts": [
-                "evt_birthday_family"
+                "evt_birthday_family",
+                "projector",
+                "musiikki",
+                "kokoustarjoilu",
+                "family-and-children"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -52546,7 +52598,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:43:40.057Z",
+            "last_updated": "2026-10-30T14:15:38.456Z",
             "verified_by": "web-enriched-ai",
             "status": "verified"
         },
@@ -53013,7 +53065,8 @@
                 "kylätapahtumat",
                 "sauna",
                 "esteeton-juhlatila",
-                "juhlatila"
+                "juhlatila",
+                "evt_memorial"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -53324,7 +53377,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:37:22.228Z",
+            "last_updated": "2026-10-30T13:46:42.584Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -53372,7 +53425,8 @@
                 "järjestää ruoan",
                 "tunnelmallinen kartano",
                 "luonnonläheinen tila",
-                "videokuvaus / esitykset"
+                "videokuvaus / esitykset",
+                "videotykki"
             ],
             "sub_contexts": [
                 "häät",
@@ -53384,11 +53438,13 @@
                 "seminaari",
                 "strategiapäivä",
                 "tyky-päivä",
-                "videotykki",
                 "muistotilaisuus",
                 "kahvitus",
                 "esteetön tila",
-                "lattiamajoitus"
+                "lattiamajoitus",
+                "venue_party",
+                "evt_wedding",
+                "business-events"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -53698,7 +53754,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-06-14T14:56:06.574Z",
+            "last_updated": "2026-10-30T14:14:33.953Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
         }
@@ -53770,7 +53826,8 @@
                 "ryhmäruokailu",
                 "muistotilaisuuden tarjoilut",
                 "kahvitarjoilu",
-                "catering"
+                "catering",
+                "syntymapaivat"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -54047,7 +54104,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:37:16.926Z",
+            "last_updated": "2026-10-30T14:13:22.786Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
         }
@@ -54093,7 +54150,8 @@
                 "keski-suomi",
                 "lähiruoka",
                 "takeaway",
-                "ruoka tapahtumiin"
+                "ruoka tapahtumiin",
+                "ruoka-tapahtumiin"
             ],
             "node_links": [
                 "LAUKAA",
@@ -54344,7 +54402,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-03T19:32:49.785Z",
+            "last_updated": "2026-10-30T14:13:12.091Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
         }
@@ -55049,7 +55107,10 @@
                 "pitopalvelu"
             ],
             "sub_contexts": [
-                "canoe_rental"
+                "canoe_rental",
+                "evt_birthday_adults",
+                "rec_outdoor",
+                "liikunta-ja-vapaaaika"
             ],
             "node_links": [
                 "LIIKUNTA"
@@ -55418,7 +55479,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:43:27.909Z",
+            "last_updated": "2026-10-30T14:15:57.022Z",
             "verified_by": "ai-profile-builder",
             "status": "updated"
         }
@@ -55498,7 +55559,10 @@
                 "hääkukat",
                 "kasvihuonetuotanto",
                 "puutarhamyynti",
-                "hautauspalvelut"
+                "hautauspalvelut",
+                "events-and-celebrations",
+                "biz_florist",
+                "evt_wedding"
             ],
             "node_links": [
                 "KUKAT"
@@ -55753,7 +55817,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:31:05.459Z",
+            "last_updated": "2026-10-30T14:15:00.692Z",
             "verified_by": "web-research",
             "status": "enriched"
         }
@@ -56129,7 +56193,9 @@
                 "lievestuore",
                 "kelkkamäen kappeli",
                 "floristipalvelut",
-                "evt_birthday_family"
+                "evt_birthday_family",
+                "funeral_memorial",
+                "funerals-and-memorials"
             ],
             "node_links": [
                 "KUKAT",
@@ -56396,7 +56462,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:42:44.639Z",
+            "last_updated": "2026-10-30T14:14:51.490Z",
             "verified_by": "ai-profile-enrichment",
             "status": "enriched"
         }

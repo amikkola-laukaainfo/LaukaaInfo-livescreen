@@ -47,7 +47,8 @@
                 "verkkosivut",
                 "startup-brändäys",
                 "mainonta",
-                "sisällöntuotanto"
+                "sisällöntuotanto",
+                "startup-brandays"
             ],
             "node_links": [
                 "BRÄNDÄYS",
@@ -301,7 +302,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T13:42:47.212Z",
+            "last_updated": "2026-10-30T14:12:47.095Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -423,7 +424,9 @@
                 "sisällöntuotanto",
                 "seo",
                 "haavideo",
-                "hautajaiset"
+                "hautajaiset",
+                "yrityksen-perustaminen",
+                "valokuvaaja"
             ],
             "node_links": [
                 "VALOKUVAUS",
@@ -436,7 +439,8 @@
                 "MEDIA_VIDEO",
                 "MEDIA_PHOTO",
                 "STARTUP_WEB",
-                "EVT_WEDDING"
+                "EVT_WEDDING",
+                "EVT_MEMORIAL"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,
@@ -756,7 +760,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:37:20.519Z",
+            "last_updated": "2026-10-30T13:49:48.613Z",
             "verified_by": "AI-analysis-v2",
             "status": "verified"
         },
@@ -838,7 +842,8 @@
                 "kehittämispalvelut",
                 "hankeneuvonta",
                 "liiketoiminnan kehittäminen",
-                "rahoitusneuvonta"
+                "rahoitusneuvonta",
+                "neuvonta"
             ],
             "node_links": [
                 "LAUKAA",
@@ -1074,7 +1079,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:42:59.260Z",
+            "last_updated": "2026-10-30T14:08:58.853Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1434,7 +1439,8 @@
                 "kasvupalvelut",
                 "johtaminen",
                 "pk-yritykset",
-                "yrityksen-kehittaminen"
+                "yrityksen-kehittaminen",
+                "business-growth"
             ],
             "node_links": [
                 "BRÄNDÄYS",
@@ -1685,7 +1691,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:42:54.612Z",
+            "last_updated": "2026-10-30T14:11:17.280Z",
             "verified_by": "web-research-ai",
             "status": "draft"
         }
