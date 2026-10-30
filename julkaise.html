@@ -217,41 +217,9 @@
               <span id="selectedThemesCount" class="text-[10px] font-bold text-violet-600">0 valittu</span>
             </div>
 
+            <!-- mainThemeSelect täytetään dynaamisesti theme_taxonomy.json:sta loadThemeTaxonomy()-funktiolla -->
             <select id="mainThemeSelect" onchange="addThemeFromDropdown(this.value)" class="w-full p-2.5 mb-2 bg-violet-50/80 border border-violet-200 rounded-xl text-xs font-bold text-violet-900 outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer">
-              <option value="">➕ Valitse pääteema pudotusvalikosta...</option>
-              <optgroup label="🎨 Kulttuuri, Vapaa-aika & Tapahtumat">
-                <option value="Kulttuuri">🎨 Kulttuuri</option>
-                <option value="Käsityö">🧵 Käsityö</option>
-                <option value="Musiikki">🎵 Musiikki</option>
-                <option value="Perinteet">📜 Perinteet</option>
-                <option value="Tapahtumat">📅 Tapahtumat</option>
-                <option value="Matkailu">🌲 Matkailu</option>
-                <option value="Luonto">🍃 Luonto</option>
-              </optgroup>
-              <optgroup label="⚽ Liikunta, Hyvinvointi & Perhe">
-                <option value="Liikunta">⚽ Liikunta & Urheilu</option>
-                <option value="Hyvinvointi">🏥 Hyvinvointi & Terveys</option>
-                <option value="Nuoret">🧢 Nuoret</option>
-                <option value="Lapset & Perhe">👨‍👩‍👧 Lapset & Perhe</option>
-                <option value="Eläimet & Lemmikit">🐾 Eläimet & Lemmikit</option>
-              </optgroup>
-              <optgroup label="💼 Elinkeino, Yrittäjyys & Digitaalisuus">
-                <option value="Yrittäjyys">💼 Yrittäjyys</option>
-                <option value="Verkostot">🤝 Verkostot</option>
-                <option value="Yrityspalvelut">🏢 Yrityspalvelut</option>
-                <option value="Koulutus">🎓 Koulutus</option>
-                <option value="DIGITAALISUUS">💻 Digitaalisuus</option>
-                <option value="VIDEOTUOTANTO">🎥 Videotuotanto & Media</option>
-              </optgroup>
-              <optgroup label="🛍️ Palvelut, Arki & Asuminen">
-                <option value="Ravintolat">🍕 Ruokailu & Ravintolat</option>
-                <option value="Ostokset">🛍️ Kaupat & Ostokset</option>
-                <option value="Autoilu">🚗 Autoilu & Huolto</option>
-                <option value="Rakentaminen">🏠 Remontti & Rakentaminen</option>
-                <option value="Asuminen">🔑 Muutto & Asuminen</option>
-                <option value="Mökkipalvelut">🏡 Mökkipalvelut</option>
-                <option value="Päivystys">🚨 Päivystys & Huolto</option>
-              </optgroup>
+              <option value="">➕ Ladataan teemoja...</option>
             </select>
 
             <div class="relative mb-2">
@@ -399,23 +367,26 @@
       let editingPostId = null;
       let loadedMyPosts = [];
       let currentPubType = 'announcement';
+      // availableTags bootstrapataan theme_taxonomy.json:sta (loadThemeTaxonomy täyttää tämän)
+      // Fallback-lista käytetään jos lataus epäonnistuu — tag_id:t ovat oikeita slugeja
       let availableTags = [
-        { tag_id: 'kulttuuri', name: 'Kulttuuri' },
-        { tag_id: 'kasityo', name: 'Käsityö' },
-        { tag_id: 'musiikki', name: 'Musiikki' },
-        { tag_id: 'perinteet', name: 'Perinteet' },
-        { tag_id: 'tapahtumat', name: 'Tapahtumat' },
-        { tag_id: 'matkailu', name: 'Matkailu' },
-        { tag_id: 'luonto', name: 'Luonto' },
-        { tag_id: 'liikunta', name: 'Liikunta & Urheilu' },
-        { tag_id: 'hyvinvointi', name: 'Hyvinvointi' },
-        { tag_id: 'nuoret', name: 'Nuoret' },
-        { tag_id: 'lapset', name: 'Lapset & Perhe' },
-        { tag_id: 'yrittajyys', name: 'Yrittäjyys' },
-        { tag_id: 'verkostot', name: 'Verkostot' },
-        { tag_id: 'videotuotanto', name: 'Videotuotanto & Media' },
-        { tag_id: 'digitaalisuus', name: 'Digitaalisuus' },
-        { tag_id: 'koulutus', name: 'Koulutus' }
+        { tag_id: 'kulttuuri',   name: 'Kulttuuri',         category: 'THEME' },
+        { tag_id: 'tapahtumat',  name: 'Tapahtumat',        category: 'THEME' },
+        { tag_id: 'matkailu',    name: 'Matkailu',          category: 'THEME' },
+        { tag_id: 'luonto',      name: 'Luonto',            category: 'THEME' },
+        { tag_id: 'ulkoilu',     name: 'Ulkoilu',           category: 'THEME' },
+        { tag_id: 'liikunta',    name: 'Liikunta',          category: 'THEME' },
+        { tag_id: 'hyvinvointi', name: 'Hyvinvointi',       category: 'THEME' },
+        { tag_id: 'historia',    name: 'Historia',          category: 'THEME' },
+        { tag_id: 'ruoka',       name: 'Ruoka',             category: 'THEME' },
+        { tag_id: 'maaseutu',    name: 'Maaseutu',          category: 'THEME' },
+        { tag_id: 'vesistot',    name: 'Vesistöt',          category: 'THEME' },
+        { tag_id: 'rakentaminen',name: 'Rakentaminen',      category: 'SECTOR' },
+        { tag_id: 'palvelut',    name: 'Palvelut',          category: 'SECTOR' },
+        { tag_id: 'autoilu',     name: 'Autoilu',           category: 'SECTOR' },
+        { tag_id: 'asuminen',    name: 'Asuminen',          category: 'SECTOR' },
+        { tag_id: 'koulutus',    name: 'Koulutus',          category: 'SECTOR' },
+        { tag_id: 'media',       name: 'Media',             category: 'SECTOR' }
       ];
       let selectedThemes = new Set();
 
@@ -571,32 +542,119 @@
         if (sel) sel.value = '';
       }
 
+      // Ikonit theme_taxonomy.json:n pääteemoille
+      const THEME_ICONS = {
+        hyvinvointi: '🏥', ulkoilu: '🥾', liikunta: '⚽', luonto: '🍃',
+        matkailu: '✈️', kulttuuri: '🎨', historia: '🏛️', ruoka: '🍽️',
+        tapahtumat: '📅', maaseutu: '🌾', vesistot: '💧',
+        rakentaminen: '🏗️', palvelut: '🛍️', autoilu: '🚗',
+        asuminen: '🏠', koulutus: '🎓', media: '🎥'
+      };
+
+      // Täyttää mainThemeSelect-valikon theme_taxonomy.json-rakenteen mukaisesti
+      function populateMainThemeSelect(taxonomy) {
+        const select = document.getElementById('mainThemeSelect');
+        if (!select || !taxonomy || !taxonomy.main_groups) return;
+
+        select.innerHTML = '<option value="">➕ Valitse pääteema pudotusvalikosta...</option>';
+
+        // THEME-ryhmät ensin (Kulttuuri, Luonto, Matkailu jne.)
+        const themes = taxonomy.main_groups.filter(g => g.category === 'THEME');
+        if (themes.length) {
+          const og = document.createElement('optgroup');
+          og.label = '🌲 Teemat & Elämäntapa';
+          themes.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;   // ← oikea tag_id-slug, esim. "kulttuuri"
+            opt.textContent = `${THEME_ICONS[g.id] || '🧩'} ${g.label}`;
+            og.appendChild(opt);
+          });
+          select.appendChild(og);
+        }
+
+        // SECTOR-ryhmät (Rakentaminen, Autoilu, Media jne.)
+        const sectors = taxonomy.main_groups.filter(g => g.category === 'SECTOR');
+        if (sectors.length) {
+          const og = document.createElement('optgroup');
+          og.label = '💼 Toimialat & Palvelut';
+          sectors.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;   // ← oikea tag_id-slug, esim. "rakentaminen"
+            opt.textContent = `${THEME_ICONS[g.id] || '🏢'} ${g.label}`;
+            og.appendChild(opt);
+          });
+          select.appendChild(og);
+        }
+      }
+
+      // Lataa theme_taxonomy.json → täyttää valikko + availableTags
+      // Yhdistää Supabasen tags-tauluun lisätaksonomian varalta
       async function loadThemesFromSupabase() {
+        // 1. Ladataan theme_taxonomy.json (ensisijainen lähde tag_id-rakenteelle)
+        try {
+          const res = await fetch('theme_taxonomy.json');
+          if (res.ok) {
+            const taxonomy = await res.json();
+            if (taxonomy && taxonomy.main_groups) {
+              // Rakennetaan availableTags pääteemoista (kaikki tag_id:t ovat oikeita slugeja)
+              const taxonomyTags = [];
+              taxonomy.main_groups.forEach(group => {
+                // Lisätään pääteema
+                taxonomyTags.push({ tag_id: group.id, name: group.label, category: group.category });
+                // Lisätään myös alitagit chip-listaan (hakua varten)
+                (group.groups || []).forEach(sub => {
+                  (sub.tags || []).forEach(tag => {
+                    taxonomyTags.push({ tag_id: tag.id, name: tag.label, category: tag.category, parent: group.id });
+                  });
+                });
+              });
+              // Lisätään muut erikoisryhmät (target_groups, seasons, features)
+              ['target_groups', 'seasons', 'features'].forEach(key => {
+                (taxonomy[key] || []).forEach(t => {
+                  taxonomyTags.push({ tag_id: t.id, name: t.label, category: t.category });
+                });
+              });
+
+              // Yhdistetään fallback-listaan (deduplikointi tag_id:n perusteella)
+              const seen = new Set(taxonomyTags.map(t => t.tag_id));
+              availableTags.forEach(t => { if (!seen.has(t.tag_id)) taxonomyTags.push(t); });
+              availableTags = taxonomyTags;
+
+              // Täytetään pudotusvalikko oikeilla tag_id-arvoilla
+              populateMainThemeSelect(taxonomy);
+            }
+          }
+        } catch (e) {
+          console.warn('[Julkaisupiste] theme_taxonomy.json lataus epäonnistui, käytetään fallbackia:', e);
+          // Rakennetaan valikko fallback-listasta
+          populateMainThemeSelect({
+            main_groups: availableTags
+              .filter(t => t.category === 'THEME' || t.category === 'SECTOR')
+              .map(t => ({ id: t.tag_id, label: t.name, category: t.category, groups: [] }))
+          });
+        }
+
+        // 2. Täydennetään Supabasen tags-taulusta (lisää tagit jotka eivät ole taksonomiassa)
         const sb = getSbClient();
         if (sb) {
           try {
-            const { data } = await sb.from('tags').select('tag_id, name').limit(150);
+            const { data } = await sb.from('tags').select('tag_id, name, category').eq('active', true).limit(200);
             if (data && data.length > 0) {
               const dbTagList = data.map(t => ({
                 tag_id: t.tag_id || t.id,
-                name: t.name || t.tag_id
+                name: t.name || t.tag_id,
+                category: t.category || 'SERVICE'
               })).filter(t => t.tag_id);
 
-              const seen = new Set();
-              const merged = [];
-              for (const t of [...dbTagList, ...availableTags]) {
-                if (!seen.has(t.tag_id)) {
-                  seen.add(t.tag_id);
-                  merged.push(t);
-                }
-              }
-              availableTags = merged;
+              const seen = new Set(availableTags.map(t => t.tag_id));
+              dbTagList.forEach(t => { if (!seen.has(t.tag_id)) availableTags.push(t); });
             }
           } catch (e) {
-            console.warn('Tags fetch notice:', e);
+            console.warn('[Julkaisupiste] Supabase tags fetch notice:', e);
           }
         }
-        renderThemesList(availableTags);
+
+        renderThemesList(availableTags.filter(t => !t.parent)); // Näytetään chipeissä vain päätagit
       }
 
       function renderThemesList(tags) {
