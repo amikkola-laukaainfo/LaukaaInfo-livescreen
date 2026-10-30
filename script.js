@@ -3774,6 +3774,7 @@ async function initV4Places() {
 }
 
 function initV4GlobalSearch() {
+    if (window.__smartSearchActive) return;
     const input = document.getElementById('v4-global-search');
     const dropdown = document.getElementById('v4-search-dropdown');
     if (!input || !dropdown) return;

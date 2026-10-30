@@ -373,7 +373,8 @@
                 "ilmastointihuolto",
                 "vikadiagnostiikka",
                 "määräaikaishuolto",
-                "sijaisauto"
+                "sijaisauto",
+                "auto_repair"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO"
@@ -613,7 +614,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:36:01.679Z",
+            "last_updated": "2026-10-30T15:48:07.830Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -661,7 +662,8 @@
                 "kolarikorjaus",
                 "maalipinnan korjaus",
                 "auton maalaus",
-                "ruostekorjaus"
+                "ruostekorjaus",
+                "auto_repair"
             ],
             "node_links": [],
             "intent_codes": [
@@ -895,7 +897,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-09T18:18:13.068Z",
+            "last_updated": "2026-10-30T15:35:47.316Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1222,11 +1224,11 @@
             "sub_contexts": [
                 "kahvila",
                 "ravintola",
-                "majoitus",
                 "venevuokraus",
                 "lomamökki",
                 "tapahtumat",
-                "matkailu"
+                "matkailu",
+                "huvit"
             ],
             "node_links": [
                 "LAUKAA",
@@ -1469,7 +1471,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T12:57:45.330Z",
+            "last_updated": "2026-10-30T15:42:20.385Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
