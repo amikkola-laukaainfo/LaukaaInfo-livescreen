@@ -1727,47 +1727,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// ── REITTILOGIIKKA TEEMOILLE ──────────────────────────
+// ── REITTILOGIIKKA TEEMOILLE (059C – get_content_for_context RPC) ──
 async function loadThemeRoutes(themeName) {
     if (!aiSbClient) return;
 
-    // Jos teema ei ole 'luontopolut', 'historiapolut' yms. voimme käyttää tagia route_categorynä
-    // Tässä yksinkertaistettu haku: jos reitillä on category = teema, näytetään se.
-    // Voit laajentaa tätä myöhemmin tarkemmaksi.
-    const normalizedTheme = themeName.toLowerCase();
-    let categoryFilter = normalizedTheme;
-    
-    // Yleisimmät teemamappaukset
-    if (normalizedTheme === 'luontopolut' || normalizedTheme === 'luonto') categoryFilter = 'luonto';
-    else if (normalizedTheme === 'historia' || normalizedTheme === 'historiapolut') categoryFilter = 'historia';
-
     try {
-        // Direct routes query (category or theme_id)
-        const { data: directRoutes } = await aiSbClient
-            .from('routes')
-            .select('id, place_id, title, description, visibility, category, distance_meters')
-            .or(`theme_id.eq.${themeName},category.ilike.%${categoryFilter}%`);
+        // 1. Haetaan tietokannan varsinainen tags.tag_id (ei pelkkä teemanimi)
+        let resolvedTagId = null;
+        if (themeName) {
+            const raw = String(themeName).trim();
+            try {
+                const { data: tagRow } = await aiSbClient
+                    .from('tags')
+                    .select('tag_id')
+                    .or(`tag_id.eq.${raw},name.ilike.${raw}`)
+                    .limit(1)
+                    .maybeSingle();
 
-        // Junction routes query (route_themes)
-        let junctionRoutes = [];
-        try {
-            const { data: jData } = await aiSbClient
-                .from('route_themes')
-                .select('route_id, routes(id, place_id, title, description, visibility, category, distance_meters)')
-                .eq('theme_id', themeName);
-            if (jData) {
-                junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+                if (tagRow && tagRow.tag_id) {
+                    resolvedTagId = tagRow.tag_id;
+                }
+            } catch (tagErr) {
+                console.debug('[ThemeRoutes] Tagin validointivirhe:', tagErr?.message);
             }
-        } catch (e) {}
+            if (!resolvedTagId && raw) {
+                resolvedTagId = raw;
+            }
+        }
 
-        const routeMap = new Map();
-        (directRoutes || []).forEach(r => routeMap.set(r.id, r));
-        junctionRoutes.forEach(r => routeMap.set(r.id, r));
-        const routes = Array.from(routeMap.values());
+        if (!resolvedTagId) {
+            console.warn('[ThemeRoutes] Kelvollista tag_id-tunnistetta ei löytynyt, ohitetaan reittihaku.');
+            return;
+        }
+
+        let routes = [];
+        let rpcSuccess = false;
+
+        // 2. Ensisijainen haku: get_content_for_context RPC
+        try {
+            const { data: rpcData, error: rpcErr } = await aiSbClient.rpc('get_content_for_context', {
+                p_mode: 'THEME',
+                p_tag_id: resolvedTagId,
+                p_types: ['route'],
+                p_limit: 20
+            });
+
+            if (rpcErr) {
+                console.warn('[ThemeRoutes] get_content_for_context RPC-virhe, aktivoidaan tekninen varalogiikka:', rpcErr);
+            } else {
+                rpcSuccess = true;
+                // RPC on ensisijainen totuus: jos tulosjoukko on tyhjä, osiota ei näytetä
+                routes = (rpcData || []).map(r => ({
+                    id: r.content_id,
+                    title: r.title,
+                    description: r.description,
+                    visibility: 'public',
+                    category: 'Reitti',
+                    distance_meters: null
+                }));
+            }
+        } catch (rpcExc) {
+            console.warn('[ThemeRoutes] get_content_for_context poikkeus, aktivoidaan tekninen varalogiikka:', rpcExc);
+        }
+
+        // 3. Tekninen varalogiikka (sallitaan VAIN jos RPC epäonnistui tekniseen virheeseen)
+        // Huom: ei palauteta mielivaltaista category-merkkijonovertailua, rajataan vain julkisiin
+        if (!rpcSuccess) {
+            const { data: directRoutes } = await aiSbClient
+                .from('routes')
+                .select('id, place_id, title, description, visibility, category, distance_meters')
+                .eq('theme_id', resolvedTagId)
+                .or('visibility.eq.public,visibility.eq.PUBLIC,visibility.is.null');
+
+            let junctionRoutes = [];
+            try {
+                const { data: jData } = await aiSbClient
+                    .from('route_themes')
+                    .select('route_id, routes!inner(id, place_id, title, description, visibility, category, distance_meters)')
+                    .eq('theme_id', resolvedTagId)
+                    .or('routes.visibility.eq.public,routes.visibility.eq.PUBLIC,routes.visibility.is.null');
+                if (jData) {
+                    junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+                }
+            } catch (e) {}
+
+            const routeMap = new Map();
+            (directRoutes || []).forEach(r => routeMap.set(r.id, r));
+            junctionRoutes.forEach(r => routeMap.set(r.id, r));
+            routes = Array.from(routeMap.values());
+        }
 
         if (!routes || routes.length === 0) return;
 
-        // Etsi DOM-elementti johon reitit lisätään (jos ei ole, luodaan)
+        // 4. Renderöinti (säilytetty 1:1 ennallaan)
         let routesSection = document.getElementById('routes-section');
         if (!routesSection) {
             const placesSection = document.getElementById('places-section');
@@ -1792,7 +1844,7 @@ async function loadThemeRoutes(themeName) {
                 return `
                 <a href="reitti.html?id=${r.id}" style="text-decoration: none; color: inherit; display: block; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 1rem; transition: transform 0.2s; border-left: 3px solid ${isPrivate ? '#e11d48' : '#059669'};" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
                     <div style="font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">${isPrivate ? '🔒 ' : ''}${r.title}</div>
-                    <div style="font-size: 0.85rem; color: #64748b;">${distStr} &middot; ${r.category || 'Reitti'}</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">${distStr ? distStr + ' &middot; ' : ''}${r.category || 'Reitti'}</div>
                 </a>`;
             }).join('');
         }

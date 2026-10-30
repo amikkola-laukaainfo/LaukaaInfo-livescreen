@@ -3911,43 +3911,91 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
     }
 }
 
-// ── REITTILOGIIKKA ──────────────────────────
+// ── REITTILOGIIKKA (059A – get_content_for_context RPC) ──
 async function loadRoutesForPlace(place) {
     const routesContainer = document.getElementById('routes-list-container');
     const routesList = document.getElementById('routes-list');
     if (!routesContainer || !routesList) return;
 
     try {
-        // Direct routes (routes.place_id)
-        const { data: directRoutes, error: directErr } = await window.aiSb
-            .from('routes')
-            .select('id, place_id, title, description, visibility, category, distance_meters')
-            .eq('place_id', place.place_id);
-
-        if (directErr) {
-            console.error('Virhe haettaessa suoria reittejä:', directErr);
+        const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        let placeUuid = null;
+        if (place && place.id && UUID_REGEX.test(String(place.id).trim())) {
+            placeUuid = String(place.id).trim();
+        } else if (place && place.place_id && UUID_REGEX.test(String(place.place_id).trim())) {
+            placeUuid = String(place.place_id).trim();
         }
 
-        // N-to-N routes (route_places junction table)
-        let junctionRoutes = [];
+        // 1. Jos kelvollista paikka-UUID:tä ei ole, älä suorita fallback-hakua
+        if (!placeUuid) {
+            console.warn('[Routes] Kelvollista paikka-UUID-tunnistetta ei löytynyt, ohitetaan reittihaku.');
+            routesContainer.style.display = 'none';
+            return;
+        }
+
+        let routes = [];
+        let rpcSuccess = false;
+
+        // 2. Ensisijainen: get_content_for_context RPC
         try {
-            const { data: jData } = await window.aiSb
-                .from('route_places')
-                .select('route_id, routes(id, place_id, title, description, visibility, category, distance_meters)')
-                .eq('place_id', place.place_id);
-            if (jData) {
-                junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+            const { data: rpcData, error: rpcErr } = await window.aiSb.rpc('get_content_for_context', {
+                p_mode: 'PLACE',
+                p_place_id: placeUuid,
+                p_types: ['route'],
+                p_limit: 20
+            });
+
+            if (rpcErr) {
+                console.warn('[Routes] get_content_for_context RPC-virhe, aktivoidaan tekninen varalogiikka:', rpcErr);
+            } else {
+                rpcSuccess = true;
+                // RPC on ensisijainen totuus: jos tulos on tyhjä, säiliö pysyy piilossa
+                routes = (rpcData || []).map(r => ({
+                    id: r.content_id,
+                    title: r.title,
+                    description: r.description,
+                    visibility: 'public',
+                    category: 'Reitti',
+                    distance_meters: null
+                }));
             }
-        } catch (e) {
-            // route_places table optional fallback
+        } catch (rpcExc) {
+            console.warn('[Routes] get_content_for_context poikkeus, aktivoidaan tekninen varalogiikka:', rpcExc);
         }
 
-        // Combine and deduplicate by route id
-        const routeMap = new Map();
-        (directRoutes || []).forEach(r => routeMap.set(r.id, r));
-        junctionRoutes.forEach(r => routeMap.set(r.id, r));
-        const routes = Array.from(routeMap.values());
+        // 3. Varalogiikka (vain teknisessä RPC-virhetilanteessa, rajattu samoihin julkisuusreunaehtoihin)
+        if (!rpcSuccess) {
+            const { data: directRoutes, error: directErr } = await window.aiSb
+                .from('routes')
+                .select('id, place_id, title, description, visibility, category, distance_meters')
+                .eq('place_id', placeUuid)
+                .or('visibility.eq.public,visibility.eq.PUBLIC,visibility.is.null');
 
+            if (directErr) {
+                console.error('[Routes] Virhe haettaessa suoria reittejä varalogiikalla:', directErr);
+            }
+
+            let junctionRoutes = [];
+            try {
+                const { data: jData } = await window.aiSb
+                    .from('route_places')
+                    .select('route_id, routes!inner(id, place_id, title, description, visibility, category, distance_meters)')
+                    .eq('place_id', placeUuid)
+                    .or('routes.visibility.eq.public,routes.visibility.eq.PUBLIC,routes.visibility.is.null');
+                if (jData) {
+                    junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+                }
+            } catch (e) {
+                // route_places optional fallback
+            }
+
+            const routeMap = new Map();
+            (directRoutes || []).forEach(r => routeMap.set(r.id, r));
+            junctionRoutes.forEach(r => routeMap.set(r.id, r));
+            routes = Array.from(routeMap.values());
+        }
+
+        // 4. Renderöinti (säilytetty 1:1 ennallaan)
         if (routes && routes.length > 0) {
             routesContainer.style.display = 'block';
             
@@ -3979,6 +4027,8 @@ async function loadRoutesForPlace(place) {
                     </div>
                 </a>`;
             }).join('');
+        } else {
+            routesContainer.style.display = 'none';
         }
     } catch (e) {
         console.warn('Poikkeus ladattaessa reittejä:', e);
@@ -4270,92 +4320,127 @@ async function loadWallPostsForPlace(placeData) {
             posts.push({ ...p, _matched_place_id: matchedPlaceId || p.place_id || null });
         };
 
-        // Kerätään kaikki mahdolliset paikan tunnisteet (UUID, place_id, name, canonical_name, alue_slug + alakohteet)
-        const placeIdentifiers = new Set();
-        const addPlaceIds = (p) => {
-            if (!p) return;
-            if (p.id) placeIdentifiers.add(String(p.id).trim());
-            if (p.place_id) placeIdentifiers.add(String(p.place_id).trim());
-            if (p.name) placeIdentifiers.add(String(p.name).trim());
-            if (p.canonical_name) placeIdentifiers.add(String(p.canonical_name).trim());
-            if (p.alue_slug) placeIdentifiers.add(String(p.alue_slug).trim());
-        };
-        addPlaceIds(placeData);
-        if (Array.isArray(placeData.subPlaces)) {
-            placeData.subPlaces.forEach(addPlaceIds);
-        }
-
-        const idList = [...placeIdentifiers].filter(Boolean);
-
-        // ── VAIHE 1: Suora posts.place_id -haku (Android tallentaa place_id:n posts-tauluun) ──
-        if (idList.length > 0) {
-            for (const pId of idList) {
-                try {
-                    const { data: directData, error: dErr } = await aiSb
-                        .from('posts')
-                        .select('*, post_attachments(*), post_media(url, media_type)')
-                        .eq('place_id', pId)
-                        .order('created_at', { ascending: false })
-                        .limit(30);
-                    if (dErr) console.debug('[WallPosts] Direct query error for', pId, dErr.message);
-                    (directData || []).forEach(p => addPost(p, pId));
-                } catch (e) { console.debug('[WallPosts] Direct query exc:', e?.message); }
-            }
-        }
-
+        // 1. Kerätään kelvolliset paikka- ja alipaikka-UUID:t
         const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        const validPlaceUuids = idList.filter(id => id && UUID_REGEX.test(String(id).trim()));
+        const placeNameByUuid = new Map();
 
-        // ── VAIHE 2: post_places -relaatiohaku kelvollisilla UUID-tunnisteilla (Uusi skeema) ──
-        if (validPlaceUuids.length > 0) {
+        const primaryUuid = (placeData.id && UUID_REGEX.test(String(placeData.id).trim()))
+            ? String(placeData.id).trim()
+            : ((placeData.place_id && UUID_REGEX.test(String(placeData.place_id).trim())) ? String(placeData.place_id).trim() : null);
+
+        if (primaryUuid) {
+            placeNameByUuid.set(primaryUuid, placeData.name || placeData.canonical_name || null);
+        }
+
+        if (Array.isArray(placeData.subPlaces)) {
+            placeData.subPlaces.forEach(sp => {
+                const spUuid = (sp.id && UUID_REGEX.test(String(sp.id).trim()))
+                    ? String(sp.id).trim()
+                    : ((sp.place_id && UUID_REGEX.test(String(sp.place_id).trim())) ? String(sp.place_id).trim() : null);
+                if (spUuid && !placeNameByUuid.has(spUuid)) {
+                    placeNameByUuid.set(spUuid, sp.name || sp.canonical_name || null);
+                }
+            });
+        }
+
+        const validPlaceUuids = Array.from(placeNameByUuid.keys());
+
+        // Jos kelvollista paikka-UUID:tä ei ole, älä suorita fallback-hakua
+        if (validPlaceUuids.length === 0) {
+            console.warn('[WallPosts] Kelvollista paikka-UUID-tunnistetta ei löytynyt, ohitetaan seinäjulkaisut.');
+            section.style.display = 'none';
+            return;
+        }
+
+        let rpcSuccess = false;
+        const rpcItemMap = new Map(); // content_id -> { content_id, context_place_id }
+
+        // 2. Ensisijainen haku: get_content_for_context RPC kaikille paikoille ja alipaikoille rinnakkain
+        try {
+            const rpcCalls = validPlaceUuids.map(pUuid =>
+                aiSb.rpc('get_content_for_context', {
+                    p_mode: 'PLACE',
+                    p_place_id: pUuid,
+                    p_types: ['post'],
+                    p_limit: 30
+                })
+            );
+            const rpcResponses = await Promise.all(rpcCalls);
+
+            const anyError = rpcResponses.some(res => res.error);
+            if (anyError) {
+                const firstErr = rpcResponses.find(res => res.error)?.error;
+                console.warn('[WallPosts] get_content_for_context RPC-virhe, aktivoidaan tekninen varalogiikka:', firstErr);
+            } else {
+                rpcSuccess = true;
+                // Yhdistetään tulokset säilyttäen täsmällisin kontekstipaikka ja deduplikointi
+                rpcResponses.forEach((res, idx) => {
+                    const queryUuid = validPlaceUuids[idx];
+                    (res.data || []).forEach(row => {
+                        if (!rpcItemMap.has(row.content_id)) {
+                            rpcItemMap.set(row.content_id, {
+                                content_id: row.content_id,
+                                context_place_id: row.context_place_id || queryUuid
+                            });
+                        }
+                    });
+                });
+
+                // Haetaan täydelliset julkaisutiedot ja liitteet vain RPC:n palauttamille ID:ille
+                const postIds = Array.from(rpcItemMap.keys());
+                if (postIds.length > 0) {
+                    try {
+                        const { data: pData, error: pErr } = await aiSb
+                            .from('posts')
+                            .select('*, post_attachments(*), post_media(url, media_type)')
+                            .in('id', postIds);
+
+                        if (pErr) {
+                            console.warn('[WallPosts] Virhe haettaessa julkaisujen täysiä tietoja:', pErr);
+                        } else if (pData) {
+                            pData.forEach(p => {
+                                const rpcMeta = rpcItemMap.get(p.id);
+                                addPost(p, rpcMeta?.context_place_id);
+                            });
+                        }
+                    } catch (fetchExc) {
+                        console.warn('[WallPosts] Poikkeus julkaisujen lisähaussa:', fetchExc);
+                    }
+                }
+            }
+        } catch (rpcExc) {
+            console.warn('[WallPosts] get_content_for_context poikkeus, aktivoidaan tekninen varalogiikka:', rpcExc);
+        }
+
+        // 3. Varalogiikka (sallitaan VAIN jos RPC epäonnistui teknisesti)
+        if (!rpcSuccess) {
             try {
                 const { data: ppRows, error: ppErr } = await aiSb
                     .from('post_places')
                     .select('post_id, place_id')
                     .in('place_id', validPlaceUuids)
                     .limit(100);
-                if (ppErr) console.debug('[WallPosts] post_places query error:', ppErr.message);
+
+                if (ppErr) console.debug('[WallPosts] Varalogiikan post_places virhe:', ppErr.message);
                 if (ppRows && ppRows.length > 0) {
-                    const postIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
-                    if (postIds.length > 0) {
+                    const fallbackPostIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
+                    if (fallbackPostIds.length > 0) {
                         const { data: pData } = await aiSb
                             .from('posts')
                             .select('*, post_attachments(*), post_media(url, media_type)')
-                            .in('id', postIds)
+                            .in('id', fallbackPostIds)
+                            .or('visibility.eq.public,visibility.eq.PUBLIC,visibility.is.null')
                             .order('created_at', { ascending: false });
+
                         (pData || []).forEach(p => {
                             const match = ppRows.find(r => r.post_id === p.id);
                             addPost(p, match?.place_id);
                         });
                     }
                 }
-            } catch (e) { console.debug('[WallPosts] post_places exc:', e?.message); }
-        }
-
-        // ── VAIHE 4: Fallback – posts.place_id nimihaku ──
-        if (posts.length === 0) {
-            const primaryName = placeData.name || placeData.canonical_name || '';
-            const shortPrimary = primaryName.split(/,| ja /i)[0].trim();
-            try {
-                const nameLower = new Set(idList.map(s => s.toLowerCase()));
-                const { data: fallbackData } = await aiSb
-                    .from('posts')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(100);
-                (fallbackData || []).forEach(p => {
-                    if (!p.place_id) return;
-                    const pLower = p.place_id.toLowerCase().trim();
-                    if (nameLower.has(pLower)) { addPost(p, p.place_id); return; }
-                    for (const n of nameLower) {
-                        if (n.length > 3 && (pLower.includes(n) || n.includes(pLower))) { addPost(p, p.place_id); return; }
-                    }
-                    if (shortPrimary && shortPrimary.length > 3 &&
-                        (p.title || '').toLowerCase().includes(shortPrimary.toLowerCase())) {
-                        addPost(p, null);
-                    }
-                });
-            } catch (e) { console.debug('[WallPosts] Fallback exc:', e?.message); }
+            } catch (e) {
+                console.debug('[WallPosts] Varalogiikan poikkeus:', e?.message);
+            }
         }
 
         if (posts.length === 0) {
@@ -4394,7 +4479,7 @@ async function loadWallPostsForPlace(placeData) {
             const rawPlace = p._matched_place_id || p.place_id || null;
             let displayPlace = rawPlace;
             if (displayPlace && displayPlace.length > 20 && displayPlace.includes('-')) {
-                displayPlace = placeData.name || placeData.canonical_name || displayPlace;
+                displayPlace = placeNameByUuid.get(displayPlace) || placeData.name || placeData.canonical_name || displayPlace;
             }
             const placeHtml = displayPlace
                 ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📍 ${safeHtml(displayPlace)}</span>`
