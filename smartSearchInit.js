@@ -389,7 +389,8 @@
             const compHeader = activeThemeObj ? `YRITYKSET & PALVELUT (${activeThemeObj.name || activeThemeObj.tag_id}: ${combinedCompanies.length})` : `YRITYKSET & PALVELUT (${combinedCompanies.length})`;
             html += `<div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #7c3aed; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🏢 ${escapeHtml(compHeader)}</div>`;
             
-            combinedCompanies.slice(0, 6).forEach(c => {
+            const showCompLimit = 8;
+            combinedCompanies.slice(0, showCompLimit).forEach(c => {
                 const badge = c.is_partner ? `<span style="font-size: 0.68rem; background: #fef3c7; color: #92400e; padding: 0.15rem 0.45rem; border-radius: 6px; font-weight: 700;">★ Kumppani</span>` : '';
                 const compName = c.nimi || c.name || 'Yritys';
                 const compCat = c.kategoria || c.category || 'Palvelu · Laukaa';
@@ -403,6 +404,13 @@
                     </a>
                 `;
             });
+            if (combinedCompanies.length > showCompLimit) {
+                html += `
+                    <div style="text-align: center; padding: 0.35rem; font-size: 0.75rem; color: #7c3aed; font-weight: 700;">
+                        + ${combinedCompanies.length - showCompLimit} muuta yritystä
+                    </div>
+                `;
+            }
             html += `</div>`;
         }
 

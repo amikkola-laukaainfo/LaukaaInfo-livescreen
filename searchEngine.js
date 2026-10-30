@@ -1067,18 +1067,34 @@ function executeContextSearch(searchContext, companies = [], places = [], events
         return true;
     });
 
-    // Mediazoo boost for media, valokuvaus, video queries
+    // Relevanssilajittelu yrityksille: nimen alku -> nimen sisältö -> kategoria -> tagit -> muu
     if (query) {
-        const mzKeywords = ['media', 'valokuva', 'video', 'kuvaus'];
-        if (mzKeywords.some(kw => query.includes(kw))) {
-            matchedCompanies.sort((a, b) => {
+        matchedCompanies.sort((a, b) => {
+            // Mediazoo boost mediaan liittyville hauille
+            const mzKeywords = ['media', 'valokuva', 'video', 'kuvaus'];
+            if (mzKeywords.some(kw => query.includes(kw))) {
                 const aMz = (a.nimi || a.name || '').toLowerCase().includes('mediazoo');
                 const bMz = (b.nimi || b.name || '').toLowerCase().includes('mediazoo');
                 if (aMz && !bMz) return -1;
                 if (!aMz && bMz) return 1;
-                return 0;
-            });
-        }
+            }
+
+            const getScore = (c) => {
+                const name = (c.nimi || c.name || '').toLowerCase().trim();
+                if (name.startsWith(query)) return 1000;
+                if (name.includes(query)) return 500;
+                const cat = (c.kategoria || c.category || '').toLowerCase();
+                if (cat.includes(query)) return 200;
+                const tags = (Array.isArray(c.tags) ? c.tags.join(' ') : (c.tags || '')).toLowerCase();
+                if (tags.includes(query)) return 100;
+                return 10;
+            };
+
+            const scoreA = getScore(a);
+            const scoreB = getScore(b);
+            if (scoreB !== scoreA) return scoreB - scoreA;
+            return (a.nimi || a.name || '').localeCompare(b.nimi || b.name || '', 'fi');
+        });
     }
 
     // Filter Places
@@ -1091,12 +1107,25 @@ function executeContextSearch(searchContext, companies = [], places = [], events
         if (query) {
             const nameMatch = (p.name || '').toLowerCase().includes(query) ||
                               (p.canonical_name || '').toLowerCase().includes(query) ||
+                              (p.type || '').toLowerCase().includes(query) ||
                               (p.municipality || '').toLowerCase().includes(query);
             if (!nameMatch) return false;
         }
 
         return true;
     });
+
+    // Relevanssilajittelu paikoille
+    if (query) {
+        matchedPlaces.sort((a, b) => {
+            const nameA = (a.name || a.canonical_name || '').toLowerCase().trim();
+            const nameB = (b.name || b.canonical_name || '').toLowerCase().trim();
+            const scoreA = nameA.startsWith(query) ? 1000 : (nameA.includes(query) ? 500 : 10);
+            const scoreB = nameB.startsWith(query) ? 1000 : (nameB.includes(query) ? 500 : 10);
+            if (scoreB !== scoreA) return scoreB - scoreA;
+            return nameA.localeCompare(nameB, 'fi');
+        });
+    }
 
     // Filter Events
     const matchedEvents = safeEvents.filter(e => {
