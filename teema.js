@@ -698,8 +698,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     actualTagId = matchingTags[0].tag_id;
                 }
 
-                // 4. Kutsu RPC lähipaikkojen ja -yritysten hakuun
-                const { data: contextResults, error: rpcError } = await aiSbClient.rpc('get_contextual_theme_results', {
+                // 4. Kutsu RPC v2 lähipaikkojen ja -yritysten hakuun
+                // get_contextual_theme_results_v2 lukee vain hyväksyttyä tuotantodataa:
+                // actor_theme_places (Tier 1), actor_themes (Tier 2-4), place_company_relations (verified).
+                const { data: contextResults, error: rpcError } = await aiSbClient.rpc('get_contextual_theme_results_v2', {
                     p_place_id: placeIdParam,
                     p_tag_id: actualTagId,
                     p_radius_km: 10
@@ -712,10 +714,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (contextResults) {
                     contextResults.forEach(res => {
+                        // v2 lisäkentät: relevance_tier, tier_name, is_partner, partner_boost, distance_km, rank_score
+                        const tierLabel = res.tier_name || res.match_reason || '';
+                        const isPartner = res.is_partner || false;
+
                         if (res.entity_type === 'PLACE') {
                             const pDataJson = allPlaces.find(p => p.id === res.entity_id || p.place_id === res.entity_id);
                             if (pDataJson) {
-                                pDataJson.match_reason = res.match_reason;
+                                pDataJson.match_reason = tierLabel;
+                                pDataJson.is_partner = isPartner;
+                                pDataJson.relevance_tier = res.relevance_tier;
                                 matchedPlaceNodes.push(pDataJson);
                             } else {
                                 matchedPlaceNodes.push({
@@ -723,19 +731,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     name: res.entity_name,
                                     type: 'PLACE',
                                     description: '',
-                                    match_reason: res.match_reason
+                                    match_reason: tierLabel,
+                                    is_partner: isPartner,
+                                    relevance_tier: res.relevance_tier
                                 });
                             }
-                        } else if (res.entity_type === 'COMPANY') {
+                        } else if (res.entity_type === 'COMPANY' || res.entity_type === 'ASSOCIATION' || res.entity_type === 'ORGANIZATION') {
                             const cDataJson = allCompanies.find(c => String(c.id) === String(res.entity_id) || `company-${c.id}` === String(res.entity_id));
                             if (cDataJson) {
-                                cDataJson.match_reason = res.match_reason;
+                                cDataJson.match_reason = tierLabel;
+                                cDataJson.is_partner = isPartner;
+                                cDataJson.relevance_tier = res.relevance_tier;
+                                cDataJson.entity_type = res.entity_type;
                                 matchedCompanies.push(cDataJson);
                             } else {
                                 matchedCompanies.push({
                                     id: res.entity_id,
                                     nimi: res.entity_name,
-                                    match_reason: res.match_reason
+                                    match_reason: tierLabel,
+                                    is_partner: isPartner,
+                                    relevance_tier: res.relevance_tier,
+                                    entity_type: res.entity_type
                                 });
                             }
                         }
@@ -757,7 +773,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const typeTranslations = { 'LANDMARK': 'Nähtävyys', 'NATURE': 'Luontokohde', 'SERVICE': 'Palvelu', 'BUILDING': 'Rakennus', 'AREA': 'Alue', 'ROUTE': 'Reitti' };
                         const typeName = typeTranslations[p.type] || p.type || 'Paikka';
                         const desc = p.description ? p.description.substring(0, 100) + '...' : '';
-                        const reasonBadge = p.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">${p.match_reason}</span>` : '';
+                        const reasonBadge = (() => {
+                            if (!p.match_reason && !p.is_partner) return '';
+                            const tierColors = { 1: '#065f46', 2: '#1d4ed8', 3: '#7c3aed', 4: '#92400e' };
+                            const tierBg = { 1: '#d1fae5', 2: '#dbeafe', 3: '#ede9fe', 4: '#fef3c7' };
+                            const color = tierColors[p.relevance_tier] || '#0369a1';
+                            const bg = tierBg[p.relevance_tier] || '#e0f2fe';
+                            const partnerBadge = p.is_partner ? ' ⭐' : '';
+                            return p.match_reason ? `<span style="font-size: 0.72rem; background: ${bg}; color: ${color}; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 600;">${p.match_reason}${partnerBadge}</span>` : '';
+                        })();
                         
                         let imgHtml = '';
                         const imgObj = imgMap[p.id || p.place_id];
@@ -821,22 +845,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                     placesContainer.innerHTML = html;
                 }
 
-                // 6. Renderöi Yritykset
+                // 6. Renderöi Yritykset (ja yhdistykset/organisaatiot v2:sta)
                 const companiesContainer = document.getElementById('companies-list');
                 if (matchedCompanies.length === 0) {
                     companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei yrityksiä tällä teemalla lähialueella.</p>';
                 } else {
-                    matchedCompanies.sort((a,b) => (b.subscription_tier || 1) - (a.subscription_tier || 1));
+                    // v2 antaa järjestyksen rank_score-perusteella – säilytetään se.
                     companiesContainer.innerHTML = matchedCompanies.map(c => {
                         const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
-                        const reasonBadge = c.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px;">${c.match_reason}</span>` : '';
+                        const tierColors = { 1: '#065f46', 2: '#1d4ed8', 3: '#7c3aed', 4: '#92400e' };
+                        const tierBg = { 1: '#d1fae5', 2: '#dbeafe', 3: '#ede9fe', 4: '#fef3c7' };
+                        const color = tierColors[c.relevance_tier] || '#0369a1';
+                        const bg = tierBg[c.relevance_tier] || '#e0f2fe';
+                        const partnerMark = c.is_partner ? ' ⭐' : '';
+                        const reasonBadge = c.match_reason ? `<span style="font-size: 0.72rem; background: ${bg}; color: ${color}; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 600;">${c.match_reason}${partnerMark}</span>` : '';
                         const tier = c.subscription_tier || 1;
-                        const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💎' : '');
+                        const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💠' : '');
+                        const entityIcon = c.entity_type === 'ASSOCIATION' ? '🤝' : c.entity_type === 'ORGANIZATION' ? '🏦' : '🏢';
                         return `
                             <a href="${url}" class="list-item-card">
                                 <div class="card-header-grid">
                                     <div>
-                                        <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi} ${displayIcon}</h3>
+                                        <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${entityIcon} ${c.nimi} ${displayIcon}</h3>
                                         <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">${c.kategoria || ''}</div>
                                         ${reasonBadge}
                                     </div>
