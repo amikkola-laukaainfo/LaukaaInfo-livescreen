@@ -2198,6 +2198,9 @@ async function loadContextualTheme(tagParam, placeId) {
         const encountersSec = document.getElementById('encounters-section');
         if (encountersSec) encountersSec.style.display = 'none';
 
+        // 11. Renderöi ÄLYKKÄÄT SUOSITELLUT TEEMAT ("Muita näkökulmia", ei nollatuloksia)
+        await renderSmartRelatedThemes(tagParam, placeId);
+
     } catch (err) {
         console.error('loadContextualTheme epäonnistui:', err);
         // Näytä virheilmoitus
@@ -2211,3 +2214,86 @@ async function loadContextualTheme(tagParam, placeId) {
         if (content) content.style.display = 'block';
     }
 }
+
+// ── Älykkäät suositellut teemat ("Muita näkökulmia", ei nollatuloksia) ────────
+async function renderSmartRelatedThemes(tagId, placeId) {
+    if (!aiSbClient) return;
+    try {
+        const safeHtml = (str) => String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        let relatedThemes = [];
+
+        // 1. Kokeillaan Supabasen get_smart_related_themes RPC:tä
+        try {
+            const { data, error } = await aiSbClient.rpc('get_smart_related_themes', {
+                p_tag_id: tagId,
+                p_place_id: placeId || null,
+                p_limit: 8
+            });
+            if (!error && Array.isArray(data) && data.length > 0) {
+                relatedThemes = data.filter(t => (t.places_count > 0 || t.actors_count > 0));
+            }
+        } catch (rpcEx) {
+            console.warn('get_smart_related_themes RPC ei vielä saatavilla:', rpcEx);
+        }
+
+        // 2. Fallback: haetaan suoraan theme_places-taulusta samojen kohteiden rinnakkaisteemat
+        if (relatedThemes.length === 0) {
+            try {
+                const { data: myPlaces } = await aiSbClient.from('theme_places').select('place_id').eq('tag_id', tagId);
+                const placeIds = (myPlaces || []).map(r => r.place_id);
+                if (placeIds.length > 0) {
+                    const { data: coData } = await aiSbClient.from('theme_places').select('tag_id, tags(name, category)').in('place_id', placeIds).neq('tag_id', tagId);
+                    const counts = {};
+                    (coData || []).forEach(r => {
+                        const tid = r.tag_id;
+                        const name = r.tags?.name || tid;
+                        counts[tid] = counts[tid] || { tag_id: tid, name: name, places_count: 0 };
+                        counts[tid].places_count++;
+                    });
+                    relatedThemes = Object.values(counts)
+                        .sort((a, b) => b.places_count - a.places_count)
+                        .slice(0, 8);
+                }
+            } catch (fbEx) {
+                console.warn('Fallback rinnakkaisteemoille epäonnistui:', fbEx);
+            }
+        }
+
+        if (relatedThemes.length === 0) return;
+
+        const content = document.getElementById('theme-content');
+        let section = document.getElementById('smart-related-themes-section');
+        if (!section && content) {
+            section = document.createElement('section');
+            section.id = 'smart-related-themes-section';
+            section.style.cssText = 'padding:2.5rem 1.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; margin-top:2rem;';
+            section.innerHTML = `
+                <div style="max-width:1200px; margin:0 auto;">
+                    <h2 style="font-size:1.3rem; font-weight:800; color:var(--color-forest); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                        <span>🔗</span> Muita näkökulmia
+                    </h2>
+                    <div id="smart-related-themes-chips" style="display:flex; flex-wrap:wrap; gap:0.6rem;"></div>
+                </div>`;
+            content.appendChild(section);
+        }
+
+        const chipsContainer = document.getElementById('smart-related-themes-chips');
+        if (chipsContainer) {
+            chipsContainer.innerHTML = relatedThemes.map(t => {
+                const url = `teema.html?tag=${encodeURIComponent(t.tag_id)}${placeId ? `&place_id=${encodeURIComponent(placeId)}` : ''}`;
+                const countBadge = t.places_count > 0 ? `<span style="font-size:0.75rem; opacity:0.7; margin-left:4px;">(${t.places_count})</span>` : '';
+                return `
+                    <a href="${url}" style="display:inline-flex; align-items:center; padding:6px 14px; background:#fff; border:1px solid #cbd5e1; border-radius:50px; text-decoration:none; color:#1e293b; font-weight:600; font-size:0.9rem; box-shadow:0 1px 3px rgba(0,0,0,0.05); transition:all 0.15s ease;"
+                       onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8';"
+                       onmouseout="this.style.background='#fff'; this.style.borderColor='#cbd5e1';">
+                        <span>🏷️</span>
+                        <span style="margin-left:6px;">${safeHtml(t.name || t.tag_id)}</span>
+                        ${countBadge}
+                    </a>`;
+            }).join('');
+        }
+    } catch (e) {
+        console.warn('renderSmartRelatedThemes error:', e);
+    }
+}
+

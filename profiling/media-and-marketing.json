@@ -48,7 +48,8 @@
                 "startup-brändäys",
                 "mainonta",
                 "sisällöntuotanto",
-                "startup-brandays"
+                "startup-brandays",
+                "startup-services"
             ],
             "node_links": [
                 "BRÄNDÄYS",
@@ -302,7 +303,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T14:12:47.095Z",
+            "last_updated": "2026-10-30T16:32:06.133Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -428,7 +429,15 @@
                 "yrityksen-perustaminen",
                 "valokuvaaja",
                 "events-and-celebrations",
-                "sisallontuotanto"
+                "sisallontuotanto",
+                "drone_filming",
+                "startup-services",
+                "brandays",
+                "videokuvaaja",
+                "juhlat-ja-merkkipaivat",
+                "brandi-ilme",
+                "business-events",
+                "haakooste"
             ],
             "node_links": [
                 "VALOKUVAUS",
@@ -762,7 +771,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T15:46:39.746Z",
+            "last_updated": "2026-10-30T16:54:20.647Z",
             "verified_by": "AI-analysis-v2",
             "status": "verified"
         },
@@ -845,7 +854,8 @@
                 "hankeneuvonta",
                 "liiketoiminnan kehittäminen",
                 "rahoitusneuvonta",
-                "neuvonta"
+                "neuvonta",
+                "yrityspalvelut"
             ],
             "node_links": [
                 "LAUKAA",
@@ -1081,7 +1091,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T14:08:58.853Z",
+            "last_updated": "2026-10-30T15:55:00.381Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1128,7 +1138,9 @@
                 "dj-palvelut",
                 "live-musiikki",
                 "ravintolakonsultointi",
-                "tapahtumat"
+                "tapahtumat",
+                "yritystapahtumat",
+                "huvit"
             ],
             "node_links": [
                 "HUVIT",
@@ -1370,7 +1382,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T15:46:00.518Z",
+            "last_updated": "2026-10-30T16:47:09.239Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1443,7 +1455,8 @@
                 "johtaminen",
                 "pk-yritykset",
                 "yrityksen-kehittaminen",
-                "business-growth"
+                "business-growth",
+                "biz_advisory"
             ],
             "node_links": [
                 "BRÄNDÄYS",
@@ -1694,7 +1707,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T14:11:17.280Z",
+            "last_updated": "2026-10-30T16:47:01.487Z",
             "verified_by": "web-research-ai",
             "status": "draft"
         }

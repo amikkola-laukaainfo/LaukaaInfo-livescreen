@@ -63,7 +63,10 @@
                 "autokorjaamo",
                 "määräaikaishuolto",
                 "vikadiagnostiikka",
-                "korjauspalvelu"
+                "korjauspalvelu",
+                "maaraaikaishuolto",
+                "auto_repair",
+                "rengaspalvelu"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO"
@@ -302,7 +305,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:36:01.666Z",
+            "last_updated": "2026-10-30T16:26:56.492Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -374,7 +377,9 @@
                 "vikadiagnostiikka",
                 "määräaikaishuolto",
                 "sijaisauto",
-                "auto_repair"
+                "auto_repair",
+                "construction-and-maintenance",
+                "maaraaikaishuolto"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO"
@@ -614,7 +619,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T15:48:07.830Z",
+            "last_updated": "2026-10-30T15:52:39.824Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -663,7 +668,8 @@
                 "maalipinnan korjaus",
                 "auton maalaus",
                 "ruostekorjaus",
-                "auto_repair"
+                "auto_repair",
+                "auton-maalaus"
             ],
             "node_links": [],
             "intent_codes": [
@@ -897,7 +903,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T15:35:47.316Z",
+            "last_updated": "2026-10-30T17:09:22.099Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -950,7 +956,8 @@
                 "painepesu",
                 "kiinteistöpesu",
                 "teollisuuspesu",
-                "home_cleaning"
+                "home_cleaning",
+                "sisapesu"
             ],
             "node_links": [],
             "intent_codes": [
@@ -1184,7 +1191,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T13:38:09.890Z",
+            "last_updated": "2026-10-30T16:06:51.494Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1219,7 +1226,8 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [
-                "majoitus"
+                "majoitus",
+                "matkailu"
             ],
             "sub_contexts": [
                 "kahvila",
@@ -1227,8 +1235,8 @@
                 "venevuokraus",
                 "lomamökki",
                 "tapahtumat",
-                "matkailu",
-                "huvit"
+                "huvit",
+                "watercraft_rental"
             ],
             "node_links": [
                 "LAUKAA",
@@ -1471,7 +1479,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-10-30T15:42:20.385Z",
+            "last_updated": "2026-10-30T16:54:18.351Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
