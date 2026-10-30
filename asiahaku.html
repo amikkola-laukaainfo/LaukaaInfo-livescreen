@@ -436,6 +436,7 @@
                 { id: '2025-all-v', text: 'Vuoden 2025 kokoukset', active: true }
             ],
             'kunnan-talous': [
+                { id: 'talousarvio2027', text: 'Talousarvioehdotus 2027', active: true },
                 { id: 'talousarvio', text: 'Talousarvio ja muutokset', active: true },
                 { id: 'talouslukuja-2018-24', text: 'Talouslukuja 2018-24', active: true },
                 { id: 'velka-as-2018-24', text: 'Velka/as 2018-24', active: true }
@@ -487,6 +488,8 @@
                     iframe.src = 'logica/valtuusto232026.html';
                 } else if (category === 'kunnanvaltuusto' && issue === '2025-all-v') {
                     iframe.src = 'logica/sivu2.html';
+                } else if (category === 'kunnan-talous' && issue === 'talousarvio2027') {
+                    iframe.src = 'logica/talousarvioehdotus2027.html';
                 } else if (category === 'kunnan-talous' && issue === 'talousarvio') {
                     iframe.src = 'logica/sivu3.html';
                 } else if (category === 'kunnan-talous' && issue === 'talouslukuja-2018-24') {
@@ -521,6 +524,7 @@
             let issueParam = params.get('issue');
 
             if (catParam && issueData[catParam]) {
+                // URL-parametreilla navigointi
                 categorySelect.value = catParam;
                 categorySelect.dispatchEvent(new Event('change'));
 
@@ -534,6 +538,14 @@
                         }, 500);
                     }, 100);
                 }
+            } else {
+                // Oletusvalinta: Talousarvioehdotus 2027
+                categorySelect.value = 'kunnan-talous';
+                categorySelect.dispatchEvent(new Event('change'));
+                setTimeout(() => {
+                    issueSelect.value = 'talousarvio2027';
+                    updateEmbed();
+                }, 100);
             }
         });
     </script>
