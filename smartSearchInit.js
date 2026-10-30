@@ -322,9 +322,21 @@
         });
 
         // Yhdistetään teematoimijat tuloksiin
+        // HUOM: yrityksillä on kenttä "nimi" eikä "name" -> vertailu pitää tehdä oikein
         const combinedCompanies = [...themeActors];
         (results.companies || []).forEach(c => {
-            if (!combinedCompanies.some(cc => cc.name === c.name || (cc.id && cc.id === c.id))) {
+            const cName = c.nimi || c.name;
+            const cId = c.id || c.company_id;
+            const isDuplicate = combinedCompanies.some(cc => {
+                const ccName = cc.nimi || cc.name;
+                const ccId = cc.id || cc.company_id;
+                // ID-vertailu (luotettavin)
+                if (cId && ccId && cId === ccId) return true;
+                // Nimi-vertailu vain jos molemmat ovat olemassa (ei undefined === undefined -ansaa)
+                if (cName && ccName && cName === ccName) return true;
+                return false;
+            });
+            if (!isDuplicate) {
                 combinedCompanies.push(c);
             }
         });
