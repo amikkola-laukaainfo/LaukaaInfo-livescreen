@@ -631,10 +631,21 @@
                 if (links) pLinks = links;
                 const { data: atts } = await supabaseClient.from('post_attachments').select('*').eq('post_id', postId);
                 if (atts) pAttachments = atts;
-                const { data: places } = await supabaseClient.from('post_places').select('*, places(name)').eq('post_id', postId);
-                if (places) pPlaces = places.map(pl => ({ ...pl, place_name: (pl.places && pl.places.name) || pl.place_name || null }));
-                const { data: themes } = await supabaseClient.from('post_themes').select('*').eq('post_id', postId);
-                if (themes) pThemes = themes;
+                const { data: contexts } = await supabaseClient
+                  .from('content_contexts')
+                  .select('place_id, tag_id, relation, places(name)')
+                  .eq('post_id', postId);
+                if (contexts) {
+                  pPlaces = contexts.filter(c => c.place_id).map(pl => ({
+                    place_id: pl.place_id,
+                    place_name: (pl.places && pl.places.name) || pl.place_id,
+                    relation: pl.relation
+                  }));
+                  pThemes = contexts.filter(c => c.tag_id).map(t => ({
+                    tag_id: t.tag_id,
+                    relation: t.relation
+                  }));
+                }
               } catch (subErr) {
                 console.warn('Single post sub-tables notice:', subErr);
               }
@@ -1071,11 +1082,28 @@
               let placesMap = {}, themesMap = {}, mediaMap = {}, linksMap = {}, attachmentsMap = {};
 
               try {
-                const { data: pPlaces } = await supabaseClient.from('post_places').select('*, places(name)').in('post_id', postIds);
-                if (pPlaces) pPlaces.forEach(p => { const enriched = { ...p, place_name: (p.places && p.places.name) || p.place_name || null }; (placesMap[enriched.post_id] = placesMap[enriched.post_id] || []).push(enriched); });
-
-                const { data: pThemes } = await supabaseClient.from('post_themes').select('*').in('post_id', postIds);
-                if (pThemes) pThemes.forEach(t => { (themesMap[t.post_id] = themesMap[t.post_id] || []).push(t); });
+                const { data: contexts } = await supabaseClient
+                  .from('content_contexts')
+                  .select('post_id, place_id, tag_id, relation, places(name)')
+                  .in('post_id', postIds);
+                if (contexts) {
+                  contexts.forEach(c => {
+                    if (c.place_id) {
+                      const enriched = {
+                        place_id: c.place_id,
+                        place_name: (c.places && c.places.name) || c.place_id,
+                        relation: c.relation
+                      };
+                      (placesMap[c.post_id] = placesMap[c.post_id] || []).push(enriched);
+                    }
+                    if (c.tag_id) {
+                      (themesMap[c.post_id] = themesMap[c.post_id] || []).push({
+                        tag_id: c.tag_id,
+                        relation: c.relation
+                      });
+                    }
+                  });
+                }
 
                 const { data: pAttachments } = await supabaseClient.from('post_attachments').select('*').in('post_id', postIds);
                 if (pAttachments) pAttachments.forEach(a => { (attachmentsMap[a.post_id] = attachmentsMap[a.post_id] || []).push(a); });

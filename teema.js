@@ -919,13 +919,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     } catch(e) { console.warn('Kohtaamiset place_id-haku epäonnistui:', e); }
 
                     try {
-                        // Seinäjulkaisut (posts & post_places -taulut) place_id:n perusteella
+                        // Seinäjulkaisut (content_contexts & posts -taulut) place_id:n perusteella
                         const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
                         if (placeIdParam && UUID_REGEX.test(String(placeIdParam).trim())) {
                             const { data: wallPostPlaces } = await laukaaDb
-                                .from('post_places')
+                                .from('content_contexts')
                                 .select('post_id, posts(*, post_attachments(*), post_media(url, media_type))')
                                 .eq('place_id', placeIdParam)
+                                .not('post_id', 'is', null)
                                 .limit(5);
 
                             if (wallPostPlaces) {
@@ -1198,8 +1199,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (!rpcPostsSuccess && laukaaDb2 && uniqueTagIds && uniqueTagIds.length > 0) {
                         try {
                             const { data: postThemeRows } = await laukaaDb2
-                                .from('post_themes')
+                                .from('content_contexts')
                                 .select('post_id')
+                                .not('post_id', 'is', null)
                                 .in('tag_id', uniqueTagIds);
 
                             const fallbackIds = [...new Set((postThemeRows || []).map(r => r.post_id).filter(Boolean))];
@@ -1836,9 +1838,10 @@ async function loadThemeRoutes(themeName) {
             let junctionRoutes = [];
             try {
                 const { data: jData } = await aiSbClient
-                    .from('route_themes')
+                    .from('content_contexts')
                     .select('route_id, routes!inner(id, place_id, title, description, visibility, category, distance_meters)')
-                    .eq('theme_id', resolvedTagId)
+                    .eq('tag_id', resolvedTagId)
+                    .not('route_id', 'is', null)
                     .or('routes.visibility.eq.public,routes.visibility.eq.PUBLIC,routes.visibility.is.null');
                 if (jData) {
                     junctionRoutes = jData.map(j => j.routes).filter(Boolean);

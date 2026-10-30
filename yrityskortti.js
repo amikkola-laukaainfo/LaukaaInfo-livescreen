@@ -1810,8 +1810,11 @@
                     expires_at,
                     event_start_at,
                     image_url,
-                    post_places ( place_id ),
-                    post_themes ( tag_id )
+                    content_contexts (
+                        place_id,
+                        tag_id,
+                        relation
+                    )
                 `)
                 .eq('organization_id', orgId)
                 .neq('status', 'deleted')
@@ -1857,11 +1860,14 @@
                     ? new Date(p.event_start_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'long' })
                     : new Date(p.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short' });
 
-                const placeTags = (p.post_places || []).length > 0
-                    ? `<div style="font-size:0.75rem;color:#64748b;margin-top:0.4rem;">📍 ${p.post_places.length} paikkaa</div>`
+                const placeIds = [...new Set((p.content_contexts || []).map(c => c.place_id).filter(Boolean))];
+                const tagIds = [...new Set((p.content_contexts || []).map(c => c.tag_id).filter(Boolean))];
+
+                const placeTags = placeIds.length > 0
+                    ? `<div style="font-size:0.75rem;color:#64748b;margin-top:0.4rem;">📍 ${placeIds.length} paikkaa</div>`
                     : '';
-                const themeTags = (p.post_themes || [])
-                    .map(t => `<span style="display:inline-block;font-size:0.7rem;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:50px;padding:1px 7px;margin:0 2px;">${t.tag_id}</span>`)
+                const themeTags = tagIds
+                    .map(t => `<span style="display:inline-block;font-size:0.7rem;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:50px;padding:1px 7px;margin:0 2px;">${t}</span>`)
                     .join('');
 
                 const visibilityNote = p.visibility === 'link'

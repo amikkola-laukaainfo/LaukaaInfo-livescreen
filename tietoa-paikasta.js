@@ -3978,15 +3978,16 @@ async function loadRoutesForPlace(place) {
             let junctionRoutes = [];
             try {
                 const { data: jData } = await window.aiSb
-                    .from('route_places')
+                    .from('content_contexts')
                     .select('route_id, routes!inner(id, place_id, title, description, visibility, category, distance_meters)')
                     .eq('place_id', placeUuid)
+                    .not('route_id', 'is', null)
                     .or('routes.visibility.eq.public,routes.visibility.eq.PUBLIC,routes.visibility.is.null');
                 if (jData) {
                     junctionRoutes = jData.map(j => j.routes).filter(Boolean);
                 }
             } catch (e) {
-                // route_places optional fallback
+                // content_contexts optional fallback
             }
 
             const routeMap = new Map();
@@ -4416,12 +4417,13 @@ async function loadWallPostsForPlace(placeData) {
         if (!rpcSuccess) {
             try {
                 const { data: ppRows, error: ppErr } = await aiSb
-                    .from('post_places')
+                    .from('content_contexts')
                     .select('post_id, place_id')
+                    .not('post_id', 'is', null)
                     .in('place_id', validPlaceUuids)
                     .limit(100);
 
-                if (ppErr) console.debug('[WallPosts] Varalogiikan post_places virhe:', ppErr.message);
+                if (ppErr) console.debug('[WallPosts] Varalogiikan content_contexts virhe:', ppErr.message);
                 if (ppRows && ppRows.length > 0) {
                     const fallbackPostIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
                     if (fallbackPostIds.length > 0) {
