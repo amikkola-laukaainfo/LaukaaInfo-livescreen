@@ -15,81 +15,112 @@
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20260622">
     <link rel="stylesheet" href="modal.css">
     
     <!-- PhotoSwipe -->
     <link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.3/dist/photoswipe.css">
 
-    <script src="translations.js"></script>
+    <script src="translations.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     
     <style>
-        /* ── LaukaaInfo Teemasivu – Luonnollinen ja moderni design-järjestelmä ── */
+        /* =========================================================
+           LaukaaInfo Teemasivu – Modernisoitu & yhtenäistetty design
+           Yhdenmukainen etusivun (index.html) ja tievahti.fi:n kanssa
+           Fontit: Outfit (otsikot) + Inter (leipäteksti)
+           Paletti: LaukaaInfo brand-sininen + modernit slate-neutraalit
+           ========================================================= */
         :root {
             /* Pääpaletti */
-            --color-bg: #F7F8F5;               /* Luonnonvalkoinen tausta */
-            --color-forest: #183F35;           /* Syvä metsänvihreä */
-            --color-forest-dark: #123228;      /* Tumma metsä */
-            --color-sand: #D9A85C;             /* Lämmin kultahiekka CTA */
-            --color-sage: #E5EEE8;             /* Pehmeä salvia/reunat */
-            --color-sage-light: #F0F5F2;       /* Hyvin vaalea salvia */
-            --color-text: #26332F;             /* Tumma metsänvihreä leipäteksti */
-            --color-text-muted: #5C6E67;       /* Pehmeä teksti */
-
-            --text-main: #26332F;
-            --text-muted: #5C6E67;
-            --accent: #183F35;
-            --accent-hover: #123228;
+            --bg-color: #f8fafc;
+            --bg-page: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            
+            --primary: #0056b3;
+            --primary-hover: #004494;
+            --primary-light: #eff6ff;
+            
+            --accent: #0284c7;
+            --accent-hover: #0369a1;
+            --accent-light: #e0f2fe;
+            
+            --text-main: #0f172a;             /* Slate 900 */
+            --text-muted: #475569;            /* Slate 600 */
+            --text-light: #64748b;            /* Slate 500 */
+            --border-color: #e2e8f0;          /* Slate 200 */
+            
+            /* Yhteensopivuusmuuttujat */
+            --color-bg: #f8fafc;
+            --color-forest: #0056b3;
+            --color-forest-dark: #004494;
+            --color-sand: #0284c7;
+            --color-sage: #e2e8f0;
+            --color-sage-light: #eff6ff;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
 
             /* Muotoilu & varjot */
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
-            --shadow-sm: 0 2px 8px rgba(24, 63, 53, 0.05);
-            --shadow-md: 0 6px 20px rgba(24, 63, 53, 0.07);
-            --shadow-hover: 0 10px 24px rgba(24, 63, 53, 0.12);
+            --radius-pill: 9999px;
+            
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
+            --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.03);
+            --shadow-hover: 0 12px 28px -4px rgba(15, 23, 42, 0.10), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
         }
 
         body {
-            background: var(--color-bg);
+            background: var(--bg-page);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
-            color: var(--color-text);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Kontekstibanneri (näkyy vain kun place_id on annettu) ── */
+        h1, h2, h3, h4, .hero-title {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.015em;
+        }
+
+        /* ── Kontekstibanneri (Tievahti-tyylinen kevyt yläbanneri) ── */
         .context-banner {
             display: none;
-            background: rgba(18, 50, 40, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: #fff;
-            padding: 0.65rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: var(--text-main);
+            padding: 0.75rem 2rem;
             font-size: 0.9rem;
             font-weight: 500;
             position: sticky;
-            top: 0;
+            top: 60px;
             z-index: 100;
-            border-bottom: 1px solid rgba(229, 238, 232, 0.15);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
         }
         .context-banner a {
-            color: var(--color-sand);
+            color: #0284c7;
             text-decoration: none;
             font-weight: 700;
             margin-right: 1rem;
-            transition: opacity 0.2s;
+            transition: color 0.18s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
         }
-        .context-banner a:hover { opacity: 0.85; }
+        .context-banner a:hover { color: #0369a1; }
         .context-banner.active { display: flex; align-items: center; gap: 0.5rem; }
 
         /* ── Hero-osio ── */
@@ -97,29 +128,28 @@
             width: 100%;
             height: auto;
             min-height: 380px;
-            padding-top: 5rem;
-            background-color: var(--color-forest);
+            padding-top: 3.5rem;
+            background-color: #0f172a;
             background-position: center 40%;
             background-size: cover;
             background-repeat: no-repeat;
             position: relative;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 2.5rem;
-            border-radius: 0 0 20px 20px;
+            padding-bottom: 2.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            /* Editorial-overlay: alhaalta tumma tekstiä varten, ylhäältä kuva näkyy */
             background: linear-gradient(
                 to top,
-                rgba(10, 28, 18, 0.90) 0%,
-                rgba(10, 28, 18, 0.58) 32%,
-                rgba(5,  15, 10, 0.20) 62%,
-                rgba(0,   0,  0, 0.00) 100%
+                rgba(15, 23, 42, 0.95) 0%,
+                rgba(15, 23, 42, 0.70) 35%,
+                rgba(15, 23, 42, 0.30) 70%,
+                rgba(15, 23, 42, 0.15) 100%
             );
         }
 
@@ -138,49 +168,52 @@
 
         /* Badge: pieni metadata-tagi */
         .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-pill);
             font-size: 0.75rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.85);
+            font-weight: 700;
+            color: #ffffff;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            letter-spacing: 0.08em;
+            border: 1px solid rgba(255, 255, 255, 0.28);
             width: fit-content;
         }
 
         /* Otsikko */
         .hero-title {
-            font-family: 'Manrope', sans-serif;
-            font-size: 2.75rem;
-            font-weight: 700;
-            line-height: 1.1;
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.1rem, 4.5vw, 3.1rem);
+            font-weight: 800;
+            line-height: 1.15;
             margin: 0;
-            letter-spacing: -1px;
-            color: #fff;
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
+            letter-spacing: -0.025em;
+            color: #ffffff;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
             word-break: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
-            max-width: 680px;
+            max-width: 720px;
         }
 
         .hero-subtitle {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.85) !important;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.9) !important;
             margin: 0;
-            max-width: 620px;
+            max-width: 640px;
+            line-height: 1.6;
         }
 
         /* ── Painikkeet ── */
         .action-buttons {
             display: flex;
             gap: 0.75rem;
-            margin-top: 1rem;
+            margin-top: 1.25rem;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -188,71 +221,82 @@
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
-            padding: 0.65rem 1.2rem;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
             border-radius: 10px;
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             text-decoration: none;
+            line-height: 1.3;
         }
 
-        /* Hero: Etusivu = ghost */
-        .hero-section a.btn-primary {
-            background: transparent !important;
-            color: rgba(255, 255, 255, 0.6) !important;
-            border: 1px solid rgba(255, 255, 255, 0.18) !important;
-            font-size: 0.85rem !important;
-            padding: 0.55rem 0.95rem !important;
-            font-weight: 500 !important;
-            box-shadow: none !important;
-        }
-        .hero-section a.btn-primary:hover {
-            background: rgba(255, 255, 255, 0.08) !important;
-            color: #fff !important;
-            transform: none !important;
-        }
-
-        /* Hero: Näytä kartalla = sand primary */
+        /* Hero: Näytä kartalla = korostettu CTA */
         .hero-section #btn-map {
-            background: var(--color-sand) !important;
-            color: var(--color-forest) !important;
+            background: #0284c7 !important;
+            color: #ffffff !important;
             font-weight: 700 !important;
             border: none !important;
-            padding: 0.7rem 1.3rem !important;
+            padding: 0.65rem 1.35rem !important;
+            border-radius: 10px !important;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
         }
         .hero-section #btn-map:hover {
-            background: #c99446 !important;
-            box-shadow: 0 3px 12px rgba(217, 168, 92, 0.4) !important;
-            transform: translateY(-1px) !important;
+            background: #0369a1 !important;
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Hero: Etusivu ja Jaa teema = lasi-ghost */
+        .hero-section .btn-light,
+        .hero-section a.btn-primary {
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.28) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            box-shadow: none !important;
+        }
+        .hero-section .btn-light:hover,
+        .hero-section a.btn-primary:hover {
+            background: rgba(255, 255, 255, 0.24) !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
         }
 
         /* Sivun yleiset painikkeet */
         .btn-primary {
-            background: var(--color-forest);
-            color: #fff;
+            background: #0056b3;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 86, 179, 0.25);
         }
         .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
+            background: #004494;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 86, 179, 0.35);
         }
 
         .btn-light {
-            background: var(--color-sage);
-            color: var(--color-forest);
-            border: 1px solid rgba(24, 63, 53, 0.12);
+            background: #ffffff;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
         }
         .btn-light:hover {
-            background: #d4e5d8;
-            transform: translateY(-1px);
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8;
+            transform: translateY(-2px);
         }
 
         /* ── Sivun sisältöalue ── */
         .page-container {
             max-width: 1200px;
-            margin: 2.5rem auto;
+            margin: 2.75rem auto;
             padding: 0 2rem;
             display: grid;
             grid-template-columns: 1.5fr 1fr;
@@ -260,17 +304,22 @@
         }
 
         .content-block {
-            margin-bottom: 3rem;
+            margin-bottom: 3.5rem;
         }
 
         .content-block h2 {
-            font-family: 'Manrope', sans-serif;
-            font-size: 1.4rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
             font-weight: 700;
             margin-bottom: 1.25rem;
-            color: var(--color-forest);
-            border-bottom: 2px solid var(--color-sage);
-            padding-bottom: 0.5rem;
+            margin-top: 0;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            letter-spacing: -0.015em;
         }
 
         .sidebar {
@@ -291,18 +340,18 @@
             background: #ffffff;
             padding: 1.25rem 1.5rem;
             border-radius: var(--radius-md);
-            border: 1px solid var(--color-sage);
+            border: 1px solid var(--border-color);
             text-decoration: none;
             color: inherit;
             display: block;
-            transition: all 0.22s ease;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: var(--shadow-sm);
         }
 
         .list-item-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: var(--shadow-hover);
-            border-color: rgba(24, 63, 53, 0.22);
+            border-color: #93c5fd;
         }
 
         .card-header-grid {
@@ -314,28 +363,36 @@
 
         /* ── Tagit ── */
         .tag-pill {
-            display: inline-block;
-            background: var(--color-sage-light);
-            color: var(--color-forest);
-            border: 1px solid rgba(24, 63, 53, 0.12);
-            padding: 0.35rem 0.85rem;
-            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #dbeafe;
+            padding: 0.45rem 0.95rem;
+            border-radius: var(--radius-pill);
             font-size: 0.85rem;
             font-weight: 600;
             margin-right: 0.4rem;
             margin-bottom: 0.4rem;
-            transition: all 0.2s ease;
+            transition: all 0.18s ease;
         }
         .tag-pill:hover {
-            background: var(--color-sage);
-            border-color: rgba(24, 63, 53, 0.25);
+            background: #dbeafe;
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.14);
         }
 
-        /* ── Mixonet-projektiosio – korostettu vasemmalla sand-viivalla ── */
+        /* ── Mixonet-projektiosio ── */
         #mixonet-projects-section,
         #mixonet-companies-section {
-            border-left: 3px solid var(--color-sand);
+            border-left: 3px solid #6366f1;
             padding-left: 1.25rem;
+        }
+        #mixonet-projects-section > h2,
+        #mixonet-companies-section > h2 {
+            border-bottom-color: rgba(99, 102, 241, 0.25);
         }
 
         #loading-spinner, #error-message {
@@ -365,15 +422,143 @@
                 max-width: 100%;
             }
             .hero-section {
-                min-height: 300px;
+                min-height: 280px;
+                padding-top: 3rem;
                 padding-bottom: 2rem;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+            }
+            .action-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            .action-buttons > :last-child:nth-child(odd) {
+                grid-column: span 2;
             }
         }
     </style>
 </head>
 
 <body>
-    <nav></nav>
+    <!-- TOP NAV (LaukaaInfo yhtenäinen navigaatio) -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <!-- 1. Löydä -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_find">Löydä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="tilannekuva.html" style="font-weight: 600; color: #0284c7;">Laukaan tilannekuva</a></li>
+                            <li><a href="koko-laukaa.html">Kaikki palvelut</a></li>
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_areas">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                    <li><a href="kohdekartta.html">Kaikki kartalla</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="kategoria.html">Teemat &amp; Kategoriat</a></li>
+                            <li><a href="index.html#search-section">Tarkempi haku</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 2. Ajankohtaista -->
+                    <li class="nav-item">
+                        <a href="ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
+                            <li><a href="yhteisot-ja-linkit.html">Laukaa somessa &amp; kanavat</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 3. Paikalliset nostot -->
+                    <li class="nav-item">
+                        <a href="seina.html" class="nav-link" data-i18n="nav_highlights">Paikalliset nostot <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="seina.html" style="font-weight: 600; color: #1e40af;">Seinä</a></li>
+                            <li><a href="kohtaamiset.html">Kohtaamispaikka &amp; Feed</a></li>
+                            <li><a href="kohdekortit.html">Kohdekortit &amp; tarjoukset</a></li>
+                            <li><a href="galleria.html">Kuvagalleria &amp; videot</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 4. Verkostoidu -->
+                    <li class="nav-item">
+                        <a href="verkostokartta.html" class="nav-link" data-i18n="nav_network">Verkostoidu <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html#service-needs">Mitä tarvitset? (Tarvehaku)</a></li>
+                            <li><a href="verkostokartta.html">Verkostokartta</a></li>
+                            <li><a href="pikahaku.html">Pikahaku &amp; vuokraus</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 5. Tutki Laukaata -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_explore">Tutki Laukaata <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html" data-i18n="nav_paths">Päätösten polut</a></li>
+                            <li><a href="tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
+                            <li><a href="tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
+                            <li><a href="muistokartta.html" data-i18n="nav_memorial_map">Muistokartta</a></li>
+                            <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 6. Julkaise -->
+                    <li class="nav-item">
+                        <a href="ilmoittaudu.html" class="nav-link" data-i18n="nav_publish">Julkaise <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Jätä ilmoitus / Kanavat</a></li>
+                            <li><a href="lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
+                            <li><a href="kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit &amp; Kauppa</a></li>
+                            <li><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" style="color: #3b82f6; font-weight: 700;">Kilpailutus</a></li>
+                            <li><a href="palvelun-esittely.html">Tietoa palvelusta</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay & Menu mobiilille -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+        <div class="sidebar-content"></div>
+    </aside>
     
     <div id="loading-spinner">
         <span class="iconify" data-icon="line-md:loading-twotone-loop" style="font-size: 4rem; color: var(--accent);"></span>
@@ -576,6 +761,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     
+    <script src="script.js?v=20260301"></script>
     <!-- Nav sync (if exists) -->
     <script src="nav-sync.js"></script>
     
