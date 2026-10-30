@@ -421,7 +421,9 @@
                 "google-mainonta",
                 "somemainonta",
                 "sisällöntuotanto",
-                "seo"
+                "seo",
+                "haavideo",
+                "hautajaiset"
             ],
             "node_links": [
                 "VALOKUVAUS",
@@ -754,9 +756,9 @@
             }
         },
         "meta": {
-            "last_updated": "2026-06-26T12:41:20.370Z",
+            "last_updated": "2026-10-30T13:37:20.519Z",
             "verified_by": "AI-analysis-v2",
-            "status": "draft"
+            "status": "verified"
         },
         "ai_and_seo": {
             "ai_summary": "Mediazoo on Lievestuoreella toimiva digimedia- ja markkinointialan yritys, joka tuottaa videotuotantoa, valokuvausta, drone-kuvausta sekä digimarkkinoinnin ja verkkosivujen ratkaisuja yrityksille ja tapahtumille Keski-Suomessa ja koko Suomessa.",
@@ -835,7 +837,8 @@
                 "yrityksen perustaminen",
                 "kehittämispalvelut",
                 "hankeneuvonta",
-                "liiketoiminnan kehittäminen"
+                "liiketoiminnan kehittäminen",
+                "rahoitusneuvonta"
             ],
             "node_links": [
                 "LAUKAA",
@@ -1071,7 +1074,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T08:24:57.796Z",
+            "last_updated": "2026-10-30T13:42:59.260Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1430,7 +1433,8 @@
                 "yrityksen kehittäminen",
                 "kasvupalvelut",
                 "johtaminen",
-                "pk-yritykset"
+                "pk-yritykset",
+                "yrityksen-kehittaminen"
             ],
             "node_links": [
                 "BRÄNDÄYS",
@@ -1681,7 +1685,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-13T13:42:20.768Z",
+            "last_updated": "2026-10-30T13:42:54.612Z",
             "verified_by": "web-research-ai",
             "status": "draft"
         }

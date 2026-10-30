@@ -947,7 +947,8 @@
                 "ulkopesu",
                 "painepesu",
                 "kiinteistöpesu",
-                "teollisuuspesu"
+                "teollisuuspesu",
+                "home_cleaning"
             ],
             "node_links": [],
             "intent_codes": [
@@ -1181,7 +1182,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-09T18:18:13.074Z",
+            "last_updated": "2026-10-30T13:38:09.890Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }

@@ -71,7 +71,8 @@
                 "asumisyksiköt",
                 "palvelutalot",
                 "hyvinvointipalvelut",
-                "sosiaalihuolto"
+                "sosiaalihuolto",
+                "kotipalvelut"
             ],
             "node_links": [
                 "LAUKAA",
@@ -325,7 +326,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.282Z",
+            "last_updated": "2026-10-30T13:38:17.239Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -2444,13 +2445,13 @@
                 "maalari / tapetoija",
                 "suunnittelija / arkkitehti",
                 "laituritarvikkeet / huolto",
-                "kertaluonteinen remontti"
+                "kertaluonteinen remontti",
+                "bassot"
             ],
             "sub_contexts": [
                 "kitarahuolto",
                 "soitinhuolto",
                 "käytetyt kitarat",
-                "bassot",
                 "äänentoisto",
                 "elävä musiikki",
                 "musiikkipalvelut",
@@ -2461,7 +2462,8 @@
                 "soitinmyynti",
                 "keikkapalvelut",
                 "musiikkitapahtumat",
-                "instrumenttihuolto"
+                "instrumenttihuolto",
+                "business-events"
             ],
             "node_links": [
                 "LIIKUNTA",
@@ -2727,7 +2729,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T14:24:53.507Z",
+            "last_updated": "2026-10-30T13:40:33.576Z",
             "verified_by": "web-research",
             "status": "enriched"
         }
@@ -3131,7 +3133,8 @@
                 "asennustyöt",
                 "huoneistoremontti",
                 "mökkiremontti",
-                "kiinteistön korjaus"
+                "kiinteistön korjaus",
+                "kiinteiston-korjaus"
             ],
             "node_links": [
                 "MAJOITUS"
@@ -3375,7 +3378,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:39:12.741Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -3428,7 +3431,9 @@
                 "sisustuspuutyöt",
                 "remonttipuu",
                 "ovet ja listoitukset",
-                "keittiökalusteet"
+                "keittiökalusteet",
+                "puusepantyo",
+                "construction-and-maintenance"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO",
@@ -3670,7 +3675,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:43:48.835Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -3962,7 +3967,8 @@
                 "kiinteistönvälitys",
                 "asuntomyynti",
                 "vuokraus",
-                "kiinteistökonsultointi"
+                "kiinteistökonsultointi",
+                "kiinteistot"
             ],
             "node_links": [
                 "KIINTEISTOT",
@@ -4193,7 +4199,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:43:15.556Z",
             "verified_by": "system-init-v3",
             "status": "draft"
         }
@@ -4263,7 +4269,8 @@
                 "asunto-osakeyhtiöt",
                 "muuttoilmoitus",
                 "remontti-ilmoitukset",
-                "taloushallinto"
+                "taloushallinto",
+                "home_maintenance"
             ],
             "node_links": [
                 "ISÄNNÖINTI",
@@ -4508,7 +4515,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:42:33.169Z",
+            "last_updated": "2026-10-30T13:36:01.772Z",
             "verified_by": "AI-analysis-v2",
             "status": "updated"
         }
@@ -5177,7 +5184,8 @@
                 "lämmitys",
                 "ilmanvaihto",
                 "huolto",
-                "vesi- ja viemärityöt"
+                "vesi- ja viemärityöt",
+                "putkityot"
             ],
             "node_links": [
                 "LVI",
@@ -5414,7 +5422,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:43:37.446Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -5744,7 +5752,8 @@
                 "pihaurakointi",
                 "ulkotyöt",
                 "taloyhtiöt",
-                "mökkipalvelut"
+                "mökkipalvelut",
+                "home_maintenance"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO",
@@ -6000,7 +6009,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:47:37.863Z",
+            "last_updated": "2026-10-30T13:38:20.276Z",
             "verified_by": "AI-analysis-v2",
             "status": "updated"
         }
@@ -6353,7 +6362,8 @@
                 "kiinteistöhuolto",
                 "ylläpitosiivous",
                 "taloyhtiöhuolto",
-                "ulkoalueiden hoito"
+                "ulkoalueiden hoito",
+                "service-partner"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO",
@@ -6601,7 +6611,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:38:01.254Z",
             "verified_by": "AI-analysis-v3",
             "status": "draft"
         }
@@ -6662,7 +6672,8 @@
                 "muuttoapu",
                 "kiinteistönhoito",
                 "asiointiapu",
-                "kotiapu"
+                "kotiapu",
+                "pihatyot"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO",
@@ -6909,7 +6920,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-13T14:40:12.788Z",
+            "last_updated": "2026-10-30T13:43:10.516Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -6974,7 +6985,8 @@
                 "ylläpito",
                 "taloyhtiöt",
                 "kiinteistöhuolto",
-                "mökkihuolto"
+                "mökkihuolto",
+                "rakennusten-yllapito"
             ],
             "node_links": [
                 "MAJOITUS",
@@ -7218,7 +7230,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:32:20.518Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -9533,7 +9545,8 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [
-                "laituritarvikkeet"
+                "laituritarvikkeet",
+                "hiihdot"
             ],
             "sub_contexts": [
                 "majoitus",
@@ -9553,7 +9566,6 @@
                 "retkeily",
                 "melonta",
                 "luonnonrauha",
-                "hiihdot",
                 "pilkkiminen",
                 "marjastus",
                 "sienestys"
@@ -9839,7 +9851,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-10-30T13:38:42.328Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -10607,7 +10619,8 @@
                 "ulkoleikit",
                 "saunominen",
                 "rentoutumisloma",
-                "luontokylpy"
+                "luontokylpy",
+                "majoitus"
             ],
             "node_links": [
                 "MAJOITUS",
@@ -10905,7 +10918,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-06-14T14:56:06.574Z",
+            "last_updated": "2026-10-30T13:40:19.483Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -11295,7 +11308,9 @@
                 "sähköurakointi",
                 "sähköasennukset",
                 "kiinteistöhuolto",
-                "huoltosopimus"
+                "huoltosopimus",
+                "sahkotyot",
+                "leppavesi"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO"
@@ -11546,7 +11561,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-04T14:55:37.754Z",
+            "last_updated": "2026-10-30T13:43:32.147Z",
             "verified_by": "ai-enriched",
             "status": "completed"
         }
@@ -12530,7 +12545,8 @@
                 "metsätalous",
                 "mökkitarvikkeet",
                 "varastointi",
-                "kevatkunnostus"
+                "kevatkunnostus",
+                "verkkoklapisakit"
             ],
             "node_links": [
                 "KIINTEISTÖHUOLTO",
@@ -12790,7 +12806,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-13T13:46:03.602Z",
+            "last_updated": "2026-10-30T13:37:39.835Z",
             "verified_by": "web-research-ai",
             "status": "draft"
         }
