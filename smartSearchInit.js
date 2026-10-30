@@ -43,20 +43,28 @@
         const dropdown = document.getElementById('v4-search-dropdown');
         if (!searchInput || !dropdown) return;
 
-        // 1. Ladataan perustiedostot ja Supabase-data taustalla
         try {
-            if (typeof window.allCompanies !== 'undefined' && window.allCompanies.length) {
+            if (typeof window.allCompanies !== 'undefined' && Array.isArray(window.allCompanies) && window.allCompanies.length) {
                 companiesData = window.allCompanies;
             } else {
                 const compRes = await fetch('companies_data.json').catch(() => null);
-                if (compRes && compRes.ok) companiesData = await compRes.json();
+                if (compRes && compRes.ok) {
+                    const cJson = await compRes.json();
+                    companiesData = Array.isArray(cJson) ? cJson : (cJson?.results || []);
+                }
             }
 
             const placesRes = await fetch('paikat_laukaa.json').catch(() => null);
-            if (placesRes && placesRes.ok) placesData = await placesRes.json();
+            if (placesRes && placesRes.ok) {
+                const pJson = await placesRes.json();
+                placesData = Array.isArray(pJson) ? pJson : (pJson?.results || []);
+            }
 
             const eventsRes = await fetch('tapahtumat.json').catch(() => null);
-            if (eventsRes && eventsRes.ok) eventsData = await eventsRes.json();
+            if (eventsRes && eventsRes.ok) {
+                const eJson = await eventsRes.json();
+                eventsData = Array.isArray(eJson) ? eJson : (eJson?.results || []);
+            }
         } catch (e) {
             console.warn('[SmartSearch] Alustustiedostojen latausvirhe:', e);
         }
@@ -210,13 +218,15 @@
                 const companyIds = etRows.map(r => r.entity_id);
                 const { data: compRows } = await sb
                     .from('companies')
-                    .select('id, name, category, municipality')
+                    .select('id, name, kategoria, alue_slug')
                     .in('id', companyIds);
 
                 if (compRows && compRows.length) {
                     const mapped = compRows.map(c => ({
                         id: c.id,
                         name: c.name,
+                        category: c.kategoria || '',
+                        municipality: c.alue_slug || 'Laukaa',
                         tier_name: 'LOCAL_THEME',
                         is_partner: false,
                         entity_type: 'COMPANY'

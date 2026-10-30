@@ -1018,12 +1018,16 @@ function executeContextSearch(searchContext, companies = [], places = [], events
         return { companies: [], places: [], events: [] };
     }
 
+    const safeCompanies = Array.isArray(companies) ? companies : (companies?.results || []);
+    const safePlaces = Array.isArray(places) ? places : (places?.results || []);
+    const safeEvents = Array.isArray(events) ? events : (events?.results || []);
+
     const query = (searchContext.query || '').toLowerCase().trim();
     const pContext = searchContext.placeContext || (searchContext.targetPlace ? searchContext : null);
     const themeId = searchContext.themeId || null;
 
     // Filter Companies
-    const matchedCompanies = companies.filter(c => {
+    const matchedCompanies = safeCompanies.filter(c => {
         // Place filter
         if (pContext && pContext.targetPlace) {
             const matchesPlace = pContext.matchesPlace(c.place_id || c.id, c.municipality || c.address || c.city);
@@ -1072,7 +1076,7 @@ function executeContextSearch(searchContext, companies = [], places = [], events
     }
 
     // Filter Places
-    const matchedPlaces = places.filter(p => {
+    const matchedPlaces = safePlaces.filter(p => {
         if (pContext && pContext.targetPlace) {
             const matchesPlace = pContext.matchesPlace(p.id || p.place_id, p.municipality || p.name);
             if (!matchesPlace) return false;
@@ -1089,7 +1093,7 @@ function executeContextSearch(searchContext, companies = [], places = [], events
     });
 
     // Filter Events
-    const matchedEvents = events.filter(e => {
+    const matchedEvents = safeEvents.filter(e => {
         if (pContext && pContext.targetPlace) {
             const matchesPlace = pContext.matchesPlace(e.place_id, e.location || e.venue || e.municipality);
             if (!matchesPlace) return false;
