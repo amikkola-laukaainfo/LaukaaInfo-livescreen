@@ -1094,96 +1094,130 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     }
 
-                    // Hae feed_post ja wall_post -julkaisut (posts-taulu & post_themes)
-                    const feedPostEntities = (taggedEntities || []).filter(e => ['feed_post', 'post', 'wall_post', 'wall'].includes((e.entity_type || '').toLowerCase()));
-                    const feedPostIds = feedPostEntities.map(e => e.entity_id);
+                    // ── TEEMAN AJANKOHTAISJULKAISUT (059C – get_content_for_context RPC) ──
+                    const mapAndPushPosts = (postsArray) => {
+                        const seenPostIds = new Set(sbAjankohtainen.map(x => x.id));
+                        (postsArray || []).filter(p => {
+                            if (p.visibility === 'code_protected' || p.visibility === 'hidden') return false;
+                            const st = String(p.status || '').toLowerCase();
+                            if (st === 'deleted' || st === 'cleanup_pending' || st === 'rejected' || st === 'archived') return false;
+                            const exp = p.expires_at || p.valid_until;
+                            if (exp && new Date(exp) < new Date()) return false;
+                            return true;
+                        }).forEach(post => {
+                            if (seenPostIds.has(post.id)) return;
+                            seenPostIds.add(post.id);
 
-                    const laukaaDb2 = window.LaukaaSupabase || supabaseClient;
-                    if (laukaaDb2 && uniqueTagIds && uniqueTagIds.length > 0) {
+                            // Määritetään tyyppi: yhteisöjulkaisut vs. yrityksen feedjulkaisut
+                            const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
+                            const postTypeUpper = (post.type || '').toUpperCase();
+                            const isCommunity = COMMUNITY_TYPES.includes(postTypeUpper);
+
+                            // Liitteet: post_attachments ensisijainen, post_media toissijainen, image_url fallback
+                            const attImg = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'image')?.url;
+                            const mediaImg = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : null;
+                            const mediaUrl = attImg || mediaImg || post.image_url || null;
+
+                            const pdfAtt = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'pdf');
+                            const pubName = post.publisher_name || post.org_name || (post.organization_id && !post.organization_id.startsWith('company-') ? post.organization_id : '');
+
+                            sbAjankohtainen.push({
+                                id: post.id,
+                                type: isCommunity ? postTypeUpper : 'feed_post',
+                                category: isCommunity ? (post.type || 'Julkaisu') : 'Seinäjulkaisu',
+                                title: post.title || '',
+                                description: post.content || post.description || post.title || '',
+                                location_name: post.location_name || post.place_name || '',
+                                publisher_name: pubName,
+                                photo_url: mediaUrl,
+                                pdf_url: pdfAtt ? pdfAtt.url : null,
+                                pdf_name: pdfAtt ? (pdfAtt.file_name || 'Avaa PDF') : null,
+                                created_at: post.created_at,
+                                isSupabase: true
+                            });
+                        });
+                    };
+
+                    const laukaaDb2 = window.LaukaaSupabase || supabaseClient || aiSbClient;
+                    let rpcPostsSuccess = false;
+
+                    if (aiSbClient && uniqueTagIds && uniqueTagIds.length > 0) {
+                        try {
+                            // 1. Rinnakkaiset RPC-kutsut jokaiselle teematagille
+                            const rpcCalls = uniqueTagIds.map(tId =>
+                                aiSbClient.rpc('get_content_for_context', {
+                                    p_mode: 'THEME',
+                                    p_tag_id: tId,
+                                    p_types: ['post'],
+                                    p_limit: 30
+                                })
+                            );
+                            const rpcResponses = await Promise.all(rpcCalls);
+
+                            // Jos yksikin kutsu epäonnistuu teknisesti, käsitellään kokonaisuus virheenä
+                            const anyError = rpcResponses.some(res => res.error);
+                            if (anyError) {
+                                const firstErr = rpcResponses.find(res => res.error)?.error;
+                                console.warn('[ThemePosts] get_content_for_context RPC-virhe, aktivoidaan tekninen varalogiikka:', firstErr);
+                            } else {
+                                rpcPostsSuccess = true;
+                                // Deduplikoidaan kaikki RPC-tulokset content_id-avaimella
+                                const rpcPostIds = new Set();
+                                rpcResponses.forEach(res => {
+                                    (res.data || []).forEach(row => {
+                                        if (row.content_id) rpcPostIds.add(row.content_id);
+                                    });
+                                });
+
+                                const postIds = Array.from(rpcPostIds);
+                                // Haetaan täydelliset julkaisutiedot ja liitteet VAIN RPC:n palauttamille ID:ille
+                                if (postIds.length > 0 && laukaaDb2) {
+                                    try {
+                                        const { data: feedData, error: feedError } = await laukaaDb2
+                                            .from('posts')
+                                            .select('*, post_attachments(*), post_media(url, media_type)')
+                                            .in('id', postIds)
+                                            .or('status.eq.APPROVED,status.eq.published,status.is.null')
+                                            .or('visibility.eq.public,visibility.is.null');
+
+                                        if (!feedError && feedData) {
+                                            mapAndPushPosts(feedData);
+                                        }
+                                    } catch (err) {
+                                        console.warn('[ThemePosts] Virhe haettaessa täysiä julkaisutietoja:', err);
+                                    }
+                                }
+                            }
+                        } catch (rpcExc) {
+                            console.warn('[ThemePosts] get_content_for_context poikkeus, aktivoidaan tekninen varalogiikka:', rpcExc);
+                        }
+                    }
+
+                    // 2. Tekninen varalogiikka (sallitaan VAIN jos RPC epäonnistui teknisesti)
+                    // Rajattu vain post_themes-kytkentään ja julkisiin julkaisuihin (ilike-tekstihaku poistettu)
+                    if (!rpcPostsSuccess && laukaaDb2 && uniqueTagIds && uniqueTagIds.length > 0) {
                         try {
                             const { data: postThemeRows } = await laukaaDb2
                                 .from('post_themes')
                                 .select('post_id')
                                 .in('tag_id', uniqueTagIds);
-                            if (postThemeRows) {
-                                postThemeRows.forEach(r => {
-                                    if (r.post_id && !feedPostIds.includes(r.post_id)) {
-                                        feedPostIds.push(r.post_id);
-                                    }
-                                });
+
+                            const fallbackIds = [...new Set((postThemeRows || []).map(r => r.post_id).filter(Boolean))];
+                            if (fallbackIds.length > 0) {
+                                const { data: feedData, error: feedError } = await laukaaDb2
+                                    .from('posts')
+                                    .select('*, post_attachments(*), post_media(url, media_type)')
+                                    .in('id', fallbackIds)
+                                    .or('status.eq.APPROVED,status.eq.published,status.is.null')
+                                    .or('visibility.eq.public,visibility.is.null')
+                                    .order('created_at', { ascending: false });
+
+                                if (!feedError && feedData) {
+                                    mapAndPushPosts(feedData);
+                                }
                             }
-                        } catch(e) { console.warn('post_themes fetch notice:', e); }
-                    }
-
-                    // Myös haku suoraan posts-taulusta haettavan teeman perusteella
-                    if (laukaaDb2 && searchTag) {
-                        try {
-                            const { data: textMatchedPosts } = await laukaaDb2
-                                .from('posts')
-                                .select('id')
-                                .or(`title.ilike.%${searchTag}%,content.ilike.%${searchTag}%,type.ilike.%${searchTag}%`)
-                                .limit(20);
-                            if (textMatchedPosts) {
-                                textMatchedPosts.forEach(p => {
-                                    if (p.id && !feedPostIds.includes(p.id)) feedPostIds.push(p.id);
-                                });
-                            }
-                        } catch(e) {}
-                    }
-
-                    if (feedPostIds.length > 0 && laukaaDb2) {
-                        try {
-                            const { data: feedData, error: feedError } = await laukaaDb2
-                                .from('posts')
-                                .select('*, post_attachments(*), post_media(url, media_type)')
-                                .in('id', feedPostIds)
-                                .or('status.eq.APPROVED,status.eq.published,status.is.null')
-                                .or('visibility.eq.public,visibility.is.null')
-                                .order('created_at', { ascending: false });
-                            if (!feedError && feedData) {
-                                const seenPostIds = new Set(sbAjankohtainen.map(x => x.id));
-                                feedData.filter(p => {
-                                    if (p.visibility === 'code_protected' || p.visibility === 'hidden') return false;
-                                    const st = String(p.status || '').toLowerCase();
-                                    if (st === 'deleted' || st === 'cleanup_pending' || st === 'rejected' || st === 'archived') return false;
-                                    const exp = p.expires_at || p.valid_until;
-                                    if (exp && new Date(exp) < new Date()) return false;
-                                    return true;
-                                }).forEach(post => {
-                                    if (seenPostIds.has(post.id)) return;
-                                    seenPostIds.add(post.id);
-
-                                    // Määritetään tyyppi: yhteisöjulkaisut vs. yrityksen feedjulkaisut
-                                    const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
-                                    const postTypeUpper = (post.type || '').toUpperCase();
-                                    const isCommunity = COMMUNITY_TYPES.includes(postTypeUpper);
-
-                                    // Liitteet: post_attachments ensisijainen, post_media toissijainen, image_url fallback
-                                    const attImg = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'image')?.url;
-                                    const mediaImg = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : null;
-                                    const mediaUrl = attImg || mediaImg || post.image_url || null;
-
-                                    const pdfAtt = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'pdf');
-                                    const pubName = post.publisher_name || post.org_name || (post.organization_id && !post.organization_id.startsWith('company-') ? post.organization_id : '');
-
-                                    sbAjankohtainen.push({
-                                        id: post.id,
-                                        type: isCommunity ? postTypeUpper : 'feed_post',
-                                        category: isCommunity ? (post.type || 'Julkaisu') : 'Seinäjulkaisu',
-                                        title: post.title || '',
-                                        description: post.content || post.description || post.title || '',
-                                        location_name: post.location_name || post.place_name || '',
-                                        publisher_name: pubName,
-                                        photo_url: mediaUrl,
-                                        pdf_url: pdfAtt ? pdfAtt.url : null,
-                                        pdf_name: pdfAtt ? (pdfAtt.file_name || 'Avaa PDF') : null,
-                                        created_at: post.created_at,
-                                        isSupabase: true
-                                    });
-                                });
-                            }
-                        } catch(err) {
-                            console.warn('Virhe haettaessa feed-julkaisuja LaukaaLive Supabasesta:', err);
+                        } catch(e) {
+                            console.warn('[ThemePosts] Varalogiikan poikkeus:', e);
                         }
                     }
 
