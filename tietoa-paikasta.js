@@ -1188,6 +1188,11 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
         if (statCompaniesRow) {
             statCompaniesRow.style.display = effectiveCompanies.length > 0 ? '' : 'none';
         }
+        // Näytä säde-badge kun yrityksiä löytyy
+        const radiusBadge = document.getElementById('stat-radius-badge');
+        if (radiusBadge) {
+            radiusBadge.style.display = effectiveCompanies.length > 0 ? 'inline' : 'none';
+        }
     }
     
     const statObservations = document.getElementById('stat-observations');
