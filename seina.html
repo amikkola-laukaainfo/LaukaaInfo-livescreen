@@ -436,8 +436,9 @@
           document.getElementById('footerLabel').innerText = 'Organisaation Oma seinä';
           
           if (targetOrgId) {
-            document.getElementById('publishLink').href = `julkaise.html?org=${encodeURIComponent(targetOrgId)}`;
-            document.getElementById('manageLink').href = `julkaise.html?org=${encodeURIComponent(targetOrgId)}`;
+            const publishOrgId = normalizeCanonicalOrgId(targetOrgId);
+            document.getElementById('publishLink').href = `julkaise.html?org=${encodeURIComponent(publishOrgId)}`;
+            document.getElementById('manageLink').href = `julkaise.html?org=${encodeURIComponent(publishOrgId)}`;
           }
           await loadOrganizationWall(targetOrgId || searchName);
         } else {
@@ -450,6 +451,42 @@
           document.getElementById('pageTitle').innerText = 'LaukaaInfo — Yleinen Seinä';
           await loadGlobalWall();
         }
+      }
+
+      // Organisaatioiden alias-kartta (yhdistää eri tunnisteet samaan toimijaan, esim. mediazoo <-> company-2)
+      const ORG_ALIASES_MAP = {
+        'mediazoo': ['company-2', 'mediazoo', '2'],
+        'company-2': ['company-2', 'mediazoo', '2'],
+        '2': ['company-2', 'mediazoo', '2']
+      };
+
+      function getOrgAliases(orgParam) {
+        if (!orgParam) return [];
+        const lower = String(orgParam).toLowerCase().trim();
+        if (ORG_ALIASES_MAP[lower]) {
+          return ORG_ALIASES_MAP[lower];
+        }
+        const clean = lower.replace('company-', '');
+        return Array.from(new Set([orgParam, lower, 'company-' + clean, clean]));
+      }
+
+      function normalizeCanonicalOrgId(orgParam) {
+        if (!orgParam) return '';
+        const lower = String(orgParam).toLowerCase().trim();
+        if (lower === 'mediazoo' || lower === 'company-2' || lower === '2') {
+          return 'company-2';
+        }
+        if (!lower.startsWith('company-') && !isNaN(lower)) {
+          return 'company-' + lower;
+        }
+        return lower;
+      }
+
+      function matchesOrg(itemOrgId, filterOrgId) {
+        if (!itemOrgId || !filterOrgId) return false;
+        const aliases = getOrgAliases(filterOrgId);
+        const itemLower = String(itemOrgId).toLowerCase().trim();
+        return aliases.includes(itemLower) || aliases.includes(itemOrgId);
       }
 
       // Cache for organization logos
@@ -466,9 +503,15 @@
             const res = await fetch('companies_data.json');
             if (res.ok) {
               const json = await res.json();
-              const list = Array.isArray(json) ? json : (json.results || []);
-              const cleanId = String(orgId).replace('company-', '');
-              const match = list.find(c => String(c.id) === String(orgId) || String(c.id) === cleanId || ('company-' + c.id) === String(orgId));
+              const list = Array.isArray(json) ? json : (json.companies || json.results || []);
+              const aliases = getOrgAliases(orgId);
+              const match = list.find(c => {
+                const cId = String(c.id || '').toLowerCase();
+                const cName = String(c.nimi || c.name || '').toLowerCase();
+                return aliases.includes(cId) || 
+                       aliases.includes(cId.replace('company-', '')) ||
+                       (aliases.includes('mediazoo') && cName.includes('mediazoo'));
+              });
               if (match) {
                 if (match.logo && match.logo.trim() && match.logo !== '-') logoUrl = match.logo;
                 else if (match.images && match.images.length > 0) logoUrl = match.images[0];
