@@ -811,248 +811,429 @@
 
         const typeTranslations = {
             'event': 'Tapahtuma',
+            'offer': 'Tarjous',
+            'announcement': 'Tiedote',
+            'news': 'Uutinen',
             'association': 'Yhdistys',
             'service': 'Palvelu',
             'product': 'Tuote',
-            'business': 'Yritys',
-            'offer': 'Tarjous'
+            'business': 'Yritys'
         };
+
+        const placeCache = new Map();
+
+        function isUuid(str) {
+            if (!str || typeof str !== 'string') return false;
+            return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str.trim());
+        }
+
+        function formatDate(iso) {
+            if (!iso) return '';
+            const d = new Date(iso);
+            if (isNaN(d.getTime())) return iso;
+            return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Helsinki' });
+        }
+
+        function formatTime(iso) {
+            if (!iso) return '';
+            const d = new Date(iso);
+            if (isNaN(d.getTime())) return '';
+            return d.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Helsinki' });
+        }
+
+        // 1. Ensisijainen haku posts.id (UUID)
+        async function fetchPostByUuid(uuid) {
+            if (!window.LaukaaSupabase || !uuid) return null;
+            const { data, error } = await window.LaukaaSupabase
+                .from('posts')
+                .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
+                .eq('id', uuid)
+                .in('status', ['published', 'APPROVED'])
+                .in('visibility', ['public', 'link'])
+                .maybeSingle();
+
+            if (error) {
+                console.error('Virhe posts.id-haussa:', error);
+                throw error;
+            }
+            return data;
+        }
+
+        // 2. Toissijainen haku posts.target_id
+        async function fetchPostByTargetId(targetId) {
+            if (!window.LaukaaSupabase || !targetId) return null;
+            const { data, error } = await window.LaukaaSupabase
+                .from('posts')
+                .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
+                .eq('target_id', targetId)
+                .in('status', ['published', 'APPROVED'])
+                .in('visibility', ['public', 'link'])
+                .order('updated_at', { ascending: false });
+
+            if (error) {
+                console.error('Virhe posts.target_id-haussa:', error);
+                throw error;
+            }
+            if (!data || data.length === 0) return null;
+            if (data.length > 1) {
+                console.warn(`Löytyi useita julkaisuja target_id:llä "${targetId}" (${data.length} kpl). Valitaan tuorein julkaistu rivi.`);
+            }
+            return data[0];
+        }
+
+        // Hae paikkatieto place_id:n perusteella
+        async function fetchPlace(placeId) {
+            if (!window.LaukaaSupabase || !placeId) return null;
+            if (placeCache.has(placeId)) return placeCache.get(placeId);
+            try {
+                const { data, error } = await window.LaukaaSupabase
+                    .from('places')
+                    .select('id, place_id, name, municipality, canonical_name')
+                    .or(`id.eq.${placeId},place_id.eq.${placeId}`)
+                    .maybeSingle();
+                if (error) {
+                    console.warn('Virhe paikan haussa:', error);
+                    return null;
+                }
+                if (data) placeCache.set(placeId, data);
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Muunna posts-rivi kohdekortin entiteettirakenteeseen
+        function mapPostToEntity(p, place) {
+            const isEvent = p.type === 'event';
+            const isOffer = p.type === 'offer';
+
+            const placeName = place ? place.name : '';
+            const placeMuni = place ? place.municipality : '';
+
+            const entity = {
+                id: p.id,
+                target_id: p.target_id || null,
+                target_type: p.target_type || null,
+                type: p.type || 'event',
+                name: p.title || 'Nimetön kohde',
+                shortDescription: p.description || '',
+                description: p.content || p.description || '',
+                images: p.image_url ? [p.image_url] : [],
+                tags: Array.isArray(p.tags) ? p.tags : [],
+                place_id: p.place_id || null,
+                visibility: p.visibility,
+                status: p.status,
+                created_at: p.created_at,
+                updated_at: p.updated_at,
+                source: 'posts',
+                location: {
+                    venue: p.event_location_detail || placeName || '',
+                    address: '',
+                    postalCode: '',
+                    municipality: placeMuni || 'Laukaa',
+                    mapUrl: ''
+                },
+                contact: {
+                    email: p.contact_email || '',
+                    phone: p.contact_phone || '',
+                    website: p.link || p.website_url || ''
+                },
+                event: null,
+                offer: null
+            };
+
+            if (isEvent) {
+                entity.event = {
+                    startDate: p.event_start_at,
+                    endDate: p.event_end_at,
+                    allDay: !!p.event_all_day,
+                    venue: p.event_location_detail || placeName || '',
+                    organizer: p.publisher_name || '',
+                    ticketUrl: p.event_registration_url || ''
+                };
+            } else if (isOffer) {
+                entity.offer = {
+                    validFrom: p.offer_start_at,
+                    validUntil: p.offer_end_at,
+                    terms: p.offer_terms || ''
+                };
+            }
+
+            return entity;
+        }
+
+        // Tarkista onko kohde vanhentunut
+        function isItemExpired(item) {
+            const now = new Date();
+            if (item.type === 'event') {
+                const dateStr = item.event?.endDate || item.event?.startDate || item.event_end_at || item.event_start_at;
+                if (!dateStr) return false;
+
+                let eventDate;
+                if (typeof dateStr === 'string' && !dateStr.includes('T') && !dateStr.includes(':')) {
+                    const parts = dateStr.split('-');
+                    if (parts.length === 3) {
+                        eventDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 23, 59, 59, 999);
+                    } else {
+                        eventDate = new Date(dateStr);
+                        eventDate.setHours(23, 59, 59, 999);
+                    }
+                } else {
+                    eventDate = new Date(dateStr);
+                    const isSingleDay = !(item.event?.endDate || item.event_end_at);
+                    if (isSingleDay && !isNaN(eventDate.getTime())) {
+                        const endOfDay = new Date(eventDate);
+                        endOfDay.setHours(23, 59, 59, 999);
+                        if (endOfDay > eventDate) eventDate = endOfDay;
+                    }
+                }
+                return !isNaN(eventDate.getTime()) && now > eventDate;
+            } else if (item.type === 'offer') {
+                const validUntil = item.offer?.validUntil || item.offer_end_at;
+                if (!validUntil) return false; // Toistaiseksi voimassa
+                const validDate = new Date(validUntil);
+                if (isNaN(validDate.getTime())) return false;
+                validDate.setHours(23, 59, 59, 999);
+                return now > validDate;
+            }
+            return false; // Tiedotteet ja uutiset eivät vanhene automaattisesti
+        }
+
+        function showEmptyState(title, desc, isExpired = false) {
+            const cardContainer = document.getElementById('card-container');
+            const emptyContainer = document.getElementById('empty-state-container');
+            if (cardContainer) cardContainer.style.display = 'none';
+            if (emptyContainer) {
+                emptyContainer.style.display = 'block';
+                const emptyTitle = document.getElementById('empty-state-title');
+                const emptyDesc = document.getElementById('empty-state-desc');
+                if (emptyTitle) emptyTitle.textContent = title;
+                if (emptyDesc) emptyDesc.textContent = desc;
+            }
+        }
+
+        function populateSelector(items, selectedId, isExpired = false) {
+            const selector = document.getElementById('demo-selector');
+            if (!selector) return;
+            selector.innerHTML = '';
+
+            items.forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k.id;
+                const isSelected = selectedId && (k.id === selectedId || k.target_id === selectedId);
+                const expiredTag = (isSelected && isExpired) ? ' ⚠️ (Päättynyt)' : '';
+                const isDemo = !k.description || (k.id && (k.id.startsWith('kohde_00') || k.id.startsWith('offer_')));
+                const typeLabel = typeTranslations[k.type] || k.type;
+                opt.textContent = `${k.name} (${typeLabel}${isDemo ? ' · demo' : ''})${expiredTag}`;
+                if (isSelected) opt.selected = true;
+                selector.appendChild(opt);
+            });
+
+            selector.onchange = (e) => {
+                const chosenId = e.target.value;
+                if (!chosenId) return;
+                const url = new URL(window.location.href);
+                url.searchParams.set('id', chosenId);
+                url.searchParams.delete('offer');
+                window.history.pushState({}, '', url);
+
+                const chosen = kohteet.find(k => k.id === chosenId || k.target_id === chosenId);
+                if (chosen && isItemExpired(chosen)) {
+                    const isEvent = chosen.type === 'event';
+                    showEmptyState(
+                        isEvent ? 'Tapahtuma on päättynyt' : 'Kohde ei ole enää voimassa',
+                        `${isEvent ? 'Tapahtuma' : 'Kohde'} "${chosen.name}" on jo mennyt. Voit tutustua muihin tuleviin kohteisiin LaukaaInfossa.`,
+                        true
+                    );
+                } else {
+                    const emptyContainer = document.getElementById('empty-state-container');
+                    if (emptyContainer) emptyContainer.style.display = 'none';
+                    renderEntity(chosenId);
+                }
+            };
+        }
+
+        // Ladataan aktiiviset kohteet valintalistaa ja yleisnäkymää varten
+        async function loadAllFallbackAndActiveItems() {
+            let items = [];
+            const postsUuids = new Set();
+            const postsTargetIds = new Set();
+
+            // 1. Hae julkiset julkaistut julkaisut Supabasesta
+            if (window.LaukaaSupabase) {
+                try {
+                    const { data, error } = await window.LaukaaSupabase
+                        .from('posts')
+                        .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
+                        .in('type', ['event', 'offer', 'announcement', 'news'])
+                        .in('status', ['published', 'APPROVED'])
+                        .eq('visibility', 'public')
+                        .order('created_at', { ascending: false })
+                        .limit(40);
+
+                    if (!error && Array.isArray(data)) {
+                        data.forEach(p => {
+                            postsUuids.add(p.id);
+                            if (p.target_id) postsTargetIds.add(p.target_id);
+                            items.push(mapPostToEntity(p, null));
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Virhe aktiivisten julkaisujen haussa Supabasesta:', e);
+                }
+            }
+
+            // 2. Hae JSON-tiedostot siirtymävaiheen varmistuksena
+            try {
+                const cacheBuster = Date.now();
+                const results = await Promise.allSettled([
+                    fetch('kohdekortit/kohteet.json?v=' + cacheBuster).then(r => r.json()),
+                    fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster).then(r => r.json())
+                ]);
+
+                results.forEach(res => {
+                    if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+                        res.value.forEach(j => {
+                            if (j.supabase_post_id && postsUuids.has(j.supabase_post_id)) return;
+                            if (j.id && (postsTargetIds.has(j.id) || postsUuids.has(j.id))) return;
+                            items.push({ ...j, source: 'json_fallback' });
+                        });
+                    }
+                });
+            } catch (e) {
+                console.warn('Virhe JSON-tiedostojen latauksessa:', e);
+            }
+
+            return items;
+        }
 
         async function init() {
             try {
-                // Fetch data
-                const cacheBuster = new Date().getTime();
-                const [kohteetRes, tarjouksetRes] = await Promise.all([
-                    fetch('kohdekortit/kohteet.json?v=' + cacheBuster),
-                    fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster)
-                ]);
-                
-                const perusKohteet = await kohteetRes.json();
-                const tarjoukset = await tarjouksetRes.json();
-                
-                const allLoadedItems = [...perusKohteet, ...tarjoukset];
-                if (window.LaukaaSupabase) {
-                    try {
-                        const { data, error } = await window.LaukaaSupabase
-                            .from('offers')
-                            .select('*')
-                            .eq('status', 'active');
-                        
-                        if (!error && data) {
-                            data.forEach(dbItem => {
-                               let type = 'offer';
-                               if (dbItem.taxonomy && dbItem.taxonomy.includes('Tapahtuma')) {
-                                   type = 'event';
-                               } else if (dbItem.taxonomy && dbItem.taxonomy.includes('Tarjous')) {
-                                   type = 'offer';
-                               } else if (dbItem.valid_from && dbItem.venue) {
-                                   type = 'event';
-                               }
-
-                               const item = {
-                                 id: dbItem.id,
-                                 type: type,
-                                 name: dbItem.name,
-                                 shortDescription: dbItem.short_description,
-                                 description: dbItem.description,
-                                 images: dbItem.image_url ? [dbItem.image_url] : [],
-                                 tags: dbItem.tags || [],
-                                 event: null,
-                                 offer: null,
-                                 location: {
-                                   venue: dbItem.venue,
-                                   address: dbItem.address,
-                                   municipality: dbItem.municipality
-                                 },
-                                 contact: {
-                                   email: dbItem.contact_email,
-                                   phone: dbItem.contact_phone,
-                                   website: dbItem.website
-                                 }
-                               };
-
-                               if (type === 'event') {
-                                 item.event = {
-                                   startDate: dbItem.valid_from,
-                                   endDate: dbItem.valid_until,
-                                   venue: dbItem.venue,
-                                   ticketUrl: dbItem.ticket_url,
-                                   organizer: dbItem.organizer
-                                 };
-                               } else {
-                                 item.offer = {
-                                   validFrom: dbItem.valid_from,
-                                   validUntil: dbItem.valid_until
-                                 };
-                               }
-
-                               allLoadedItems.push(item);
-                            });
-                        }
-                    } catch (e) {
-                        console.error("Supabase fetch failed", e);
-                    }
-                }
-
-                // Apufunktiot: tarkista onko tapahtuma tai tarjous vanhentunut
-                const now = new Date();
-
-                function isEventExpired(event) {
-                    if (!event) return false;
-                    const dateStr = event.endDate || event.startDate;
-                    if (!dateStr) return false;
-
-                    let eventDate;
-                    if (typeof dateStr === 'string' && !dateStr.includes('T') && !dateStr.includes(':')) {
-                        // Vain päivämäärä (esim. 2026-09-14) ilman kellonaikaa: voimassa koko kyseisen päivän loppuun
-                        const parts = dateStr.split('-');
-                        if (parts.length === 3) {
-                            eventDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 23, 59, 59, 999);
-                        } else {
-                            eventDate = new Date(dateStr);
-                            eventDate.setHours(23, 59, 59, 999);
-                        }
-                    } else {
-                        eventDate = new Date(dateStr);
-                        // Jos ilmoitettu vain startDate kellonajalla mutta ei endDatea, pidetään aktiivisena kyseisen päivän loppuun
-                        if (!event.endDate && !isNaN(eventDate.getTime())) {
-                            const endOfDay = new Date(eventDate);
-                            endOfDay.setHours(23, 59, 59, 999);
-                            if (endOfDay > eventDate) {
-                                eventDate = endOfDay;
-                            }
-                        }
-                    }
-                    return !isNaN(eventDate.getTime()) && now > eventDate;
-                }
-
-                function isOfferExpired(offer) {
-                    if (!offer || !offer.validUntil) return false;
-                    const validDate = new Date(offer.validUntil);
-                    if (isNaN(validDate.getTime())) return false;
-                    validDate.setHours(23, 59, 59, 999);
-                    return now > validDate;
-                }
-
-                // Suodata pois menneet tapahtumat ja vanhentuneet tarjoukset
-                kohteet = allLoadedItems.filter(k => {
-                    if (k.type === 'event' && k.event) {
-                        if (isEventExpired(k.event)) {
-                            return false;
-                        }
-                    } else if (k.type === 'offer' && k.offer) {
-                        if (isOfferExpired(k.offer)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                });
-
-                // URL-parametrien käsittely
                 const urlParams = new URLSearchParams(window.location.search);
                 const idFromUrl = urlParams.get('id');
                 const offerIdFromUrl = urlParams.get('offer');
-                const targetId = offerIdFromUrl || idFromUrl;
+                const targetId = (offerIdFromUrl || idFromUrl || '').trim();
 
-                const cardContainer = document.getElementById('card-container');
-                const emptyContainer = document.getElementById('empty-state-container');
                 const selector = document.getElementById('demo-selector');
-                selector.innerHTML = '';
+                if (selector) selector.innerHTML = '';
 
-                // Tarkistetaan, pyydettiinkö nimenomaisesti kohdetta, joka on jo päättynyt
-                let requestedExpiredItem = null;
+                let targetEntity = null;
+                let isExpiredTarget = false;
+
                 if (targetId) {
-                    const rawItem = allLoadedItems.find(k => k.id === targetId);
-                    if (rawItem && !kohteet.some(k => k.id === targetId)) {
-                        requestedExpiredItem = rawItem;
+                    // 1. Ensisijainen haku posts.id (UUID)
+                    if (isUuid(targetId)) {
+                        try {
+                            const post = await fetchPostByUuid(targetId);
+                            if (post) {
+                                const place = post.place_id ? await fetchPlace(post.place_id) : null;
+                                targetEntity = mapPostToEntity(post, place);
+                            }
+                        } catch (e) {
+                            console.error('Supabase UUID -haku epäonnistui:', e);
+                        }
+                    }
+
+                    // 2. Toissijainen haku posts.target_id
+                    if (!targetEntity) {
+                        try {
+                            const post = await fetchPostByTargetId(targetId);
+                            if (post) {
+                                const place = post.place_id ? await fetchPlace(post.place_id) : null;
+                                targetEntity = mapPostToEntity(post, place);
+                            }
+                        } catch (e) {
+                            console.error('Supabase target_id -haku epäonnistui:', e);
+                        }
+                    }
+
+                    // 3. Fallback: JSON-haku
+                    if (!targetEntity) {
+                        try {
+                            const cacheBuster = Date.now();
+                            const results = await Promise.allSettled([
+                                fetch('kohdekortit/kohteet.json?v=' + cacheBuster).then(r => r.json()),
+                                fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster).then(r => r.json())
+                            ]);
+                            for (const res of results) {
+                                if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+                                    const found = res.value.find(k => k.id === targetId || k.supabase_post_id === targetId || k.target_id === targetId);
+                                    if (found) {
+                                        targetEntity = { ...found, source: 'json_fallback' };
+                                        break;
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('JSON-etsintä epäonnistui:', e);
+                        }
+                    }
+
+                    if (targetEntity) {
+                        isExpiredTarget = isItemExpired(targetEntity);
                     }
                 }
 
-                if (requestedExpiredItem) {
-                    // Pyydetty kohde/tapahtuma on mennyt – ei näytetä menneen tapahtuman korttia
-                    if (cardContainer) cardContainer.style.display = 'none';
-                    if (emptyContainer) {
-                        emptyContainer.style.display = 'block';
-                        const emptyTitle = document.getElementById('empty-state-title');
-                        const emptyDesc = document.getElementById('empty-state-desc');
-                        if (emptyTitle) {
-                            emptyTitle.textContent = requestedExpiredItem.type === 'event' ? 'Tapahtuma on päättynyt' : 'Kohde ei ole enää voimassa';
-                        }
-                        if (emptyDesc) {
-                            emptyDesc.textContent = `Tapahtuma "${requestedExpiredItem.name}" on jo mennyt. Voit tutustua muihin tuleviin tapahtumiin ja kohteisiin LaukaaInfossa.`;
-                        }
-                    }
+                // Ladataan aktiiviset kohteet valintalistaa ja yleisnäkymää varten
+                const otherItems = await loadAllFallbackAndActiveItems();
+                const activeItems = otherItems.filter(i => !isItemExpired(i));
 
-                    const optExpired = document.createElement('option');
-                    optExpired.value = requestedExpiredItem.id;
-                    optExpired.textContent = `⚠️ ${requestedExpiredItem.name} (Päättynyt)`;
-                    optExpired.selected = true;
-                    selector.appendChild(optExpired);
-
-                    kohteet.forEach(k => {
-                        const opt = document.createElement('option');
-                        opt.value = k.id;
-                        const isDemo = !k.description || k.id.startsWith('kohde_00') || k.id.startsWith('offer_');
-                        const typeLabel = typeTranslations[k.type] || k.type;
-                        opt.textContent = `${k.name} (${typeLabel}${isDemo ? ' · demo' : ''})`;
-                        selector.appendChild(opt);
-                    });
-
-                    selector.addEventListener('change', (e) => {
-                        if (e.target.value !== requestedExpiredItem.id) {
-                            if (emptyContainer) emptyContainer.style.display = 'none';
-                            renderEntity(e.target.value);
-                        }
-                    });
-
-                } else if (kohteet.length === 0) {
-                    // Ei lainkaan aktiivisia tapahtumia tai kohteita
-                    if (cardContainer) cardContainer.style.display = 'none';
-                    if (emptyContainer) {
-                        emptyContainer.style.display = 'block';
-                        const emptyTitle = document.getElementById('empty-state-title');
-                        const emptyDesc = document.getElementById('empty-state-desc');
-                        if (emptyTitle) emptyTitle.textContent = 'Ei aktiivisia tapahtumia';
-                        if (emptyDesc) emptyDesc.textContent = 'Tällä hetkellä ei ole tulevia tapahtumia tai voimassa olevia tarjouksia. Tarkista tapahtumakalenteri tai palaa etusivulle.';
-                    }
-                    const opt = document.createElement('option');
-                    opt.value = '';
-                    opt.textContent = 'Ei aktiivisia kohteita';
-                    selector.appendChild(opt);
-
-                } else {
-                    // Aktiivisia kohteita on olemassa
-                    if (emptyContainer) emptyContainer.style.display = 'none';
-
-                    kohteet.forEach(k => {
-                        const opt = document.createElement('option');
-                        opt.value = k.id;
-                        const isDemo = !k.description || k.id.startsWith('kohde_00') || k.id.startsWith('offer_');
-                        const typeLabel = typeTranslations[k.type] || k.type;
-                        opt.textContent = `${k.name} (${typeLabel}${isDemo ? ' · demo' : ''})`;
-                        selector.appendChild(opt);
-                    });
-
-                    selector.addEventListener('change', (e) => {
-                        renderEntity(e.target.value);
-                    });
-
-                    if (targetId && kohteet.some(k => k.id === targetId)) {
-                        selector.value = targetId;
-                        renderEntity(targetId);
-                    } else {
-                        selector.value = kohteet[0].id;
-                        renderEntity(kohteet[0].id);
-                    }
+                // Yhdistetään kohteet-listaan
+                kohteet = [...activeItems];
+                if (targetEntity && !kohteet.some(k => k.id === targetEntity.id)) {
+                    kohteet.unshift(targetEntity);
                 }
+
+                // Käsitellään eri tilanteet:
+                if (targetId && !targetEntity) {
+                    showEmptyState(
+                        'Kohdetta ei löytynyt',
+                        `Hakemaasi julkaisua "${targetId}" ei löytynyt tai se ei ole julkisesti saatavilla.`
+                    );
+                    populateSelector(kohteet, null);
+                    return;
+                }
+
+                if (targetEntity && isExpiredTarget) {
+                    const isEvent = targetEntity.type === 'event';
+                    showEmptyState(
+                        isEvent ? 'Tapahtuma on päättynyt' : 'Kohde ei ole enää voimassa',
+                        `${isEvent ? 'Tapahtuma' : 'Kohde'} "${targetEntity.name}" on jo mennyt. Voit tutustua muihin tuleviin tapahtumiin ja kohteisiin LaukaaInfossa.`,
+                        true
+                    );
+                    populateSelector(kohteet, targetEntity.id, true);
+                    return;
+                }
+
+                if (kohteet.length === 0) {
+                    showEmptyState(
+                        'Ei aktiivisia kohteita',
+                        'Tällä hetkellä ei ole tulevia tapahtumia tai voimassa olevia tarjouksia. Tarkista tapahtumakalenteri tai palaa etusivulle.'
+                    );
+                    if (selector) {
+                        const opt = document.createElement('option');
+                        opt.value = '';
+                        opt.textContent = 'Ei aktiivisia kohteita';
+                        selector.appendChild(opt);
+                    }
+                    return;
+                }
+
+                const selectedId = targetEntity ? targetEntity.id : kohteet[0].id;
+                populateSelector(kohteet, selectedId);
+                renderEntity(selectedId);
 
             } catch (error) {
-                console.error("Virhe ladattaessa dataa:", error);
+                console.error("Virhe alustuksessa:", error);
+                showEmptyState(
+                    'Latausvirhe',
+                    'Sivun alustuksessa tapahtui virhe. Yritä hetken kuluttua uudelleen.'
+                );
             }
         }
 
         function renderEntity(id) {
-            const entity = kohteet.find(k => k.id === id);
+            const entity = kohteet.find(k => k.id === id || (k.target_id && k.target_id === id));
             if (!entity) return;
 
             const emptyContainer = document.getElementById('empty-state-container');
@@ -1063,19 +1244,17 @@
             // Header
             document.getElementById('el-type').textContent = typeTranslations[entity.type] || entity.type;
             document.getElementById('el-name').textContent = entity.name;
-            document.getElementById('el-shortdesc').textContent = entity.shortDescription;
-            document.getElementById('el-desc').textContent = entity.description;
+            document.getElementById('el-shortdesc').textContent = entity.shortDescription || '';
+            document.getElementById('el-desc').textContent = entity.description || entity.shortDescription || '';
 
             // Image — auto-upgrade http → https, onerror-fallback placeholder
             const imgEl = document.getElementById('el-image');
             if (entity.images && entity.images.length > 0 && entity.images[0]) {
                 let imgSrc = entity.images[0];
-                // Automaattinen http → https -päivitys
                 if (imgSrc.startsWith('http://')) imgSrc = 'https://' + imgSrc.slice(7);
                 imgEl.src = imgSrc;
                 imgEl.style.display = 'block';
                 imgEl.onerror = () => {
-                    // Näytä placeholder jos kuva ei lataudu
                     imgEl.style.display = 'none';
                     const placeholder = document.getElementById('el-image-placeholder');
                     if (placeholder) {
@@ -1094,16 +1273,16 @@
             }
 
             // Contact & Location
-            const addrText = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
+            const addrText = `${entity.location?.address || ''}, ${entity.location?.postalCode || ''} ${entity.location?.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
             const addrEl = document.getElementById('el-address');
-            if (entity.location.mapUrl) {
+            if (entity.location?.mapUrl) {
                 addrEl.innerHTML = `<a href="${entity.location.mapUrl}" target="_blank" style="color:var(--primary-blue); text-decoration:none; border-bottom:1px dashed var(--primary-blue); padding-bottom:2px;">${addrText || 'Katso kartalta &rarr;'}</a>`;
             } else {
-                addrEl.textContent = addrText || '-';
+                addrEl.textContent = addrText || entity.location?.venue || '-';
             }
             
             const em = document.getElementById('el-email');
-            if (entity.contact.email) {
+            if (entity.contact?.email) {
                 em.textContent = entity.contact.email;
                 em.href = `mailto:${entity.contact.email}`;
                 em.parentElement.parentElement.style.display = 'flex';
@@ -1112,7 +1291,7 @@
             }
 
             const ph = document.getElementById('el-phone');
-            if (entity.contact.phone) {
+            if (entity.contact?.phone) {
                 ph.textContent = entity.contact.phone;
                 ph.href = `tel:${entity.contact.phone}`;
                 ph.parentElement.parentElement.style.display = 'flex';
@@ -1121,7 +1300,7 @@
             }
 
             const wb = document.getElementById('el-website');
-            if (entity.contact.website) {
+            if (entity.contact?.website) {
                 wb.textContent = 'Avaa sivusto';
                 wb.href = entity.contact.website;
                 wb.parentElement.parentElement.style.display = 'flex';
@@ -1138,29 +1317,27 @@
                 const e = entity.event.endDate   ? new Date(entity.event.endDate)   : null;
                 let schedHtml = '';
                 if (s && e && s.toDateString() === e.toDateString()) {
-                    // Yhdenpäivän tapahtuma
                     schedHtml = `
                         <div style="font-size:1.15rem; font-weight:700; color:var(--secondary-blue); margin-bottom:0.5rem;">
-                            ${s.toLocaleDateString('fi-FI', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}
+                            ${s.toLocaleDateString('fi-FI', {weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone: 'Europe/Helsinki'})}
                         </div>
                         <div style="font-size:1rem; color:var(--light-text);">
-                            🕐 ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})} – ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}
+                            🕐 ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit', timeZone: 'Europe/Helsinki'})} – ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit', timeZone: 'Europe/Helsinki'})}
                         </div>`;
                 } else if (s && e) {
-                    // Monipäiväinen
                     schedHtml = `
                         <div style="margin-bottom:0.75rem;">
                             <div style="font-size:0.75rem;color:#a0aec0;text-transform:uppercase;font-weight:700;">Alkaa</div>
-                            <div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'short',day:'numeric',month:'short'})}</div>
-                            <div style="color:var(--light-text);">klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}</div>
+                            <div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'short',day:'numeric',month:'short', timeZone: 'Europe/Helsinki'})}</div>
+                            <div style="color:var(--light-text);">klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit', timeZone: 'Europe/Helsinki'})}</div>
                         </div>
                         <div>
                             <div style="font-size:0.75rem;color:#a0aec0;text-transform:uppercase;font-weight:700;">Päättyy</div>
-                            <div style="font-weight:700;color:var(--secondary-blue);">${e.toLocaleDateString('fi-FI',{weekday:'short',day:'numeric',month:'short'})}</div>
-                            <div style="color:var(--light-text);">klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}</div>
+                            <div style="font-weight:700;color:var(--secondary-blue);">${e.toLocaleDateString('fi-FI',{weekday:'short',day:'numeric',month:'short', timeZone: 'Europe/Helsinki'})}</div>
+                            <div style="color:var(--light-text);">klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit', timeZone: 'Europe/Helsinki'})}</div>
                         </div>`;
                 } else if (s) {
-                    schedHtml = `<div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>`;
+                    schedHtml = `<div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric', timeZone: 'Europe/Helsinki'})}</div>`;
                 }
                 if (entity.event.ticketUrl) {
                     schedHtml += `<a href="${entity.event.ticketUrl}" target="_blank" style="display:inline-block;margin-top:1rem;padding:0.5rem 1rem;background:var(--primary-blue);color:white;border-radius:8px;font-weight:700;font-size:0.85rem;text-decoration:none;">🎟 Liput / Ilmoittaudu</a>`;
@@ -1170,7 +1347,7 @@
                 schedPanel.style.display = 'none';
             }
 
-            // Tags & Profiles
+            // Tags
             const tagContainer = document.getElementById('el-tags');
             tagContainer.innerHTML = '';
             const allTags = [...(entity.tags || []), ...(entity.profiles || [])];
@@ -1187,26 +1364,25 @@
             if (entity.type === 'event' && entity.event) {
                 specEl.style.display = 'block';
 
-                // Muodosta älykkäämpi päivämäärä-esitys
                 const start = entity.event.startDate ? new Date(entity.event.startDate) : null;
                 const end   = entity.event.endDate   ? new Date(entity.event.endDate)   : null;
 
                 let dateHtml = '';
                 if (start && end) {
-                    const startDay = start.toLocaleDateString('fi-FI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                    const endDay   = end.toLocaleDateString('fi-FI',   { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                    const startTime = start.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
-                    const endTime   = end.toLocaleTimeString('fi-FI',   { hour: '2-digit', minute: '2-digit' });
+                    const startDay = start.toLocaleDateString('fi-FI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Helsinki' });
+                    const endDay   = end.toLocaleDateString('fi-FI',   { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Helsinki' });
+                    const startTime = start.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Helsinki' });
+                    const endTime   = end.toLocaleTimeString('fi-FI',   { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Helsinki' });
 
                     if (start.toDateString() === end.toDateString()) {
-                        // Yhdenpäivän tapahtuma
                         dateHtml = `<p><strong>📅 Päivä:</strong> ${startDay}</p>
                                     <p><strong>🕐 Aika:</strong> ${startTime} – ${endTime}</p>`;
                     } else {
-                        // Monipäiväinen tapahtuma
                         dateHtml = `<p><strong>📅 Alkaa:</strong> ${startDay} klo ${startTime}</p>
                                     <p><strong>📅 Päättyy:</strong> ${endDay} klo ${endTime}</p>`;
                     }
+                } else if (start) {
+                    dateHtml = `<p><strong>📅 Päivä:</strong> ${formatDate(entity.event.startDate)}</p>`;
                 }
 
                 specEl.innerHTML = `
@@ -1216,40 +1392,67 @@
                     ${entity.event.venue     ? `<p><strong>Paikka:</strong> ${entity.event.venue}</p>` : ''}
                     ${entity.event.ticketUrl ? `<p><a href="${entity.event.ticketUrl}" target="_blank" style="color:var(--primary-blue);font-weight:bold;">🎟 Osta liput / Ilmoittaudu &rarr;</a></p>` : ''}
                 `;
+            } else if (entity.type === 'offer' && entity.offer) {
+                specEl.style.display = 'block';
+                const isFree = entity.offer.discountType === 'free';
+                let termsHtml = '';
+                if (entity.offer.terms) {
+                    termsHtml = `<p><strong>Ehdot:</strong> ${entity.offer.terms}</p>`;
+                }
+                let discountHtml = '';
+                if (entity.offer.discountValue) {
+                    discountHtml = `<p><strong>Edun tyyppi:</strong> ${isFree ? 'Ilmainen kokeilu' : entity.offer.discountValue + ' % alennus'}</p>`;
+                }
+                const validHtml = entity.offer.validUntil 
+                    ? `<p><strong>Voimassa:</strong> ${formatDate(entity.offer.validUntil)} asti</p>` 
+                    : `<p><strong>Voimassa:</strong> Voimassa toistaiseksi</p>`;
+                specEl.innerHTML = `
+                    <h4>Tarjouksen tiedot</h4>
+                    ${discountHtml}
+                    ${entity.offer.couponCode ? `<p><strong>Alennuskoodi:</strong> <span style="background:var(--primary-blue); color:white; padding:2px 8px; border-radius:4px; font-family:monospace;">${entity.offer.couponCode}</span></p>` : ''}
+                    ${validHtml}
+                    ${termsHtml}
+                `;
+            } else if (entity.type === 'announcement') {
+                specEl.style.display = 'block';
+                specEl.innerHTML = `
+                    <h4>Tiedotteen tiedot</h4>
+                    ${entity.created_at ? `<p><strong>Julkaistu:</strong> ${formatDate(entity.created_at)}</p>` : ''}
+                    ${entity.contact?.website ? `<p><a href="${entity.contact.website}" target="_blank" style="color:var(--primary-blue); font-weight:bold;">Lue tiedote lähteestä &rarr;</a></p>` : ''}
+                `;
+            } else if (entity.type === 'news') {
+                specEl.style.display = 'block';
+                specEl.innerHTML = `
+                    <h4>Uutisen tiedot</h4>
+                    ${entity.created_at ? `<p><strong>Julkaistu:</strong> ${formatDate(entity.created_at)}</p>` : ''}
+                    ${entity.contact?.website ? `<p><a href="${entity.contact.website}" target="_blank" style="color:var(--primary-blue); font-weight:bold;">Lue uutinen lähteestä &rarr;</a></p>` : ''}
+                `;
             } else if (entity.type === 'association' && entity.association) {
                 specEl.style.display = 'block';
                 specEl.innerHTML = `
                     <h4>Yhdistyksen tiedot</h4>
-                    <p><strong>Perustettu:</strong> ${entity.association.founded}</p>
-                    <p><strong>Puheenjohtaja:</strong> ${entity.association.chairperson}</p>
-                    <p><strong>Jäsenyys:</strong> ${entity.association.membershipInfo}</p>
+                    <p><strong>Perustettu:</strong> ${entity.association.founded || '-'}</p>
+                    <p><strong>Puheenjohtaja:</strong> ${entity.association.chairperson || '-'}</p>
+                    <p><strong>Jäsenyys:</strong> ${entity.association.membershipInfo || '-'}</p>
                 `;
             } else if (entity.type === 'service' && entity.service) {
                 specEl.style.display = 'block';
                 specEl.innerHTML = `
                     <h4>Palvelun tiedot</h4>
-                    <p><strong>Tarjoaja:</strong> ${entity.service.provider}</p>
-                    <p><strong>Hinta/Tieto:</strong> ${entity.service.priceInfo}</p>
+                    <p><strong>Tarjoaja:</strong> ${entity.service.provider || '-'}</p>
+                    <p><strong>Hinta/Tieto:</strong> ${entity.service.priceInfo || '-'}</p>
                     ${entity.service.bookingUrl ? `<p><a href="${entity.service.bookingUrl}" target="_blank" style="color:var(--primary-blue); font-weight:bold;">Siirry varaukseen &rarr;</a></p>` : ''}
-                `;
-            } else if (entity.type === 'offer' && entity.offer) {
-                specEl.style.display = 'block';
-                const isFree = entity.offer.discountType === 'free';
-                specEl.innerHTML = `
-                    <h4>Tarjouksen tiedot</h4>
-                    <p><strong>Edun tyyppi:</strong> ${isFree ? 'Ilmainen kokeilu' : entity.offer.discountValue + ' % alennus'}</p>
-                    ${entity.offer.couponCode ? `<p><strong>Alennuskoodi:</strong> <span style="background:var(--primary-blue); color:white; padding:2px 8px; border-radius:4px; font-family:monospace;">${entity.offer.couponCode}</span></p>` : ''}
-                    <p><strong>Voimassa:</strong> ${entity.offer.validUntil}</p>
                 `;
             } else {
                 specEl.style.display = 'none';
             }
 
+            // Paikkalinkki tietoa-paikasta.html -sivulle
             if (entity.place_id) {
                 specEl.style.display = 'block';
                 specEl.innerHTML += `
                     <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed #e2e8f0;">
-                        <a href="tietoa-paikasta.html?id=${entity.place_id}" style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--light-blue); color:var(--primary-blue); padding:0.75rem 1.25rem; border-radius:50px; text-decoration:none; font-weight:700; font-size:0.9rem; transition: background 0.2s;">
+                        <a href="tietoa-paikasta.html?id=${encodeURIComponent(entity.place_id)}" style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--light-blue); color:var(--primary-blue); padding:0.75rem 1.25rem; border-radius:50px; text-decoration:none; font-weight:700; font-size:0.9rem; transition: background 0.2s;">
                             <span class="iconify" data-icon="mdi:map-marker-radius"></span> Katso alueen muut kohteet
                         </a>
                     </div>
@@ -1261,6 +1464,46 @@
                 renderKohtaamisetForEntity(entity);
             }
 
+            // Palvelut integraatio
+            if (window.LaukaaSupabase) {
+                renderServicesForEntity(entity);
+            }
+
+            // Tiedotteet / Posts -feedi
+            const feedBox = document.getElementById('feed-box');
+            const feedContainer = document.getElementById('el-feed');
+            feedContainer.innerHTML = '';
+
+            if (entity.posts && entity.posts.length > 0) {
+                feedBox.style.display = 'block';
+                const sortedPosts = [...entity.posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+                sortedPosts.forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'feed-post';
+                    let dateStr = post.date;
+                    try {
+                        const d = new Date(post.date);
+                        if (!isNaN(d)) dateStr = d.toLocaleDateString('fi-FI', { timeZone: 'Europe/Helsinki' });
+                    } catch (e) {}
+
+                    let html = '';
+                    if (post.image) {
+                        html += `<img src="${post.image}" alt="Kuva" class="feed-post-img" onerror="this.style.display='none'">`;
+                    }
+                    html += `<div class="feed-post-content">
+                                <div class="feed-post-date"><span class="iconify" data-icon="mdi:calendar-clock"></span> ${dateStr}</div>
+                                <h3 class="feed-post-title">${post.title || ''}</h3>
+                                <p class="feed-post-desc">${post.description || ''}</p>
+                                ${post.link ? `<a href="${post.link}" target="_blank" class="feed-post-link">Lue lisää &rarr;</a>` : ''}
+                             </div>`;
+                    postDiv.innerHTML = html;
+                    feedContainer.appendChild(postDiv);
+                });
+            } else {
+                feedBox.style.display = 'none';
+            }
+        }
+
         async function renderKohtaamisetForEntity(entity) {
             const kohtaamisetBox = document.getElementById('kohtaamiset-box');
             const kohtaamisetContainer = document.getElementById('el-kohtaamiset');
@@ -1271,8 +1514,13 @@
             try {
                 const allEncounters = await fetchEncounters();
                 
-                // 1. Kohteen omat ilmoitukset (täsmäävä location_id)
-                const ownEncounters = allEncounters.filter(ad => ad.location_id === entity.id || ad.location_id === String(entity.id).replace('loc-', ''));
+                // 1. Kohteen omat ilmoitukset (täsmäävä location_id tai target_id tai place_id)
+                const ownEncounters = allEncounters.filter(ad => 
+                    ad.location_id === entity.id || 
+                    ad.location_id === String(entity.id).replace('loc-', '') ||
+                    (entity.target_id && ad.location_id === entity.target_id) ||
+                    (entity.place_id && ad.location_id === entity.place_id)
+                );
                 
                 if (ownEncounters.length > 0) {
                     specificList.innerHTML = ownEncounters.map(ad => {
@@ -1288,25 +1536,20 @@
                     specificList.style.display = 'flex';
                 }
 
-                if (btnAdd) {
-                    btnAdd.style.display = 'none'; // Ilmoitukset tehdään sovelluksessa
-                }
+                if (btnAdd) btnAdd.style.display = 'none';
 
-                // 2. Lähistön ilmoitukset (Aiempien tapojen mukaan)
+                // 2. Lähistön ilmoitukset
                 const enNameLower = (entity.name || '').toLowerCase();
                 const enMuniLower = (entity.location && entity.location.municipality) ? entity.location.municipality.toLowerCase() : '';
                 
                 const related = allEncounters.filter(ad => {
-                    // Ohitetaan omat ilmoitukset
                     if (ad.location_id === entity.id || ad.location_id === String(entity.id).replace('loc-', '')) return false;
-
                     const loc = (ad.location || '').toLowerCase();
                     const desc = (ad.description || '').toLowerCase();
                     const title = (ad.title || '').toLowerCase();
-                    // Osuma nimeen tai sijaintiin (joka vastaa kuntaa/taajamaa)
                     return loc.includes(enNameLower) || desc.includes(enNameLower) || title.includes(enNameLower) || 
                            (enMuniLower && loc.includes(enMuniLower));
-                }).slice(0, 5); // Max 5
+                }).slice(0, 5);
 
                 if (related.length > 0) {
                     if (ownEncounters.length > 0 && relatedTitle) {
@@ -1339,16 +1582,12 @@
             }
         }
 
-        if (window.LaukaaSupabase) {
-            renderServicesForEntity(entity);
-        }
-
         async function renderServicesForEntity(entity) {
             const servicesBox = document.getElementById('services-box');
             const servicesContainer = document.getElementById('el-services');
             
             try {
-                const placeIdStr = String(entity.id).replace('loc-', '');
+                const placeIdStr = entity.place_id || String(entity.id).replace('loc-', '');
                 
                 const { data: relations, error: relError } = await window.LaukaaSupabase
                     .from('place_relations')
@@ -1380,7 +1619,6 @@
                 servicesContainer.innerHTML = relations.map(rel => {
                     const companySources = sources ? sources.filter(s => String(s.entity_id) === String(rel.entity_id)) : [];
                     const companyContents = contents ? contents.filter(c => String(c.entity_id) === String(rel.entity_id)) : [];
-                    
                     let htmlArr = [];
                     
                     if (companySources.length > 0) {
@@ -1458,56 +1696,12 @@
             }
         }
 
-            // Posts / Tiedotteet
-            const feedBox = document.getElementById('feed-box');
-            const feedContainer = document.getElementById('el-feed');
-            feedContainer.innerHTML = '';
-
-            if (entity.posts && entity.posts.length > 0) {
-                feedBox.style.display = 'block';
-                // Järjestetään uusimmasta vanhimpaan (päivämäärän mukaan)
-                const sortedPosts = [...entity.posts].sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                sortedPosts.forEach(post => {
-                    const postDiv = document.createElement('div');
-                    postDiv.className = 'feed-post';
-                    
-                    // Format date (e.g., 10.6.2026)
-                    let dateStr = post.date;
-                    try {
-                        const d = new Date(post.date);
-                        if (!isNaN(d)) {
-                            dateStr = d.toLocaleDateString('fi-FI');
-                        }
-                    } catch (e) {}
-
-                    let html = '';
-                    if (post.image) {
-                        html += `<img src="${post.image}" alt="Kuva" class="feed-post-img" onerror="this.style.display='none'">`;
-                    }
-                    
-                    html += `<div class="feed-post-content">
-                                <div class="feed-post-date"><span class="iconify" data-icon="mdi:calendar-clock"></span> ${dateStr}</div>
-                                <h3 class="feed-post-title">${post.title || ''}</h3>
-                                <p class="feed-post-desc">${post.description || ''}</p>
-                                ${post.link ? `<a href="${post.link}" target="_blank" class="feed-post-link">Lue lisää &rarr;</a>` : ''}
-                             </div>`;
-                    
-                    postDiv.innerHTML = html;
-                    feedContainer.appendChild(postDiv);
-                });
-            } else {
-                feedBox.style.display = 'none';
-            }
-        }
-
         function shareEntity() {
             const btn = document.getElementById('share-btn');
             const toast = document.getElementById('share-toast');
             const name = document.getElementById('el-name')?.textContent || 'Kohde';
             const url = window.location.href;
 
-            // Web Share API (mobiili, moderni selain)
             if (navigator.share) {
                 navigator.share({
                     title: name + ' – LaukaaInfo',
@@ -1517,7 +1711,6 @@
                 return;
             }
 
-            // Fallback: kopioi leikepöydälle
             navigator.clipboard.writeText(url).then(() => {
                 btn.classList.add('copied');
                 btn.innerHTML = '<span class="iconify" data-icon="mdi:check"></span> Kopioitu!';
@@ -1528,16 +1721,14 @@
                     toast.classList.remove('show');
                 }, 2500);
             }).catch(() => {
-                // Viimeinen vaihtoehto: prompt
                 prompt('Kopioi linkki:', url);
             });
         }
 
         function printEntity() {
-            // Check if entity is currently loaded
             const selector = document.getElementById('demo-selector');
-            const id = selector.value;
-            const entity = kohteet.find(k => k.id === id);
+            const id = selector ? selector.value : '';
+            const entity = kohteet.find(k => k.id === id || (k.target_id && k.target_id === id));
             if (!entity) return;
 
             // Populate Print Layout
@@ -1562,6 +1753,7 @@
             let addrText = '';
             if (entity.location) {
                 addrText = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
+                if (!addrText && entity.location.venue) addrText = entity.location.venue;
             }
             const printAddrRow = document.getElementById('print-address-row');
             if (addrText) {
@@ -1578,16 +1770,21 @@
                 const e = entity.event.endDate   ? new Date(entity.event.endDate)   : null;
                 let timeStr = '';
                 if (s && e && s.toDateString() === e.toDateString()) {
-                    timeStr = `${s.toLocaleDateString('fi-FI')} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})} – ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+                    timeStr = `${s.toLocaleDateString('fi-FI', {timeZone: 'Europe/Helsinki'})} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit',timeZone: 'Europe/Helsinki'})} – ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit',timeZone: 'Europe/Helsinki'})}`;
                 } else if (s && e) {
-                    timeStr = `${s.toLocaleDateString('fi-FI')} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})} – ${e.toLocaleDateString('fi-FI')} klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+                    timeStr = `${s.toLocaleDateString('fi-FI', {timeZone: 'Europe/Helsinki'})} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit',timeZone: 'Europe/Helsinki'})} – ${e.toLocaleDateString('fi-FI', {timeZone: 'Europe/Helsinki'})} klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit',timeZone: 'Europe/Helsinki'})}`;
                 } else if (s) {
-                    timeStr = `${s.toLocaleDateString('fi-FI')} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+                    timeStr = `${s.toLocaleDateString('fi-FI', {timeZone: 'Europe/Helsinki'})} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit',timeZone: 'Europe/Helsinki'})}`;
                 }
                 document.getElementById('print-time').textContent = timeStr;
                 printTimeRow.style.display = 'block';
-            } else if (entity.type === 'offer' && entity.offer && entity.offer.validUntil) {
-                document.getElementById('print-time').textContent = 'Voimassa: ' + entity.offer.validUntil;
+            } else if (entity.type === 'offer' && entity.offer) {
+                let offerTime = entity.offer.validUntil ? 'Voimassa: ' + formatDate(entity.offer.validUntil) : 'Voimassa toistaiseksi';
+                if (entity.offer.terms) offerTime += ' (' + entity.offer.terms + ')';
+                document.getElementById('print-time').textContent = offerTime;
+                printTimeRow.style.display = 'block';
+            } else if ((entity.type === 'announcement' || entity.type === 'news') && entity.created_at) {
+                document.getElementById('print-time').textContent = 'Julkaistu: ' + formatDate(entity.created_at);
                 printTimeRow.style.display = 'block';
             } else {
                 printTimeRow.style.display = 'none';
