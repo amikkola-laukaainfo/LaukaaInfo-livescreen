@@ -838,7 +838,7 @@ function buildCard(item) {
     <div class="card-meta">
       ${dateStr ? `<div class="card-date">🗓 ${dateStr}</div>` : ''}
       ${venue ? `<div class="card-location">📍 ${venue}</div>` : ''}
-      ${item.event?.organizer ? `<div class="card-location">ðŸ‘¤ ${item.event.organizer}</div>` : ''}
+      ${item.event?.organizer ? `<div class="card-location">👤 ${item.event.organizer}</div>` : ''}
     </div>
   </div>
   ${tags.length ? `<div class="card-footer">${tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>` : ''}

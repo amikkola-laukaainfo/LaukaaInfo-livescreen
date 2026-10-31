@@ -4,8 +4,6 @@
     const root = document.getElementById('homepage-feed-highlights');
     if (!root) return;
 
-    const feedEl = document.getElementById('homepage-feed');
-    const feedUrl = feedEl?.dataset.feedSrc || 'https://www.mediazoo.fi/laukaainfo-web/api.php';
     const maxHighlights = 3;
     const placeholderImage = 'kuvia/syote.jpg';
 
@@ -16,15 +14,30 @@
         story: 'Tarina',
         offer: 'Tarjous',
         notice: 'Ilmoitus',
+        announcement: 'Tiedote',
+        news: 'Uutinen',
         video: 'Video',
         pikkuilmoitus: 'Ajankohtaista',
         kohde: 'Kohde',
         place: 'Paikka'
     };
 
+    const typeIcons = {
+        event: '📅',
+        offer: '🎁',
+        announcement: '📢',
+        news: '📰',
+        notice: '📌',
+        video: '🎥',
+        kohde: '📇',
+        business: '🏢',
+        place: '📍'
+    };
+
     const placeTypeIcons = {
         NATURE: '🌿',
         LANDMARK: '🏛️',
+        ATTRACTION: '✨',
         SERVICE: '🏪',
         BUILDING: '🏠',
         AREA: '🗺️',
@@ -49,98 +62,6 @@
         return cloned;
     }
 
-    async function loadKohdekortit() {
-        try {
-            const response = await fetch(`kohdekortit/kohteet.json?ts=${Date.now()}`);
-            if (!response.ok) {
-                throw new Error(`Kohdekortit haussa HTTP ${response.status}`);
-            }
-            const json = await response.json();
-            const now = new Date();
-            return Array.isArray(json) ? json.filter(item => {
-                if (!item || item.status === 'inactive') return false;
-                if (item.type === 'event' && item.event) {
-                    const dateStr = item.event.endDate || item.event.startDate;
-                    if (dateStr) {
-                        let eventDate;
-                        if (typeof dateStr === 'string' && !dateStr.includes('T') && !dateStr.includes(':')) {
-                            const parts = dateStr.split('-');
-                            if (parts.length === 3) {
-                                eventDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 23, 59, 59, 999);
-                            } else {
-                                eventDate = new Date(dateStr);
-                                eventDate.setHours(23, 59, 59, 999);
-                            }
-                        } else {
-                            eventDate = new Date(dateStr);
-                            if (!item.event.endDate && !isNaN(eventDate.getTime())) {
-                                const endOfDay = new Date(eventDate);
-                                endOfDay.setHours(23, 59, 59, 999);
-                                if (endOfDay > eventDate) eventDate = endOfDay;
-                            }
-                        }
-                        if (!isNaN(eventDate.getTime()) && now > eventDate) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }) : [];
-        } catch (err) {
-            console.warn('Kohdekorttien lataus epäonnistui:', err);
-            return [];
-        }
-    }
-
-    function normalizeKohdeEntity(entity) {
-        return {
-            source: 'kohde',
-            id: entity.id,
-            title: entity.name,
-            description: entity.shortDescription || entity.description || '',
-            image: Array.isArray(entity.images) && entity.images.length ? entity.images[0] : placeholderImage,
-            type: 'kohde',
-            targetUrl: `kohdekortti.html?id=${encodeURIComponent(entity.id)}`
-        };
-    }
-
-    async function loadPlaces() {
-        try {
-            // Yritetään hakea Supabase-client globaalista scopesta
-            const sbUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-            const sbKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-            if (!window.supabase) return [];
-            window.aiSb = window.aiSb || window.supabase.createClient(sbUrl, sbKey);
-            const sb = window.aiSb;
-            const { data, error } = await sb
-                .from('places')
-                .select('place_id, name, canonical_name, type, municipality, description')
-                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
-                .limit(30);
-            if (error || !data) return [];
-            return data;
-        } catch (e) {
-            console.warn('Places-haku epäonnistui:', e);
-            return [];
-        }
-    }
-
-    function normalizePlaceEntity(place) {
-        const icon = placeTypeIcons[place.type] || '📍';
-        const label = { NATURE: 'Luontokohde', LANDMARK: 'Nähtävyys', SERVICE: 'Palvelukeskus', BUILDING: 'Rakennus', AREA: 'Alue', ROUTE: 'Reitti' }[place.type] || 'Paikka';
-        return {
-            source: 'place',
-            id: place.place_id,
-            title: place.name || place.canonical_name,
-            description: place.description || `${icon} ${label} – ${place.municipality || 'Laukaa'}`,
-            image: placeholderImage,
-            type: 'place',
-            placeIcon: icon,
-            placeLabel: label,
-            targetUrl: `tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}`
-        };
-    }
-
     function truncate(text, maxLength) {
         if (!text) return '';
         text = text.trim();
@@ -148,18 +69,172 @@
         return escapeHtml(text.slice(0, maxLength).replace(/\s+$/, '')) + '…';
     }
 
+    function getSupabase() {
+        if (window.LaukaaSupabase) return window.LaukaaSupabase;
+        if (window.supabase) {
+            const sbUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+            const sbKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+            window.LaukaaSupabase = window.supabase.createClient(sbUrl, sbKey);
+            return window.LaukaaSupabase;
+        }
+        return null;
+    }
+
+    function isExpired(post) {
+        const now = new Date();
+        if (post.type === 'event') {
+            const end = post.event_end_at || post.event_start_at;
+            if (end) {
+                const d = new Date(end);
+                if (!isNaN(d.getTime()) && now > d) return true;
+            }
+        } else if (post.type === 'offer') {
+            if (post.offer_end_at) {
+                const d = new Date(post.offer_end_at);
+                if (!isNaN(d.getTime()) && now > d) return true;
+            }
+        }
+        return false;
+    }
+
+    async function loadPostsFromSupabase() {
+        const sb = getSupabase();
+        if (sb) {
+            try {
+                const { data, error } = await sb
+                    .from('posts')
+                    .select('id, type, title, description, content, place_id, status, visibility, image_url, link, target_id, event_start_at, event_end_at, offer_start_at, offer_end_at, created_at, published_at')
+                    .in('type', ['event', 'offer', 'announcement', 'news', 'notice', 'video'])
+                    .in('status', ['published', 'APPROVED'])
+                    .eq('visibility', 'public')
+                    .order('created_at', { ascending: false })
+                    .limit(30);
+
+                if (!error && Array.isArray(data)) {
+                    return data.filter(p => !isExpired(p));
+                }
+            } catch (err) {
+                console.warn('[Highlights] Supabase posts -haku epäonnistui:', err);
+            }
+        }
+
+        // REST fallback
+        try {
+            const url = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?type=in.(event,offer,announcement,news,notice,video)&status=in.(published,APPROVED)&visibility=eq.public&select=id,type,title,description,content,place_id,status,visibility,image_url,link,target_id,event_start_at,event_end_at,offer_start_at,offer_end_at,created_at,published_at&order=created_at.desc&limit=30';
+            const res = await fetch(url, {
+                headers: {
+                    'apikey': 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+                    'Authorization': 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu'
+                }
+            });
+            if (res.ok) {
+                const raw = await res.json();
+                return (raw || []).filter(p => !isExpired(p));
+            }
+        } catch (e) {
+            console.warn('[Highlights] REST fallback epäonnistui:', e);
+        }
+        return [];
+    }
+
+    async function loadPlacesFromSupabase() {
+        const sb = getSupabase();
+        if (sb) {
+            try {
+                const { data, error } = await sb
+                    .from('places')
+                    .select('place_id, name, canonical_name, type, municipality, description')
+                    .or('status.eq.active,status.eq.ACTIVE,status.is.null')
+                    .limit(30);
+                if (!error && data) return data;
+            } catch (e) {
+                console.warn('[Highlights] Places-haku epäonnistui:', e);
+            }
+        }
+        return [];
+    }
+
+    async function loadKohdekortitJson() {
+        try {
+            const response = await fetch(`kohdekortit/kohteet.json?ts=${Date.now()}`);
+            if (!response.ok) return [];
+            const json = await response.json();
+            return Array.isArray(json) ? json.filter(item => item && item.status !== 'inactive') : [];
+        } catch (err) {
+            return [];
+        }
+    }
+
+    function normalizePostEntity(post) {
+        const title = post.title || 'Laukaa-syöte';
+        const desc = post.description || post.content || '';
+        const img = post.image_url || null;
+        const targetUrl = post.id ? `kohdekortti.html?id=${encodeURIComponent(post.id)}` : 'kohdekortit.html';
+
+        return {
+            source: 'posts',
+            id: post.id,
+            target_id: post.target_id || null,
+            title: title,
+            description: desc,
+            image: img,
+            type: post.type || 'announcement',
+            place_id: post.place_id || null,
+            event_date: post.event_start_at || post.published_at || post.created_at,
+            targetUrl: targetUrl
+        };
+    }
+
+    function normalizeKohdeEntity(entity) {
+        return {
+            source: 'kohde_json',
+            id: entity.id,
+            title: entity.name,
+            description: entity.shortDescription || entity.description || '',
+            image: Array.isArray(entity.images) && entity.images.length ? entity.images[0] : null,
+            type: entity.type || 'kohde',
+            targetUrl: `kohdekortti.html?id=${encodeURIComponent(entity.id)}`
+        };
+    }
+
+    function normalizePlaceEntity(place) {
+        const icon = placeTypeIcons[place.type] || '📍';
+        const label = {
+            NATURE: 'Luontokohde',
+            LANDMARK: 'Nähtävyys',
+            ATTRACTION: 'Nähtävyys',
+            SERVICE: 'Palvelukeskus',
+            BUILDING: 'Rakennus',
+            AREA: 'Alue',
+            ROUTE: 'Reitti'
+        }[place.type] || 'Paikka';
+
+        return {
+            source: 'place',
+            id: place.place_id,
+            title: place.name || place.canonical_name,
+            description: place.description || `${icon} ${label} – ${place.municipality || 'Laukaa'}`,
+            image: null,
+            type: 'place',
+            placeIcon: icon,
+            placeLabel: label,
+            targetUrl: `tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}`
+        };
+    }
+
     function createCard(item) {
-        const title = escapeHtml(item.title || item.name || 'Laukaa-syöte');
-        const desc = truncate(item.description || item.summary || '', 110);
-        const type = escapeHtml(typeLabels[item.type] || 'Julkaisu');
-        const targetUrl = item.targetUrl || (item.id ? `index.html?item=${encodeURIComponent(item.id)}&feed=open` : 'index.html?feed=open');
+        const title = escapeHtml(item.title || 'Laukaa-syöte');
+        const desc = truncate(item.description || '', 120);
+        const typeLabel = escapeHtml(typeLabels[item.type] || 'Julkaisu');
+        const typeIcon = typeIcons[item.type] || '📌';
+        const targetUrl = item.targetUrl || 'kohdekortit.html';
 
         const card = document.createElement('article');
 
         if (item.type === 'event') {
-            card.className = 'homepage-feed-highlights__card';
-            const img = item.image || item.imageUrl || (item.media && Array.isArray(item.media) ? item.media.find(m => m.type === 'image' && m.url)?.url : null);
-            const rawDate = item.event_date || item.date || item.published_at || item.created_at;
+            card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--event-text';
+            const img = item.image;
+            const rawDate = item.event_date;
             let dateStr = 'Tapahtuma';
             if (rawDate) {
                 try {
@@ -177,16 +252,31 @@
                         <div class="homepage-feed-highlights__event-date-badge">
                             <span class="homepage-feed-highlights__event-date-icon">📅</span>
                             <span class="homepage-feed-highlights__event-date-text">${escapeHtml(dateStr)}</span>
-                            <span class="homepage-feed-highlights__badge homepage-feed-highlights__badge--event">${type}</span>
+                            <span class="homepage-feed-highlights__badge homepage-feed-highlights__badge--event">${typeLabel}</span>
                         </div>
                         <h3 class="homepage-feed-highlights__card-title">${title}</h3>
                         <p class="homepage-feed-highlights__card-desc">${desc}</p>
-                        <span class="homepage-feed-highlights__card-cta">Näytä koko tapahtuma »</span>
+                        <span class="homepage-feed-highlights__card-cta" style="color: #ea580c; font-weight: 700;">Näytä koko tapahtuma »</span>
+                    </div>
+                </a>
+            `;
+        } else if (item.type === 'offer') {
+            card.className = 'homepage-feed-highlights__card';
+            const img = item.image;
+            card.innerHTML = `
+                <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
+                    ${img ? `<div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>` : ''}
+                    <div class="homepage-feed-highlights__card-body" style="background: linear-gradient(135deg, #fffcf0 0%, #fff 100%); border-top: 4px solid #f59e0b;">
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <span class="homepage-feed-highlights__badge" style="background:#fef3c7; color:#b45309;">🎁 ${typeLabel}</span>
+                        </div>
+                        <h3 class="homepage-feed-highlights__card-title">${title}</h3>
+                        <p class="homepage-feed-highlights__card-desc">${desc}</p>
+                        <span class="homepage-feed-highlights__card-cta" style="color: #b45309; font-weight: 700;">Katso tarjous »</span>
                     </div>
                 </a>
             `;
         } else if (item.type === 'place') {
-            // Paikkakortti – erityinen tyyli vihreällä aksentilla
             card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--place';
             card.innerHTML = `
                 <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
@@ -203,15 +293,15 @@
             `;
         } else {
             card.className = 'homepage-feed-highlights__card';
-            const img = item.image || (item.media && Array.isArray(item.media) ? item.media.find(m => m.type === 'image' && m.url)?.url : null) || placeholderImage;
+            const img = item.image || placeholderImage;
             card.innerHTML = `
                 <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
                     <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
                     <div class="homepage-feed-highlights__card-body">
-                        <span class="homepage-feed-highlights__badge">${type}</span>
+                        <span class="homepage-feed-highlights__badge">${typeIcon} ${typeLabel}</span>
                         <h3 class="homepage-feed-highlights__card-title">${title}</h3>
                         <p class="homepage-feed-highlights__card-desc">${desc}</p>
-                        <span class="homepage-feed-highlights__card-cta">Näytä koko nosto »</span>
+                        <span class="homepage-feed-highlights__card-cta">Avaa kohdekortti »</span>
                     </div>
                 </a>
             `;
@@ -237,7 +327,7 @@
         action.innerHTML = `
             <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; width: 100%;">
                 <button type="button" class="btn-radar homepage-feed-highlights__button" data-i18n="feed_open_publications">${window.i18n ? window.i18n.t('feed_open_publications') : 'Avaa julkaisujen syöte'}</button>
-                <a href="kohdekortit.html" class="btn-radar" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; background: linear-gradient(135deg, #f5a623, #e09010); color: #000; box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35);">📅 <span data-i18n="feed_events_and_offers">${window.i18n ? window.i18n.t('feed_events_and_offers') : 'Tapahtumat ja tarjoukset'}</span></a>
+                <a href="kohdekortit.html" class="btn-radar" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; background: linear-gradient(135deg, #f5a623, #e09010); color: #000; box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35); font-weight: 700;">📅 <span data-i18n="feed_events_and_offers">${window.i18n ? window.i18n.t('feed_events_and_offers') : 'Tapahtumat ja tarjoukset'}</span></a>
             </div>
         `;
         root.appendChild(action);
@@ -261,57 +351,83 @@
         root.innerHTML = '<div class="homepage-feed-highlights__loading">Ladataan nostoja…</div>';
 
         try {
-            const SUPABASE_POSTS_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&order=published_at.desc';
-            const SUPABASE_HEADERS = {
-                'apikey': 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
-                'Authorization': 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu'
-            };
+            // 1. Hae julkaisut Supabase posts -taulusta
+            const posts = await loadPostsFromSupabase();
+            const normalizedPosts = posts.map(normalizePostEntity);
 
-            let items = [];
-            try {
-                const response = await fetch(SUPABASE_POSTS_URL, { headers: SUPABASE_HEADERS });
-                if (response.ok) {
-                    const rawPosts = await response.json();
-                    items = (rawPosts || []).map(p => ({
-                        ...p,
-                        image: p.image || p.image_url,
-                        publish_at: p.publish_at || p.published_at
-                    }));
-                }
-            } catch (err) {
-                console.warn('[Highlights] Supabase fetch failed, falling back to feedUrl:', err);
-                const response = await fetch(`${feedUrl}${feedUrl.includes('?') ? '&' : '?'}ts=${Date.now()}`);
-                const json = await response.json();
-                items = Array.isArray(json) ? json : (json.data || []);
-            }
-            if (!items || !items.length) {
+            // 2. Hae JSON-lähteet (fallback / täydentävä data) ja poista duplikaatit
+            const jsonKohteet = await loadKohdekortitJson();
+            const postUuids = new Set(posts.map(p => p.id).filter(Boolean));
+            const postTargetIds = new Set(posts.map(p => p.target_id).filter(Boolean));
+            const uniqueJson = jsonKohteet.filter(j => !postUuids.has(j.id) && !postTargetIds.has(j.id));
+            const normalizedJson = uniqueJson.map(normalizeKohdeEntity);
+
+            // 3. Hae paikkoja Supabasesta
+            const places = await loadPlacesFromSupabase();
+            const normalizedPlaces = shuffleArray(places).map(normalizePlaceEntity);
+
+            // Yhdistetään kohde- ja julkaisukortit
+            const allContentCards = [...normalizedPosts, ...normalizedJson];
+
+            if (!allContentCards.length && !normalizedPlaces.length) {
                 renderHighlights([]);
                 return;
             }
 
-            const promoted = items.filter(i => i.is_promoted || i.type === 'offer' || i.type === 'notice');
-            const otherFeedItems = items.filter(i => !promoted.includes(i));
-            const kohteet = await loadKohdekortit();
-            const normalizedKohteet = shuffleArray(kohteet).map(normalizeKohdeEntity);
+            // Valitaan esille nostettavat 3 korttia:
+            // - Erotellaan tapahtumat, tarjoukset ja yleiset julkaisut
+            const events = allContentCards.filter(c => c.type === 'event');
+            const offers = allContentCards.filter(c => c.type === 'offer');
+            const others = allContentCards.filter(c => c.type !== 'event' && c.type !== 'offer');
 
-            // Hae paikkoja Supabasesta
-            const places = await loadPlaces();
-            const normalizedPlaces = shuffleArray(places).map(normalizePlaceEntity);
+            const selected = [];
 
-            // Satunnaisesti 0-1 paikkakorttia mukaan
-            const includePlaces = normalizedPlaces.length > 0 && Math.random() < 0.6;
-            const placeCount = includePlaces ? 1 : 0;
+            // Suositaan kuvalisia ja ajankohtaisia nostoja
+            const hasImg = (c) => Boolean(c.image);
 
-            const includeKohde = normalizedKohteet.length > 0 && Math.random() < 0.65;
-            const kohdeCount = includeKohde ? Math.min(1 + Math.floor(Math.random() * 2), maxHighlights - 1 - placeCount) : 0;
-            const feedCount = maxHighlights - kohdeCount - placeCount;
+            // Jos tapahtumia löytyy, nostetaan 1 tapahtuma
+            if (events.length > 0) {
+                const pickedEvent = events.find(hasImg) || events[0];
+                selected.push(pickedEvent);
+            }
 
-            const selectedFeed = shuffleArray(promoted.concat(otherFeedItems)).slice(0, Math.max(1, feedCount));
-            const selectedKohde = normalizedKohteet.slice(0, kohdeCount);
-            const selectedPlaces = normalizedPlaces.slice(0, placeCount);
-            const selected = shuffleArray([...selectedFeed, ...selectedKohde, ...selectedPlaces]).slice(0, maxHighlights);
+            // Jos tarjouksia löytyy, nostetaan 1 tarjous
+            if (offers.length > 0 && selected.length < maxHighlights) {
+                const pickedOffer = offers.find(hasImg) || offers[0];
+                selected.push(pickedOffer);
+            }
 
-            renderHighlights(selected);
+            // Mahdollisesti 1 paikkakortti monipuolisuuden vuoksi (50% todennäköisyys)
+            if (normalizedPlaces.length > 0 && selected.length < maxHighlights && Math.random() < 0.5) {
+                selected.push(normalizedPlaces[0]);
+            }
+
+            // Täytetään loput paikat muista julkaisuista (uutiset, tiedotteet, videot, ym.)
+            const remainingPool = shuffleArray(
+                allContentCards.filter(c => !selected.some(s => s.id === c.id))
+            );
+
+            // Ensisijaisesti kuvalliset julkaisut
+            const withImages = remainingPool.filter(hasImg);
+            const withoutImages = remainingPool.filter(c => !hasImg(c));
+            const sortedRemaining = [...withImages, ...withoutImages];
+
+            for (const item of sortedRemaining) {
+                if (selected.length >= maxHighlights) break;
+                selected.push(item);
+            }
+
+            // Jos vieläkin tilaa, täydennetään paikoilla
+            if (selected.length < maxHighlights && normalizedPlaces.length > 0) {
+                for (const p of normalizedPlaces) {
+                    if (selected.length >= maxHighlights) break;
+                    if (!selected.some(s => s.id === p.id)) {
+                        selected.push(p);
+                    }
+                }
+            }
+
+            renderHighlights(selected.slice(0, maxHighlights));
         } catch (err) {
             console.error('Homepage feed highlights load failed:', err);
             root.innerHTML = '<div class="homepage-feed-highlights__error">Nostojen lataus epäonnistui. Yritä hetken kuluttua uudelleen.</div>';
