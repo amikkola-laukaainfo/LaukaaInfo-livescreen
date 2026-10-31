@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tapahtumat &amp; Tarjoukset – LaukaaInfo</title>
-<meta name="description" content="Laukaan tapahtumat, tarjoukset ja suositukset kalenterinäkymässä. Löydä mitä Laukaassa tapahtuu!">
+<meta name="description" content="Tapahtumat, tarjoukset ja suositukset kalenterinäkymässä. Löydä mitä kunnassasi tapahtuu!">
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
@@ -37,13 +37,18 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 /* ── Hero ── */
 .cal-hero{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#001f4d 100%);padding:3.5rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden;}
 .cal-hero::before{content:'';position:absolute;inset:0;background:url('hero-kuva.webp') center/cover no-repeat;opacity:0.12;}
-.cal-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto;}
-.cal-hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50px;padding:5px 16px;font-size:.82rem;font-weight:600;color:#fff;margin-bottom:1rem;letter-spacing:.04em;backdrop-filter:blur(4px);}
+.cal-hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.cal-hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50px;padding:6px 18px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:1rem;letter-spacing:.04em;backdrop-filter:blur(4px);transition:.2s;}
 .cal-hero h1{font-family:'Outfit',sans-serif;font-size:2.4rem;font-weight:800;color:#fff;margin:0 0 .75rem;line-height:1.15;}
-.cal-hero p{color:rgba(255,255,255,.85);font-size:1rem;margin:0 0 2rem;}
+.cal-hero p{color:rgba(255,255,255,.85);font-size:1.02rem;margin:0 0 1rem;line-height:1.5;}
+
+/* ── Notification Banners ── */
+.notice-banner{max-width:1100px;margin:1rem auto -0.5rem;padding:.75rem 1.25rem;border-radius:10px;font-size:.85rem;font-weight:600;display:none;align-items:center;gap:.6rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.notice-warning{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
+.notice-error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
 
 /* ── Filter bar ── */
-.filter-bar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:.85rem 1.5rem;}
+.filter-bar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:.85rem 1.5rem;box-shadow:0 2px 10px rgba(0,0,0,0.03);}
 .filter-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;}
 .filter-pill{padding:.45rem 1rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;cursor:pointer;transition:.18s;color:var(--muted);white-space:nowrap;}
 .filter-pill:hover{border-color:var(--blue);color:var(--blue);}
@@ -53,9 +58,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .search-filter{flex:1;min-width:160px;max-width:280px;padding:.45rem 1rem;border:1.5px solid var(--border);border-radius:50px;font-size:.85rem;color:var(--text);outline:none;transition:.18s;}
 .search-filter:focus{border-color:var(--blue);}
 
+/* ── Municipality Selector ── */
+.muni-select-wrapper{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);padding:3px 12px;border-radius:50px;border:1.5px solid rgba(0,86,179,0.25);margin-right:.4rem;}
+.muni-label{font-size:.8rem;font-weight:700;color:var(--blue-dark);white-space:nowrap;display:flex;align-items:center;gap:4px;}
+.muni-select{background:transparent;border:none;font-family:inherit;font-size:.85rem;font-weight:700;color:var(--blue-dark);outline:none;cursor:pointer;padding:3px 4px;}
+.muni-select:focus{outline:none;}
+
 /* ── Main layout ── */
 .cal-main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem;}
-.section-label{font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:2.5rem 0 1rem;display:flex;align-items:center;gap:8px;}
+.section-label{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:2.5rem 0 1rem;display:flex;align-items:center;gap:8px;}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
 /* ── Card grid ── */
@@ -67,15 +78,20 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .card-img{width:100%;height:170px;object-fit:cover;background:#e2e8f0;}
 .card-img-placeholder{width:100%;height:170px;background:linear-gradient(135deg,#e8f1fb,#d1e2f7);display:flex;align-items:center;justify-content:center;font-size:3rem;}
 .card-body{padding:1rem 1.1rem 1.1rem;flex:1;display:flex;flex-direction:column;}
-.card-type-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.6rem;width:fit-content;}
+.card-badges{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:.6rem;}
+.card-type-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;width:fit-content;}
 .badge-event{background:var(--blue-light);color:var(--blue);}
 .badge-offer{background:var(--accent-light);color:#a0610a;}
 .badge-service{background:var(--purple-light);color:var(--purple);}
 .badge-association{background:var(--green-light);color:#065f46;}
+.badge-announcement{background:#fef3c7;color:#92400e;}
+.badge-news{background:#e0f2fe;color:#0369a1;}
 .badge-other{background:#f1f5f9;color:var(--muted);}
-.card-title{font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.3;}
+.badge-source{font-size:.65rem;padding:2px 7px;border-radius:50px;background:#f1f5f9;color:#64748b;font-weight:600;}
+
+.card-title{font-size:1.05rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.3;}
 .card-short{font-size:.85rem;color:var(--muted);margin:0 0 .8rem;line-height:1.5;flex:1;}
-.card-meta{display:flex;flex-direction:column;gap:4px;margin-top:auto;}
+.card-meta{display:flex;flex-direction:column;gap:5px;margin-top:auto;}
 .card-date{font-size:.8rem;font-weight:600;color:var(--blue);display:flex;align-items:center;gap:5px;}
 .card-location{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:5px;}
 .card-footer{padding:.7rem 1.1rem;border-top:1px solid var(--border);background:#fafcff;display:flex;gap:.5rem;flex-wrap:wrap;}
@@ -89,7 +105,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 
 /* ── Month separator ── */
 .month-sep{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin-top:1rem;}
-.month-sep span{font-size:.8rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;}
+.month-sep span{font-size:.82rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;}
 .month-sep::before,.month-sep::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--blue-light),transparent);}
 .month-sep::before{background:linear-gradient(90deg,transparent,var(--blue-light));}
 
@@ -98,7 +114,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .highlight-strip{background:linear-gradient(90deg,var(--accent-light),#fff);border-left:4px solid var(--accent);padding:.5rem .8rem;border-radius:0 8px 8px 0;font-size:.82rem;color:#a0610a;font-weight:600;margin-bottom:.5rem;}
 
 /* ── Empty state ── */
-.empty-state{text-align:center;padding:4rem 1rem;color:var(--muted);}
+.empty-state{text-align:center;padding:4rem 1rem;color:var(--muted);grid-column:1/-1;}
 .empty-state .icon{font-size:3rem;margin-bottom:1rem;}
 
 /* ── CTA banner ── */
@@ -113,11 +129,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   .cal-hero h1{font-size:1.7rem;}
   .cards-grid,.nodatecards{grid-template-columns:1fr;}
   .cta-banner{text-align:center;justify-content:center;}
+  .muni-select-wrapper{width:100%;justify-content:space-between;}
 }
-  /* Bottom CTA buttons (alaosan) only: text visible without hover */
-  .cta-banner .btn-cta{color:#1e293b !important;}
-  .cta-banner .btn-cta:visited{color:#1e293b !important;}
-  .cta-banner .btn-cta:hover{color:#000 !important;}
+.cta-banner .btn-cta{color:#1e293b !important;}
+.cta-banner .btn-cta:visited{color:#1e293b !important;}
+.cta-banner .btn-cta:hover{color:#000 !important;}
 </style>
 </head>
 <body>
@@ -130,7 +146,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
             </a>
             <div class="desktop-nav">
                 <ul class="nav-links">
-                    <!-- 1. Löydä -->
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-i18n="nav_find">Löydä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
@@ -151,7 +166,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                         </ul>
                     </li>
 
-                    <!-- 2. Ajankohtaista -->
                     <li class="nav-item">
                         <a href="ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
@@ -163,7 +177,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                         </ul>
                     </li>
 
-                    <!-- 3. Paikalliset nostot -->
                     <li class="nav-item">
                         <a href="seina.html" class="nav-link" data-i18n="nav_highlights">Paikalliset nostot <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
@@ -174,7 +187,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                         </ul>
                     </li>
 
-                    <!-- 4. Verkostoidu -->
                     <li class="nav-item">
                         <a href="verkostokartta.html" class="nav-link" data-i18n="nav_network">Verkostoidu <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
@@ -184,7 +196,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                         </ul>
                     </li>
 
-                    <!-- 5. Tutki Laukaata -->
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-i18n="nav_explore">Tutki Laukaata <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
@@ -196,7 +207,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                         </ul>
                     </li>
 
-                    <!-- 6. Julkaise -->
                     <li class="nav-item">
                         <a href="ilmoittaudu.html" class="nav-link" data-i18n="nav_publish">Julkaise <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
@@ -234,7 +244,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
             <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
         </div>
         <div class="sidebar-content">
-            <!-- 1. LÖYDÄ -->
             <div class="menu-section">
                 <h3 class="section-title">01 · LÖYDÄ</h3>
                 <ul class="menu-list">
@@ -255,7 +264,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                 </ul>
             </div>
 
-            <!-- 2. AJANKOHTAISTA -->
             <div class="menu-section">
                 <h3 class="section-title">02 · AJANKOHTAISTA</h3>
                 <ul class="menu-list">
@@ -267,7 +275,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                 </ul>
             </div>
 
-            <!-- 3. PAIKALLISET NOSTOT -->
             <div class="menu-section">
                 <h3 class="section-title">03 · PAIKALLISET NOSTOT</h3>
                 <ul class="menu-list">
@@ -278,7 +285,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                 </ul>
             </div>
 
-            <!-- 4. VERKOSTOIDU -->
             <div class="menu-section">
                 <h3 class="section-title">04 · VERKOSTOIDU</h3>
                 <ul class="menu-list">
@@ -288,7 +294,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                 </ul>
             </div>
 
-            <!-- 5. TUTKI LAUKAATA -->
             <div class="menu-section highlight-section">
                 <h3 class="section-title">05 · TUTKI LAUKAATA ⭐</h3>
                 <ul class="menu-list">
@@ -300,7 +305,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                 </ul>
             </div>
 
-            <!-- 6. JULKAISE -->
             <div class="menu-section">
                 <h3 class="section-title">06 · JULKAISE</h3>
                 <ul class="menu-list">
@@ -308,30 +312,51 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
                     <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysprofiili</a></li>
                     <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Julkaisupaketit &amp; Kauppa</a></li>
                     <li class="menu-item"><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" class="sidebar-link" style="color: #3b82f6; font-weight: 700;">Kilpailutus</a></li>
-                    <li class="menu-item"><a href="palvelun-esittely.html" class="sidebar-link">Tietoa palvelusta</a></li>
+                    <li class="menu-item"><a href="palvelun-esittely.html">Tietoa palvelusta</a></li>
                 </ul>
             </div>
-
-            <!-- 7. TYÖKALUT -->
         </div>
     </aside>
 
 <!-- HERO -->
 <div class="cal-hero">
   <div class="cal-hero-inner">
-    <div class="cal-hero-badge">📍 LaukaaInfo &nbsp;·&nbsp; Laukaa</div>
-    <h1>Tapahtumat &amp; Tarjoukset</h1>
-    <p>Kaikki mitä Laukaassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.</p>
+    <div class="cal-hero-badge" id="hero-badge">📍 LaukaaInfo &nbsp;·&nbsp; Laukaa</div>
+    <h1 id="hero-title">Tapahtumat &amp; Tarjoukset</h1>
+    <p id="hero-subtitle">Kaikki mitä kunnassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.</p>
   </div>
+</div>
+
+<!-- Notice Banners -->
+<div id="muni-warning-banner" class="notice-banner notice-warning">
+  <span class="iconify" data-icon="lucide:alert-triangle"></span>
+  <span id="muni-warning-text"></span>
+</div>
+<div id="db-status-banner" class="notice-banner notice-error">
+  <span class="iconify" data-icon="lucide:wifi-off"></span>
+  <span id="db-status-text"></span>
 </div>
 
 <!-- FILTER BAR -->
 <div class="filter-bar">
   <div class="filter-inner">
-    <input type="text" class="search-filter" id="search-input" placeholder="🔍 Hae tapahtumaa...">
+    <!-- Kuntavalitsin -->
+    <div class="muni-select-wrapper">
+      <span class="muni-label">
+        <span class="iconify" data-icon="lucide:map-pin"></span>
+        Kunta:
+      </span>
+      <select id="muni-select" class="muni-select" aria-label="Valitse kunta">
+        <option value="laukaa">Laukaa</option>
+        <option value="kaikki">Kaikki kunnat</option>
+      </select>
+    </div>
+
+    <input type="text" class="search-filter" id="search-input" placeholder="🔍 Hae tapahtumaa tai tarjousta...">
     <span class="filter-pill active" data-filter="all">Kaikki</span>
     <span class="filter-pill" data-filter="event">📅 Tapahtumat</span>
     <span class="filter-pill" data-filter="offer">🎁 Tarjoukset</span>
+    <span class="filter-pill" data-filter="announcement">📢 Tiedotteet &amp; Uutiset</span>
   </div>
 </div>
 
@@ -345,7 +370,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   </div>
 
   <div id="nodate-section" style="margin-top:1rem;">
-    <div class="section-label">🎁 Tarjoukset &amp; suositukset</div>
+    <div class="section-label">🎁 Tarjoukset &amp; julkaisut</div>
     <div class="nodatecards" id="nodate-grid">
       <div class="empty-state"><div class="icon">⏳</div><p>Ladataan...</p></div>
     </div>
@@ -368,98 +393,317 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260713"></script>
 <script>
-const SOURCES = [
+// JSON fallback -lähteet
+const JSON_SOURCES = [
   'kohdekortit/kohteet.json',
   'kohdekortit/tarjoukset.json',
   'tarjoukset.json'
 ];
 
 const TYPE_LABELS = {
-  event:       {label:'Tapahtuma', cls:'badge-event', icon:'📅'},
-  offer:       {label:'Tarjous',   cls:'badge-offer', icon:'🎁'},
-  association: {label:'Yhdistys',  cls:'badge-association', icon:'🤝'},
-  service:     {label:'Palvelu',   cls:'badge-service', icon:'🛠'},
-  route:       {label:'Reitti',    cls:'badge-other',  icon:'🗺'},
-  story:       {label:'Tarina',    cls:'badge-other',  icon:'📖'},
-  memory:      {label:'Muisto',    cls:'badge-other',  icon:'💭'},
-  website:     {label:'Verkkosivu',cls:'badge-other',  icon:'🌐'},
-  other:       {label:'Muu',       cls:'badge-other',  icon:'📌'}
+  event:        {label:'Tapahtuma', cls:'badge-event', icon:'📅'},
+  offer:        {label:'Tarjous',   cls:'badge-offer', icon:'🎁'},
+  announcement: {label:'Tiedote',   cls:'badge-announcement', icon:'📢'},
+  news:         {label:'Uutinen',   cls:'badge-news', icon:'📰'},
+  association:  {label:'Yhdistys',  cls:'badge-association', icon:'🤝'},
+  service:      {label:'Palvelu',   cls:'badge-service', icon:'🛠'},
+  route:        {label:'Reitti',    cls:'badge-other',  icon:'🗺'},
+  story:        {label:'Tarina',    cls:'badge-other',  icon:'📖'},
+  memory:       {label:'Muisto',    cls:'badge-other',  icon:'💭'},
+  website:      {label:'Verkkosivu',cls:'badge-other',  icon:'🌐'},
+  other:        {label:'Muu',       cls:'badge-other',  icon:'📌'}
 };
 
 const MONTH_FI = ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kesäkuu',
                   'Heinäkuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu'];
 
 let allItems = [];
+let allPlaces = [];
+let availableKunnat = [];
 let activeFilter = 'all';
+let currentKuntaSlug = 'laukaa';
+let currentDescendantPlaceIds = null; // null = kaikki kunnat sallittu
 
-async function loadAll() {
-  const results = await Promise.allSettled(SOURCES.map(s => fetch(s).then(r => r.json())));
-  results.forEach(r => { if (r.status === 'fulfilled') allItems.push(...r.value); });
-  
-  if (window.LaukaaSupabase) {
-    try {
-      const { data, error } = await window.LaukaaSupabase
-          .from('offers')
-          .select('*')
-          .eq('status', 'active');
-      
-      if (!error && data) {
-        data.forEach(dbItem => {
-           let type = 'offer';
-           if (dbItem.taxonomy && dbItem.taxonomy.includes('Tapahtuma')) {
-               type = 'event';
-           } else if (dbItem.taxonomy && dbItem.taxonomy.includes('Tarjous')) {
-               type = 'offer';
-           } else if (dbItem.valid_from && dbItem.venue) {
-               type = 'event';
-           }
+// Apufunktio tekstin muuntamiseen URL-slugiksi
+function slugify(text) {
+  return (text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[äå]/g, 'a')
+    .replace(/ö/g, 'o')
+    .replace(/ü/g, 'u')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
 
-           const item = {
-             id: dbItem.id,
-             type: type,
-             name: dbItem.name,
-             shortDescription: dbItem.short_description,
-             description: dbItem.description,
-             images: dbItem.image_url ? [dbItem.image_url] : [],
-             tags: dbItem.tags || [],
-             event: null,
-             offer: null,
-             location: {
-               venue: dbItem.venue,
-               address: dbItem.address,
-               municipality: dbItem.municipality
-             },
-             contact: {
-               email: dbItem.contact_email,
-               phone: dbItem.contact_phone,
-               website: dbItem.website
-             }
-           };
+// 1. KUNTIEN TUNNISTUS JA HAKU PLACES-TAULUSTA
+async function loadPlacesAndMunicipalities() {
+  if (!window.LaukaaSupabase) return;
 
-           if (type === 'event') {
-             item.event = {
-               startDate: dbItem.valid_from,
-               endDate: dbItem.valid_until,
-               venue: dbItem.venue,
-               ticketUrl: dbItem.ticket_url,
-               organizer: dbItem.organizer
-             };
-           } else {
-             item.offer = {
-               validFrom: dbItem.valid_from,
-               validUntil: dbItem.valid_until
-             };
-           }
+  try {
+    const { data, error } = await window.LaukaaSupabase
+      .from('places')
+      .select('id, place_id, name, canonical_name, municipality, parent_place_id, type')
+      .order('name');
 
-           allItems.push(item);
+    if (error) throw error;
+    allPlaces = data || [];
+
+    // Tunnistetaan kunnat hierarkiasta:
+    // 1) type = 'KUNTA'
+    // 2) Suomen alaisuudessa olevat kunnat (parent_place_id = '54bf89b2-9e5d-46e0-9a9d-395f768c4195')
+    // 3) Root-tason paikat joissa municipality = name (esim. Hankasalmi)
+    const SUOMI_ID = '54bf89b2-9e5d-46e0-9a9d-395f768c4195';
+    const muniPlaces = allPlaces.filter(p => 
+      p.type === 'KUNTA' || 
+      p.parent_place_id === SUOMI_ID || 
+      (p.parent_place_id === null && p.type === 'AREA' && p.municipality === p.name)
+    );
+
+    const kuntaMap = new Map();
+    // Varmistetaan aina peruskunnat
+    kuntaMap.set('laukaa', { name: 'Laukaa', slug: 'laukaa' });
+
+    muniPlaces.forEach(p => {
+      const slug = slugify(p.name);
+      if (slug && !kuntaMap.has(slug)) {
+        kuntaMap.set(slug, {
+          id: p.id,
+          place_id: p.place_id,
+          name: p.name,
+          slug: slug
         });
       }
-    } catch (e) {
-      console.error("Supabase fetch failed", e);
+    });
+
+    // Tarkistetaan esiintyykö places.municipality -arvoissa muita tunnettuja kuntia
+    allPlaces.forEach(p => {
+      if (p.municipality) {
+        const slug = slugify(p.municipality);
+        if (['hankasalmi', 'aanekoski', 'jyvaskyla', 'konnevesi', 'uurainen'].includes(slug) && !kuntaMap.has(slug)) {
+          kuntaMap.set(slug, {
+            name: p.municipality,
+            slug: slug
+          });
+        }
+      }
+    });
+
+    // Muodostetaan lista: Laukaa ensin, sitten aakkosjärjestys, ja "Kaikki kunnat"
+    const list = Array.from(kuntaMap.values()).filter(k => k.slug !== 'laukaa');
+    list.sort((a,b) => a.name.localeCompare(b.name, 'fi'));
+    availableKunnat = [kuntaMap.get('laukaa'), ...list];
+
+    // Päivitetään kuntavalitsimen pudotusvalikko
+    const select = document.getElementById('muni-select');
+    if (select) {
+      select.innerHTML = '';
+      availableKunnat.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k.slug;
+        opt.textContent = k.name;
+        select.appendChild(opt);
+      });
+      const optKaikki = document.createElement('option');
+      optKaikki.value = 'kaikki';
+      optKaikki.textContent = '🌐 Kaikki kunnat';
+      select.appendChild(optKaikki);
+    }
+  } catch (err) {
+    console.error('Virhe paikkojen ja kuntien latauksessa:', err);
+  }
+}
+
+// 2. PAIKKAHIERARKIAPOHJAINEN JÄLKELÄISTEN HAKU (REKURSIIVINEN / BFS, SYKLITURVALLINEN)
+function resolveDescendantPlaceIds(targetSlug) {
+  if (targetSlug === 'kaikki') return null; // Kaikki sallitaan
+
+  const validPlaceIds = new Set();
+  const muni = availableKunnat.find(k => k.slug === targetSlug);
+  if (muni) {
+    if (muni.id) validPlaceIds.add(muni.id);
+    if (muni.place_id) validPlaceIds.add(muni.place_id);
+  }
+
+  // Lisää paikat joiden municipality täsmää kunnan slugiin
+  allPlaces.forEach(p => {
+    if (p.municipality && slugify(p.municipality) === targetSlug) {
+      if (p.id) validPlaceIds.add(p.id);
+      if (p.place_id) validPlaceIds.add(p.place_id);
+    }
+  });
+
+  // Iteratiivinen sykliturvallinen jälkeläisten haku parent_place_id:n kautta
+  let added = true;
+  let iterations = 0;
+  const maxIterations = 50; // Turvaraja ikuisten silmukoiden estämiseksi
+  while (added && iterations < maxIterations) {
+    added = false;
+    iterations++;
+    for (const p of allPlaces) {
+      if (p.parent_place_id && validPlaceIds.has(p.parent_place_id)) {
+        if (!validPlaceIds.has(p.id)) {
+          validPlaceIds.add(p.id);
+          if (p.place_id) validPlaceIds.add(p.place_id);
+          added = true;
+        }
+      }
     }
   }
 
+  return validPlaceIds;
+}
+
+// 3. PÄÄTIETOJEN LATAUS (SUPABASE POSTS ENSIJAISESTI, JSON-FALLBACK)
+async function loadAll() {
+  await loadPlacesAndMunicipalities();
+
+  // URL-parametrien käsittely
+  const urlParams = new URLSearchParams(window.location.search);
+  const kuntaParam = urlParams.get('kunta');
+  let selectedKunta = 'laukaa';
+
+  if (kuntaParam) {
+    const norm = slugify(kuntaParam);
+    if (norm === 'kaikki' || availableKunnat.some(k => k.slug === norm)) {
+      selectedKunta = norm;
+    } else {
+      // Tuntematon kunta: näytetään varoitus ja palautetaan Laukaaseen
+      const warnBanner = document.getElementById('muni-warning-banner');
+      const warnText = document.getElementById('muni-warning-text');
+      if (warnBanner && warnText) {
+        warnText.textContent = `Kuntaa "${kuntaParam}" ei löytynyt paikkatietokannasta. Näytetään Laukaan julkaisut.`;
+        warnBanner.style.display = 'flex';
+      }
+      selectedKunta = 'laukaa';
+    }
+  }
+
+  currentKuntaSlug = selectedKunta;
+  const muniSelect = document.getElementById('muni-select');
+  if (muniSelect) muniSelect.value = selectedKunta;
+  updateHeroTitles(selectedKunta);
+  currentDescendantPlaceIds = resolveDescendantPlaceIds(selectedKunta);
+
+  // Datanhaku
+  let supabaseSuccess = false;
+  let postsItems = [];
+
+  if (window.LaukaaSupabase) {
+    try {
+      const { data, error } = await window.LaukaaSupabase
+        .from('posts')
+        .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at')
+        .in('type', ['event', 'offer', 'announcement', 'news'])
+        .in('status', ['published', 'APPROVED'])
+        .eq('visibility', 'public');
+
+      if (error) throw error;
+
+      supabaseSuccess = true;
+      postsItems = (data || []).map(p => {
+        const item = {
+          id: p.id,
+          target_id: p.target_id || null,
+          target_type: p.target_type || null,
+          type: p.type || 'event',
+          name: p.title || '',
+          shortDescription: p.description || '',
+          description: p.content || p.description || '',
+          images: p.image_url ? [p.image_url] : [],
+          place_id: p.place_id || null,
+          created_at: p.created_at,
+          updated_at: p.updated_at,
+          tags: [],
+          source: 'posts'
+        };
+
+        if (p.type === 'event') {
+          item.event = {
+            startDate: p.event_start_at,
+            endDate: p.event_end_at,
+            allDay: !!p.event_all_day,
+            venue: p.event_location_detail,
+            organizer: p.publisher_name,
+            ticketUrl: p.event_registration_url
+          };
+        } else if (p.type === 'offer') {
+          item.offer = {
+            validFrom: p.offer_start_at,
+            validUntil: p.offer_end_at,
+            terms: p.offer_terms
+          };
+        } else {
+          item.link = p.link;
+        }
+
+        return item;
+      });
+    } catch (err) {
+      console.error('Supabase posts -haku epäonnistui:', err);
+      supabaseSuccess = false;
+      const dbBanner = document.getElementById('db-status-banner');
+      const dbText = document.getElementById('db-status-text');
+      if (dbBanner && dbText) {
+        dbText.textContent = `Tietokantayhteys katkesi: ${err.message || 'Haku epäonnistui'}. Näytetään varasisältö.`;
+        dbBanner.style.display = 'flex';
+      }
+    }
+  }
+
+  // JSON Fallback -lataus
+  let jsonItems = [];
+  try {
+    const results = await Promise.allSettled(JSON_SOURCES.map(s => fetch(s).then(r => r.json())));
+    results.forEach(r => {
+      if (r.status === 'fulfilled' && Array.isArray(r.value)) {
+        jsonItems.push(...r.value);
+      }
+    });
+  } catch (e) {
+    console.warn('JSON-tiedostojen lataus epäonnistui:', e);
+  }
+
+  // Yhdistetään sisällöt: Jos Supabase toimi, poistetaan JSON-duplikaatit
+  if (supabaseSuccess) {
+    const postsUuids = new Set(postsItems.map(p => p.id).filter(Boolean));
+    const postsTargetIds = new Set(postsItems.map(p => p.target_id).filter(Boolean));
+
+    const nonDuplicateJsonItems = jsonItems.filter(j => {
+      if (j.supabase_post_id && postsUuids.has(j.supabase_post_id)) return false;
+      if (j.id && (postsTargetIds.has(j.id) || postsUuids.has(j.id))) return false;
+      return true;
+    }).map(j => ({ ...j, source: 'json_fallback' }));
+
+    allItems = [...postsItems, ...nonDuplicateJsonItems];
+  } else {
+    // Supabase epäonnistui: käytetään pelkkää JSON-dataa
+    allItems = jsonItems.map(j => ({ ...j, source: 'json_fallback' }));
+  }
+
   render();
+}
+
+function updateHeroTitles(kuntaSlug) {
+  const badge = document.getElementById('hero-badge');
+  const title = document.getElementById('hero-title');
+  const subtitle = document.getElementById('hero-subtitle');
+
+  if (kuntaSlug === 'kaikki') {
+    if (badge) badge.innerHTML = '🌐 LaukaaInfo &nbsp;·&nbsp; Kaikki kunnat';
+    if (title) title.textContent = 'Tapahtumat & Tarjoukset';
+    if (subtitle) subtitle.textContent = 'Kaikkien kuntien tapahtumat, tarjoukset ja suositukset yhdessä paikassa.';
+    document.title = 'Tapahtumat & Tarjoukset – Kaikki kunnat – LaukaaInfo';
+  } else {
+    const muni = availableKunnat.find(k => k.slug === kuntaSlug);
+    const muniName = muni ? muni.name : 'Laukaa';
+    if (badge) badge.innerHTML = `📍 LaukaaInfo &nbsp;·&nbsp; ${muniName}`;
+    if (title) title.textContent = `${muniName} – Tapahtumat &amp; Tarjoukset`;
+    if (subtitle) subtitle.textContent = `Kaikki mitä kunnassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.`;
+    document.title = `${muniName} – Tapahtumat & Tarjoukset – LaukaaInfo`;
+  }
 }
 
 function getStartDate(item) {
@@ -468,9 +712,10 @@ function getStartDate(item) {
   return null;
 }
 
+// Tarkistaa onko julkaisu vanhentunut
 function isExpired(item) {
   const now = new Date();
-  
+
   if (item.type === 'event') {
     const dateStr = item.event?.endDate || item.event?.startDate;
     if (!dateStr) return false;
@@ -494,44 +739,55 @@ function isExpired(item) {
     }
     return !isNaN(eventDate.getTime()) && now > eventDate;
   } else if (item.type === 'offer') {
-    if (item.offer?.validUntil) {
-      const validDate = new Date(item.offer.validUntil);
-      if (!isNaN(validDate.getTime())) {
-        validDate.setHours(23, 59, 59, 999);
-        return now > validDate;
-      }
+    // Jos päättymispäivää ei ole ilmoitettu, tarjous on voimassa toistaiseksi (ei vanhentunut)
+    if (!item.offer?.validUntil) return false;
+
+    const validDate = new Date(item.offer.validUntil);
+    if (!isNaN(validDate.getTime())) {
+      validDate.setHours(23, 59, 59, 999);
+      return now > validDate;
     }
   }
-  
+
+  // Tiedotteet ja uutiset eivät vanhene automaattisesti
   return false;
 }
 
 function formatDate(iso) {
   if (!iso) return null;
   const d = new Date(iso);
-  return d.toLocaleDateString('fi-FI',{day:'numeric',month:'long',year:'numeric'});
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('fi-FI', { day:'numeric', month:'long', year:'numeric', timeZone: 'Europe/Helsinki' });
 }
 
 function formatTime(iso) {
   if (!iso) return '';
   const d = new Date(iso);
-  return d.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'});
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleTimeString('fi-FI', { hour:'2-digit', minute:'2-digit', timeZone: 'Europe/Helsinki' });
 }
 
 function getPlaceholderIcon(item) {
   return (TYPE_LABELS[item.type]?.icon) || '📌';
 }
 
+function getPlaceName(placeId) {
+  if (!placeId) return '';
+  const p = allPlaces.find(pl => pl.place_id === placeId || pl.id === placeId);
+  return p ? p.name : '';
+}
+
 function buildCard(item) {
   const t = TYPE_LABELS[item.type] || TYPE_LABELS.other;
   const img = item.images?.[0];
-  const venue = item.event?.venue || item.location?.address || item.location?.municipality || '';
+  const placeName = getPlaceName(item.place_id);
+  const venue = item.event?.venue || placeName || item.location?.address || item.location?.municipality || '';
   const startD = item.event?.startDate;
   const endD = item.event?.endDate;
   const validUntil = item.offer?.validUntil;
   const ticketUrl = item.event?.ticketUrl;
-  const website = item.contact?.website;
-  const tags = (item.tags || []).slice(0,4);
+  const website = item.link || item.contact?.website;
+  const tags = (item.tags || []).slice(0, 4);
 
   let dateStr = '';
   if (startD) {
@@ -547,22 +803,29 @@ function buildCard(item) {
     }
   } else if (validUntil) {
     dateStr = `Voimassa ${formatDate(validUntil)} asti`;
+  } else if (item.offer?.terms) {
+    dateStr = item.offer.terms;
+  } else if (item.created_at) {
+    dateStr = `Julkaistu ${formatDate(item.created_at)}`;
   }
 
   const actionBtns = [];
   if (ticketUrl) actionBtns.push(`<a href="${ticketUrl}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
   if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 www</a>`);
-  if (item.id) actionBtns.push(`<a href="kohdekortti.html?id=${item.id}" class="btn-card btn-card-secondary">📇 Kortti</a>`);
+  if (item.id) actionBtns.push(`<a href="kohdekortti.html?id=${encodeURIComponent(item.id)}" class="btn-card btn-card-secondary">📇 Kortti</a>`);
 
   return `
-<div class="kohde-card" data-type="${item.type}" data-name="${(item.name||'').toLowerCase()}" data-tags="${tags.join(',')}">
+<div class="kohde-card" data-type="${item.type}" data-name="${(item.name||'').toLowerCase()}">
   ${img
     ? `<img src="${img}" alt="${item.name}" class="card-img" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-img-placeholder',textContent:'${getPlaceholderIcon(item)}'}))">`
     : `<div class="card-img-placeholder">${getPlaceholderIcon(item)}</div>`
   }
   <div class="card-body">
-    <span class="card-type-badge ${t.cls}">${t.icon} ${t.label}</span>
-    <div class="card-title">${item.name || ''}</div>
+    <div class="card-badges">
+      <span class="card-type-badge ${t.cls}">${t.icon} ${t.label}</span>
+      ${item.source === 'posts' ? '<span class="badge-source">☁️ Julkaisu</span>' : ''}
+    </div>
+    <div class="card-title">${item.name || 'Nimetön kohde'}</div>
     <div class="card-short">${item.shortDescription || ''}</div>
     <div class="card-meta">
       ${dateStr ? `<div class="card-date">🗓 ${dateStr}</div>` : ''}
@@ -576,21 +839,42 @@ function buildCard(item) {
 }
 
 function render() {
-  const query = document.getElementById('search-input').value.toLowerCase();
+  const query = document.getElementById('search-input').value.toLowerCase().trim();
 
   const filtered = allItems.filter(item => {
+    // 1. Vanhentuneisuus
     if (isExpired(item)) return false;
 
-    const typeOk = activeFilter === 'all' || item.type === activeFilter;
+    // 2. Kuntakohtainen paikkasuodatus
+    if (currentDescendantPlaceIds !== null) {
+      if (!item.place_id || !currentDescendantPlaceIds.has(item.place_id)) {
+        return false;
+      }
+    }
+
+    // 3. Tyyppisuodatus
+    let typeOk = false;
+    if (activeFilter === 'all') {
+      typeOk = true;
+    } else if (activeFilter === 'announcement') {
+      typeOk = item.type === 'announcement' || item.type === 'news';
+    } else {
+      typeOk = item.type === activeFilter;
+    }
+
+    // 4. Hakusana
+    const placeName = getPlaceName(item.place_id).toLowerCase();
     const searchOk = !query ||
-      (item.name||'').toLowerCase().includes(query) ||
-      (item.shortDescription||'').toLowerCase().includes(query) ||
-      (item.tags||[]).some(t => t.toLowerCase().includes(query));
+      (item.name || '').toLowerCase().includes(query) ||
+      (item.shortDescription || '').toLowerCase().includes(query) ||
+      (item.description || '').toLowerCase().includes(query) ||
+      placeName.includes(query) ||
+      (item.tags || []).some(t => t.toLowerCase().includes(query));
+
     return typeOk && searchOk;
   });
 
-  // Separate dated events vs undated/offers
-  const now = new Date();
+  // Jaetaan tapahtumat (päivämäärällä) ja muut/tarjoukset
   const withDate = filtered.filter(i => {
     const d = getStartDate(i);
     return d && i.type === 'event';
@@ -598,10 +882,10 @@ function render() {
 
   const withoutDate = filtered.filter(i => !withDate.includes(i));
 
-  // Events grid with month separators
+  // Tapahtumien ruudukko kuukausierottimilla
   const evGrid = document.getElementById('events-grid');
   if (withDate.length === 0) {
-    evGrid.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Ei tulevia tapahtumia hakuehdoilla.</p></div>`;
+    evGrid.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Ei tulevia tapahtumia valituilla ehdoilla.</p></div>`;
   } else {
     let html = '';
     let lastMonth = null;
@@ -617,18 +901,42 @@ function render() {
     evGrid.innerHTML = html;
   }
 
-  // No-date / offers grid
+  // Tarjoukset, tiedotteet ja muut julkaisut
   const ndGrid = document.getElementById('nodate-grid');
   if (withoutDate.length === 0) {
-    ndGrid.innerHTML = `<div class="empty-state"><div class="icon">🎁</div><p>Ei tarjouksia tai suosituksia hakuehdoilla.</p></div>`;
+    ndGrid.innerHTML = `<div class="empty-state"><div class="icon">🎁</div><p>Ei tarjouksia tai muita julkaisuja valituilla ehdoilla.</p></div>`;
   } else {
-    // Shuffle for variety
-    const shuffled = withoutDate.sort(() => Math.random() - 0.5);
-    ndGrid.innerHTML = shuffled.map(buildCard).join('');
+    // Järjestetään tuoreimmat ensin
+    const sorted = [...withoutDate].sort((a,b) => {
+      const timeA = new Date(a.updated_at || a.created_at || 0).getTime();
+      const timeB = new Date(b.updated_at || b.created_at || 0).getTime();
+      return timeB - timeA;
+    });
+    ndGrid.innerHTML = sorted.map(buildCard).join('');
   }
 }
 
-// Filter pills
+// Kuntavalitsimen tapahtumankäsittelijä
+document.getElementById('muni-select').addEventListener('change', (e) => {
+  const selectedSlug = e.target.value;
+  currentKuntaSlug = selectedSlug;
+
+  // Päivitä URL-parametri ilman sivun uudelleenlatausta
+  const url = new URL(window.location.href);
+  if (selectedSlug === 'laukaa') {
+    url.searchParams.delete('kunta');
+  } else {
+    url.searchParams.set('kunta', selectedSlug);
+  }
+  window.history.pushState({}, '', url);
+
+  // Päivitä tekstit ja suodata jälkeläispaikat
+  updateHeroTitles(selectedSlug);
+  currentDescendantPlaceIds = resolveDescendantPlaceIds(selectedSlug);
+  render();
+});
+
+// Suodatinpainikkeet
 document.querySelectorAll('.filter-pill').forEach(pill => {
   pill.addEventListener('click', () => {
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
@@ -638,12 +946,12 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
   });
 });
 
-// Search
+// Tekstihaku
 document.getElementById('search-input').addEventListener('input', render);
 
+// Käynnistys
 loadAll();
 </script>
 <script src="script.js?v=20260301-1"></script>
 </body>
 </html>
-
