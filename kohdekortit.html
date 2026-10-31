@@ -553,6 +553,14 @@ function resolveDescendantPlaceIds(targetSlug) {
     }
   }
 
+  // Lisätään myös paikkojen tekstislugit (esim. 'peurunka', 'lievestuore', 'vihtavuori')
+  allPlaces.forEach(p => {
+    if (validPlaceIds.has(p.id) || validPlaceIds.has(p.place_id)) {
+      if (p.canonical_name) validPlaceIds.add(slugify(p.canonical_name));
+      if (p.name) validPlaceIds.add(slugify(p.name));
+    }
+  });
+
   return validPlaceIds;
 }
 
