@@ -401,17 +401,17 @@ const JSON_SOURCES = [
 ];
 
 const TYPE_LABELS = {
-  event:        {label:'Tapahtuma', cls:'badge-event', icon:'📅'},
-  offer:        {label:'Tarjous',   cls:'badge-offer', icon:'🎁'},
-  announcement: {label:'Tiedote',   cls:'badge-announcement', icon:'📢'},
-  news:         {label:'Uutinen',   cls:'badge-news', icon:'📰'},
-  association:  {label:'Yhdistys',  cls:'badge-association', icon:'🤝'},
-  service:      {label:'Palvelu',   cls:'badge-service', icon:'🛠'},
-  route:        {label:'Reitti',    cls:'badge-other',  icon:'🗺'},
-  story:        {label:'Tarina',    cls:'badge-other',  icon:'📖'},
-  memory:       {label:'Muisto',    cls:'badge-other',  icon:'💭'},
-  website:      {label:'Verkkosivu',cls:'badge-other',  icon:'🌐'},
-  other:        {label:'Muu',       cls:'badge-other',  icon:'📌'}
+  event:        {label:'Tapahtuma', cls:'badge-event', icon:'ðŸ“…'},
+  offer:        {label:'Tarjous',   cls:'badge-offer', icon:'ðŸŽ'},
+  announcement: {label:'Tiedote',   cls:'badge-announcement', icon:'ðŸ“¢'},
+  news:         {label:'Uutinen',   cls:'badge-news', icon:'ðŸ“°'},
+  association:  {label:'Yhdistys',  cls:'badge-association', icon:'ðŸ¤'},
+  service:      {label:'Palvelu',   cls:'badge-service', icon:'ðŸ› '},
+  route:        {label:'Reitti',    cls:'badge-other',  icon:'ðŸ—º'},
+  story:        {label:'Tarina',    cls:'badge-other',  icon:'ðŸ“–'},
+  memory:       {label:'Muisto',    cls:'badge-other',  icon:'ðŸ’­'},
+  website:      {label:'Verkkosivu',cls:'badge-other',  icon:'ðŸŒ'},
+  other:        {label:'Muu',       cls:'badge-other',  icon:'ðŸ“Œ'}
 };
 
 const MONTH_FI = ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kesäkuu',
@@ -508,7 +508,7 @@ async function loadPlacesAndMunicipalities() {
       });
       const optKaikki = document.createElement('option');
       optKaikki.value = 'kaikki';
-      optKaikki.textContent = '🌐 Kaikki kunnat';
+      optKaikki.textContent = 'ðŸŒ Kaikki kunnat';
       select.appendChild(optKaikki);
     }
   } catch (err) {
@@ -516,7 +516,7 @@ async function loadPlacesAndMunicipalities() {
   }
 }
 
-// 2. PAIKKAHIERARKIAPOHJAINEN JÄLKELÄISTEN HAKU (REKURSIIVINEN / BFS, SYKLITURVALLINEN)
+// 2. PAIKKAHIERARKIAPOHJAINEN JÃ„LKELÃ„ISTEN HAKU (REKURSIIVINEN / BFS, SYKLITURVALLINEN)
 function resolveDescendantPlaceIds(targetSlug) {
   if (targetSlug === 'kaikki') return null; // Kaikki sallitaan
 
@@ -564,7 +564,7 @@ function resolveDescendantPlaceIds(targetSlug) {
   return validPlaceIds;
 }
 
-// 3. PÄÄTIETOJEN LATAUS (SUPABASE POSTS ENSIJAISESTI, JSON-FALLBACK)
+// 3. PÃ„Ã„TIETOJEN LATAUS (SUPABASE POSTS ENSIJAISESTI, JSON-FALLBACK)
 async function loadAll() {
   await loadPlacesAndMunicipalities();
 
@@ -708,7 +708,7 @@ function updateHeroTitles(kuntaSlug) {
     const muni = availableKunnat.find(k => k.slug === kuntaSlug);
     const muniName = muni ? muni.name : 'Laukaa';
     if (badge) badge.innerHTML = `📍 LaukaaInfo &nbsp;·&nbsp; ${muniName}`;
-    if (title) title.textContent = `${muniName} – Tapahtumat &amp; Tarjoukset`;
+    if (title) title.textContent = `${muniName} – Tapahtumat & Tarjoukset`;
     if (subtitle) subtitle.textContent = `Kaikki mitä kunnassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.`;
     document.title = `${muniName} – Tapahtumat & Tarjoukset – LaukaaInfo`;
   }
@@ -776,7 +776,7 @@ function formatTime(iso) {
 }
 
 function getPlaceholderIcon(item) {
-  return (TYPE_LABELS[item.type]?.icon) || '📌';
+  return (TYPE_LABELS[item.type]?.icon) || 'ðŸ“Œ';
 }
 
 function getPlaceName(placeId) {
@@ -818,9 +818,9 @@ function buildCard(item) {
   }
 
   const actionBtns = [];
-  if (ticketUrl) actionBtns.push(`<a href="${ticketUrl}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
-  if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 www</a>`);
-  if (item.id) actionBtns.push(`<a href="kohdekortti.html?id=${encodeURIComponent(item.id)}" class="btn-card btn-card-secondary">📇 Kortti</a>`);
+  if (ticketUrl) actionBtns.push(`<a href="${ticketUrl}" target="_blank" class="btn-card btn-card-primary">ðŸŽŸ Liput</a>`);
+  if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">ðŸŒ www</a>`);
+  if (item.id) actionBtns.push(`<a href="kohdekortti.html?id=${encodeURIComponent(item.id)}" class="btn-card btn-card-secondary">ðŸ“‡ Kortti</a>`);
 
   return `
 <div class="kohde-card" data-type="${item.type}" data-name="${(item.name||'').toLowerCase()}">
@@ -831,14 +831,14 @@ function buildCard(item) {
   <div class="card-body">
     <div class="card-badges">
       <span class="card-type-badge ${t.cls}">${t.icon} ${t.label}</span>
-      ${item.source === 'posts' ? '<span class="badge-source">☁️ Julkaisu</span>' : ''}
+      ${item.source === 'posts' ? '<span class="badge-source">â˜ï¸ Julkaisu</span>' : ''}
     </div>
     <div class="card-title">${item.name || 'Nimetön kohde'}</div>
     <div class="card-short">${item.shortDescription || ''}</div>
     <div class="card-meta">
-      ${dateStr ? `<div class="card-date">🗓 ${dateStr}</div>` : ''}
-      ${venue ? `<div class="card-location">📍 ${venue}</div>` : ''}
-      ${item.event?.organizer ? `<div class="card-location">👤 ${item.event.organizer}</div>` : ''}
+      ${dateStr ? `<div class="card-date">ðŸ—“ ${dateStr}</div>` : ''}
+      ${venue ? `<div class="card-location">ðŸ“ ${venue}</div>` : ''}
+      ${item.event?.organizer ? `<div class="card-location">ðŸ‘¤ ${item.event.organizer}</div>` : ''}
     </div>
   </div>
   ${tags.length ? `<div class="card-footer">${tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>` : ''}
@@ -893,7 +893,7 @@ function render() {
   // Tapahtumien ruudukko kuukausierottimilla
   const evGrid = document.getElementById('events-grid');
   if (withDate.length === 0) {
-    evGrid.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Ei tulevia tapahtumia valituilla ehdoilla.</p></div>`;
+    evGrid.innerHTML = `<div class="empty-state"><div class="icon">ðŸ“…</div><p>Ei tulevia tapahtumia valituilla ehdoilla.</p></div>`;
   } else {
     let html = '';
     let lastMonth = null;
@@ -912,7 +912,7 @@ function render() {
   // Tarjoukset, tiedotteet ja muut julkaisut
   const ndGrid = document.getElementById('nodate-grid');
   if (withoutDate.length === 0) {
-    ndGrid.innerHTML = `<div class="empty-state"><div class="icon">🎁</div><p>Ei tarjouksia tai muita julkaisuja valituilla ehdoilla.</p></div>`;
+    ndGrid.innerHTML = `<div class="empty-state"><div class="icon">ðŸŽ</div><p>Ei tarjouksia tai muita julkaisuja valituilla ehdoilla.</p></div>`;
   } else {
     // Järjestetään tuoreimmat ensin
     const sorted = [...withoutDate].sort((a,b) => {
