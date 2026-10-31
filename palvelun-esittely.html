@@ -120,6 +120,49 @@
             color: var(--primary-blue);
         }
 
+        .site-disclaimer {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 5px solid #f59e0b;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            margin: 0 0 2.5rem;
+        }
+
+        .site-disclaimer .disclaimer-icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            line-height: 1;
+            padding-top: 0.1rem;
+        }
+
+        .site-disclaimer .disclaimer-text {
+            flex: 1;
+        }
+
+        .site-disclaimer .disclaimer-text strong {
+            display: block;
+            color: #92400e;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .site-disclaimer .disclaimer-text p {
+            color: #78350f;
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .site-disclaimer .disclaimer-text a {
+            color: #b45309;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
         .cta-section {
             background: var(--primary-blue);
             color: white;
@@ -432,6 +475,14 @@
     </header>
 
     <main class="content-container">
+
+        <div class="site-disclaimer" role="note" aria-label="Tärkeä huomio palvelun luonteesta">
+            <div class="disclaimer-icon">⚠️</div>
+            <div class="disclaimer-text">
+                <strong>LaukaaInfo ei ole Laukaan kunnan virallinen sivusto tai palvelu.</strong>
+                <p>LaukaaInfo on yksityinen, epävirallinen paikallispalvelu, jota ylläpitää Tmi Mediazoo (Antti Mikkola, Lievestuore). Palvelu ei edusta Laukaan kuntaa eikä toimi sen toimeksiannosta. Sivuston tiedot perustuvat avoimiin RSS-syötteisiin, OpenStreetMap-kartta-aineistoon ja muihin julkisesti saatavilla oleviin tietolähteisiin. Virallisia tietoja kuntapalveluista saa suoraan osoitteesta <a href="https://www.laukaa.fi" target="_blank" rel="noopener">www.laukaa.fi</a>.</p>
+            </div>
+        </div>
 
         <h2>Tutustu Laukaaseen omalla tavallasi</h2>
         <p>LaukaaInfon sisältöä voi lähestyä useasta suunnasta.</p>
