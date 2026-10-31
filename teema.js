@@ -1224,17 +1224,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     }
 
-                    // 2. Tekninen varalogiikka (sallitaan VAIN jos RPC epäonnistui teknisesti)
-                    // Rajattu vain post_themes-kytkentään ja julkisiin julkaisuihin (ilike-tekstihaku poistettu)
-                    if (!rpcPostsSuccess && laukaaDb2 && uniqueTagIds && uniqueTagIds.length > 0) {
+                    // 2. Haetaan julkaisut myös post_themes-taulusta (ja content_contexts)
+                    if (laukaaDb2 && uniqueTagIds && uniqueTagIds.length > 0) {
                         try {
                             const { data: postThemeRows } = await laukaaDb2
-                                .from('content_contexts')
+                                .from('post_themes')
                                 .select('post_id')
-                                .not('post_id', 'is', null)
                                 .in('tag_id', uniqueTagIds);
 
-                            const fallbackIds = [...new Set((postThemeRows || []).map(r => r.post_id).filter(Boolean))];
+                            let allTagPostIds = (postThemeRows || []).map(r => r.post_id).filter(Boolean);
+                            try {
+                                const { data: ccRows } = await laukaaDb2
+                                    .from('content_contexts')
+                                    .select('post_id')
+                                    .not('post_id', 'is', null)
+                                    .in('tag_id', uniqueTagIds);
+                                if (ccRows && ccRows.length > 0) {
+                                    allTagPostIds.push(...ccRows.map(r => r.post_id).filter(Boolean));
+                                }
+                            } catch (_) {}
+
+                            const fallbackIds = [...new Set(allTagPostIds)];
                             if (fallbackIds.length > 0) {
                                 const { data: feedData, error: feedError } = await laukaaDb2
                                     .from('posts')
@@ -1249,7 +1259,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 }
                             }
                         } catch(e) {
-                            console.warn('[ThemePosts] Varalogiikan poikkeus:', e);
+                            console.warn('[ThemePosts] post_themes haun poikkeus:', e);
                         }
                     }
 
@@ -2184,6 +2194,111 @@ async function loadContextualTheme(tagParam, placeId) {
                 }).join('');
                 obsSection.style.display = 'block';
             }
+        }
+
+        // 8.5 Renderöi SEINÄJULKAISUT (Paikka × Teema)
+        try {
+            // Etsitään julkaisut, jotka kytkeytyvät tähän paikkaan JA tähän teemaan
+            let themePostIds = [];
+            try {
+                const { data: ptRows } = await aiSbClient
+                    .from('post_themes')
+                    .select('post_id')
+                    .or(`tag_id.eq.${actualTagId},tag_id.ilike.%${actualTagId}%`);
+                if (ptRows && ptRows.length > 0) {
+                    themePostIds = ptRows.map(r => r.post_id).filter(Boolean);
+                }
+            } catch (e) { console.debug('post_themes haku epäonnistui:', e); }
+
+            let placePostIds = [];
+            try {
+                const { data: ppRows } = await aiSbClient
+                    .from('post_places')
+                    .select('post_id')
+                    .eq('place_id', placeId);
+                if (ppRows && ppRows.length > 0) {
+                    placePostIds = ppRows.map(r => r.post_id).filter(Boolean);
+                }
+            } catch (e) { console.debug('post_places haku epäonnistui:', e); }
+
+            // Haetaan julkiset aktiiviset julkaisut
+            const { data: matchedPosts } = await aiSbClient
+                .from('posts')
+                .select('*, post_attachments(*), post_media(url, media_type)')
+                .or('visibility.eq.public,visibility.is.null')
+                .or('status.eq.published,status.eq.APPROVED,status.is.null')
+                .order('created_at', { ascending: false })
+                .limit(40);
+
+            const filteredPosts = (matchedPosts || []).filter(post => {
+                const pId = String(post.place_id || '').toLowerCase();
+                const targetPId = String(placeId || '').toLowerCase();
+                const isThisPlace = (pId && (pId === targetPId || pId.includes(targetPId))) || placePostIds.includes(post.id);
+                if (!isThisPlace) return false;
+
+                const hasTheme = themePostIds.includes(post.id) ||
+                    (Array.isArray(post.tags) && post.tags.some(t => String(t).toLowerCase() === actualTagId)) ||
+                    (typeof post.tags === 'string' && post.tags.toLowerCase().includes(actualTagId));
+                return hasTheme;
+            });
+
+            if (filteredPosts.length > 0) {
+                let wallSection = document.getElementById('ctx-wallposts-section');
+                if (!wallSection && content) {
+                    wallSection = document.createElement('section');
+                    wallSection.id = 'ctx-wallposts-section';
+                    wallSection.style.cssText = 'padding:2rem 1.5rem;border-top:1px solid #eaeaea;background:#faf5ff;';
+                    wallSection.innerHTML = `
+                        <div style="max-width:1200px;margin:0 auto;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+                                <h2 style="font-size:1.35rem;font-weight:800;color:#6b21a8;margin:0;display:flex;align-items:center;gap:0.5rem;">
+                                    <span>🧱</span> Seinäjulkaisut – ${safeHtml(placeName)} (${safeHtml(tagDisplayName)})
+                                </h2>
+                                <a href="seina.html" style="font-size:0.85rem;font-weight:700;color:#7c3aed;text-decoration:none;">
+                                    Avaa Laukaan Seinä →
+                                </a>
+                            </div>
+                            <div id="ctx-wallposts-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;"></div>
+                        </div>`;
+                    content.appendChild(wallSection);
+                }
+                const wallList = document.getElementById('ctx-wallposts-list');
+                if (wallList) {
+                    wallList.innerHTML = filteredPosts.map(post => {
+                        const dateStr = post.created_at ? new Date(post.created_at).toLocaleDateString('fi-FI') : '';
+                        const attImg = post.post_attachments && post.post_attachments.find && post.post_attachments.find(a => a.type === 'image')?.url;
+                        const mediaImg = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : null;
+                        const photoUrl = attImg || mediaImg || post.image_url || null;
+                        const pubName = post.publisher_name || post.author_name || post.org_name || 'LaukaaInfo';
+                        const photoHtml = photoUrl
+                            ? `<div style="width:100%;height:150px;overflow:hidden;border-radius:10px 10px 0 0;background:#e2e8f0;">
+                                   <img src="${photoUrl}" alt="${safeHtml(post.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+                               </div>`
+                            : '';
+                        return `
+                            <div style="background:#fff;border-radius:12px;border:1px solid #e9d5ff;box-shadow:0 2px 8px rgba(107,33,168,0.06);overflow:hidden;display:flex;flex-direction:column;">
+                                ${photoHtml}
+                                <div style="padding:1rem;flex:1;display:flex;flex-direction:column;gap:0.4rem;border-left:4px solid #9333ea;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:#7e22ce;font-weight:700;">
+                                        <span>📢 ${safeHtml(pubName)}</span>
+                                        ${dateStr ? `<span style="color:#94a3b8;font-weight:normal;">${dateStr}</span>` : ''}
+                                    </div>
+                                    <h3 style="font-weight:800;color:#1e293b;font-size:1.05rem;margin:0;">${safeHtml(post.title || '')}</h3>
+                                    ${post.content || post.description ? `<p style="font-size:0.88rem;color:#475569;line-height:1.5;margin:0;">${safeHtml((post.content || post.description || '').substring(0, 160))}${(post.content || post.description || '').length > 160 ? '...' : ''}</p>` : ''}
+                                    <div style="margin-top:auto;padding-top:0.6rem;">
+                                        <a href="seina.html?post=${encodeURIComponent(post.id)}"
+                                           style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#7c3aed;font-weight:700;text-decoration:none;">
+                                            Lue koko julkaisu seinällä →
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>`;
+                    }).join('');
+                    wallSection.style.display = 'block';
+                }
+            }
+        } catch (postErr) {
+            console.warn('Kontekstuaalisten seinäjulkaisujen haku epäonnistui:', postErr);
         }
 
         // 9. Renderöi MEDIAGALLERIA (IMAGE + YOUTUBE, pl. HERO)

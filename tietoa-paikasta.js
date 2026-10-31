@@ -4413,36 +4413,60 @@ async function loadWallPostsForPlace(placeData) {
             console.warn('[WallPosts] get_content_for_context poikkeus, aktivoidaan tekninen varalogiikka:', rpcExc);
         }
 
-        // 3. Varalogiikka (sallitaan VAIN jos RPC epäonnistui teknisesti)
-        if (!rpcSuccess) {
+        // 3. Suora haku post_places- ja posts-tauluista (varmistaa että kaikki paikkaan liitetyt julkaisut näkyvät)
+        try {
+            // A) post_places -relaatiohaku
+            const { data: ppRows, error: ppErr } = await aiSb
+                .from('post_places')
+                .select('post_id, place_id')
+                .in('place_id', validPlaceUuids)
+                .limit(100);
+
+            if (ppErr) console.debug('[WallPosts] post_places haku:', ppErr.message);
+
+            let placePostIds = (ppRows || []).map(r => r.post_id).filter(Boolean);
+
+            // B) Suora haku posts.place_id
             try {
-                const { data: ppRows, error: ppErr } = await aiSb
+                const { data: directRows } = await aiSb
+                    .from('posts')
+                    .select('id, place_id')
+                    .in('place_id', validPlaceUuids)
+                    .limit(100);
+                if (directRows && directRows.length > 0) {
+                    placePostIds.push(...directRows.map(r => r.id).filter(Boolean));
+                }
+            } catch (_) {}
+
+            // C) Fallback content_contexts
+            try {
+                const { data: ccRows } = await aiSb
                     .from('content_contexts')
                     .select('post_id, place_id')
                     .not('post_id', 'is', null)
                     .in('place_id', validPlaceUuids)
                     .limit(100);
-
-                if (ppErr) console.debug('[WallPosts] Varalogiikan content_contexts virhe:', ppErr.message);
-                if (ppRows && ppRows.length > 0) {
-                    const fallbackPostIds = [...new Set(ppRows.map(r => r.post_id).filter(Boolean))];
-                    if (fallbackPostIds.length > 0) {
-                        const { data: pData } = await aiSb
-                            .from('posts')
-                            .select('*, post_attachments(*), post_media(url, media_type)')
-                            .in('id', fallbackPostIds)
-                            .or('visibility.eq.public,visibility.eq.PUBLIC,visibility.is.null')
-                            .order('created_at', { ascending: false });
-
-                        (pData || []).forEach(p => {
-                            const match = ppRows.find(r => r.post_id === p.id);
-                            addPost(p, match?.place_id);
-                        });
-                    }
+                if (ccRows && ccRows.length > 0) {
+                    placePostIds.push(...ccRows.map(r => r.post_id).filter(Boolean));
                 }
-            } catch (e) {
-                console.debug('[WallPosts] Varalogiikan poikkeus:', e?.message);
+            } catch (_) {}
+
+            const uniquePIds = [...new Set(placePostIds)];
+            if (uniquePIds.length > 0) {
+                const { data: pData } = await aiSb
+                    .from('posts')
+                    .select('*, post_attachments(*), post_media(url, media_type)')
+                    .in('id', uniquePIds)
+                    .or('visibility.eq.public,visibility.eq.PUBLIC,visibility.is.null')
+                    .order('created_at', { ascending: false });
+
+                (pData || []).forEach(p => {
+                    const match = (ppRows || []).find(r => r.post_id === p.id);
+                    addPost(p, match?.place_id || p.place_id);
+                });
             }
+        } catch (e) {
+            console.debug('[WallPosts] Suoran haun poikkeus:', e?.message);
         }
 
         if (posts.length === 0) {
