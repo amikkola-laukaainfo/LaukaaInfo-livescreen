@@ -788,24 +788,41 @@
                 const badge = document.getElementById('theme-badge');
                 const subtitle = document.getElementById('theme-subtitle');
 
-                if (banner) banner.classList.add('active');
+                const formatTagTitle = (t) => {
+                    if (!t) return '';
+                    const clean = t.replace(/--+/g, ' & ').replace(/-/g, ' ');
+                    return clean.charAt(0).toUpperCase() + clean.slice(1);
+                };
+                const tagLabel = formatTagTitle(tag);
+
+                if (banner) {
+                    banner.classList.add('active');
+                    if (!document.getElementById('context-all-link')) {
+                        const allLink = document.createElement('a');
+                        allLink.id = 'context-all-link';
+                        allLink.href = `teema.html?tag=${encodeURIComponent(tag || '')}`;
+                        allLink.style.cssText = 'margin-left:auto;color:#0284c7;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;';
+                        allLink.innerHTML = 'Koko Laukaan teema →';
+                        banner.appendChild(allLink);
+                    }
+                }
                 if (backLink) {
                     backLink.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
                     backLink.textContent = '← Takaisin paikkaan';
                 }
-                if (label && tag) label.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)} lähellä tätä paikkaa`;
+                if (label && tag) label.textContent = `${tagLabel} lähellä tätä paikkaa`;
                 if (badge) badge.textContent = 'Teema · Paikkakonteksti';
                 if (subtitle) {
-                    subtitle.textContent = 'Sisältö on rajattu valitun paikan lähialueeseen. Palauta yleinen teema poistamalla paikkakonteksti.';
+                    subtitle.innerHTML = `Sisältö on rajattu valitun paikan lähialueeseen. <a href="teema.html?tag=${encodeURIComponent(tag || '')}" style="color:var(--accent);font-weight:700;text-decoration:underline;">Näytä koko Laukaan kohteet</a>`;
                     subtitle.style.display = 'block';
                 }
                 // Päivitä otsikoita paikkakontekstia varten
                 const placesTitle = document.getElementById('places-section-title');
                 if (placesTitle) placesTitle.textContent = 'Muita paikkoja lähellä';
                 const eventsTitle = document.getElementById('events-section-title');
-                if (eventsTitle && tag) eventsTitle.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)}tapahtumat lähellä`;
+                if (eventsTitle && tag) eventsTitle.textContent = `${tagLabel} – tapahtumat lähellä`;
                 const companiesTitle = document.getElementById('companies-section-title');
-                if (companiesTitle && tag) companiesTitle.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)}palvelut lähellä`;
+                if (companiesTitle && tag) companiesTitle.textContent = `${tagLabel} – palvelut lähellä`;
                 const companiesDesc = document.getElementById('companies-section-desc');
                 if (companiesDesc) companiesDesc.textContent = 'Palvelut, jotka liittyvät tähän teemaan ja ovat saatavilla lähialueella.';
             }

@@ -2016,7 +2016,8 @@ async function loadContextualTheme(tagParam, placeId) {
         // 2. Selvitä todellinen tag_id (slug voi erota näyttönimestä)
         const tagLower = tagParam.toLowerCase().trim();
         let actualTagId = tagLower;
-        let tagDisplayName = tagParam.charAt(0).toUpperCase() + tagParam.slice(1);
+        let tagDisplayName = tagParam.replace(/--+/g, ' & ').replace(/-/g, ' ');
+        tagDisplayName = tagDisplayName.charAt(0).toUpperCase() + tagDisplayName.slice(1);
         try {
             const { data: tagRow } = await aiSbClient
                 .from('tags')
@@ -2047,12 +2048,17 @@ async function loadContextualTheme(tagParam, placeId) {
             heroContent.insertBefore(backLink, heroContent.firstChild);
         }
 
-        // 4. Kutsu uutta kontekstuaalista RPC:tä
-        const { data: dashboard, error: rpcError } = await aiSbClient.rpc(
-            'get_contextual_theme_dashboard',
-            { p_tag_id: actualTagId, p_place_id: placeId }
-        );
-        if (rpcError) throw rpcError;
+        // 4. Kutsu kontekstuaalista RPC:tä
+        let dashboard = null;
+        try {
+            const { data: dbData, error: rpcError } = await aiSbClient.rpc(
+                'get_contextual_theme_dashboard',
+                { p_tag_id: actualTagId, p_place_id: placeId }
+            );
+            if (!rpcError && dbData) dashboard = dbData;
+        } catch(rpcEx) {
+            console.warn('get_contextual_theme_dashboard epäonnistui:', rpcEx);
+        }
 
         // 5. Renderöi Hero-kuva
         const media = dashboard?.media || [];
@@ -2067,17 +2073,42 @@ async function loadContextualTheme(tagParam, placeId) {
             }
         }
 
-        // 6. Aseta kuvailuteksti
+        // 6. Aseta kuvailuteksti ja linkki koko Laukaan teemaan
         const subtitleEl = document.getElementById('theme-subtitle');
         if (subtitleEl) {
-            subtitleEl.textContent = `Tutustu teemaan ${tagDisplayName.toLowerCase()} alueella ${placeName}.`;
+            subtitleEl.innerHTML = `Tutustu teemaan ${safeHtml(tagDisplayName.toLowerCase())} alueella ${safeHtml(placeName)}. <a href="teema.html?tag=${encodeURIComponent(tagParam)}" style="color:#fff;text-decoration:underline;font-weight:700;margin-left:6px;">Katso kaikki kohteet koko Laukaassa →</a>`;
             subtitleEl.style.display = 'block';
         }
 
-        // 7. Renderöi KOHTEET (places RPC:stä)
-        const places = dashboard?.places || [];
+        // 7. Renderöi KOHTEET
+        // RPC palauttaa sub_places (tai places). Jos suoria alikohteita ei ole, haetaan rinnakkaiset teemakohteet theme_places-taulusta.
+        let places = dashboard?.sub_places || dashboard?.places || [];
         const placesSection = document.getElementById('places-section');
         const placesList = document.getElementById('places-list');
+        const placesTitle = document.getElementById('places-section-title');
+
+        if (places.length === 0) {
+            try {
+                const { data: tpRows } = await aiSbClient
+                    .from('theme_places')
+                    .select('place_id, places(id, place_id, name, canonical_name, type, description)')
+                    .eq('tag_id', actualTagId)
+                    .neq('place_id', placeId)
+                    .limit(16);
+
+                if (tpRows && tpRows.length > 0) {
+                    places = tpRows
+                        .map(r => r.places)
+                        .filter(Boolean);
+                    if (placesTitle) {
+                        placesTitle.textContent = `Muut teeman kohteet Laukaassa (${places.length})`;
+                    }
+                }
+            } catch (fbErr) {
+                console.warn('Fallback teemakohteille epäonnistui:', fbErr);
+            }
+        }
+
         if (placesList) {
             if (places.length === 0) {
                 if (placesSection) placesSection.style.display = 'none';
@@ -2085,7 +2116,7 @@ async function loadContextualTheme(tagParam, placeId) {
                 placesList.innerHTML = places.map(p => {
                     const displayName = p.canonical_name || p.name || p.place_id || '';
                     const desc = p.description ? p.description.substring(0, 100) + '...' : '';
-                    const typeLabel = { LANDMARK: 'Nähtävyys', NATURE: 'Luontokohde', SERVICE: 'Palvelu', BUILDING: 'Rakennus', AREA: 'Alue' }[p.type] || p.type || 'Paikka';
+                    const typeLabel = { LANDMARK: 'Nähtävyys', NATURE: 'Luontokohde', SERVICE: 'Palvelu', BUILDING: 'Rakennus', AREA: 'Alue', ATTRACTION: 'Nähtävyys' }[p.type] || p.type || 'Paikka';
                     const ctx = p.theme_context || {};
                     const ctxBadge = (ctx.media > 0 || ctx.observations > 0)
                         ? `<span style="font-size:0.75rem;background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:50px;margin-left:6px;">${ctx.media > 0 ? '📷 '+ctx.media : ''}${ctx.media > 0 && ctx.observations > 0 ? ' · ' : ''}${ctx.observations > 0 ? '👁 '+ctx.observations : ''}</span>`
@@ -2103,29 +2134,12 @@ async function loadContextualTheme(tagParam, placeId) {
         }
 
         // 7.5 Renderöi TOIMIJAT (Yritykset/Toimijat)
+        const companiesSection = document.getElementById('companies-section');
+        const companiesList = document.getElementById('companies-list');
         const actors = dashboard?.actors || [];
         if (actors.length > 0) {
-            let actorsSection = document.getElementById('ctx-actors-section');
-            if (!actorsSection && content) {
-                actorsSection = document.createElement('section');
-                actorsSection.id = 'ctx-actors-section';
-                actorsSection.style.cssText = 'padding:2rem 1.5rem;border-top:1px solid #eaeaea;';
-                actorsSection.innerHTML = `
-                    <div style="max-width:1200px;margin:0 auto;">
-                        <h2 style="font-size:1.4rem;font-weight:800;color:var(--color-forest);margin-bottom:1rem;">🏢 Toimijat</h2>
-                        <div id="ctx-actors-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;"></div>
-                    </div>`;
-                // Lisätään kohteiden jälkeen
-                const placesSec = document.getElementById('places-section');
-                if (placesSec && placesSec.parentNode) {
-                    placesSec.parentNode.insertBefore(actorsSection, placesSec.nextSibling);
-                } else {
-                    content.appendChild(actorsSection);
-                }
-            }
-            const actorsList = document.getElementById('ctx-actors-list');
-            if (actorsList) {
-                actorsList.innerHTML = actors.map(actor => {
+            if (companiesList) {
+                companiesList.innerHTML = actors.map(actor => {
                     const displayName = actor.name || actor.actor_id || 'Yritys';
                     return `
                         <div style="background:#f8fafc;border-radius:10px;padding:1rem 1.25rem;border-left:3px solid #f59e0b;display:flex;align-items:center;gap:0.75rem;">
@@ -2133,7 +2147,26 @@ async function loadContextualTheme(tagParam, placeId) {
                             <span style="font-weight:700;color:#1e293b;font-size:1.1rem;">${safeHtml(displayName)}</span>
                         </div>`;
                 }).join('');
+                if (companiesSection) companiesSection.style.display = 'block';
             }
+        } else {
+            if (companiesSection) companiesSection.style.display = 'none';
+        }
+
+        // 7.6 TAPAHTUMAT
+        const eventsSection = document.getElementById('events-section');
+        const eventsList = document.getElementById('events-list');
+        const events = dashboard?.events || [];
+        if (events.length > 0 && eventsList) {
+            eventsList.innerHTML = events.map(e => `
+                <div class="list-item-card">
+                    <div style="font-size:0.8rem;font-weight:700;color:#7c3aed;text-transform:uppercase;margin-bottom:0.35rem;">🎉 Tapahtuma</div>
+                    <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.1rem;color:var(--text-main);">${safeHtml(e.title || e.name || '')}</h3>
+                    ${e.description ? `<p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${safeHtml(e.description.substring(0, 110))}</p>` : ''}
+                </div>`).join('');
+            if (eventsSection) eventsSection.style.display = 'block';
+        } else {
+            if (eventsSection) eventsSection.style.display = 'none';
         }
 
         // 8. Renderöi HAVAINNOT (kuva + linkki mukana)
@@ -2384,9 +2417,12 @@ async function renderSmartRelatedThemes(tagId, placeId) {
             section.style.cssText = 'padding:2.5rem 1.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; margin-top:2rem;';
             section.innerHTML = `
                 <div style="max-width:1200px; margin:0 auto;">
-                    <h2 style="font-size:1.3rem; font-weight:800; color:var(--color-forest); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                    <h2 style="font-size:1.3rem; font-weight:800; color:var(--color-forest); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
                         <span>🔗</span> Muita näkökulmia
                     </h2>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.25rem;">
+                        Tutustu muihin aihepiireihin ja näkökulmiin koko Laukaan alueella:
+                    </p>
                     <div id="smart-related-themes-chips" style="display:flex; flex-wrap:wrap; gap:0.6rem;"></div>
                 </div>`;
             content.appendChild(section);
@@ -2395,12 +2431,14 @@ async function renderSmartRelatedThemes(tagId, placeId) {
         const chipsContainer = document.getElementById('smart-related-themes-chips');
         if (chipsContainer) {
             chipsContainer.innerHTML = relatedThemes.map(t => {
-                const url = `teema.html?tag=${encodeURIComponent(t.tag_id)}${placeId ? `&place_id=${encodeURIComponent(placeId)}` : ''}`;
+                // Linkki avaa kyseisen teeman yleisen sivun (ilman place_id -rajausta),
+                // jolloin suluissa näkyvät kohteet ovat oikeasti nähtävillä eikä käyttäjä päädy tyhjälle sivulle!
+                const url = `teema.html?tag=${encodeURIComponent(t.tag_id)}`;
                 const countBadge = t.places_count > 0 ? `<span style="font-size:0.75rem; opacity:0.7; margin-left:4px;">(${t.places_count})</span>` : '';
                 return `
                     <a href="${url}" style="display:inline-flex; align-items:center; padding:6px 14px; background:#fff; border:1px solid #cbd5e1; border-radius:50px; text-decoration:none; color:#1e293b; font-weight:600; font-size:0.9rem; box-shadow:0 1px 3px rgba(0,0,0,0.05); transition:all 0.15s ease;"
-                       onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8';"
-                       onmouseout="this.style.background='#fff'; this.style.borderColor='#cbd5e1';">
+                       onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8'; this.style.transform='translateY(-1px)';"
+                       onmouseout="this.style.background='#fff'; this.style.borderColor='#cbd5e1'; this.style.transform='none';">
                         <span>🏷️</span>
                         <span style="margin-left:6px;">${safeHtml(t.name || t.tag_id)}</span>
                         ${countBadge}
