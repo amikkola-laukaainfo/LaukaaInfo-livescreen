@@ -405,6 +405,9 @@ const TYPE_LABELS = {
   offer:        {label:'Tarjous',   cls:'badge-offer', icon:'🎁'},
   announcement: {label:'Tiedote',   cls:'badge-announcement', icon:'📢'},
   news:         {label:'Uutinen',   cls:'badge-news', icon:'📰'},
+  notice:       {label:'Ilmoitus',  cls:'badge-other', icon:'📌'},
+  feed:         {label:'Feed',      cls:'badge-other', icon:'💬'},
+  video:        {label:'Video',     cls:'badge-other', icon:'🎥'},
   association:  {label:'Yhdistys',  cls:'badge-association', icon:'🤝'},
   service:      {label:'Palvelu',   cls:'badge-service', icon:'🛠'},
   route:        {label:'Reitti',    cls:'badge-other',  icon:'🗺'},
@@ -604,7 +607,7 @@ async function loadAll() {
       const { data, error } = await window.LaukaaSupabase
         .from('posts')
         .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at')
-        .in('type', ['event', 'offer', 'announcement', 'news'])
+        .in('type', ['event', 'offer', 'announcement', 'news', 'notice', 'feed', 'video'])
         .in('status', ['published', 'APPROVED'])
         .eq('visibility', 'public');
 
@@ -616,7 +619,8 @@ async function loadAll() {
           id: p.id,
           target_id: p.target_id || null,
           target_type: p.target_type || null,
-          type: p.type || 'event',
+          organization_id: p.organization_id || null,
+          type: p.type || 'announcement',
           name: p.title || '',
           shortDescription: p.description || '',
           description: p.content || p.description || '',
@@ -785,6 +789,72 @@ function getPlaceName(placeId) {
   return p ? p.name : '';
 }
 
+function getItemDestination(item) {
+  if (!item) return { url: 'kohdekortit.html', label: '📇 Kortti', title: 'Avaa kohdekortti', type: 'kohde' };
+
+  // 1. Feed-julkaisut: ohjataan suoraan feediin kyseiseen julkaisuun
+  const isFeed = item.type === 'notice' || 
+                 item.type === 'feed' || 
+                 item.type === 'pikkuilmoitus' || 
+                 item.type === 'video' ||
+                 item.target_type === 'feed' ||
+                 item.source === 'feed';
+
+  if (isFeed) {
+    const id = item.id || item.target_id;
+    return {
+      type: 'feed',
+      url: id ? `index.html?item=${encodeURIComponent(id)}&feed=open` : 'index.html?feed=open',
+      label: '💬 Feed',
+      title: 'Avaa feed-julkaisu'
+    };
+  }
+
+  // 2. Tapahtumat ja perinteiset kohdekortit: ohjataan kohdekortti.html -sivulle
+  const isEvent = item.type === 'event' || item.target_type === 'event';
+  const isClassicKohde = item.source === 'json_fallback' || 
+                         ['service', 'association', 'route', 'story', 'place', 'kohde'].includes(item.type);
+
+  if (isEvent || (isClassicKohde && item.type !== 'announcement' && item.type !== 'news')) {
+    const id = item.id || item.target_id;
+    return {
+      type: 'event',
+      url: id ? `kohdekortti.html?id=${encodeURIComponent(id)}` : 'kohdekortti.html',
+      label: '📇 Kortti',
+      title: 'Avaa kohdekortti'
+    };
+  }
+
+  // 3. Seinäjulkaisut (announcement / tiedote, news / uutinen, wall jne.):
+  // ohjataan seina.html sivulle kyseiseen julkaisuun
+  const isSeina = item.type === 'announcement' || 
+                  item.type === 'news' || 
+                  item.type === 'wall' || 
+                  item.target_type === 'wall' || 
+                  item.target_type === 'project' ||
+                  Boolean(item.organization_id) ||
+                  item.source === 'posts';
+
+  if (isSeina) {
+    const id = item.id || item.target_id;
+    return {
+      type: 'seina',
+      url: id ? `seina.html?post=${encodeURIComponent(id)}` : 'seina.html',
+      label: '🧱 Seinä',
+      title: 'Avaa seinäjulkaisu'
+    };
+  }
+
+  // Oletus
+  const id = item.id || item.target_id;
+  return {
+    type: 'kohde',
+    url: id ? `kohdekortti.html?id=${encodeURIComponent(id)}` : 'kohdekortti.html',
+    label: '📇 Kortti',
+    title: 'Avaa kohdekortti'
+  };
+}
+
 function buildCard(item) {
   const t = TYPE_LABELS[item.type] || TYPE_LABELS.other;
   const img = item.images?.[0];
@@ -817,23 +887,38 @@ function buildCard(item) {
     dateStr = `Julkaistu ${formatDate(item.created_at)}`;
   }
 
+  const dest = getItemDestination(item);
+
   const actionBtns = [];
   if (ticketUrl) actionBtns.push(`<a href="${ticketUrl}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
   if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 www</a>`);
-  if (item.id) actionBtns.push(`<a href="kohdekortti.html?id=${encodeURIComponent(item.id)}" class="btn-card btn-card-secondary">📇 Kortti</a>`);
+  if (dest && (item.id || item.target_id)) {
+    actionBtns.push(`<a href="${dest.url}" class="btn-card btn-card-secondary" title="${dest.title}">${dest.label}</a>`);
+  }
+
+  let sourceBadge = '';
+  if (dest.type === 'seina') {
+    sourceBadge = '<span class="badge-source">🧱 Seinä</span>';
+  } else if (dest.type === 'feed') {
+    sourceBadge = '<span class="badge-source">💬 Feed</span>';
+  } else if (item.source === 'posts') {
+    sourceBadge = '<span class="badge-source">☁️ Julkaisu</span>';
+  }
 
   return `
 <div class="kohde-card" data-type="${item.type}" data-name="${(item.name||'').toLowerCase()}">
+  ${dest ? `<a href="${dest.url}" style="text-decoration:none; color:inherit; display:block;" title="${dest.title}">` : ''}
   ${img
     ? `<img src="${img}" alt="${item.name}" class="card-img" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-img-placeholder',textContent:'${getPlaceholderIcon(item)}'}))">`
     : `<div class="card-img-placeholder">${getPlaceholderIcon(item)}</div>`
   }
+  ${dest ? `</a>` : ''}
   <div class="card-body">
     <div class="card-badges">
       <span class="card-type-badge ${t.cls}">${t.icon} ${t.label}</span>
-      ${item.source === 'posts' ? '<span class="badge-source">☁️ Julkaisu</span>' : ''}
+      ${sourceBadge}
     </div>
-    <div class="card-title">${item.name || 'Nimetön kohde'}</div>
+    ${dest ? `<a href="${dest.url}" style="text-decoration:none; color:inherit;" title="${dest.title}"><div class="card-title">${item.name || 'Nimetön kohde'}</div></a>` : `<div class="card-title">${item.name || 'Nimetön kohde'}</div>`}
     <div class="card-short">${item.shortDescription || ''}</div>
     <div class="card-meta">
       ${dateStr ? `<div class="card-date">🗓 ${dateStr}</div>` : ''}

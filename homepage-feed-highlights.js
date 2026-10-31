@@ -103,7 +103,7 @@
             try {
                 const { data, error } = await sb
                     .from('posts')
-                    .select('id, type, title, description, content, place_id, status, visibility, image_url, link, target_id, event_start_at, event_end_at, offer_start_at, offer_end_at, created_at, published_at')
+                    .select('id, type, title, description, content, place_id, organization_id, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, offer_start_at, offer_end_at, created_at, published_at')
                     .in('type', ['event', 'offer', 'announcement', 'news', 'notice', 'video'])
                     .in('status', ['published', 'APPROVED'])
                     .eq('visibility', 'public')
@@ -120,7 +120,7 @@
 
         // REST fallback
         try {
-            const url = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?type=in.(event,offer,announcement,news,notice,video)&status=in.(published,APPROVED)&visibility=eq.public&select=id,type,title,description,content,place_id,status,visibility,image_url,link,target_id,event_start_at,event_end_at,offer_start_at,offer_end_at,created_at,published_at&order=created_at.desc&limit=30';
+            const url = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?type=in.(event,offer,announcement,news,notice,video)&status=in.(published,APPROVED)&visibility=eq.public&select=id,type,title,description,content,place_id,organization_id,status,visibility,image_url,link,target_id,target_type,event_start_at,event_end_at,offer_start_at,offer_end_at,created_at,published_at&order=created_at.desc&limit=30';
             const res = await fetch(url, {
                 headers: {
                     'apikey': 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
@@ -165,23 +165,82 @@
         }
     }
 
+    function getItemDestination(item) {
+        if (!item) return { url: 'index.html', label: 'Avaa kohdekortti »', type: 'kohde' };
+
+        // 1. Feed-julkaisut: ohjataan suoraan feediin kyseiseen julkaisuun
+        const isFeed = item.type === 'notice' || 
+                       item.type === 'feed' || 
+                       item.type === 'pikkuilmoitus' || 
+                       item.type === 'video' || 
+                       item.target_type === 'feed' ||
+                       item.source === 'feed';
+        if (isFeed) {
+            const id = item.id || item.target_id;
+            return {
+                url: id ? `index.html?item=${encodeURIComponent(id)}&feed=open` : 'index.html?feed=open',
+                label: 'Avaa feed-julkaisu »',
+                type: 'feed'
+            };
+        }
+
+        // 2. Tapahtumat: ohjataan kohdekortti.html -sivulle
+        const isEvent = item.type === 'event' || item.target_type === 'event';
+        if (isEvent) {
+            const id = item.id || item.target_id;
+            return {
+                url: id ? `kohdekortti.html?id=${encodeURIComponent(id)}` : 'kohdekortit.html',
+                label: 'Näytä koko tapahtuma »',
+                type: 'event'
+            };
+        }
+
+        // 3. Seinäjulkaisut: ohjataan seina.html sivulle ko. julkaisuun
+        const isSeina = item.type === 'announcement' || 
+                        item.type === 'news' || 
+                        item.type === 'wall' || 
+                        item.target_type === 'wall' || 
+                        item.target_type === 'project' ||
+                        Boolean(item.organization_id) ||
+                        item.source === 'posts';
+        if (isSeina) {
+            const id = item.id || item.target_id;
+            return {
+                url: id ? `seina.html?post=${encodeURIComponent(id)}` : 'seina.html',
+                label: 'Avaa seinäjulkaisu »',
+                type: 'seina'
+            };
+        }
+
+        // Oletus: kohdekortti
+        const id = item.id || item.target_id;
+        return {
+            url: id ? `kohdekortti.html?id=${encodeURIComponent(id)}` : 'kohdekortit.html',
+            label: 'Avaa kohdekortti »',
+            type: 'kohde'
+        };
+    }
+
     function normalizePostEntity(post) {
         const title = post.title || 'Laukaa-syöte';
         const desc = post.description || post.content || '';
         const img = post.image_url || null;
-        const targetUrl = post.id ? `kohdekortti.html?id=${encodeURIComponent(post.id)}` : 'kohdekortit.html';
+        const dest = getItemDestination(post);
 
         return {
             source: 'posts',
             id: post.id,
             target_id: post.target_id || null,
+            target_type: post.target_type || null,
+            organization_id: post.organization_id || null,
             title: title,
             description: desc,
             image: img,
             type: post.type || 'announcement',
             place_id: post.place_id || null,
             event_date: post.event_start_at || post.published_at || post.created_at,
-            targetUrl: targetUrl
+            targetUrl: dest.url,
+            ctaLabel: dest.label
         };
     }
 
@@ -301,7 +360,7 @@
                         <span class="homepage-feed-highlights__badge">${typeIcon} ${typeLabel}</span>
                         <h3 class="homepage-feed-highlights__card-title">${title}</h3>
                         <p class="homepage-feed-highlights__card-desc">${desc}</p>
-                        <span class="homepage-feed-highlights__card-cta">Avaa kohdekortti »</span>
+                        <span class="homepage-feed-highlights__card-cta">${escapeHtml(item.ctaLabel || 'Avaa julkaisu »')}</span>
                     </div>
                 </a>
             `;
