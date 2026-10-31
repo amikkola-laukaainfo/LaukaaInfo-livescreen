@@ -834,55 +834,66 @@
       // 5. Mode 2: Load Organization Wall Mode (?org=mediazoo)
       async function loadOrganizationWall(targetOrgParam) {
         let orgData = null;
-        let resolvedOrgId = targetOrgParam;
+        const aliases = getOrgAliases(targetOrgParam);
+        let resolvedOrgId = normalizeCanonicalOrgId(targetOrgParam) || targetOrgParam;
 
-        // Support slug resolution (e.g. ?org=mediazoo or ?org=company-2)
+        // Support slug and ID resolution (e.g. ?org=mediazoo or ?org=company-2)
         if (supabaseClient && targetOrgParam) {
           try {
-            let { data: orgBySlug } = await supabaseClient
-              .from('companies')
+            const aliasFilter = aliases.join(',');
+            // 1. Etsitään organizations-taulusta (sarakkeet: id, name, type)
+            let { data: orgByOrg } = await supabaseClient
+              .from('organizations')
               .select('*')
-              .or(`slug.eq.${targetOrgParam},id.eq.${targetOrgParam},business_id.eq.${targetOrgParam}`)
+              .or(`id.in.(${aliasFilter})`)
               .maybeSingle();
 
-            if (!orgBySlug) {
-              let { data: orgByOrg } = await supabaseClient
-                .from('organizations')
-                .select('*')
-                .or(`slug.eq.${targetOrgParam},id.eq.${targetOrgParam}`)
-                .maybeSingle();
-              if (orgByOrg) orgBySlug = orgByOrg;
+            if (orgByOrg) {
+              orgData = orgByOrg;
             }
 
-            if (orgBySlug) {
-              orgData = orgBySlug;
-              resolvedOrgId = orgBySlug.id || targetOrgParam;
+            // 2. Etsitään companies-taulusta (sarakkeet: id, name, nimi)
+            let { data: compData } = await supabaseClient
+              .from('companies')
+              .select('*')
+              .or(`id.in.(${aliasFilter})`)
+              .maybeSingle();
+
+            if (compData) {
+              orgData = { ...(orgData || {}), ...compData };
+            }
+
+            if (orgData && orgData.id) {
+              resolvedOrgId = normalizeCanonicalOrgId(orgData.id);
             }
           } catch (e) {
-            console.warn('Organization slug lookup notice:', e);
+            console.warn('Organization lookup notice:', e);
           }
         }
 
         // Fallback: Haetaan yrityksen tiedot ja nimi companies_data.json -tiedostosta jos Supabase ei palauttanut sitä
-        if (!orgData && targetOrgParam) {
+        if ((!orgData || !orgData.nimi) && targetOrgParam) {
           try {
             const res = await fetch('companies_data.json');
             if (res.ok) {
               const json = await res.json();
               const list = Array.isArray(json) ? json : (json.results || []);
-              const cleanId = String(targetOrgParam).replace('company-', '');
-              const match = list.find(c => 
-                String(c.id) === String(targetOrgParam) || 
-                String(c.id) === cleanId || 
-                ('company-' + c.id) === String(targetOrgParam) ||
-                (c.slug && c.slug === targetOrgParam)
-              );
+              const match = list.find(c => {
+                if (!c) return false;
+                const cId = String(c.id || '').toLowerCase();
+                const cNimi = String(c.nimi || '').toLowerCase();
+                return aliases.includes(cId) ||
+                       aliases.includes('company-' + cId) ||
+                       (aliases.includes('mediazoo') && cNimi.includes('mediazoo')) ||
+                       (c.slug && aliases.includes(c.slug.toLowerCase()));
+              });
               if (match) {
-                orgData = match;
-                resolvedOrgId = match.id || targetOrgParam;
+                orgData = { ...(orgData || {}), ...match };
+                resolvedOrgId = normalizeCanonicalOrgId(match.id || resolvedOrgId);
                 if (match.id && match.nimi) {
                   orgNamesCache[match.id] = match.nimi;
                   orgNamesCache['company-' + String(match.id).replace('company-', '')] = match.nimi;
+                  orgNamesCache['mediazoo'] = match.nimi;
                 }
               }
             }
@@ -896,11 +907,11 @@
           orgName = getOrgNameSync(resolvedOrgId || targetOrgParam, null);
         }
         if (!orgName || orgName === 'Organisaatio') {
-          if (targetOrgParam && targetOrgParam.toLowerCase().includes('mediazoo')) orgName = 'Mediazoo';
+          if (aliases.includes('mediazoo')) orgName = 'Mediazoo';
           else if (targetOrgParam === 'company-313') orgName = 'Laukaan Kädenjälki ry';
           else orgName = 'Organisaatio';
         }
-        const orgSlug = (orgData && orgData.slug) || targetOrgParam;
+        const orgSlug = aliases.includes('mediazoo') ? 'mediazoo' : ((orgData && orgData.slug) || targetOrgParam);
         const orgWallUrl = `seina.html?org=${encodeURIComponent(orgSlug)}`;
 
         document.getElementById('orgTitle').innerText = orgName;
@@ -964,7 +975,7 @@
         }
 
         // Determine correct profile URL: premium → yritys/slug.html, others → yrityskortti.html?id=
-        const isPremiumOrg = orgData && (orgData.tyyppi === 'maksu' || orgData.tyyppi === 'paid' || orgData.taso === 'premium' || orgData.subscription_tier >= 2);
+        const isPremiumOrg = orgData && (orgData.tyyppi === 'maksu' || orgData.tyyppi === 'paid' || orgData.taso === 'premium' || orgData.subscription_tier >= 2 || aliases.includes('mediazoo'));
         let yrityskorttHref;
         if (isPremiumOrg && orgName && orgName !== 'Organisaatio') {
           yrityskorttHref = `yritys/${slugifyOrgName(orgName)}.html`;
@@ -1086,7 +1097,11 @@
             let query = supabaseClient.from('posts').select('*').neq('status', 'cleanup_pending').neq('status', 'deleted').order('created_at', { ascending: false });
             
             if (orgFilterId) {
-              query = query.eq('organization_id', orgFilterId).or('visibility.eq.public,visibility.is.null');
+              const aliases = getOrgAliases(orgFilterId);
+              const aliasList = aliases.join(',');
+              query = query
+                .or(`organization_id.in.(${aliasList}),business_id.in.(${aliasList})`)
+                .or('visibility.eq.public,visibility.is.null');
             } else {
               query = query.or('visibility.eq.public,visibility.is.null');
             }
@@ -1246,7 +1261,7 @@
         // Merge DB results with schema sample pool to guarantee rich content display during testing
         const existingTitles = new Set(fetchedPosts.map(p => p.title));
         const filteredSample = samplePosts.filter(p => {
-          if (orgFilterId && p.organization_id !== orgFilterId) return false;
+          if (orgFilterId && !matchesOrg(p.organization_id, orgFilterId)) return false;
           return !existingTitles.has(p.title);
         });
 
