@@ -202,6 +202,15 @@
             z-index: 2;
         }
 
+        .slider-slide iframe.main-video {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            position: relative;
+            z-index: 2;
+            background: #000;
+        }
+
         .slider-btn {
             position: absolute;
             top: 50%;
@@ -295,6 +304,7 @@
         }
 
         .slider-thumb {
+            position: relative;
             width: 76px;
             height: 52px;
             border-radius: 12px;
@@ -324,6 +334,25 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .slider-thumb .video-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            background: rgba(220, 38, 38, 0.92);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
 
         /* Kuvan suurennos (Lightbox) */
@@ -1289,13 +1318,30 @@
             return d.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Helsinki' });
         }
 
+        // Apufunktiot multimedian tunnistukseen (YouTube & Google Photos)
+        function isYouTubeUrl(url) {
+            if (!url || typeof url !== 'string') return false;
+            return /(?:youtube\.com|youtu\.be)/i.test(url);
+        }
+
+        function extractYouTubeId(url) {
+            if (!url || typeof url !== 'string') return null;
+            const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^&?/\s]+)/i);
+            return m ? m[1] : null;
+        }
+
+        function isGooglePhotosUrl(url) {
+            if (!url || typeof url !== 'string') return false;
+            return /(?:lh3\.googleusercontent\.com|photos\.google\.com|googleusercontent\.com)/i.test(url);
+        }
+
         // 1. Ensisijainen haku posts.id (UUID)
         async function fetchPostByUuid(uuid) {
             if (!window.LaukaaSupabase || !uuid) return null;
             try {
                 const { data, error } = await window.LaukaaSupabase
                     .from('posts')
-                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
                     .eq('id', uuid)
                     .in('status', ['published', 'APPROVED'])
                     .in('visibility', ['public', 'link'])
@@ -1309,7 +1355,7 @@
             // Fallback ilman liitetauluja
             const { data, error } = await window.LaukaaSupabase
                 .from('posts')
-                .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
+                .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
                 .eq('id', uuid)
                 .in('status', ['published', 'APPROVED'])
                 .in('visibility', ['public', 'link'])
@@ -1328,7 +1374,7 @@
             try {
                 const { data, error } = await window.LaukaaSupabase
                     .from('posts')
-                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
                     .eq('target_id', targetId)
                     .in('status', ['published', 'APPROVED'])
                     .in('visibility', ['public', 'link'])
@@ -1387,26 +1433,70 @@
             const placeName = place ? place.name : '';
             const placeMuni = place ? place.municipality : '';
 
-            // Kerätään kaikki esittelykuvat (max 5 kpl)
-            let images = [];
-            if (Array.isArray(p.images) && p.images.length > 0) {
-                images = p.images.filter(Boolean);
-            } else if (p.post_media && Array.isArray(p.post_media) && p.post_media.length > 0) {
-                images = p.post_media.map(m => m.url).filter(Boolean);
+            // Kerätään kaikki esittelykuvat ja -videot (max 5 kpl kuva-/videoslideriin)
+            let mediaItems = [];
+            if (p.post_media && Array.isArray(p.post_media) && p.post_media.length > 0) {
+                mediaItems = p.post_media
+                    .map(m => {
+                        const url = (m.url || '').trim();
+                        if (!url) return null;
+                        const isVid = m.media_type === 'video' || isYouTubeUrl(url);
+                        return { url, type: isVid ? 'video' : 'image' };
+                    })
+                    .filter(Boolean);
+            } else if (Array.isArray(p.images) && p.images.length > 0) {
+                mediaItems = p.images
+                    .map(u => {
+                        if (!u) return null;
+                        const url = (typeof u === 'string' ? u : u.url || '').trim();
+                        if (!url) return null;
+                        const isVid = (typeof u === 'object' && u.type === 'video') || isYouTubeUrl(url);
+                        return { url, type: isVid ? 'video' : 'image' };
+                    })
+                    .filter(Boolean);
             }
 
-            if (images.length === 0 && p.image_url) {
-                const raw = p.image_url.trim();
-                if (raw.startsWith('[') && raw.endsWith(']')) {
-                    try { images = JSON.parse(raw); } catch (e) { images = [raw]; }
-                } else if (raw.includes(',')) {
-                    images = raw.split(',').map(s => s.trim()).filter(Boolean);
-                } else {
-                    images = [raw];
+            // Jos postauksessa on youtube_url, liitetään sekin mediaan jos ei vielä mukana
+            if (p.youtube_url && typeof p.youtube_url === 'string' && p.youtube_url.trim()) {
+                const ytUrl = p.youtube_url.trim();
+                if (!mediaItems.some(m => m.url === ytUrl)) {
+                    mediaItems.unshift({ url: ytUrl, type: 'video' });
                 }
             }
+
+            if (mediaItems.length === 0 && p.image_url) {
+                const raw = p.image_url.trim();
+                let rawList = [];
+                if (raw.startsWith('[') && raw.endsWith(']')) {
+                    try { rawList = JSON.parse(raw); } catch (e) { rawList = [raw]; }
+                } else if (raw.includes(',')) {
+                    rawList = raw.split(',').map(s => s.trim()).filter(Boolean);
+                } else {
+                    rawList = [raw];
+                }
+                rawList.forEach(s => {
+                    if (s && typeof s === 'string') {
+                        const trimmed = s.trim();
+                        if (trimmed) {
+                            mediaItems.push({
+                                url: trimmed,
+                                type: isYouTubeUrl(trimmed) ? 'video' : 'image'
+                            });
+                        }
+                    }
+                });
+            }
+
             // Varmistetaan uniikit URLit ja max 5 kpl
-            images = Array.from(new Set(images)).slice(0, 5);
+            const seenMediaUrls = new Set();
+            const uniqueMedia = [];
+            for (const item of mediaItems) {
+                if (!seenMediaUrls.has(item.url)) {
+                    seenMediaUrls.add(item.url);
+                    uniqueMedia.push(item);
+                    if (uniqueMedia.length >= 5) break;
+                }
+            }
 
             // Osallistumiskaavake / Google Forms URL
             let formUrl = p.form_url || p.registration_form_url || p.google_forms_url || (p.event && p.event.formUrl) || '';
@@ -1426,7 +1516,7 @@
                 name: p.title || 'Nimetön kohde',
                 shortDescription: p.description || '',
                 description: p.content || p.description || '',
-                images: images,
+                images: uniqueMedia,
                 formUrl: formUrl,
                 tags: Array.isArray(p.tags) ? p.tags : [],
                 place_id: p.place_id || null,
@@ -1742,13 +1832,13 @@
             }
         }
 
-        // --- Kuva-slider (max 5 esittelykuvaa) ---
+        // --- Kuva- ja videoslider (max 5 esittelymediaa: kuva, Google Kuvat, YouTube) ---
         let currentSlideIndex = 0;
-        let sliderImages = [];
+        let sliderMedia = [];
         let sliderTouchStartX = 0;
         let sliderTouchEndX = 0;
 
-        function renderSlider(images) {
+        function renderSlider(media) {
             const wrapper = document.getElementById('entity-slider-wrapper');
             const track = document.getElementById('slider-track');
             const prevBtn = document.getElementById('slider-prev-btn');
@@ -1768,18 +1858,28 @@
             if (dots) dots.innerHTML = '';
             if (thumbnails) thumbnails.innerHTML = '';
 
-            // Sanitoidaan ja normalisoidaan kuvat (max 5)
-            sliderImages = (images || [])
-                .map(src => {
-                    if (typeof src !== 'string') return '';
-                    let s = src.trim();
-                    if (s.startsWith('http://')) s = 'https://' + s.slice(7);
-                    return s;
+            // Sanitoidaan ja normalisoidaan mediat (max 5)
+            // Tukee: kuvat, Google Kuvat -suoralinkit (.jpg / lh3.googleusercontent.com) ja YouTube-videot
+            sliderMedia = (media || [])
+                .map(item => {
+                    if (!item) return null;
+                    let url = '';
+                    let type = 'image';
+                    if (typeof item === 'string') {
+                        url = item.trim();
+                        if (isYouTubeUrl(url)) type = 'video';
+                    } else if (typeof item === 'object') {
+                        url = (item.url || '').trim();
+                        type = item.type || (isYouTubeUrl(url) ? 'video' : 'image');
+                    }
+                    if (!url) return null;
+                    if (url.startsWith('http://')) url = 'https://' + url.slice(7);
+                    return { url, type };
                 })
                 .filter(Boolean)
                 .slice(0, 5);
 
-            if (sliderImages.length === 0) {
+            if (sliderMedia.length === 0) {
                 if (wrapper) wrapper.style.display = 'none';
                 return;
             }
@@ -1787,31 +1887,59 @@
             if (wrapper) wrapper.style.display = 'block';
             currentSlideIndex = 0;
 
+            // Kerätään vain kuvalinkit lightboxia varten, jotta lightbox ei yritä avata videota
+            const imageOnlyUrls = sliderMedia.filter(m => m.type !== 'video').map(m => m.url);
+
             // Luodaan diat
-            sliderImages.forEach((imgSrc, idx) => {
+            sliderMedia.forEach((item, idx) => {
                 const slide = document.createElement('div');
                 slide.className = 'slider-slide';
 
-                // Sumennettu tausta
-                const bg = document.createElement('div');
-                bg.className = 'slider-slide-bg';
-                bg.style.backgroundImage = `url('${imgSrc}')`;
+                const isVideo = item.type === 'video' || isYouTubeUrl(item.url);
+                const ytId = isVideo ? extractYouTubeId(item.url) : null;
 
-                // Etualan pääkuva
-                const img = document.createElement('img');
-                img.className = 'main-img';
-                img.src = imgSrc;
-                img.alt = `Esittelykuva ${idx + 1}`;
-                img.loading = idx === 0 ? 'eager' : 'lazy';
-                img.title = 'Napauta suurentaaksesi';
-                img.onerror = () => {
-                    img.style.display = 'none';
-                };
-                // Avaa lightbox klikkaamalla
-                img.onclick = () => openLightbox(sliderImages, idx);
+                if (isVideo && ytId) {
+                    // YouTube-video slide
+                    // Sumennettu taustakuva YouTuben esikatselukuvasta
+                    const bg = document.createElement('div');
+                    bg.className = 'slider-slide-bg';
+                    bg.style.backgroundImage = `url('https://img.youtube.com/vi/${ytId}/hqdefault.jpg')`;
+                    slide.appendChild(bg);
 
-                slide.appendChild(bg);
-                slide.appendChild(img);
+                    // Upotettu responsiivinen YouTube-soitin
+                    const iframe = document.createElement('iframe');
+                    iframe.className = 'main-video';
+                    iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?rel=0&enablejsapi=1`;
+                    iframe.title = `Esittelyvideo ${idx + 1}`;
+                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                    iframe.allowFullscreen = true;
+                    slide.appendChild(iframe);
+                } else {
+                    // Kuva-slide (tavallinen kuva tai Google Kuvat)
+                    const bg = document.createElement('div');
+                    bg.className = 'slider-slide-bg';
+                    bg.style.backgroundImage = `url('${item.url}')`;
+
+                    // Etualan pääkuva
+                    const img = document.createElement('img');
+                    img.className = 'main-img';
+                    img.src = item.url;
+                    img.alt = `Esittelykuva ${idx + 1}`;
+                    img.loading = idx === 0 ? 'eager' : 'lazy';
+                    img.title = 'Napauta suurentaaksesi';
+                    img.onerror = () => {
+                        img.style.display = 'none';
+                    };
+                    // Avaa lightbox vain kuville
+                    img.onclick = () => {
+                        const lbIdx = imageOnlyUrls.indexOf(item.url);
+                        openLightbox(imageOnlyUrls, lbIdx >= 0 ? lbIdx : 0);
+                    };
+
+                    slide.appendChild(bg);
+                    slide.appendChild(img);
+                }
+
                 track.appendChild(slide);
 
                 // Täplä / Dot
@@ -1819,23 +1947,42 @@
                     const dot = document.createElement('div');
                     dot.className = `slider-dot ${idx === 0 ? 'active' : ''}`;
                     dot.onclick = () => goToSlide(idx);
-                    dot.setAttribute('title', `Kuva ${idx + 1}`);
+                    dot.setAttribute('title', isVideo ? `Video ${idx + 1}` : `Kuva ${idx + 1}`);
                     dots.appendChild(dot);
                 }
 
                 // Pikkukuva / Thumbnail
                 if (thumbnails) {
-                    const thumb = document.createElement('img');
-                    thumb.className = `slider-thumb ${idx === 0 ? 'active' : ''}`;
-                    thumb.src = imgSrc;
-                    thumb.alt = `Pikkukuva ${idx + 1}`;
-                    thumb.onclick = () => goToSlide(idx);
-                    thumbnails.appendChild(thumb);
+                    const thumbWrap = document.createElement('div');
+                    thumbWrap.className = `slider-thumb ${idx === 0 ? 'active' : ''}`;
+
+                    const thumbImg = document.createElement('img');
+                    if (isVideo && ytId) {
+                        thumbImg.src = `https://img.youtube.com/vi/${ytId}/default.jpg`;
+                        thumbImg.alt = `Video ${idx + 1}`;
+                    } else {
+                        thumbImg.src = item.url;
+                        thumbImg.alt = `Pikkukuva ${idx + 1}`;
+                    }
+                    thumbImg.onerror = () => { thumbImg.style.opacity = '0.3'; };
+                    thumbWrap.appendChild(thumbImg);
+
+                    // Videon merkki (YouTube play -ikoni)
+                    if (isVideo) {
+                        const badge = document.createElement('div');
+                        badge.className = 'video-badge';
+                        badge.innerHTML = '<span class="iconify" data-icon="mdi:play" style="font-size:14px; margin-left:1px;"></span>';
+                        badge.title = 'Video';
+                        thumbWrap.appendChild(badge);
+                    }
+
+                    thumbWrap.onclick = () => goToSlide(idx);
+                    thumbnails.appendChild(thumbWrap);
                 }
             });
 
-            // Yksi kuva vs useampi kuva
-            if (sliderImages.length > 1) {
+            // Yksi media vs useampi media
+            if (sliderMedia.length > 1) {
                 if (prevBtn) prevBtn.style.display = 'flex';
                 if (nextBtn) nextBtn.style.display = 'flex';
                 if (counter) counter.style.display = 'inline-flex';
@@ -1870,12 +2017,26 @@
         }
 
         function goToSlide(index) {
-            if (!sliderImages.length) return;
-            if (index < 0) index = sliderImages.length - 1;
-            if (index >= sliderImages.length) index = 0;
+            if (!sliderMedia.length) return;
+            if (index < 0) index = sliderMedia.length - 1;
+            if (index >= sliderMedia.length) index = 0;
+
+            // Jos siirrytään pois diasta jossa oli video, pysäytetään toisto
+            const track = document.getElementById('slider-track');
+            if (track && currentSlideIndex !== index) {
+                const slides = track.querySelectorAll('.slider-slide');
+                if (slides[currentSlideIndex]) {
+                    const iframes = slides[currentSlideIndex].querySelectorAll('iframe');
+                    iframes.forEach(ifr => {
+                        try {
+                            ifr.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                        } catch (e) {}
+                    });
+                }
+            }
+
             currentSlideIndex = index;
 
-            const track = document.getElementById('slider-track');
             if (track) {
                 track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
             }
@@ -1883,7 +2044,7 @@
             // Laskuri
             const counterText = document.getElementById('slider-counter-text');
             if (counterText) {
-                counterText.textContent = `${currentSlideIndex + 1} / ${sliderImages.length}`;
+                counterText.textContent = `${currentSlideIndex + 1} / ${sliderMedia.length}`;
             }
 
             // Täpät
@@ -1900,12 +2061,12 @@
         }
 
         function nextSlide() {
-            if (sliderImages.length <= 1) return;
+            if (sliderMedia.length <= 1) return;
             goToSlide(currentSlideIndex + 1);
         }
 
         function prevSlide() {
-            if (sliderImages.length <= 1) return;
+            if (sliderMedia.length <= 1) return;
             goToSlide(currentSlideIndex - 1);
         }
 
@@ -2411,10 +2572,19 @@
             // Image
             const printLogo = document.getElementById('print-logo');
             if (entity.images && entity.images.length > 0 && entity.images[0]) {
-                let imgSrc = entity.images[0];
+                const firstMedia = entity.images[0];
+                let imgSrc = typeof firstMedia === 'string' ? firstMedia : (firstMedia.url || '');
+                if (firstMedia && (firstMedia.type === 'video' || isYouTubeUrl(imgSrc))) {
+                    const ytId = extractYouTubeId(imgSrc);
+                    imgSrc = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '';
+                }
                 if (imgSrc.startsWith('http://')) imgSrc = 'https://' + imgSrc.slice(7);
-                printLogo.src = imgSrc;
-                printLogo.style.display = 'block';
+                if (imgSrc) {
+                    printLogo.src = imgSrc;
+                    printLogo.style.display = 'block';
+                } else {
+                    printLogo.style.display = 'none';
+                }
             } else {
                 printLogo.style.display = 'none';
             }
