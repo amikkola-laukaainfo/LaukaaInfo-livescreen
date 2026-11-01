@@ -2675,7 +2675,14 @@
             const btn = document.getElementById('share-btn');
             const toast = document.getElementById('share-toast');
             const name = document.getElementById('el-name')?.textContent || 'Kohde';
-            const url = window.location.href;
+
+            // Rakennetaan aina oikea jakolinkki kohteen id:llä
+            const selector = document.getElementById('demo-selector');
+            const selectedId = selector ? selector.value : '';
+            const entity = selectedId ? kohteet.find(k => k.id === selectedId || (k.target_id && k.target_id === selectedId)) : null;
+            const shareId = entity?.target_id || entity?.id || selectedId || new URLSearchParams(window.location.search).get('id') || '';
+            const baseUrl = 'https://laukaainfo.fi/kohdekortti.html';
+            const url = shareId ? `${baseUrl}?id=${encodeURIComponent(shareId)}` : window.location.href;
 
             if (navigator.share) {
                 navigator.share({
@@ -2690,10 +2697,12 @@
                 btn.classList.add('copied');
                 btn.innerHTML = '<span class="iconify" data-icon="mdi:check"></span> Kopioitu!';
                 toast.classList.add('show');
+                toast.textContent = '🔗 Linkki kopioitu: ' + url;
                 setTimeout(() => {
                     btn.classList.remove('copied');
                     btn.innerHTML = '<span class="iconify" data-icon="mdi:share-variant"></span> Jaa';
                     toast.classList.remove('show');
+                    toast.textContent = '🔗 Linkki kopioitu leikepöydälle!';
                 }, 2500);
             }).catch(() => {
                 prompt('Kopioi linkki:', url);
