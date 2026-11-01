@@ -693,12 +693,23 @@
         }
 
         .tag {
-            background: #e2e8f0;
-            color: #475569;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            color: #1e293b;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.83rem;
             font-weight: 600;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: all 0.15s ease;
+        }
+
+        .tag:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
         }
 
         .relation-item {
@@ -1259,8 +1270,8 @@
                     </div>
                 </div>
 
-                <div class="info-panel">
-                    <h3>Profiili ja Luokittelu</h3>
+                <div class="info-panel" id="panel-features" style="display:none">
+                    <h3 id="panel-features-title">✨ Palvelut &amp; Ominaisuudet</h3>
                     <div class="tag-container" id="el-tags">
                         <!-- Tunnisteet tänne -->
                     </div>
@@ -2357,16 +2368,143 @@
                 if (formBox) formBox.style.display = 'none';
             }
 
-            // Tags
+            // Palvelut & Ominaisuudet (Pikafaktat / Quick Facts)
+            const featuresPanel = document.getElementById('panel-features');
             const tagContainer = document.getElementById('el-tags');
-            tagContainer.innerHTML = '';
-            const allTags = [...(entity.tags || []), ...(entity.profiles || [])];
-            allTags.forEach(t => {
-                const sp = document.createElement('span');
-                sp.className = 'tag';
-                sp.textContent = t;
-                tagContainer.appendChild(sp);
-            });
+            if (tagContainer) {
+                tagContainer.innerHTML = '';
+                const factSet = new Set();
+                const addFact = (text) => {
+                    if (!text || typeof text !== 'string') return;
+                    const clean = text.trim();
+                    if (!clean) return;
+                    const norm = clean.toLowerCase();
+                    for (const existing of factSet) {
+                        if (existing.toLowerCase() === norm) return;
+                    }
+                    factSet.add(clean);
+                };
+
+                // 1. Ensisijaiset pikafaktat ja ominaisuudet (profiloinnista tai kohteelta)
+                (entity.quick_facts || []).forEach(addFact);
+                (entity.features || []).forEach(addFact);
+                if (entity.ai_and_seo && Array.isArray(entity.ai_and_seo.quick_facts)) {
+                    entity.ai_and_seo.quick_facts.forEach(addFact);
+                }
+
+                // 2. Strukturoitu data (mm. tilat, juhlat, palvelut)
+                const evCat = entity.categories?.events_and_celebrations;
+                if (evCat) {
+                    if (evCat.is_accessible) addFact('♿ Esteetön kulku');
+                    if (evCat.has_sauna) addFact('🧖 Sauna käytettävissä');
+                    if (evCat.has_av_tech) addFact('🎤 AV-tekniikka & äänentoisto');
+                    if (evCat.alcohol_license) addFact('🍻 Anniskeluoikeudet');
+                    if (evCat.own_catering_allowed) addFact('🍽️ Omat tarjoilut sallittu');
+                    if (evCat.inhouse_catering_available) addFact('☕ Kahvio / Pitopalvelu');
+                    if (evCat.is_lakeside) addFact('🌅 Järvenranta');
+                    if (evCat.accommodation_beds > 0) addFact('🛏️ Majoitusmahdollisuus');
+                    if (evCat.outdoor_capacity > 0) addFact('🌿 Ulkoalue / Terassi');
+                }
+                const coreCfg = entity.core;
+                if (coreCfg) {
+                    if (coreCfg.emergency_available) addFact('🚨 Päivystys');
+                    if (coreCfg.home_service) addFact('📦 Kotiinkuljetus / Kotikäynnit');
+                    if (coreCfg.weekend_service) addFact('🕒 Viikonloppupalvelu');
+                }
+
+                // 3. Tägit ja profiilit
+                (entity.tags || []).forEach(addFact);
+                (entity.profiles || []).forEach(addFact);
+                if (entity.ai_and_seo?.atmosphere_tags) {
+                    entity.ai_and_seo.atmosphere_tags.forEach(t => addFact('🎭 ' + t));
+                }
+                if (entity.ai_and_seo?.values_tags) {
+                    entity.ai_and_seo.values_tags.forEach(t => addFact('🌿 ' + t));
+                }
+
+                // Ikoni-sanakirja tunnetuille ominaisuuksille
+                const FEATURE_ICONS = {
+                    'wifi': '🌐',
+                    'asiakas-wifi': '🌐',
+                    'ilmainen wifi': '🌐',
+                    'pysäköinti': '🚗',
+                    'ilmainen pysäköinti': '🚗',
+                    'parkkipaikka': '🚗',
+                    'sähköauton latauspiste': '🔌',
+                    'sähköauton lataus': '🔌',
+                    'esteetön': '♿',
+                    'esteetön kulku': '♿',
+                    'esteettömyys': '♿',
+                    'kahvio': '☕',
+                    'kahvila': '☕',
+                    'ravintola': '🍽️',
+                    'kahvio / ravintola': '☕',
+                    'ulkoterassi': '🌿',
+                    'terassi': '🌿',
+                    'korttimaksu': '💳',
+                    'korttimaksu & mobilepay': '💳',
+                    'mobilepay': '📱',
+                    'anniskeluoikeudet': '🍻',
+                    'a-oikeudet': '🍻',
+                    'omat tarjoilut sallittu': '🍽️',
+                    'omat tarjoilut': '🍽️',
+                    'sauna': '🧖',
+                    'sauna käytettävissä': '🧖',
+                    'rantasauna': '🧖',
+                    'av-tekniikka': '🎤',
+                    'av-tekniikka & äänentoisto': '🎤',
+                    'äänentoisto': '🔊',
+                    'valkokangas': '📽️',
+                    'videotykki': '📽️',
+                    'valkokangas / tykki': '📽️',
+                    'valkokangas / videotykki': '📽️',
+                    'majoitus': '🛏️',
+                    'majoitusmahdollisuus': '🛏️',
+                    'järvenranta': '🌅',
+                    'järvenranta / rantasauna': '🌅',
+                    'koirat & lemmikit sallittu': '🐾',
+                    'koiraystävällinen': '🐾',
+                    'koirat sallittu': '🐾',
+                    'lemmikit sallittu': '🐾',
+                    'lapsi- ja perheystävällinen': '👶',
+                    'lapsiystävällinen': '👶',
+                    'perheystävällinen': '👨‍👩‍👧',
+                    'kotiinkuljetus': '📦',
+                    'kotiinkuljetus / noutopalvelu': '📦',
+                    'noutopalvelu': '🛍️',
+                    'viikonloppupalvelu': '🕒',
+                    'ilta- ja viikonloppupalvelu': '🕒',
+                    'ulkoalue / juhlateltta': '🎪',
+                    'juhlateltta': '🎪',
+                    'ilmastointi': '❄️',
+                    'ilmastointi / viilennys': '❄️',
+                    'yksityistilaisuudet': '🔒',
+                    'yksityisvaraus': '🔒'
+                };
+
+                const factsList = Array.from(factSet);
+                if (factsList.length === 0) {
+                    if (featuresPanel) featuresPanel.style.display = 'none';
+                } else {
+                    if (featuresPanel) featuresPanel.style.display = 'block';
+                    factsList.forEach(fact => {
+                        let displayText = fact;
+                        const hasEmoji = /^\p{Extended_Pictographic}/u.test(displayText);
+                        if (!hasEmoji) {
+                            const icon = FEATURE_ICONS[displayText.toLowerCase()];
+                            if (icon) {
+                                displayText = `${icon} ${displayText}`;
+                            } else {
+                                displayText = `✨ ${displayText}`;
+                            }
+                        }
+                        const sp = document.createElement('span');
+                        sp.className = 'tag';
+                        sp.textContent = displayText;
+                        tagContainer.appendChild(sp);
+                    });
+                }
+            }
 
             // Specific fields
             const specEl = document.getElementById('el-specific-fields');
