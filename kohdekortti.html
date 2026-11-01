@@ -1548,7 +1548,13 @@
                             const streetPart = postalMatch[1].replace(/^[,\s]+|[,\s]+$/g, '');
                             if (!postal) postal = postalMatch[2];
                             if (!muni) muni = postalMatch[3].trim();
-                            if (!addr) addr = streetPart;
+                            if (streetPart.includes(',')) {
+                                const parts = streetPart.split(',').map(s => s.trim()).filter(Boolean);
+                                venue = parts[0];
+                                if (!addr) addr = parts.slice(1).join(', ');
+                            } else {
+                                if (!addr) addr = streetPart;
+                            }
                         } else if (!addr) {
                             if (locDetail.includes(',')) {
                                 const parts = locDetail.split(',').map(s => s.trim()).filter(Boolean);
@@ -1566,8 +1572,12 @@
                         muni = placeName || placeMuni || 'Laukaa';
                     }
 
+                    if (venue && (venue.toLowerCase() === addr.toLowerCase() || venue.toLowerCase() === muni.toLowerCase() || (placeName && venue.toLowerCase() === placeName.toLowerCase()))) {
+                        venue = '';
+                    }
+
                     return {
-                        venue: venue || (addr !== (p.event_location_detail || '') ? p.event_location_detail : '') || placeName || '',
+                        venue: venue,
                         address: addr,
                         postalCode: postal,
                         municipality: muni,
@@ -2142,6 +2152,46 @@
             goToSlide(currentSlideIndex - 1);
         }
 
+        function formatEntityAddress(location) {
+            if (!location) return '';
+            let venue = (location.venue || '').trim();
+            let street = (location.address || '').trim();
+            let postal = (location.postalCode || '').trim();
+            let muni = (location.municipality || '').trim();
+
+            if (venue) {
+                if (street && (venue.toLowerCase() === street.toLowerCase() || venue.toLowerCase().includes(street.toLowerCase()))) {
+                    venue = venue.replace(new RegExp(street.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '').replace(/^[,\s]+|[,\s]+$/g, '');
+                }
+                if (muni && (venue.toLowerCase() === muni.toLowerCase() || venue.toLowerCase().includes(muni.toLowerCase()))) {
+                    venue = venue.replace(new RegExp(muni.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '').replace(/^[,\s]+|[,\s]+$/g, '');
+                }
+                if (postal && venue.includes(postal)) {
+                    venue = venue.replace(postal, '').replace(/^[,\s]+|[,\s]+$/g, '');
+                }
+            }
+
+            const cityPart = [postal, muni].filter(Boolean).join(' ').trim();
+            const parts = [];
+            if (venue) parts.push(venue);
+            if (street && street !== venue) parts.push(street);
+            if (cityPart && cityPart !== street && cityPart !== venue) {
+                const combined = parts.join(', ');
+                if (!combined.toLowerCase().includes(cityPart.toLowerCase())) {
+                    parts.push(cityPart);
+                }
+            }
+
+            const unique = [];
+            parts.forEach(p => {
+                const clean = p.trim();
+                if (clean && !unique.some(u => u.toLowerCase() === clean.toLowerCase())) {
+                    unique.push(clean);
+                }
+            });
+            return unique.join(', ');
+        }
+
         function renderEntity(id) {
             const entity = kohteet.find(k => k.id === id || (k.target_id && k.target_id === id));
             if (!entity) return;
@@ -2161,23 +2211,12 @@
             renderSlider(entity.images || []);
 
             // Contact & Location
-            const addrParts = [];
-            const venue = (entity.location?.venue || '').trim();
-            const street = (entity.location?.address || '').trim();
-            const postal = (entity.location?.postalCode || '').trim();
-            const muni = (entity.location?.municipality || '').trim();
-
-            if (venue) addrParts.push(venue);
-            if (street && street !== venue) addrParts.push(street);
-            const cityPart = [postal, muni].filter(Boolean).join(' ');
-            if (cityPart && cityPart !== street && cityPart !== venue) addrParts.push(cityPart);
-
-            const addrText = addrParts.join(', ');
+            const addrText = formatEntityAddress(entity.location);
             const addrEl = document.getElementById('el-address');
 
             let mapUrl = entity.location?.mapUrl;
-            if (!mapUrl && (street || cityPart || venue)) {
-                const queryStr = [street || venue, cityPart].filter(Boolean).join(', ');
+            if (!mapUrl && addrText) {
+                const queryStr = addrText;
                 mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryStr + (queryStr.includes('Laukaa') || queryStr.includes('Lievestuore') ? '' : ', Laukaa'))}`;
             }
 
@@ -2691,21 +2730,7 @@
             }
 
             // Location
-            let addrText = '';
-            if (entity.location) {
-                const pParts = [];
-                const pVenue = (entity.location.venue || '').trim();
-                const pStreet = (entity.location.address || '').trim();
-                const pPostal = (entity.location.postalCode || '').trim();
-                const pMuni = (entity.location.municipality || '').trim();
-
-                if (pVenue) pParts.push(pVenue);
-                if (pStreet && pStreet !== pVenue) pParts.push(pStreet);
-                const pCity = [pPostal, pMuni].filter(Boolean).join(' ');
-                if (pCity && pCity !== pStreet && pCity !== pVenue) pParts.push(pCity);
-
-                addrText = pParts.join(', ');
-            }
+            const addrText = formatEntityAddress(entity.location);
             const printAddrRow = document.getElementById('print-address-row');
             if (addrText) {
                 document.getElementById('print-address').textContent = addrText;
