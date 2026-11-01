@@ -171,8 +171,9 @@
         }
 
         .slider-slide {
-            min-width: 100%;
+            /* leveys asetetaan JS:ssä dynaamisesti (100/N)% */
             height: 100%;
+            flex-shrink: 0;
             position: relative;
             display: flex;
             align-items: center;
@@ -1887,6 +1888,9 @@
             if (wrapper) wrapper.style.display = 'block';
             currentSlideIndex = 0;
 
+            // Aseta trackin leveys diojen määrän mukaan (N * 100%) jotta translateX toimii
+            track.style.width = `${sliderMedia.length * 100}%`;
+
             // Kerätään vain kuvalinkit lightboxia varten, jotta lightbox ei yritä avata videota
             const imageOnlyUrls = sliderMedia.filter(m => m.type !== 'video').map(m => m.url);
 
@@ -1894,6 +1898,9 @@
             sliderMedia.forEach((item, idx) => {
                 const slide = document.createElement('div');
                 slide.className = 'slider-slide';
+                // Leveys suhteessa N*100%-trackiin: jokainen dia = (100/N)%
+                slide.style.width = `${100 / sliderMedia.length}%`;
+                slide.style.minWidth = `${100 / sliderMedia.length}%`;
 
                 const isVideo = item.type === 'video' || isYouTubeUrl(item.url);
                 const ytId = isVideo ? extractYouTubeId(item.url) : null;
@@ -2038,7 +2045,8 @@
             currentSlideIndex = index;
 
             if (track) {
-                track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+                const pct = sliderMedia.length > 0 ? (100 / sliderMedia.length) : 100;
+                track.style.transform = `translateX(-${currentSlideIndex * pct}%)`;
             }
 
             // Laskuri
