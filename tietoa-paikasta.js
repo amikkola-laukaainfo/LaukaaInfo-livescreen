@@ -4224,9 +4224,9 @@ async function loadPlaceObservations(placeInput) {
                 ? new Date(o.created_at).toLocaleDateString('fi-FI')
                 : '';
             const photoHtml = o.photo_url
-                ? `<div style="width:100%;height:180px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
-                       <img src="${o.photo_url}" alt="${safeHtml(o.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
-                           onerror="this.parentElement.style.display='none'">
+                ? `<div style="width:100%;border-radius:10px;margin-bottom:0.75rem;background:#f8fafc;overflow:hidden;display:flex;justify-content:center;align-items:center;">
+                       <img src="${o.photo_url}" alt="${safeHtml(o.title)}" style="width:100%;height:auto;max-height:500px;object-fit:contain;border-radius:10px;display:block;margin:0 auto;" loading="lazy"
+                           onerror="this.closest('div').style.display='none'">
                    </div>`
                 : '';
             const srcBadge = o.external_source
@@ -4524,10 +4524,29 @@ async function loadWallPostsForPlace(placeData) {
             const attImg = p.post_attachments && p.post_attachments.find && p.post_attachments.find(a => a.type === 'image')?.url;
             const mediaImg = p.post_media && p.post_media.find && p.post_media.find(m => m.media_type === 'image')?.url;
             const imgUrl = attImg || mediaImg || p.image_url || null;
+
+            let cardTargetUrl = '';
+            let cardTargetText = '';
+            if (p.type === 'event') {
+                cardTargetUrl = `kohdekortti.html?id=${encodeURIComponent(p.id)}`;
+                cardTargetText = 'Avaa tapahtumakortti →';
+            } else if (p.type === 'offer') {
+                cardTargetUrl = `kohdekortti.html?offer=${encodeURIComponent(p.id)}`;
+                cardTargetText = 'Avaa tarjouskortti →';
+            } else if (p.type === 'notice' || p.type === 'feed' || p.type === 'pikkuilmoitus' || p.type === 'video') {
+                cardTargetUrl = `index.html?item=${encodeURIComponent(p.id)}&feed=open`;
+                cardTargetText = 'Lue ilmoitus →';
+            } else {
+                cardTargetUrl = `seina.html?post=${encodeURIComponent(p.id)}`;
+                cardTargetText = 'Lue julkaisu seinällä →';
+            }
+
             const imgHtml = imgUrl ? `
-                <div style="width:100%;height:160px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
-                    <img src="${imgUrl}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
-                         onerror="this.parentElement.style.display='none'">
+                <div style="width:100%;border-radius:10px;margin-bottom:0.75rem;background:#f8fafc;overflow:hidden;display:flex;justify-content:center;align-items:center;">
+                    ${cardTargetUrl ? `<a href="${cardTargetUrl}" style="display:block;width:100%;text-decoration:none;">` : ''}
+                    <img src="${imgUrl}" alt="${safeHtml(p.title || '')}" style="width:100%;height:auto;max-height:560px;object-fit:contain;border-radius:10px;display:block;margin:0 auto;" loading="lazy"
+                         onerror="this.closest('div').style.display='none'">
+                    ${cardTargetUrl ? `</a>` : ''}
                 </div>` : '';
 
             const pdf = p.post_attachments && p.post_attachments.find && p.post_attachments.find(a => a.type === 'pdf');
@@ -4541,6 +4560,17 @@ async function loadWallPostsForPlace(placeData) {
             const borderColor = isPinned ? '#f59e0b' : (isNew ? '#dc2626' : '#7c3aed');
             const bgColor = isPinned ? '#fffbeb' : (isNew ? '#fff5f5' : '#fff');
 
+            const titleHtml = cardTargetUrl
+                ? `<a href="${cardTargetUrl}" style="text-decoration:none;color:inherit;"><div style="font-weight:700;color:#1e293b;font-size:1.05rem;margin-bottom:0.3rem;" onmouseover="this.style.color='#7c3aed'" onmouseout="this.style.color='#1e293b'">${safeHtml(p.title || '')}</div></a>`
+                : `<div style="font-weight:700;color:#1e293b;font-size:1.05rem;margin-bottom:0.3rem;">${safeHtml(p.title || '')}</div>`;
+
+            const linkActionHtml = cardTargetUrl ? `
+                <div style="margin-top:0.75rem;padding-top:0.5rem;border-top:1px dashed #e2e8f0;display:flex;justify-content:flex-end;">
+                    <a href="${cardTargetUrl}" style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#7c3aed;font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                        ${cardTargetText}
+                    </a>
+                </div>` : '';
+
             return `
                 <div style="background:${bgColor};border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;border-left:3px solid ${borderColor};">
                     ${imgHtml}
@@ -4552,9 +4582,10 @@ async function loadWallPostsForPlace(placeData) {
                         ${placeHtml}
                         ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
                     </div>
-                    <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.3rem;">${safeHtml(p.title || '')}</div>
+                    ${titleHtml}
                     ${bodyText ? `<div style="font-size:0.88rem;color:#475569;line-height:1.5;">${safeHtml(bodyText)}${(p.description || p.content || '').length > 200 ? '...' : ''}</div>` : ''}
                     ${pdfHtml}
+                    ${linkActionHtml}
                 </div>`;
         }).join('');
 

@@ -1668,8 +1668,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
 
                     const photoHtml = enc.photo_url ? `
-                        <div style="width:100%;height:150px;overflow:hidden;border-radius:8px 8px 0 0;background:#e2e8f0;margin-bottom:0.75rem;">
-                            <img src="${enc.photo_url}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        <div style="width:100%;overflow:hidden;border-radius:8px 8px 0 0;background:#f8fafc;margin-bottom:0.75rem;display:flex;justify-content:center;align-items:center;">
+                            <img src="${enc.photo_url}" alt="" style="width:100%;height:auto;max-height:500px;object-fit:contain;display:block;margin:0 auto;" loading="lazy" onerror="this.closest('div').style.display='none'">
                         </div>` : '';
 
                     const pdfHtml = enc.pdf_url ? `
@@ -1712,7 +1712,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 return `
                     <a href="tietoa-paikasta.html?id=${encodeURIComponent(e.id)}" class="list-item-card">
-                        ${img ? `<img src="${img}" alt="${e.name}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;">` : ''}
+                        ${img ? `<div style="width:100%;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#f8fafc;display:flex;justify-content:center;align-items:center;"><img src="${img}" alt="${e.name}" style="width:100%;height:auto;max-height:480px;object-fit:contain;display:block;margin:0 auto;"></div>` : ''}
                         <div style="font-size:0.8rem;font-weight:700;color:#7c3aed;text-transform:uppercase;margin-bottom:0.35rem;">🎉 Tapahtuma${dateStr ? ' · ' + dateStr : ''}</div>
                         <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.1rem;color:var(--text-main);">${e.name}</h3>
                         ${venue ? `<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.4rem;">📍 ${venue}</div>` : ''}
@@ -2193,8 +2193,8 @@ async function loadContextualTheme(tagParam, placeId) {
                         ? new Date(obs.created_at).toLocaleDateString('fi-FI')
                         : (obs.year || '');
                     const photoHtml = obs.photo_url
-                        ? `<div style="width:100%;height:160px;overflow:hidden;border-radius:8px 8px 0 0;background:#e2e8f0;">
-                               <img src="${obs.photo_url}" alt="${safeHtml(obs.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        ? `<div style="width:100%;overflow:hidden;border-radius:8px 8px 0 0;background:#f8fafc;display:flex;justify-content:center;align-items:center;">
+                               <img src="${obs.photo_url}" alt="${safeHtml(obs.title)}" style="width:100%;height:auto;max-height:500px;object-fit:contain;display:block;margin:0 auto;" loading="lazy" onerror="this.closest('div').style.display='none'">
                            </div>`
                         : '';
                     const srcLabel = obs.external_source
@@ -2303,9 +2303,25 @@ async function loadContextualTheme(tagParam, placeId) {
                         const mediaImg = post.post_media && post.post_media.length > 0 ? post.post_media[0].url : null;
                         const photoUrl = attImg || mediaImg || post.image_url || null;
                         const pubName = post.publisher_name || post.author_name || post.org_name || 'LaukaaInfo';
+
+                        let linkTarget = `seina.html?post=${encodeURIComponent(post.id)}`;
+                        let linkText = 'Lue koko julkaisu seinällä →';
+                        if (post.type === 'event') {
+                            linkTarget = `kohdekortti.html?id=${encodeURIComponent(post.id)}`;
+                            linkText = 'Avaa tapahtumakortti →';
+                        } else if (post.type === 'offer') {
+                            linkTarget = `kohdekortti.html?offer=${encodeURIComponent(post.id)}`;
+                            linkText = 'Avaa tarjouskortti →';
+                        } else if (post.type === 'notice' || post.type === 'feed' || post.type === 'pikkuilmoitus') {
+                            linkTarget = `index.html?item=${encodeURIComponent(post.id)}&feed=open`;
+                            linkText = 'Lue ilmoitus →';
+                        }
+
                         const photoHtml = photoUrl
-                            ? `<div style="width:100%;height:150px;overflow:hidden;border-radius:10px 10px 0 0;background:#e2e8f0;">
-                                   <img src="${photoUrl}" alt="${safeHtml(post.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+                            ? `<div style="width:100%;overflow:hidden;border-radius:10px 10px 0 0;background:#f8fafc;display:flex;justify-content:center;align-items:center;">
+                                   <a href="${linkTarget}" style="display:block;width:100%;text-decoration:none;">
+                                       <img src="${photoUrl}" alt="${safeHtml(post.title)}" style="width:100%;height:auto;max-height:560px;object-fit:contain;display:block;margin:0 auto;" loading="lazy">
+                                   </a>
                                </div>`
                             : '';
                         return `
@@ -2316,12 +2332,14 @@ async function loadContextualTheme(tagParam, placeId) {
                                         <span>📢 ${safeHtml(pubName)}</span>
                                         ${dateStr ? `<span style="color:#94a3b8;font-weight:normal;">${dateStr}</span>` : ''}
                                     </div>
-                                    <h3 style="font-weight:800;color:#1e293b;font-size:1.05rem;margin:0;">${safeHtml(post.title || '')}</h3>
+                                    <h3 style="font-weight:800;color:#1e293b;font-size:1.05rem;margin:0;">
+                                        <a href="${linkTarget}" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='#7c3aed'" onmouseout="this.style.color='inherit'">${safeHtml(post.title || '')}</a>
+                                    </h3>
                                     ${post.content || post.description ? `<p style="font-size:0.88rem;color:#475569;line-height:1.5;margin:0;">${safeHtml((post.content || post.description || '').substring(0, 160))}${(post.content || post.description || '').length > 160 ? '...' : ''}</p>` : ''}
                                     <div style="margin-top:auto;padding-top:0.6rem;">
-                                        <a href="seina.html?post=${encodeURIComponent(post.id)}"
-                                           style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#7c3aed;font-weight:700;text-decoration:none;">
-                                            Lue koko julkaisu seinällä →
+                                        <a href="${linkTarget}"
+                                           style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#7c3aed;font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                                            ${linkText}
                                         </a>
                                     </div>
                                 </div>
