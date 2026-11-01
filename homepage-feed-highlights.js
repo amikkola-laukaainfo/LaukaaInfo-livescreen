@@ -82,16 +82,27 @@
 
     function isExpired(post) {
         const now = new Date();
-        if (post.type === 'event') {
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+        if (post.expires_at && new Date(post.expires_at) <= now) return true;
+
+        if (post.type === 'event' || post.event_end_at || post.event_start_at) {
             const end = post.event_end_at || post.event_start_at;
             if (end) {
                 const d = new Date(end);
-                if (!isNaN(d.getTime()) && now > d) return true;
+                if (!isNaN(d.getTime())) {
+                    if (typeof end === 'string' && !end.includes('T') && !end.includes(':')) {
+                        d.setHours(23, 59, 59, 999);
+                    }
+                    if (now.getTime() > d.getTime() + ONE_DAY_MS) return true;
+                }
             }
-        } else if (post.type === 'offer') {
+        } else if (post.type === 'offer' || post.offer_end_at) {
             if (post.offer_end_at) {
                 const d = new Date(post.offer_end_at);
-                if (!isNaN(d.getTime()) && now > d) return true;
+                if (!isNaN(d.getTime())) {
+                    d.setHours(23, 59, 59, 999);
+                    if (now.getTime() > d.getTime() + ONE_DAY_MS) return true;
+                }
             }
         }
         return false;

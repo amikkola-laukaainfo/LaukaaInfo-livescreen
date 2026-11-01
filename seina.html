@@ -1408,9 +1408,38 @@
         const now = new Date();
 
         // 8.1 Filter out expired posts
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 1 vrk puskuri aikataulun ohittumisen jälkeen
         let activePosts = allPosts.filter(p => {
-          if (p.expires_at && new Date(p.expires_at) <= now) return false;
           if (p.status && p.status !== 'published' && p.status !== 'APPROVED') return false;
+          if (p.expires_at && new Date(p.expires_at) <= now) return false;
+
+          // Tarkistetaan aikataululliset julkaisut (tapahtumat ja tarjoukset):
+          // Kun aikataulu ohittuu, julkaisu poistuu näkyvyydestä 1 vrk (24h) kuluttua
+          if (p.type === 'event' || p.event_end_at || p.event_start_at) {
+            const endStr = p.event_end_at || p.event_start_at;
+            if (endStr) {
+              const eventDate = new Date(endStr);
+              if (!isNaN(eventDate.getTime())) {
+                if (typeof endStr === 'string' && !endStr.includes('T') && !endStr.includes(':')) {
+                  eventDate.setHours(23, 59, 59, 999);
+                } else if (!p.event_end_at) {
+                  const endOfDay = new Date(eventDate);
+                  endOfDay.setHours(23, 59, 59, 999);
+                  if (endOfDay > eventDate) eventDate.setTime(endOfDay.getTime());
+                }
+                if (now.getTime() > eventDate.getTime() + ONE_DAY_MS) return false;
+              }
+            }
+          } else if (p.type === 'offer' || p.offer_end_at) {
+            if (p.offer_end_at) {
+              const offerDate = new Date(p.offer_end_at);
+              if (!isNaN(offerDate.getTime())) {
+                offerDate.setHours(23, 59, 59, 999);
+                if (now.getTime() > offerDate.getTime() + ONE_DAY_MS) return false;
+              }
+            }
+          }
+
           return true;
         });
 

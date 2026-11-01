@@ -1563,10 +1563,14 @@
             return entity;
         }
 
-        // Tarkista onko kohde vanhentunut
+        // Tarkista onko kohde vanhentunut (poistuu näkyvyydestä 1 vrk aikataulun ohittumisen jälkeen)
         function isItemExpired(item) {
             const now = new Date();
-            if (item.type === 'event') {
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 1 vrk puskuri aikataulun ohittumisen jälkeen
+
+            if (item.expires_at && new Date(item.expires_at) <= now) return true;
+
+            if (item.type === 'event' || item.event_start_at || item.event_end_at || item.event?.startDate) {
                 const dateStr = item.event?.endDate || item.event?.startDate || item.event_end_at || item.event_start_at;
                 if (!dateStr) return false;
 
@@ -1588,16 +1592,16 @@
                         if (endOfDay > eventDate) eventDate = endOfDay;
                     }
                 }
-                return !isNaN(eventDate.getTime()) && now > eventDate;
-            } else if (item.type === 'offer') {
+                return !isNaN(eventDate.getTime()) && now.getTime() > (eventDate.getTime() + ONE_DAY_MS);
+            } else if (item.type === 'offer' || item.offer_end_at || item.offer?.validUntil) {
                 const validUntil = item.offer?.validUntil || item.offer_end_at;
                 if (!validUntil) return false; // Toistaiseksi voimassa
                 const validDate = new Date(validUntil);
                 if (isNaN(validDate.getTime())) return false;
                 validDate.setHours(23, 59, 59, 999);
-                return now > validDate;
+                return now.getTime() > (validDate.getTime() + ONE_DAY_MS);
             }
-            return false; // Tiedotteet ja uutiset eivät vanhene automaattisesti
+            return false;
         }
 
         function showEmptyState(title, desc, isExpired = false) {

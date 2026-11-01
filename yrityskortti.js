@@ -1849,8 +1849,28 @@
             const linkBase = window.location.pathname.includes('/yritys/') ? '../' : '';
             const now = new Date();
 
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
             const cardsHtml = posts.map(p => {
-                const isExpired = p.expires_at && new Date(p.expires_at) < now;
+                let isExpired = p.expires_at && new Date(p.expires_at) < now;
+                if (!isExpired && (p.type === 'event' || p.event_end_at || p.event_start_at)) {
+                    const end = p.event_end_at || p.event_start_at;
+                    if (end) {
+                        const d = new Date(end);
+                        if (!isNaN(d.getTime())) {
+                            if (typeof end === 'string' && !end.includes('T') && !end.includes(':')) d.setHours(23, 59, 59, 999);
+                            if (now.getTime() > d.getTime() + ONE_DAY_MS) isExpired = true;
+                        }
+                    }
+                }
+                if (!isExpired && (p.type === 'offer' || p.offer_end_at)) {
+                    if (p.offer_end_at) {
+                        const d = new Date(p.offer_end_at);
+                        if (!isNaN(d.getTime())) {
+                            d.setHours(23, 59, 59, 999);
+                            if (now.getTime() > d.getTime() + ONE_DAY_MS) isExpired = true;
+                        }
+                    }
+                }
                 if (isExpired) return ''; // Ohita vanhentuneet
 
                 const emoji = typeEmoji[p.type] || '📌';
