@@ -1571,6 +1571,7 @@
                 images: uniqueMedia,
                 formUrl: formUrl,
                 tags: Array.isArray(p.tags) ? p.tags : [],
+                quick_facts: Array.isArray(p.tags) ? p.tags : (Array.isArray(p.quick_facts) ? p.quick_facts : []),
                 place_id: p.place_id || null,
                 visibility: p.visibility,
                 status: p.status,
