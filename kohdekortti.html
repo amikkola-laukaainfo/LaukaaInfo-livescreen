@@ -641,6 +641,12 @@
             font-size: 1.5rem;
             color: var(--primary-blue);
             margin-top: 2px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .info-row a.icon-link:hover .icon {
+            transform: scale(1.22);
+            color: #1d4ed8;
         }
 
         .info-row .details strong {
@@ -1187,7 +1193,9 @@
                     <h3>Yhteystiedot ja Sijainti</h3>
                     
                     <div class="info-row" id="row-address">
-                        <span class="icon iconify" data-icon="mdi:map-marker"></span>
+                        <a href="#" target="_blank" rel="noopener noreferrer" id="el-map-icon-link" class="icon-link" title="Avaa kartta Google Mapsissa" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <span class="icon iconify" data-icon="mdi:map-marker"></span>
+                        </a>
                         <div class="details">
                             <strong>Osoite</strong>
                             <span id="el-address">-</span>
@@ -1526,13 +1534,46 @@
                 created_at: p.created_at,
                 updated_at: p.updated_at,
                 source: 'posts',
-                location: {
-                    venue: p.event_location_detail || placeName || '',
-                    address: '',
-                    postalCode: '',
-                    municipality: placeMuni || 'Laukaa',
-                    mapUrl: ''
-                },
+                location: (() => {
+                    let addr = (p.address || '').trim();
+                    let postal = (p.postal_code || '').trim();
+                    let muni = (p.municipality || '').trim();
+                    let venue = '';
+                    let mapUrl = p.map_url || '';
+
+                    const locDetail = (p.event_location_detail || '').trim();
+                    if (locDetail) {
+                        const postalMatch = locDetail.match(/^(.*?)[,\s]+(\d{5})\s+([A-Za-zÄÖÅäöå\s-]+)$/);
+                        if (postalMatch) {
+                            const streetPart = postalMatch[1].replace(/^[,\s]+|[,\s]+$/g, '');
+                            if (!postal) postal = postalMatch[2];
+                            if (!muni) muni = postalMatch[3].trim();
+                            if (!addr) addr = streetPart;
+                        } else if (!addr) {
+                            if (locDetail.includes(',')) {
+                                const parts = locDetail.split(',').map(s => s.trim()).filter(Boolean);
+                                venue = parts[0];
+                                addr = parts.slice(1).join(', ');
+                            } else {
+                                addr = locDetail;
+                            }
+                        } else if (!venue && locDetail !== addr) {
+                            venue = locDetail;
+                        }
+                    }
+
+                    if (!muni) {
+                        muni = placeName || placeMuni || 'Laukaa';
+                    }
+
+                    return {
+                        venue: venue || (addr !== (p.event_location_detail || '') ? p.event_location_detail : '') || placeName || '',
+                        address: addr,
+                        postalCode: postal,
+                        municipality: muni,
+                        mapUrl: mapUrl
+                    };
+                })(),
                 contact: {
                     email: p.contact_email || '',
                     phone: p.contact_phone || '',
@@ -2120,12 +2161,41 @@
             renderSlider(entity.images || []);
 
             // Contact & Location
-            const addrText = `${entity.location?.address || ''}, ${entity.location?.postalCode || ''} ${entity.location?.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
+            const addrParts = [];
+            const venue = (entity.location?.venue || '').trim();
+            const street = (entity.location?.address || '').trim();
+            const postal = (entity.location?.postalCode || '').trim();
+            const muni = (entity.location?.municipality || '').trim();
+
+            if (venue) addrParts.push(venue);
+            if (street && street !== venue) addrParts.push(street);
+            const cityPart = [postal, muni].filter(Boolean).join(' ');
+            if (cityPart && cityPart !== street && cityPart !== venue) addrParts.push(cityPart);
+
+            const addrText = addrParts.join(', ');
             const addrEl = document.getElementById('el-address');
-            if (entity.location?.mapUrl) {
-                addrEl.innerHTML = `<a href="${entity.location.mapUrl}" target="_blank" style="color:var(--primary-blue); text-decoration:none; border-bottom:1px dashed var(--primary-blue); padding-bottom:2px;">${addrText || 'Katso kartalta &rarr;'}</a>`;
+
+            let mapUrl = entity.location?.mapUrl;
+            if (!mapUrl && (street || cityPart || venue)) {
+                const queryStr = [street || venue, cityPart].filter(Boolean).join(', ');
+                mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryStr + (queryStr.includes('Laukaa') || queryStr.includes('Lievestuore') ? '' : ', Laukaa'))}`;
+            }
+
+            const mapIconLink = document.getElementById('el-map-icon-link');
+            if (mapUrl) {
+                addrEl.innerHTML = `<a href="${mapUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--primary-blue); text-decoration:none; border-bottom:1px dashed var(--primary-blue); padding-bottom:2px;" title="Avaa Google Maps">${addrText || 'Katso kartalta &rarr;'} ↗</a>`;
+                if (mapIconLink) {
+                    mapIconLink.href = mapUrl;
+                    mapIconLink.style.display = 'inline-flex';
+                    mapIconLink.setAttribute('title', `Avaa Google Mapsissa: ${addrText}`);
+                    mapIconLink.style.cursor = 'pointer';
+                }
             } else {
-                addrEl.textContent = addrText || entity.location?.venue || '-';
+                addrEl.textContent = addrText || '-';
+                if (mapIconLink) {
+                    mapIconLink.removeAttribute('href');
+                    mapIconLink.style.cursor = 'default';
+                }
             }
             
             const em = document.getElementById('el-email');
@@ -2623,8 +2693,18 @@
             // Location
             let addrText = '';
             if (entity.location) {
-                addrText = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
-                if (!addrText && entity.location.venue) addrText = entity.location.venue;
+                const pParts = [];
+                const pVenue = (entity.location.venue || '').trim();
+                const pStreet = (entity.location.address || '').trim();
+                const pPostal = (entity.location.postalCode || '').trim();
+                const pMuni = (entity.location.municipality || '').trim();
+
+                if (pVenue) pParts.push(pVenue);
+                if (pStreet && pStreet !== pVenue) pParts.push(pStreet);
+                const pCity = [pPostal, pMuni].filter(Boolean).join(' ');
+                if (pCity && pCity !== pStreet && pCity !== pVenue) pParts.push(pCity);
+
+                addrText = pParts.join(', ');
             }
             const printAddrRow = document.getElementById('print-address-row');
             if (addrText) {
