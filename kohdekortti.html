@@ -2224,9 +2224,12 @@
             return unique.join(', ');
         }
 
+        let currentActiveEntity = null;
+
         function renderEntity(id) {
             const entity = kohteet.find(k => k.id === id || (k.target_id && k.target_id === id));
             if (!entity) return;
+            currentActiveEntity = entity;
 
             const emptyContainer = document.getElementById('empty-state-container');
             if (emptyContainer) emptyContainer.style.display = 'none';
@@ -2857,19 +2860,25 @@
         }
 
         function openMarketingTool(type) {
+            const selector = document.getElementById('demo-selector');
             const urlParams = new URLSearchParams(window.location.search);
-            let id = urlParams.get('id');
+            const activeId = currentActiveEntity ? (currentActiveEntity.id || currentActiveEntity.target_id) : (selector && selector.value ? selector.value : (urlParams.get('id') || urlParams.get('offer')));
 
-            // Fallback: jos ei URL-parametria, käytetään valittua kohdetta pudotusvalikosta
-            if (!id) {
-                const selector = document.getElementById('demo-selector');
-                if (selector && selector.value) {
-                    id = selector.value;
+            if (activeId || (currentActiveEntity && currentActiveEntity.name)) {
+                let url = 'https://www.mediazoo.fi/laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(activeId || '') + '&type=' + encodeURIComponent(type) + '&source=kohdekortti';
+                if (currentActiveEntity) {
+                    if (currentActiveEntity.name) url += '&name=' + encodeURIComponent(currentActiveEntity.name);
+                    if (currentActiveEntity.type) url += '&cat=' + encodeURIComponent(typeTranslations[currentActiveEntity.type] || currentActiveEntity.type);
+                    const desc = currentActiveEntity.shortDescription || currentActiveEntity.description || '';
+                    if (desc) url += '&desc=' + encodeURIComponent(desc.substring(0, 160));
+                    const img = (currentActiveEntity.images && currentActiveEntity.images[0]) || '';
+                    if (img) url += '&img=' + encodeURIComponent(img);
+                    const phone = currentActiveEntity.contact?.phone || '';
+                    if (phone && phone !== '-') url += '&phone=' + encodeURIComponent(phone);
+                    const web = currentActiveEntity.contact?.website || '';
+                    if (web && web !== '-') url += '&web=' + encodeURIComponent(web);
                 }
-            }
-
-            if (id) {
-                window.open('https://www.mediazoo.fi/laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(id) + '&type=' + encodeURIComponent(type), '_blank');
+                window.open(url, '_blank');
             } else {
                 alert('Kohteen ID ei ole tiedossa.');
             }
