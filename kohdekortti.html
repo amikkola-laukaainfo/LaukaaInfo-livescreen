@@ -1627,9 +1627,8 @@
                 opt.value = k.id;
                 const isSelected = selectedId && (k.id === selectedId || k.target_id === selectedId);
                 const expiredTag = (isSelected && isExpired) ? ' ⚠️ (Päättynyt)' : '';
-                const isDemo = !k.description || (k.id && (k.id.startsWith('kohde_00') || k.id.startsWith('offer_')));
                 const typeLabel = typeTranslations[k.type] || k.type;
-                opt.textContent = `${k.name} (${typeLabel}${isDemo ? ' · demo' : ''})${expiredTag}`;
+                opt.textContent = `${k.name} (${typeLabel})${expiredTag}`;
                 if (isSelected) opt.selected = true;
                 selector.appendChild(opt);
             });
