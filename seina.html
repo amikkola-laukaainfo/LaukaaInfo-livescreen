@@ -206,6 +206,9 @@
             Sisältö...
           </p>
 
+          <!-- Pinned Event / Offer Slot -->
+          <div id="pinnedEventSlot" class="pt-1"></div>
+
           <!-- Pinned Media Slot -->
           <div id="pinnedMediaSlot" class="space-y-2 pt-1"></div>
 
@@ -785,6 +788,8 @@
             </div>
             <h1 class="text-xl md:text-2xl font-black text-slate-900 leading-tight">${title}</h1>
             ${desc ? `<div class="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">${desc}</div>` : ''}
+            ${renderEventBoxHTML(post)}
+            ${renderOfferBoxHTML(post)}
             ${renderMediaHTML(post.post_media || [])}
             ${typeof renderPdfPillsHTML === 'function' ? renderPdfPillsHTML(post.post_attachments || []) : ''}
             ${renderLinksHTML(post.post_links || [], post.target_id, post.target_type, post.organization_id, post.type, post.id)}
@@ -1499,6 +1504,12 @@
             }
           }
 
+          // Pinned Event / Offer Slot
+          const eventSlot = document.getElementById('pinnedEventSlot');
+          if (eventSlot) {
+            eventSlot.innerHTML = renderEventBoxHTML(pinnedPost) + renderOfferBoxHTML(pinnedPost);
+          }
+
           // Pinned Media Slot
           const mediaSlot = document.getElementById('pinnedMediaSlot');
           if (mediaSlot) mediaSlot.innerHTML = renderMediaHTML(pinnedPost.post_media);
@@ -1571,33 +1582,10 @@
               ${p.content ? `<p class="text-xs md:text-sm text-slate-600 leading-relaxed whitespace-pre-line">${parseMarkdownLinks(p.content)}</p>` : ''}
 
               <!-- Tapahtuman dynaaminen osio -->
-              ${p.type === 'event' && p.event_start_at ? `
-                <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200/90 space-y-1.5 shadow-2xs">
-                  <div class="flex items-center gap-2 text-amber-950 font-bold text-xs">
-                    <span class="text-sm">📅</span>
-                    <span>${formatEventDate(p.event_start_at, p.event_end_at, p.event_all_day)}</span>
-                  </div>
-                  ${p.event_location_detail ? `<div class="text-xs text-amber-900 font-medium">📍 Tarkempi paikka: <strong>${escapeHtml(p.event_location_detail)}</strong></div>` : ''}
-                  ${p.event_registration_url ? `
-                    <div class="pt-1">
-                      <a href="${escapeHtml(p.event_registration_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs">
-                        🔗 Ilmoittaudu tästä →
-                      </a>
-                    </div>
-                  ` : ''}
-                </div>
-              ` : ''}
+              ${renderEventBoxHTML(p)}
 
               <!-- Tarjouksen dynaaminen osio -->
-              ${p.type === 'offer' && (p.offer_start_at || p.offer_terms) ? `
-                <div class="p-3.5 bg-emerald-50/80 rounded-2xl border border-emerald-200/90 space-y-1.5 shadow-2xs">
-                  <div class="flex items-center gap-2 text-emerald-950 font-bold text-xs">
-                    <span class="text-sm">🏷️</span>
-                    <span>${formatOfferDate(p.offer_start_at, p.offer_end_at)}</span>
-                  </div>
-                  ${p.offer_terms ? `<div class="text-xs text-emerald-900 font-medium leading-relaxed"><strong>Ehdot:</strong> ${escapeHtml(p.offer_terms)}</div>` : ''}
-                </div>
-              ` : ''}
+              ${renderOfferBoxHTML(p)}
 
               <!-- Rich Media Slot -->
               ${renderMediaHTML(p.post_media)}
@@ -1664,6 +1652,66 @@
         if (startStr && endStr) return `Voimassa ${startStr} – ${endStr}`;
         if (endStr) return `Voimassa ${endStr} asti`;
         return `Voimassa alkaen ${startStr}`;
+      }
+
+      function renderEventBoxHTML(p) {
+        if (!p || (p.type !== 'event' && !p.event_start_at)) return '';
+        if (!p.event_start_at && !p.event_location_detail && !p.event_registration_url) return '';
+
+        const dateHtml = p.event_start_at ? `
+          <div class="flex items-center gap-2 text-amber-950 font-bold text-xs">
+            <span class="text-sm">📅</span>
+            <span>${formatEventDate(p.event_start_at, p.event_end_at, p.event_all_day)}</span>
+          </div>
+        ` : '';
+
+        const locHtml = p.event_location_detail ? `
+          <div class="text-xs text-amber-900 font-medium">📍 Tarkempi paikka: <strong>${escapeHtml(p.event_location_detail)}</strong></div>
+        ` : '';
+
+        let regHtml = '';
+        const rawReg = (p.event_registration_url || '').trim();
+        if (rawReg) {
+          const isHttp = /^https?:\/\//i.test(rawReg);
+          if (isHttp) {
+            regHtml = `
+              <div class="pt-1">
+                <a href="${escapeHtml(rawReg)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs">
+                  🔗 Ilmoittaudu tästä →
+                </a>
+              </div>
+            `;
+          } else {
+            regHtml = `
+              <div class="text-xs text-amber-900 font-medium pt-0.5">
+                📝 Ilmoittautuminen: <strong>${escapeHtml(rawReg)}</strong>
+              </div>
+            `;
+          }
+        }
+
+        return `
+          <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200/90 space-y-1.5 shadow-2xs">
+            ${dateHtml}
+            ${locHtml}
+            ${regHtml}
+          </div>
+        `;
+      }
+
+      function renderOfferBoxHTML(p) {
+        if (!p || (p.type !== 'offer' && !p.offer_start_at && !p.offer_terms)) return '';
+        if (!p.offer_start_at && !p.offer_terms) return '';
+
+        return `
+          <div class="p-3.5 bg-emerald-50/80 rounded-2xl border border-emerald-200/90 space-y-1.5 shadow-2xs">
+            <div class="flex items-center gap-2 text-emerald-950 font-bold text-xs">
+              <span class="text-sm">🏷️</span>
+              <span>${formatOfferDate(p.offer_start_at, p.offer_end_at)}</span>
+            </div>
+            ${p.offer_terms ? `<div class="text-xs text-emerald-900 font-medium leading-relaxed"><strong>Ehdot:</strong> ${escapeHtml(p.offer_terms)}</div>` : ''}
+          </div>
+        `;
       }
 
       // HTML Escape
