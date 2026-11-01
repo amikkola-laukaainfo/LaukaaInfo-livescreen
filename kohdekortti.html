@@ -142,8 +142,296 @@
             height: 400px;
             border-radius: var(--border-radius);
             object-fit: contain;
-            background-color: #f8fafc; /* Lisätty taustaväri PNG-kuville, joiden reunoille jää tyhjää */
+            background-color: #f8fafc;
             box-shadow: var(--card-shadow);
+        }
+
+        /* Kuva-slideri (Carousel) */
+        .slider-wrapper {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background: #0b1120;
+            box-shadow: var(--premium-shadow);
+            user-select: none;
+        }
+
+        .slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.42s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            overflow: hidden;
+        }
+
+        .slider-slide-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(22px) brightness(0.42);
+            opacity: 0.85;
+            z-index: 1;
+            transform: scale(1.15);
+            pointer-events: none;
+        }
+
+        .slider-slide img.main-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: var(--secondary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .slider-btn:hover {
+            background: white;
+            color: var(--primary-blue);
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 6px 22px rgba(0, 86, 179, 0.35);
+        }
+
+        .slider-btn.prev { left: 16px; }
+        .slider-btn.next { right: 16px; }
+
+        .slider-counter {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .slider-dot.active {
+            width: 24px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+        }
+
+        .slider-thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding: 4px 2px 8px 2px;
+            scrollbar-width: thin;
+        }
+
+        .slider-thumb {
+            width: 76px;
+            height: 52px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2.5px solid transparent;
+            opacity: 0.6;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            background: #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .slider-thumb:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .slider-thumb.active {
+            border-color: var(--primary-blue);
+            opacity: 1;
+            transform: scale(1.04);
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.35);
+        }
+
+        .slider-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Osallistumiskaavake / Google Forms -kortti */
+        .form-banner-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+            border: 1.5px solid #c7d2fe;
+            border-radius: var(--border-radius);
+            padding: 2.2rem;
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-banner-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #4f46e5, #7c3aed);
+        }
+
+        .form-banner-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+        }
+
+        .form-icon-pill {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            flex-shrink: 0;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.28);
+        }
+
+        .form-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #4f46e5;
+            margin-bottom: 0.3rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .form-title {
+            margin: 0 0 0.4rem 0;
+            font-size: 1.45rem;
+            color: #1e1b4b;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .form-desc {
+            margin: 0;
+            color: #475569;
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        .btn-fill-form {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            padding: 0.95rem 1.8rem;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.98rem;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.32);
+            transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+            font-family: 'Outfit', sans-serif;
+            width: fit-content;
+        }
+
+        .btn-fill-form:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.42);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .slider-container {
+                height: 300px;
+            }
+            .form-banner-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .btn-fill-form {
+                width: 100%;
+            }
         }
 
         .content-box {
@@ -648,6 +936,25 @@
 
         <div class="card-grid">
             <div class="main-section">
+                <!-- Kuva-slideri / Tapahtuman esittelykuvat -->
+                <div id="entity-slider-wrapper" class="slider-wrapper" style="display: none;">
+                    <div id="entity-slider-container" class="slider-container">
+                        <div class="slider-track" id="slider-track"></div>
+                        <button type="button" class="slider-btn prev" id="slider-prev-btn" onclick="prevSlide()" aria-label="Edellinen kuva">
+                            <span class="iconify" data-icon="mdi:chevron-left"></span>
+                        </button>
+                        <button type="button" class="slider-btn next" id="slider-next-btn" onclick="nextSlide()" aria-label="Seuraava kuva">
+                            <span class="iconify" data-icon="mdi:chevron-right"></span>
+                        </button>
+                        <div class="slider-counter" id="slider-counter">
+                            <span class="iconify" data-icon="mdi:camera"></span>
+                            <span id="slider-counter-text">1 / 1</span>
+                        </div>
+                        <div class="slider-dots" id="slider-dots"></div>
+                    </div>
+                    <div class="slider-thumbnails" id="slider-thumbnails" style="display: none;"></div>
+                </div>
+
                 <img id="el-image" class="image-banner" src="" alt="Kohdekuva" style="display: none;"
                      onerror="this.style.display='none'">
                 <div id="el-image-placeholder" style="display:none; align-items:center; justify-content:center; flex-direction:column; gap:0.5rem; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:24px; height:200px; margin-bottom:1rem; color:#94a3b8;">
@@ -663,6 +970,24 @@
                     <div id="el-specific-fields" class="specific-fields" style="display: none;">
                         <!-- Tyyppikohtaiset kentät (esim. tapahtuma, yhdistys) renderöidään tänne -->
                     </div>
+                </div>
+
+                <!-- Osallistumiskaavake / Google Forms -->
+                <div id="form-box" class="form-banner-box" style="display: none;">
+                    <div class="form-banner-header">
+                        <div class="form-icon-pill">
+                            <span class="iconify" data-icon="mdi:clipboard-text-outline"></span>
+                        </div>
+                        <div class="form-text-block">
+                            <div class="form-tag">Osallistuminen &amp; Ilmoittautuminen</div>
+                            <h3 class="form-title">Täytä osallistumiskaavake verkossa</h3>
+                            <p class="form-desc">Tapahtumalle tai kohteelle on avattu sähköinen ilmoittautumislomake (esim. Google Forms). Täytä tietosi mukaan päästäksesi osallistumaan.</p>
+                        </div>
+                    </div>
+                    <a href="#" target="_blank" id="btn-open-form" class="btn-fill-form">
+                        <span class="iconify" data-icon="mdi:open-in-new"></span>
+                        Täytä osallistumiskaavake tästä &rarr;
+                    </a>
                 </div>
 
                 <!-- Feed/Tiedotteet -->
@@ -844,6 +1169,21 @@
         // 1. Ensisijainen haku posts.id (UUID)
         async function fetchPostByUuid(uuid) {
             if (!window.LaukaaSupabase || !uuid) return null;
+            try {
+                const { data, error } = await window.LaukaaSupabase
+                    .from('posts')
+                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                    .eq('id', uuid)
+                    .in('status', ['published', 'APPROVED'])
+                    .in('visibility', ['public', 'link'])
+                    .maybeSingle();
+
+                if (!error && data) return data;
+            } catch (e) {
+                console.warn('post_media-haku UUID-haussa epäonnistui, kokeillaan perushakua:', e);
+            }
+
+            // Fallback ilman liitetauluja
             const { data, error } = await window.LaukaaSupabase
                 .from('posts')
                 .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
@@ -862,6 +1202,20 @@
         // 2. Toissijainen haku posts.target_id
         async function fetchPostByTargetId(targetId) {
             if (!window.LaukaaSupabase || !targetId) return null;
+            try {
+                const { data, error } = await window.LaukaaSupabase
+                    .from('posts')
+                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                    .eq('target_id', targetId)
+                    .in('status', ['published', 'APPROVED'])
+                    .in('visibility', ['public', 'link'])
+                    .order('updated_at', { ascending: false });
+
+                if (!error && data && data.length > 0) return data[0];
+            } catch (e) {
+                console.warn('post_media-haku target_id-haussa epäonnistui, kokeillaan perushakua:', e);
+            }
+
             const { data, error } = await window.LaukaaSupabase
                 .from('posts')
                 .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
@@ -910,6 +1264,37 @@
             const placeName = place ? place.name : '';
             const placeMuni = place ? place.municipality : '';
 
+            // Kerätään kaikki esittelykuvat (max 5 kpl)
+            let images = [];
+            if (Array.isArray(p.images) && p.images.length > 0) {
+                images = p.images.filter(Boolean);
+            } else if (p.post_media && Array.isArray(p.post_media) && p.post_media.length > 0) {
+                images = p.post_media.map(m => m.url).filter(Boolean);
+            }
+
+            if (images.length === 0 && p.image_url) {
+                const raw = p.image_url.trim();
+                if (raw.startsWith('[') && raw.endsWith(']')) {
+                    try { images = JSON.parse(raw); } catch (e) { images = [raw]; }
+                } else if (raw.includes(',')) {
+                    images = raw.split(',').map(s => s.trim()).filter(Boolean);
+                } else {
+                    images = [raw];
+                }
+            }
+            // Varmistetaan uniikit URLit ja max 5 kpl
+            images = Array.from(new Set(images)).slice(0, 5);
+
+            // Osallistumiskaavake / Google Forms URL
+            let formUrl = p.form_url || p.registration_form_url || p.google_forms_url || (p.event && p.event.formUrl) || '';
+            if (!formUrl && p.post_links && Array.isArray(p.post_links)) {
+                const fl = p.post_links.find(l => l.link_type === 'form' || (l.url && (l.url.includes('forms.gle') || l.url.includes('docs.google.com/forms'))));
+                if (fl) formUrl = fl.url;
+            }
+            if (!formUrl && p.event_registration_url && (p.event_registration_url.includes('forms.gle') || p.event_registration_url.includes('docs.google.com/forms'))) {
+                formUrl = p.event_registration_url;
+            }
+
             const entity = {
                 id: p.id,
                 target_id: p.target_id || null,
@@ -918,7 +1303,8 @@
                 name: p.title || 'Nimetön kohde',
                 shortDescription: p.description || '',
                 description: p.content || p.description || '',
-                images: p.image_url ? [p.image_url] : [],
+                images: images,
+                formUrl: formUrl,
                 tags: Array.isArray(p.tags) ? p.tags : [],
                 place_id: p.place_id || null,
                 visibility: p.visibility,
@@ -949,7 +1335,8 @@
                     allDay: !!p.event_all_day,
                     venue: p.event_location_detail || placeName || '',
                     organizer: p.publisher_name || '',
-                    ticketUrl: p.event_registration_url || ''
+                    ticketUrl: p.event_registration_url || '',
+                    formUrl: formUrl
                 };
             } else if (isOffer) {
                 entity.offer = {
@@ -1064,7 +1451,7 @@
                 try {
                     const { data, error } = await window.LaukaaSupabase
                         .from('posts')
-                        .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
+                        .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
                         .in('type', ['event', 'offer', 'announcement', 'news'])
                         .in('status', ['published', 'APPROVED'])
                         .eq('visibility', 'public')
@@ -1232,6 +1619,170 @@
             }
         }
 
+        // --- Kuva-slider (max 5 esittelykuvaa) ---
+        let currentSlideIndex = 0;
+        let sliderImages = [];
+        let sliderTouchStartX = 0;
+        let sliderTouchEndX = 0;
+
+        function renderSlider(images) {
+            const wrapper = document.getElementById('entity-slider-wrapper');
+            const track = document.getElementById('slider-track');
+            const prevBtn = document.getElementById('slider-prev-btn');
+            const nextBtn = document.getElementById('slider-next-btn');
+            const counter = document.getElementById('slider-counter');
+            const counterText = document.getElementById('slider-counter-text');
+            const dots = document.getElementById('slider-dots');
+            const thumbnails = document.getElementById('slider-thumbnails');
+            const fallbackImg = document.getElementById('el-image');
+            const placeholder = document.getElementById('el-image-placeholder');
+
+            // Siivotaan vanhat tilat
+            if (fallbackImg) fallbackImg.style.display = 'none';
+            if (placeholder) placeholder.style.display = 'none';
+            if (!track) return;
+            track.innerHTML = '';
+            if (dots) dots.innerHTML = '';
+            if (thumbnails) thumbnails.innerHTML = '';
+
+            // Sanitoidaan ja normalisoidaan kuvat (max 5)
+            sliderImages = (images || [])
+                .map(src => {
+                    if (typeof src !== 'string') return '';
+                    let s = src.trim();
+                    if (s.startsWith('http://')) s = 'https://' + s.slice(7);
+                    return s;
+                })
+                .filter(Boolean)
+                .slice(0, 5);
+
+            if (sliderImages.length === 0) {
+                if (wrapper) wrapper.style.display = 'none';
+                return;
+            }
+
+            if (wrapper) wrapper.style.display = 'block';
+            currentSlideIndex = 0;
+
+            // Luodaan diat
+            sliderImages.forEach((imgSrc, idx) => {
+                const slide = document.createElement('div');
+                slide.className = 'slider-slide';
+
+                // Sumennettu tausta
+                const bg = document.createElement('div');
+                bg.className = 'slider-slide-bg';
+                bg.style.backgroundImage = `url('${imgSrc}')`;
+
+                // Etualan pääkuva
+                const img = document.createElement('img');
+                img.className = 'main-img';
+                img.src = imgSrc;
+                img.alt = `Esittelykuva ${idx + 1}`;
+                img.loading = idx === 0 ? 'eager' : 'lazy';
+                img.onerror = () => {
+                    img.style.display = 'none';
+                };
+
+                slide.appendChild(bg);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                // Täplä / Dot
+                if (dots) {
+                    const dot = document.createElement('div');
+                    dot.className = `slider-dot ${idx === 0 ? 'active' : ''}`;
+                    dot.onclick = () => goToSlide(idx);
+                    dot.setAttribute('title', `Kuva ${idx + 1}`);
+                    dots.appendChild(dot);
+                }
+
+                // Pikkukuva / Thumbnail
+                if (thumbnails) {
+                    const thumb = document.createElement('img');
+                    thumb.className = `slider-thumb ${idx === 0 ? 'active' : ''}`;
+                    thumb.src = imgSrc;
+                    thumb.alt = `Pikkukuva ${idx + 1}`;
+                    thumb.onclick = () => goToSlide(idx);
+                    thumbnails.appendChild(thumb);
+                }
+            });
+
+            // Yksi kuva vs useampi kuva
+            if (sliderImages.length > 1) {
+                if (prevBtn) prevBtn.style.display = 'flex';
+                if (nextBtn) nextBtn.style.display = 'flex';
+                if (counter) counter.style.display = 'inline-flex';
+                if (dots) dots.style.display = 'flex';
+                if (thumbnails) thumbnails.style.display = 'flex';
+            } else {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                if (counter) counter.style.display = 'none';
+                if (dots) dots.style.display = 'none';
+                if (thumbnails) thumbnails.style.display = 'none';
+            }
+
+            goToSlide(0);
+
+            // Kosketuspyyhkäisy (swipe) mobiililaitteille
+            const container = document.getElementById('entity-slider-container');
+            if (container && !container._touchAttached) {
+                container._touchAttached = true;
+                container.addEventListener('touchstart', (e) => {
+                    sliderTouchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+                container.addEventListener('touchend', (e) => {
+                    sliderTouchEndX = e.changedTouches[0].screenX;
+                    const diff = sliderTouchStartX - sliderTouchEndX;
+                    if (Math.abs(diff) > 40) {
+                        if (diff > 0) nextSlide();
+                        else prevSlide();
+                    }
+                }, { passive: true });
+            }
+        }
+
+        function goToSlide(index) {
+            if (!sliderImages.length) return;
+            if (index < 0) index = sliderImages.length - 1;
+            if (index >= sliderImages.length) index = 0;
+            currentSlideIndex = index;
+
+            const track = document.getElementById('slider-track');
+            if (track) {
+                track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            }
+
+            // Laskuri
+            const counterText = document.getElementById('slider-counter-text');
+            if (counterText) {
+                counterText.textContent = `${currentSlideIndex + 1} / ${sliderImages.length}`;
+            }
+
+            // Täpät
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlideIndex);
+            });
+
+            // Pikkukuvat
+            const thumbs = document.querySelectorAll('.slider-thumb');
+            thumbs.forEach((th, idx) => {
+                th.classList.toggle('active', idx === currentSlideIndex);
+            });
+        }
+
+        function nextSlide() {
+            if (sliderImages.length <= 1) return;
+            goToSlide(currentSlideIndex + 1);
+        }
+
+        function prevSlide() {
+            if (sliderImages.length <= 1) return;
+            goToSlide(currentSlideIndex - 1);
+        }
+
         function renderEntity(id) {
             const entity = kohteet.find(k => k.id === id || (k.target_id && k.target_id === id));
             if (!entity) return;
@@ -1247,30 +1798,8 @@
             document.getElementById('el-shortdesc').textContent = entity.shortDescription || '';
             document.getElementById('el-desc').textContent = entity.description || entity.shortDescription || '';
 
-            // Image — auto-upgrade http → https, onerror-fallback placeholder
-            const imgEl = document.getElementById('el-image');
-            if (entity.images && entity.images.length > 0 && entity.images[0]) {
-                let imgSrc = entity.images[0];
-                if (imgSrc.startsWith('http://')) imgSrc = 'https://' + imgSrc.slice(7);
-                imgEl.src = imgSrc;
-                imgEl.style.display = 'block';
-                imgEl.onerror = () => {
-                    imgEl.style.display = 'none';
-                    const placeholder = document.getElementById('el-image-placeholder');
-                    if (placeholder) {
-                        placeholder.style.display = 'flex';
-                        placeholder.querySelector('.img-url').textContent = entity.images[0];
-                    }
-                };
-                imgEl.onload = () => {
-                    const placeholder = document.getElementById('el-image-placeholder');
-                    if (placeholder) placeholder.style.display = 'none';
-                };
-            } else {
-                imgEl.style.display = 'none';
-                const placeholder = document.getElementById('el-image-placeholder');
-                if (placeholder) placeholder.style.display = 'none';
-            }
+            // Slider ja kuvat (max 5 kuvaa sliderinä)
+            renderSlider(entity.images || []);
 
             // Contact & Location
             const addrText = `${entity.location?.address || ''}, ${entity.location?.postalCode || ''} ${entity.location?.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
@@ -1339,12 +1868,27 @@
                 } else if (s) {
                     schedHtml = `<div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric', timeZone: 'Europe/Helsinki'})}</div>`;
                 }
-                if (entity.event.ticketUrl) {
-                    schedHtml += `<a href="${entity.event.ticketUrl}" target="_blank" style="display:inline-block;margin-top:1rem;padding:0.5rem 1rem;background:var(--primary-blue);color:white;border-radius:8px;font-weight:700;font-size:0.85rem;text-decoration:none;">🎟 Liput / Ilmoittaudu</a>`;
+
+                // Sivupalkin lipunmyynti- ja osallistumiskaavake-napit
+                if (entity.formUrl) {
+                    schedHtml += `<a href="${entity.formUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:1rem;padding:0.65rem 1rem;background:linear-gradient(135deg, #4f46e5, #7c3aed);color:white;border-radius:10px;font-weight:700;font-size:0.88rem;text-decoration:none;box-shadow:0 3px 10px rgba(79,70,229,0.3);">📋 Täytä osallistumiskaavake &rarr;</a>`;
+                }
+                if (entity.event.ticketUrl && entity.event.ticketUrl !== entity.formUrl) {
+                    schedHtml += `<a href="${entity.event.ticketUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:0.6rem;padding:0.55rem 1rem;background:var(--primary-blue);color:white;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">🎟 Liput / Ilmoittaudu</a>`;
                 }
                 schedEl.innerHTML = schedHtml;
             } else {
                 schedPanel.style.display = 'none';
+            }
+
+            // Osallistumiskaavake / Google Forms -kortti pääsisältöalueella
+            const formBox = document.getElementById('form-box');
+            const formBtn = document.getElementById('btn-open-form');
+            if (entity.formUrl) {
+                if (formBox) formBox.style.display = 'flex';
+                if (formBtn) formBtn.href = entity.formUrl;
+            } else {
+                if (formBox) formBox.style.display = 'none';
             }
 
             // Tags
