@@ -792,7 +792,9 @@ function getPlaceName(placeId) {
 function getItemDestination(item) {
   if (!item) return { url: 'kohdekortit.html', label: '📇 Kortti', title: 'Avaa kohdekortti', type: 'kohde' };
 
-  // 1. Feed-julkaisut: ohjataan suoraan feediin kyseiseen julkaisuun
+  const id = item.id || item.target_id;
+
+  // 1. Feed-julkaisut: säilyvät feedissä ja ohjataan feed-julkaisuun
   const isFeed = item.type === 'notice' || 
                  item.type === 'feed' || 
                  item.type === 'pikkuilmoitus' || 
@@ -801,7 +803,6 @@ function getItemDestination(item) {
                  item.source === 'feed';
 
   if (isFeed) {
-    const id = item.id || item.target_id;
     return {
       type: 'feed',
       url: id ? `index.html?item=${encodeURIComponent(id)}&feed=open` : 'index.html?feed=open',
@@ -810,33 +811,15 @@ function getItemDestination(item) {
     };
   }
 
-  // 2. Tapahtumat ja perinteiset kohdekortit: ohjataan kohdekortti.html -sivulle
-  const isEvent = item.type === 'event' || item.target_type === 'event';
-  const isClassicKohde = item.source === 'json_fallback' || 
-                         ['service', 'association', 'route', 'story', 'place', 'kohde'].includes(item.type);
-
-  if (isEvent || (isClassicKohde && item.type !== 'announcement' && item.type !== 'news')) {
-    const id = item.id || item.target_id;
-    return {
-      type: 'event',
-      url: id ? `kohdekortti.html?id=${encodeURIComponent(id)}` : 'kohdekortti.html',
-      label: '📇 Kortti',
-      title: 'Avaa kohdekortti'
-    };
-  }
-
-  // 3. Seinäjulkaisut (announcement / tiedote, news / uutinen, wall jne.):
-  // ohjataan seina.html sivulle kyseiseen julkaisuun
+  // 2. Seinäjulkaisut: säilyvät seinällä ja ohjataan seina.html-sivulle (tiedotteet, uutiset)
   const isSeina = item.type === 'announcement' || 
                   item.type === 'news' || 
                   item.type === 'wall' || 
                   item.target_type === 'wall' || 
                   item.target_type === 'project' ||
-                  Boolean(item.organization_id) ||
-                  item.source === 'posts';
+                  item.source === 'wall';
 
   if (isSeina) {
-    const id = item.id || item.target_id;
     return {
       type: 'seina',
       url: id ? `seina.html?post=${encodeURIComponent(id)}` : 'seina.html',
@@ -845,8 +828,18 @@ function getItemDestination(item) {
     };
   }
 
-  // Oletus
-  const id = item.id || item.target_id;
+  // 3. Tarjoukset: ohjataan tarjouskorttiin kohdekortti.html-sivulla
+  const isOffer = item.type === 'offer' || item.target_type === 'offer';
+  if (isOffer) {
+    return {
+      type: 'offer',
+      url: id ? `kohdekortti.html?offer=${encodeURIComponent(id)}` : 'kohdekortti.html',
+      label: '🎁 Tarjous',
+      title: 'Avaa tarjouskortti'
+    };
+  }
+
+  // 4. Tapahtumat ja kohteet: ohjataan kohdekortti.html-sivulle
   return {
     type: 'kohde',
     url: id ? `kohdekortti.html?id=${encodeURIComponent(id)}` : 'kohdekortti.html',

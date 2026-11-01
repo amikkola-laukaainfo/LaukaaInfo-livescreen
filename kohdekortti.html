@@ -1655,18 +1655,20 @@
         }
 
         // Ladataan aktiiviset kohteet valintalistaa ja yleisnäkymää varten
+        // HUOM: Seinäjulkaisut (announcement, news, wall) ja feed-postit säilyvät omilla alustoillaan
+        // eikä niistä luoda kohdekortteja.
         async function loadAllFallbackAndActiveItems() {
             let items = [];
             const postsUuids = new Set();
             const postsTargetIds = new Set();
 
-            // 1. Hae julkiset julkaistut julkaisut Supabasesta
+            // 1. Hae julkiset julkaistut kohteet ja tarjoukset Supabasesta
             if (window.LaukaaSupabase) {
                 try {
                     const { data, error } = await window.LaukaaSupabase
                         .from('posts')
                         .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
-                        .in('type', ['event', 'offer', 'announcement', 'news'])
+                        .in('type', ['event', 'offer'])
                         .in('status', ['published', 'APPROVED'])
                         .eq('visibility', 'public')
                         .order('created_at', { ascending: false })
@@ -1674,6 +1676,7 @@
 
                     if (!error && Array.isArray(data)) {
                         data.forEach(p => {
+                            if (p.target_type === 'wall' || p.target_type === 'feed' || p.target_type === 'project') return;
                             postsUuids.add(p.id);
                             if (p.target_id) postsTargetIds.add(p.target_id);
                             items.push(mapPostToEntity(p, null));
@@ -1695,6 +1698,7 @@
                 results.forEach(res => {
                     if (res.status === 'fulfilled' && Array.isArray(res.value)) {
                         res.value.forEach(j => {
+                            if (j.type === 'announcement' || j.type === 'news' || j.type === 'wall' || j.type === 'feed' || j.type === 'notice') return;
                             if (j.supabase_post_id && postsUuids.has(j.supabase_post_id)) return;
                             if (j.id && (postsTargetIds.has(j.id) || postsUuids.has(j.id))) return;
                             items.push({ ...j, source: 'json_fallback' });
@@ -1722,11 +1726,26 @@
                 let isExpiredTarget = false;
 
                 if (targetId) {
+                    // Apufunktio tarkistamaan, kuuluuko julkaisu seinälle tai feediin
+                    function handleNonEntityRedirect(p) {
+                        if (!p) return false;
+                        if (p.type === 'announcement' || p.type === 'news' || p.type === 'wall' || p.target_type === 'wall' || p.target_type === 'project') {
+                            window.location.replace(`seina.html?post=${encodeURIComponent(p.id)}`);
+                            return true;
+                        }
+                        if (p.type === 'notice' || p.type === 'feed' || p.type === 'pikkuilmoitus' || p.type === 'video' || p.target_type === 'feed') {
+                            window.location.replace(`index.html?item=${encodeURIComponent(p.id)}&feed=open`);
+                            return true;
+                        }
+                        return false;
+                    }
+
                     // 1. Ensisijainen haku posts.id (UUID)
                     if (isUuid(targetId)) {
                         try {
                             const post = await fetchPostByUuid(targetId);
                             if (post) {
+                                if (handleNonEntityRedirect(post)) return;
                                 const place = post.place_id ? await fetchPlace(post.place_id) : null;
                                 targetEntity = mapPostToEntity(post, place);
                             }
@@ -1740,6 +1759,7 @@
                         try {
                             const post = await fetchPostByTargetId(targetId);
                             if (post) {
+                                if (handleNonEntityRedirect(post)) return;
                                 const place = post.place_id ? await fetchPlace(post.place_id) : null;
                                 targetEntity = mapPostToEntity(post, place);
                             }
