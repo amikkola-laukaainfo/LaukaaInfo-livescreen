@@ -326,6 +326,129 @@
             object-fit: cover;
         }
 
+        /* Kuvan suurennos (Lightbox) */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(5, 10, 25, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .lightbox-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-img-wrap {
+            position: relative;
+            max-width: 94vw;
+            max-height: 92vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.88);
+            transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .lightbox-overlay.open .lightbox-img-wrap {
+            transform: scale(1);
+        }
+
+        .lightbox-img-wrap img {
+            max-width: 94vw;
+            max-height: 90vh;
+            border-radius: 18px;
+            object-fit: contain;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75);
+            user-select: none;
+            display: block;
+        }
+
+        .lightbox-close-btn {
+            position: fixed;
+            top: 18px;
+            right: 22px;
+            z-index: 10001;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .lightbox-close-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .lightbox-nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10001;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .lightbox-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .lightbox-nav-btn.lb-prev { left: 16px; }
+        .lightbox-nav-btn.lb-next { right: 16px; }
+
+        .lightbox-counter {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10001;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* Klikkausvihje slider-kuvilla */
+        .slider-slide img.main-img {
+            cursor: zoom-in;
+        }
+
         /* Osallistumiskaavake / Google Forms -kortti */
         .form-banner-box {
             background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
@@ -1680,9 +1803,12 @@
                 img.src = imgSrc;
                 img.alt = `Esittelykuva ${idx + 1}`;
                 img.loading = idx === 0 ? 'eager' : 'lazy';
+                img.title = 'Napauta suurentaaksesi';
                 img.onerror = () => {
                     img.style.display = 'none';
                 };
+                // Avaa lightbox klikkaamalla
+                img.onclick = () => openLightbox(sliderImages, idx);
 
                 slide.appendChild(bg);
                 slide.appendChild(img);
@@ -2407,6 +2533,129 @@
         window.addEventListener('DOMContentLoaded', init);
     </script>
     <script src="kohtaamiset.js?v=20260708"></script>
+
+    <!-- Lightbox / Kuvan koko ruudun suurennos -->
+    <div id="lightbox-overlay" class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Kuvan suurennos">
+        <div class="lightbox-img-wrap" id="lightbox-img-wrap">
+            <img id="lightbox-img" src="" alt="Suurennettu kuva" />
+        </div>
+        <button type="button" class="lightbox-close-btn" id="lightbox-close" aria-label="Sulje">
+            <span class="iconify" data-icon="mdi:close"></span>
+        </button>
+        <button type="button" class="lightbox-nav-btn lb-prev" id="lightbox-prev" aria-label="Edellinen kuva">
+            <span class="iconify" data-icon="mdi:chevron-left"></span>
+        </button>
+        <button type="button" class="lightbox-nav-btn lb-next" id="lightbox-next" aria-label="Seuraava kuva">
+            <span class="iconify" data-icon="mdi:chevron-right"></span>
+        </button>
+        <div class="lightbox-counter" id="lightbox-counter" style="display:none"></div>
+    </div>
+
+    <script>
+        // --- Lightbox ---
+        let lbIndex = 0;
+        let lbImages = [];
+        let lbTouchStartX = 0;
+
+        function openLightbox(images, startIndex) {
+            lbImages = images || [];
+            lbIndex = startIndex || 0;
+            if (!lbImages.length) return;
+
+            const overlay = document.getElementById('lightbox-overlay');
+            const img = document.getElementById('lightbox-img');
+            const prevBtn = document.getElementById('lightbox-prev');
+            const nextBtn = document.getElementById('lightbox-next');
+            const counter = document.getElementById('lightbox-counter');
+
+            img.src = lbImages[lbIndex];
+            img.alt = `Kuva ${lbIndex + 1} / ${lbImages.length}`;
+
+            // Näytä navigointi vain jos useita kuvia
+            if (lbImages.length > 1) {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+                counter.style.display = 'block';
+                counter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+            } else {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                counter.style.display = 'none';
+            }
+
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            // Sulkeminen: Esc-näppäin
+            document.addEventListener('keydown', lbKeyHandler);
+        }
+
+        function closeLightbox() {
+            const overlay = document.getElementById('lightbox-overlay');
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', lbKeyHandler);
+        }
+
+        function lbGoTo(index) {
+            if (!lbImages.length) return;
+            if (index < 0) index = lbImages.length - 1;
+            if (index >= lbImages.length) index = 0;
+            lbIndex = index;
+
+            const img = document.getElementById('lightbox-img');
+            const wrap = document.getElementById('lightbox-img-wrap');
+            const counter = document.getElementById('lightbox-counter');
+
+            // Pieni fade-efekti kuvanvaihdossa
+            wrap.style.opacity = '0';
+            wrap.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                img.src = lbImages[lbIndex];
+                img.alt = `Kuva ${lbIndex + 1} / ${lbImages.length}`;
+                if (counter) counter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+                wrap.style.opacity = '1';
+                wrap.style.transform = 'scale(1)';
+            }, 130);
+        }
+
+        function lbKeyHandler(e) {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') lbGoTo(lbIndex + 1);
+            if (e.key === 'ArrowLeft')  lbGoTo(lbIndex - 1);
+        }
+
+        // Event-kuuntelijat lightboxille
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('lightbox-overlay');
+            const wrap = document.getElementById('lightbox-img-wrap');
+
+            // Sulje napauttamalla tummaa taustaa (ei kuvaa)
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeLightbox();
+            });
+
+            document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+            document.getElementById('lightbox-prev').addEventListener('click', () => lbGoTo(lbIndex - 1));
+            document.getElementById('lightbox-next').addEventListener('click', () => lbGoTo(lbIndex + 1));
+
+            // Pyyhkäisy kosketuslaitteella lightboxissa
+            wrap.addEventListener('touchstart', (e) => {
+                lbTouchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            wrap.addEventListener('touchend', (e) => {
+                const diff = lbTouchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) lbGoTo(lbIndex + 1);
+                    else lbGoTo(lbIndex - 1);
+                }
+            }, { passive: true });
+
+            // Transition-tyylitys
+            wrap.style.transition = 'opacity 0.13s ease, transform 0.13s ease';
+        });
+    </script>
+
 </body>
 </html>
 
