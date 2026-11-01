@@ -2871,7 +2871,8 @@
                     if (currentActiveEntity.type) url += '&cat=' + encodeURIComponent(typeTranslations[currentActiveEntity.type] || currentActiveEntity.type);
                     const desc = currentActiveEntity.shortDescription || currentActiveEntity.description || '';
                     if (desc) url += '&desc=' + encodeURIComponent(desc.substring(0, 160));
-                    const img = (currentActiveEntity.images && currentActiveEntity.images[0]) || '';
+                    const rawMedia = (currentActiveEntity.images && currentActiveEntity.images.length > 0) ? currentActiveEntity.images[0] : null;
+                    const img = (typeof rawMedia === 'string') ? rawMedia : (rawMedia?.url || '');
                     if (img) url += '&img=' + encodeURIComponent(img);
                     const phone = currentActiveEntity.contact?.phone || '';
                     if (phone && phone !== '-') url += '&phone=' + encodeURIComponent(phone);

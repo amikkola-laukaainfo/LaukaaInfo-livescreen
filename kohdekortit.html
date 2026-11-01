@@ -888,7 +888,8 @@ function buildCard(item) {
   const dest = getItemDestination(item);
 
   const actionBtns = [];
-  if (ticketUrl) actionBtns.push(`<a href="${ticketUrl}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
+  const isTicketLink = ticketUrl && typeof ticketUrl === 'string' && ticketUrl.trim().toLowerCase().startsWith('http');
+  if (isTicketLink) actionBtns.push(`<a href="${ticketUrl.trim()}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
   if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 www</a>`);
   if (dest && (item.id || item.target_id)) {
     actionBtns.push(`<a href="${dest.url}" class="btn-card btn-card-secondary" title="${dest.title}">${dest.label}</a>`);
