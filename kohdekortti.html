@@ -1396,7 +1396,7 @@
                     .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
                     .eq('id', uuid)
                     .in('status', ['published', 'APPROVED'])
-                    .in('visibility', ['public', 'link'])
+                    .in('visibility', ['public', 'link', 'unlisted'])
                     .maybeSingle();
 
                 if (!error && data) return data;
@@ -1410,7 +1410,7 @@
                 .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
                 .eq('id', uuid)
                 .in('status', ['published', 'APPROVED'])
-                .in('visibility', ['public', 'link'])
+                .in('visibility', ['public', 'link', 'unlisted'])
                 .maybeSingle();
 
             if (error) {
@@ -1429,7 +1429,7 @@
                     .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
                     .eq('target_id', targetId)
                     .in('status', ['published', 'APPROVED'])
-                    .in('visibility', ['public', 'link'])
+                    .in('visibility', ['public', 'link', 'unlisted'])
                     .order('updated_at', { ascending: false });
 
                 if (!error && data && data.length > 0) return data[0];
@@ -1442,7 +1442,7 @@
                 .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags')
                 .eq('target_id', targetId)
                 .in('status', ['published', 'APPROVED'])
-                .in('visibility', ['public', 'link'])
+                .in('visibility', ['public', 'link', 'unlisted'])
                 .order('updated_at', { ascending: false });
 
             if (error) {
@@ -1560,6 +1560,13 @@
                 formUrl = p.event_registration_url;
             }
 
+            // Poimitaan access_key joko kentästä tai _access_key-tagista
+            let accessKey = (p.access_key || '').trim();
+            if (!accessKey && Array.isArray(p.tags)) {
+                const keyTag = p.tags.find(t => typeof t === 'string' && t.startsWith('_access_key:'));
+                if (keyTag) accessKey = keyTag.replace('_access_key:', '').trim();
+            }
+
             const entity = {
                 id: p.id,
                 target_id: p.target_id || null,
@@ -1574,6 +1581,7 @@
                 quick_facts: Array.isArray(p.tags) ? p.tags : (Array.isArray(p.quick_facts) ? p.quick_facts : []),
                 place_id: p.place_id || null,
                 visibility: p.visibility,
+                access_key: accessKey,
                 status: p.status,
                 created_at: p.created_at,
                 updated_at: p.updated_at,
@@ -1797,6 +1805,7 @@
                     if (res.status === 'fulfilled' && Array.isArray(res.value)) {
                         res.value.forEach(j => {
                             if (j.type === 'announcement' || j.type === 'news' || j.type === 'wall' || j.type === 'feed' || j.type === 'notice') return;
+                            if (j.visibility === 'unlisted' || j.visibility === 'link' || j.visibility === 'private' || j.status === 'draft') return;
                             if (j.supabase_post_id && postsUuids.has(j.supabase_post_id)) return;
                             if (j.id && (postsTargetIds.has(j.id) || postsUuids.has(j.id))) return;
                             items.push({ ...j, source: 'json_fallback' });
@@ -1911,6 +1920,48 @@
                     );
                     populateSelector(kohteet, null);
                     return;
+                }
+
+                // Näkyvyystarkistukset (unlisted, private, draft)
+                if (targetEntity) {
+                    const vis = (targetEntity.visibility || 'public').toLowerCase();
+                    const isDraft = (targetEntity.status || '').toLowerCase() === 'draft';
+
+                    if (vis === 'private' || isDraft) {
+                        showEmptyState(
+                            'Yksityinen kohde',
+                            'Tämä tapahtuma tai kohde on luonnos tai merkitty yksityiseksi, eikä se ole katseltavissa.'
+                        );
+                        populateSelector(kohteet, null);
+                        return;
+                    }
+
+                    if (vis === 'unlisted' || vis === 'link') {
+                        const keyFromUrl = (urlParams.get('k') || urlParams.get('key') || '').trim();
+                        let expectedKey = (targetEntity.access_key || '').trim();
+                        if (!expectedKey && Array.isArray(targetEntity.tags)) {
+                            const kt = targetEntity.tags.find(t => typeof t === 'string' && t.startsWith('_access_key:'));
+                            if (kt) expectedKey = kt.replace('_access_key:', '').trim();
+                        }
+
+                        if (expectedKey && keyFromUrl !== expectedKey) {
+                            showEmptyState(
+                                'Piilotettu tapahtuma',
+                                'Tämä tapahtuma on piilotettu ja vaatii voimassa olevan jakolinkin (&k=...). Tarkista saamasi suora linkki tai pyydä tapahtuman järjestäjältä uusi osoite.'
+                            );
+                            populateSelector(kohteet, null);
+                            return;
+                        }
+
+                        // Estetään hakukoneita indeksoimasta piilotettua kohdetta
+                        let metaRobots = document.querySelector('meta[name="robots"]');
+                        if (!metaRobots) {
+                            metaRobots = document.createElement('meta');
+                            metaRobots.setAttribute('name', 'robots');
+                            document.head.appendChild(metaRobots);
+                        }
+                        metaRobots.setAttribute('content', 'noindex, nofollow');
+                    }
                 }
 
                 if (targetEntity && isExpiredTarget) {

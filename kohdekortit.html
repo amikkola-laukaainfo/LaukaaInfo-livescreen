@@ -684,6 +684,7 @@ async function loadAll() {
     const postsTargetIds = new Set(postsItems.map(p => p.target_id).filter(Boolean));
 
     const nonDuplicateJsonItems = jsonItems.filter(j => {
+      if (j.visibility === 'unlisted' || j.visibility === 'link' || j.visibility === 'private' || j.status === 'draft') return false;
       if (j.supabase_post_id && postsUuids.has(j.supabase_post_id)) return false;
       if (j.id && (postsTargetIds.has(j.id) || postsUuids.has(j.id))) return false;
       return true;
@@ -691,8 +692,10 @@ async function loadAll() {
 
     allItems = [...postsItems, ...nonDuplicateJsonItems];
   } else {
-    // Supabase epäonnistui: käytetään pelkkää JSON-dataa
-    allItems = jsonItems.map(j => ({ ...j, source: 'json_fallback' }));
+    // Supabase epäonnistui: käytetään pelkkää julkista JSON-dataa
+    allItems = jsonItems
+      .filter(j => j.visibility !== 'unlisted' && j.visibility !== 'link' && j.visibility !== 'private' && j.status !== 'draft')
+      .map(j => ({ ...j, source: 'json_fallback' }));
   }
 
   render();
