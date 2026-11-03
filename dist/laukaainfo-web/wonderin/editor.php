@@ -22,14 +22,43 @@ $auth = require_auth();
 $jwt  = $auth['jwt'];
 $user = $auth['user'];
 
+// ── Tarkista admin-rooli (Antti Mikkola / Mediazoo) ──────────────────────────
+$admin_emails = ['antmikk@gmail.com', 'mediazoo@mediazoo.fi', 'info.mediazoo@gmail.com', 'admin@laukaainfo.fi'];
+$user_email   = strtolower($user['email'] ?? '');
+$is_admin     = !empty($user['is_dev']) || in_array($user_email, $admin_emails);
+if ($is_admin) {
+    $user['is_dev'] = true;
+    $_SESSION['user']['is_dev'] = true;
+}
+
 // ── Hae kaikki käyttäjän MEMORY-kartat ────────────────────────────────────────
-$owner_param = empty($user['is_dev']) ? '&owner_id=eq.' . urlencode($user['id']) : '';
+$owner_param = $is_admin ? '' : ('&owner_id=eq.' . urlencode($user['id']));
 $maps_res = supabase_request('GET',
     '/rest/v1/routes?experience_type=eq.MEMORY' . $owner_param
     . '&select=id,title,description,edit_expires_at,view_expires_at,archive_until,share_token,view_pin,view_pin_hash,created_at&order=created_at.desc',
     null, $jwt
 );
+
+// Jos JWT on vanhentunut tai palautti 401, kokeillaan anon-avaimella
+if ($maps_res['status'] === 401) {
+    $maps_res = supabase_request('GET',
+        '/rest/v1/routes?experience_type=eq.MEMORY' . $owner_param
+        . '&select=id,title,description,edit_expires_at,view_expires_at,archive_until,share_token,view_pin,view_pin_hash,created_at&order=created_at.desc'
+    );
+}
+
 $maps = ($maps_res['status'] === 200 && is_array($maps_res['data'])) ? $maps_res['data'] : [];
+
+// Fallback: jos admin-käyttäjälle ei löytynyt karttoja owner_id-rajauksella, hae kaikki MEMORY-kartat
+if (empty($maps) && $is_admin) {
+    $fb_res = supabase_request('GET',
+        '/rest/v1/routes?experience_type=eq.MEMORY'
+        . '&select=id,title,description,edit_expires_at,view_expires_at,archive_until,share_token,view_pin,view_pin_hash,created_at&order=created_at.desc'
+    );
+    if ($fb_res['status'] === 200 && is_array($fb_res['data']) && !empty($fb_res['data'])) {
+        $maps = $fb_res['data'];
+    }
+}
 
 // ── Aktiivinen kartta ─────────────────────────────────────────────────────────
 $active_map_id = $_GET['map'] ?? ($_SESSION['active_map'] ?? ($maps[0]['id'] ?? null));
@@ -45,12 +74,10 @@ if ($active_map_id) {
         if ($m['id'] === $active_map_id) { $active_map = $m; break; }
     }
     if (!$active_map) {
-        // Voi olla, että listaus ei löytynyt – hae suoraan
+        // Voi olla, että listaus ei löytynyt – hae suoraan kartan ID:llä
         $mr = supabase_request('GET',
             '/rest/v1/routes?id=eq.' . urlencode($active_map_id)
-            . $owner_param
-            . '&select=id,title,description,edit_expires_at,view_expires_at,archive_until,share_token,view_pin,view_pin_hash,created_at',
-            null, $jwt
+            . '&select=id,title,description,edit_expires_at,view_expires_at,archive_until,share_token,view_pin,view_pin_hash,created_at'
         );
         if ($mr['status'] === 200 && !empty($mr['data'])) $active_map = $mr['data'][0];
     }

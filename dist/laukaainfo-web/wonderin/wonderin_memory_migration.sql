@@ -356,7 +356,11 @@ RETURNS TABLE (
     is_redeemed BOOLEAN,
     redeemed_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ,
-    notes TEXT
+    notes TEXT,
+    customer_email TEXT,
+    redeemed_by_email TEXT,
+    email TEXT,
+    map_title TEXT
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -373,8 +377,14 @@ BEGIN
         a.is_redeemed,
         a.redeemed_at,
         a.created_at,
-        a.notes
+        a.notes,
+        a.customer_email,
+        u.email::text AS redeemed_by_email,
+        COALESCE(u.email::text, a.customer_email, '')::text AS email,
+        COALESCE(r.title, '')::text AS map_title
     FROM public.activation_codes a
+    LEFT JOIN auth.users u ON u.id = a.redeemed_by
+    LEFT JOIN public.routes r ON (r.owner_id = a.redeemed_by AND r.experience_type = 'MEMORY')
     ORDER BY a.created_at DESC
     LIMIT p_limit;
 END;
