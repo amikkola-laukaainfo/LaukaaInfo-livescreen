@@ -3,7 +3,7 @@
   "form": {
     "formId": "form_lievestuore_palaute",
     "title": "Lievestuoreen yrittäjät ry:n pikkujoulut",
-    "description": "Ilmoittaudu mukaan pikkujouluihin"
+    "description": "Ilmoittaudu mukaan"
   },
   "project": {
     "projectId": "laukaainfo",
@@ -16,8 +16,8 @@
     "publicationId": "pub_mixonet_01",
     "status": "published",
     "access": "PUBLIC",
-    "slug": "mixonet/yrityskysely",
-    "validUntil": "2026-12-31"
+    "slug": "pikkujoulut",
+    "validUntil": "2026-11-12"
   },
   "presentation": {
     "layout": "multi-step",
