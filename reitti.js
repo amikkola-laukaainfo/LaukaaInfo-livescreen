@@ -2947,6 +2947,114 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     let pointSwiperInstance = null;
+    let pointLightboxSwiper = null;
+    let currentPointImages = [];
+    let currentPointImageIndex = 0;
+    const pointImageOrientations = {};
+
+    function updateMediaOrientation(idx) {
+        const mediaContainer = document.getElementById('point-modal-media-container');
+        if (!mediaContainer) return;
+        const isPortrait = !!pointImageOrientations[idx];
+        if (isPortrait) {
+            mediaContainer.classList.add('is-portrait');
+        } else {
+            mediaContainer.classList.remove('is-portrait');
+        }
+        if (pointSwiperInstance && pointSwiperInstance.update) {
+            setTimeout(() => { try { pointSwiperInstance.update(); } catch(e){} }, 50);
+        }
+    }
+
+    function checkImageOrientation(url, idx) {
+        if (pointImageOrientations[idx] !== undefined) return;
+        const img = new Image();
+        img.onload = function() {
+            const isPortrait = img.naturalHeight > (img.naturalWidth * 1.05);
+            pointImageOrientations[idx] = isPortrait;
+            if (currentPointImageIndex === idx) {
+                updateMediaOrientation(idx);
+            }
+        };
+        img.src = url;
+    }
+
+    window.openPointLightbox = function(startIndex) {
+        if (!currentPointImages || currentPointImages.length === 0) return;
+        const lightbox = document.getElementById('point-lightbox');
+        const wrapper = document.getElementById('point-lightbox-wrapper');
+        const counter = document.getElementById('point-lightbox-counter');
+        const prevBtn = document.querySelector('.lki-lightbox-prev');
+        const nextBtn = document.querySelector('.lki-lightbox-next');
+        const pagination = document.querySelector('.lki-lightbox-pagination');
+        if (!lightbox || !wrapper) return;
+
+        currentPointImageIndex = startIndex || 0;
+        window._currentPointImageIndex = currentPointImageIndex;
+
+        wrapper.innerHTML = currentPointImages.map(img => `
+            <div class="swiper-slide">
+                <img src="${img}" alt="Suurennettu kuva">
+            </div>
+        `).join('');
+
+        if (pointLightboxSwiper) {
+            pointLightboxSwiper.destroy(true, true);
+            pointLightboxSwiper = null;
+        }
+
+        const isMulti = currentPointImages.length > 1;
+        if (counter) {
+            counter.style.display = isMulti ? 'block' : 'none';
+            counter.textContent = `${currentPointImageIndex + 1} / ${currentPointImages.length}`;
+        }
+        if (prevBtn) prevBtn.style.display = isMulti ? '' : 'none';
+        if (nextBtn) nextBtn.style.display = isMulti ? '' : 'none';
+        if (pagination) pagination.style.display = isMulti ? '' : 'none';
+
+        lightbox.style.display = 'flex';
+        void lightbox.offsetWidth;
+        lightbox.classList.add('active');
+
+        if (typeof Swiper !== 'undefined') {
+            pointLightboxSwiper = new Swiper('#point-lightbox-swiper', {
+                initialSlide: currentPointImageIndex,
+                loop: isMulti,
+                navigation: isMulti ? { nextEl: '.lki-lightbox-next', prevEl: '.lki-lightbox-prev' } : false,
+                pagination: isMulti ? { el: '.lki-lightbox-pagination', clickable: true } : false,
+                keyboard: { enabled: true },
+                on: {
+                    slideChange: function() {
+                        const realIdx = this.realIndex != null ? this.realIndex : this.activeIndex;
+                        currentPointImageIndex = realIdx;
+                        window._currentPointImageIndex = realIdx;
+                        if (counter) {
+                            counter.textContent = `${realIdx + 1} / ${currentPointImages.length}`;
+                        }
+                        if (pointSwiperInstance && pointSwiperInstance.slideToLoop) {
+                            try { pointSwiperInstance.slideToLoop(realIdx, 0); } catch(e){}
+                        }
+                        updateMediaOrientation(realIdx);
+                    }
+                }
+            });
+        }
+    };
+
+    window.closePointLightbox = function() {
+        const lightbox = document.getElementById('point-lightbox');
+        if (lightbox) {
+            lightbox.classList.remove('active');
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+            }, 250);
+        }
+        if (pointLightboxSwiper) {
+            pointLightboxSwiper.destroy(true, true);
+            pointLightboxSwiper = null;
+        }
+        updateMediaOrientation(currentPointImageIndex);
+    };
 
     window.openPointModal = function(p) {
         if (!p) return;
@@ -3148,22 +3256,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Helper to render image slider view
         function renderImageView(imgList) {
             mediaContainer.style.display = 'block';
+            currentPointImages = imgList;
+            currentPointImageIndex = 0;
+            window._currentPointImageIndex = 0;
+            Object.keys(pointImageOrientations).forEach(k => delete pointImageOrientations[k]);
+            mediaContainer.classList.remove('is-portrait');
+
             if (pointSwiperInstance) {
                 pointSwiperInstance.destroy(true, true);
                 pointSwiperInstance = null;
             }
 
+            imgList.forEach((url, i) => checkImageOrientation(url, i));
+
             if (imgList.length === 1) {
-                mediaContainer.innerHTML = `<img src="${imgList[0]}" alt="${modalTitle}" style="width:100%; height:100%; object-fit: contain;">`;
+                mediaContainer.innerHTML = `
+                    <div style="position:relative; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center;">
+                        <img src="${imgList[0]}" alt="${modalTitle}" style="width:100%; height:100%; object-fit:contain; cursor:zoom-in;" onclick="window.openPointLightbox(0)">
+                        <div class="lki-media-zoom-badge" onclick="window.openPointLightbox(0)">
+                            <span class="iconify" data-icon="material-symbols:fullscreen"></span> Avaa koko näyttöön
+                        </div>
+                    </div>`;
             } else {
                 mediaContainer.innerHTML = `
-                    <div class="swiper" id="point-modal-swiper">
+                    <div class="swiper" id="point-modal-swiper" style="width:100%; height:100%;">
                         <div class="swiper-wrapper">
-                            ${imgList.map(img => `<div class="swiper-slide"><img src="${img}" alt="${modalTitle}" style="width:100%; height:100%; object-fit: contain;"></div>`).join('')}
+                            ${imgList.map((img, i) => `
+                                <div class="swiper-slide" style="position:relative; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center;">
+                                    <img src="${img}" alt="${modalTitle}" style="width:100%; height:100%; object-fit:contain; cursor:zoom-in;" onclick="window.openPointLightbox(${i})">
+                                </div>
+                            `).join('')}
                         </div>
                         <div class="swiper-pagination"></div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
+                        <div class="lki-media-zoom-badge" onclick="window.openPointLightbox(window._currentPointImageIndex || 0)">
+                            <span class="iconify" data-icon="material-symbols:fullscreen"></span> Avaa koko näyttöön
+                        </div>
                     </div>`;
                 
                 setTimeout(() => {
@@ -3172,6 +3301,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                             pagination: { el: '.swiper-pagination', clickable: true },
                             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                             loop: true,
+                            on: {
+                                slideChange: function() {
+                                    const realIdx = this.realIndex != null ? this.realIndex : this.activeIndex;
+                                    currentPointImageIndex = realIdx;
+                                    window._currentPointImageIndex = realIdx;
+                                    updateMediaOrientation(realIdx);
+                                }
+                            }
                         });
                     }
                 }, 50);
@@ -3387,6 +3524,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     function closePointModal() {
+        if (window.closePointLightbox) {
+            window.closePointLightbox();
+        }
         const modal = document.getElementById('point-modal');
         if (modal) {
             modal.classList.remove('active');
@@ -3396,7 +3536,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 try { a.pause(); a.currentTime = 0; } catch(e) {}
             });
         }
-        document.getElementById('point-modal-media-container').innerHTML = ''; // Stop video
+        const mediaContainer = document.getElementById('point-modal-media-container');
+        if (mediaContainer) {
+            mediaContainer.innerHTML = ''; // Stop video
+            mediaContainer.classList.remove('is-portrait');
+        }
         if (pointSwiperInstance) {
             pointSwiperInstance.destroy(true, true);
             pointSwiperInstance = null;
@@ -3411,6 +3555,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('point-modal').addEventListener('click', (e) => {
         if (e.target.id === 'point-modal') {
             closePointModal();
+        }
+    });
+
+    const closeLightboxBtn = document.getElementById('point-lightbox-close');
+    if (closeLightboxBtn) {
+        closeLightboxBtn.addEventListener('click', () => {
+            if (window.closePointLightbox) window.closePointLightbox();
+        });
+    }
+
+    const lightboxEl = document.getElementById('point-lightbox');
+    if (lightboxEl) {
+        lightboxEl.addEventListener('click', (e) => {
+            if (e.target.id === 'point-lightbox' || e.target.classList.contains('swiper-slide')) {
+                if (window.closePointLightbox) window.closePointLightbox();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lb = document.getElementById('point-lightbox');
+            if (lb && lb.classList.contains('active')) {
+                if (window.closePointLightbox) window.closePointLightbox();
+            } else {
+                closePointModal();
+            }
         }
     });
 });

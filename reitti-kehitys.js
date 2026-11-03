@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     localStorage.removeItem(key);
                 }
             });
-        } catch(e) {}
+        } catch (e) { }
     }
 
     const isEmbed = urlParams.get('embed') === '1' || urlParams.get('embed') === 'true';
@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const supabase = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
 
     let isAdminMode = urlParams.get('admin') === '1' ||
-                      urlParams.get('admin') === 'true' ||
-                      urlParams.get('mode') === 'admin' ||
-                      urlParams.get('admin_mode') === '1' ||
-                      urlParams.get('preview') === 'all';
+        urlParams.get('admin') === 'true' ||
+        urlParams.get('mode') === 'admin' ||
+        urlParams.get('admin_mode') === '1' ||
+        urlParams.get('preview') === 'all';
 
     let currentRouteData = null;
 
@@ -96,10 +96,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (AudioCtxClass) {
                     this.audioCtx = new AudioCtxClass();
                     if (this.audioCtx.state === 'suspended') {
-                        this.audioCtx.resume().catch(() => {});
+                        this.audioCtx.resume().catch(() => { });
                     }
                 }
-            } catch(e) {
+            } catch (e) {
                 console.warn('[AudioEngine] AudioContext init error:', e);
             }
             // SpeechSynthesis: laukaistaan kerran käyttäjän kosketuksen yhteydessä
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const dummy = new SpeechSynthesisUtterance('');
                     dummy.volume = 0.001;
                     window.speechSynthesis.speak(dummy);
-                } catch(e) {}
+                } catch (e) { }
             }
             this.isInitialized = true;
             console.log('[AudioEngine] Initialized.');
@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         playChime(type = 'warning') {
             if (this.isMuted || !this.audioCtx) return;
             try {
-                if (this.audioCtx.state === 'suspended') this.audioCtx.resume().catch(() => {});
-                const osc  = this.audioCtx.createOscillator();
+                if (this.audioCtx.state === 'suspended') this.audioCtx.resume().catch(() => { });
+                const osc = this.audioCtx.createOscillator();
                 const gain = this.audioCtx.createGain();
                 osc.connect(gain);
                 gain.connect(this.audioCtx.destination);
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
                     osc.start(now); osc.stop(now + 0.8);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.warn('[AudioEngine] Chime error:', e);
             }
         },
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 utter.volume = 1.0;
                 if (onEndCallback) utter.onend = onEndCallback;
                 window.speechSynthesis.speak(utter);
-            } catch(e) {
+            } catch (e) {
                 console.warn('[AudioEngine] TTS error:', e);
             }
         },
@@ -199,8 +199,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ─── "ALOITA ELÄMYSPOLKU" OVERLAY ──────────────────────────────────────────
     // AudioContext + GPS aktivoituvat yhdellä napin painalluksella.
 
-    const startAudioBtn     = document.getElementById('audio-start-btn');
-    const audioOverlay      = document.getElementById('audio-start-overlay');
+    const startAudioBtn = document.getElementById('audio-start-btn');
+    const audioOverlay = document.getElementById('audio-start-overlay');
     const audioIndicatorBar = document.getElementById('audio-indicator-bar');
     let gpsStartedFromOverlay = false;
 
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             AudioEngine.init();
             AudioEngine.playChime('arrival');
 
-            if (audioOverlay)      audioOverlay.classList.add('hidden');
+            if (audioOverlay) audioOverlay.classList.add('hidden');
             if (audioIndicatorBar) audioIndicatorBar.style.display = 'flex';
 
             // GPS käynnistetään heti — routePoints on jo ladattu renderGeoJSON:ssa
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (geo.name && geo.name !== 'Uusi projekti') title = geo.name;
                     else if (geo.title) title = geo.title;
                     else if (geo.features?.[0]?.properties?.name) title = geo.features[0].properties.name;
-                } catch (e) {}
+                } catch (e) { }
             }
         }
 
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let savedStyle = 'osm';
         try {
             savedStyle = localStorage.getItem('route_map_tile_style') || 'osm';
-        } catch(e) {}
+        } catch (e) { }
         if (!tileLayers[savedStyle]) savedStyle = 'osm';
 
         tileLayers[savedStyle].addTo(map);
@@ -435,10 +435,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             collapsed: true
         }).addTo(map);
 
-        map.on('baselayerchange', function(e) {
+        map.on('baselayerchange', function (e) {
             for (const [key, layer] of Object.entries(tileLayers)) {
                 if (layer === e.layer) {
-                    try { localStorage.setItem('route_map_tile_style', key); } catch(err) {}
+                    try { localStorage.setItem('route_map_tile_style', key); } catch (err) { }
                     break;
                 }
             }
@@ -446,14 +446,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const RecenterControl = L.Control.extend({
             options: { position: 'bottomright' },
-            onAdd: function() {
+            onAdd: function () {
                 const btn = L.DomUtil.create('button', 'leaflet-bar map-recenter-btn' + (isFollowingUser ? ' active' : ''));
                 btn.id = 'map-recenter-btn';
                 btn.title = isFollowingUser ? 'Seurataan sijaintia (napauta vapauttaaksesi)' : 'Keskitä omaan sijaintiin';
                 btn.setAttribute('aria-label', 'Keskitä sijaintiin');
                 btn.innerHTML = `<span class="iconify" data-icon="material-symbols:my-location"></span>`;
                 L.DomEvent.disableClickPropagation(btn);
-                L.DomEvent.on(btn, 'click', function(e) {
+                L.DomEvent.on(btn, 'click', function (e) {
                     L.DomEvent.stop(e);
                     if (isFollowingUser) { isFollowingUser = false; updateRecenterBtnUI(); }
                     else recenterOnUser();
@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         map.addControl(new RecenterControl());
 
-        map.on('dragstart', function() {
+        map.on('dragstart', function () {
             if (isFollowingUser) { isFollowingUser = false; updateRecenterBtnUI(); }
         });
 
@@ -471,19 +471,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         let routeLineCoords = [];
 
         const geojsonLayer = L.geoJSON(geojson, {
-            style: function(feature) {
+            style: function (feature) {
                 if (feature.geometry && feature.geometry.type === 'LineString') {
                     return { color: '#059669', weight: 5, opacity: 0.8 };
                 }
                 return {};
             },
-            pointToLayer: function(feature, latlng) {
+            pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, {
                     radius: 8, fillColor: '#e11d48', color: '#fff',
                     weight: 2, opacity: 1, fillOpacity: 0.8
                 });
             },
-            onEachFeature: function(feature, layer) {
+            onEachFeature: function (feature, layer) {
                 if (feature.geometry.type === 'LineString') {
                     routeLineCoords = feature.geometry.coordinates;
                     nearbyPlacesEnabled = feature.properties?.show_nearby !== false;
@@ -520,13 +520,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (isAdminMode) {
                 if (p.locked_content) {
                     if (p.locked_content.description) p.description = p.locked_content.description;
-                    if (p.locked_content.imageUrl)    p.imageUrl    = p.locked_content.imageUrl;
-                    if (p.locked_content.image)       p.image       = p.locked_content.image;
-                    if (p.locked_content.images)      p.images      = p.locked_content.images;
-                    if (p.locked_content.audioUrl)    p.audioUrl    = p.locked_content.audioUrl;
-                    if (p.locked_content.audio)       p.audio       = p.locked_content.audio;
-                    if (p.locked_content.youtubeUrl)  p.youtubeUrl  = p.locked_content.youtubeUrl;
-                    if (p.locked_content.infoLink)    p.infoLink    = p.locked_content.infoLink;
+                    if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+                    if (p.locked_content.image) p.image = p.locked_content.image;
+                    if (p.locked_content.images) p.images = p.locked_content.images;
+                    if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+                    if (p.locked_content.audio) p.audio = p.locked_content.audio;
+                    if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+                    if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
                 }
                 return true;
             }
@@ -539,16 +539,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     p._unlocked = true;
                     if (p.locked_content) {
                         if (p.locked_content.description) p.description = p.locked_content.description;
-                        if (p.locked_content.imageUrl)    p.imageUrl    = p.locked_content.imageUrl;
-                        if (p.locked_content.image)       p.image       = p.locked_content.image;
-                        if (p.locked_content.audioUrl)    p.audioUrl    = p.locked_content.audioUrl;
-                        if (p.locked_content.audio)       p.audio       = p.locked_content.audio;
-                        if (p.locked_content.youtubeUrl)  p.youtubeUrl  = p.locked_content.youtubeUrl;
-                        if (p.locked_content.infoLink)    p.infoLink    = p.locked_content.infoLink;
+                        if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+                        if (p.locked_content.image) p.image = p.locked_content.image;
+                        if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+                        if (p.locked_content.audio) p.audio = p.locked_content.audio;
+                        if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+                        if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
                     }
                     return true;
                 }
-            } catch(e) {}
+            } catch (e) { }
             if (mode === 'REQUIRE_PREVIOUS' && window.routePoints && Array.isArray(window.routePoints)) {
                 const idx = window.routePoints.findIndex(pt => (pt.id || `pt_${pt._lat || pt.lat}_${pt._lng || pt.lng}`) === pointId);
                 if (idx > 0) {
@@ -698,9 +698,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let nextPointIndex = 0;
     let progressIndex = 0;
-    const visitedPoints  = new Set();
-    const arrivedPoints  = new Set();
-    const skippedPoints  = new Set();
+    const visitedPoints = new Set();
+    const arrivedPoints = new Set();
+    const skippedPoints = new Set();
     let approachToastVisible = false;
     let _insideCount = 0;
     let _arrivalCooldownUntil = 0;
@@ -722,8 +722,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLng = (lng2 - lng1) * Math.PI / 180;
         const a = Math.sin(dLat / 2) ** 2 +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLng / 2) ** 2;
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) ** 2;
         return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
@@ -779,7 +779,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ─── GPS CORE ────────────────────────────────────────────────────────────────
 
     function initGPS(points) {
-        window.toggleGPS = function() {
+        window.toggleGPS = function () {
             if (gpsActive) stopGPS();
             else startGPS(points);
         };
@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function startGPS(points) {
-        const gpsBtn   = document.getElementById('gps-status-btn');
+        const gpsBtn = document.getElementById('gps-status-btn');
         const gpsLabel = document.getElementById('gps-label');
 
         if (location.protocol === 'http:' && !location.hostname.includes('localhost')) {
@@ -920,7 +920,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         lastReportedStepDistance = 0;
         _gpsHistory = [];
 
-        const gpsBtn   = document.getElementById('gps-status-btn');
+        const gpsBtn = document.getElementById('gps-status-btn');
         const gpsLabel = document.getElementById('gps-label');
         if (gpsBtn) { gpsBtn.className = ''; gpsLabel.textContent = 'GPS pois'; }
         closeProximityToast();
@@ -931,8 +931,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function onPositionUpdate(pos, points) {
-        const userLat  = pos.coords.latitude;
-        const userLng  = pos.coords.longitude;
+        const userLat = pos.coords.latitude;
+        const userLng = pos.coords.longitude;
         const rawAccuracy = pos.coords.accuracy || 15;
 
         const smoothed = getSmoothedPosition(userLat, userLng, rawAccuracy);
@@ -1187,12 +1187,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             routeState = targetState; offRouteSince = null;
         }
         const showLeftRoute = routeState === ROUTE_STATES.LEFT_ROUTE &&
-                              offRouteSince && (Date.now() - offRouteSince) >= OFF_ROUTE_TIMEOUT_MS;
+            offRouteSince && (Date.now() - offRouteSince) >= OFF_ROUTE_TIMEOUT_MS;
         const displayState = showLeftRoute ? ROUTE_STATES.LEFT_ROUTE : Math.min(routeState, ROUTE_STATES.OFF_ROUTE);
         const cfg = [
-            { emoji: '🟢', text: 'Reitillä',                      color: '#059669', bg: '#ecfdf5' },
-            { emoji: '🟡', text: `Hieman sivussa — ${dist} m`,     color: '#b45309', bg: '#fffbeb' },
-            { emoji: '🟠', text: `Poikkeama — ${dist} m`,          color: '#c2410c', bg: '#fff7ed' },
+            { emoji: '🟢', text: 'Reitillä', color: '#059669', bg: '#ecfdf5' },
+            { emoji: '🟡', text: `Hieman sivussa — ${dist} m`, color: '#b45309', bg: '#fffbeb' },
+            { emoji: '🟠', text: `Poikkeama — ${dist} m`, color: '#c2410c', bg: '#fff7ed' },
             { emoji: '🔴', text: `Poistunut reitiltä — ${dist} m`, color: '#b91c1c', bg: '#fef2f2' },
         ][displayState];
         statusEl.textContent = `${cfg.emoji} ${cfg.text}`;
@@ -1203,7 +1203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ─── PROGRESS PANEL ──────────────────────────────────────────────────────────
 
     function updateProgressPanel(userLat, userLng) {
-        const coords   = window.routeLineCoords || [];
+        const coords = window.routeLineCoords || [];
         const totalLen = window.totalRouteLength || 0;
         if (coords.length < 2 || totalLen === 0) return;
         const projDist = projectToRouteDistance(userLat, userLng, coords);
@@ -1211,7 +1211,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const effectiveDist = window._maxProjDist || 0;
         const pct = Math.min(100, Math.round((effectiveDist / totalLen) * 100));
         const fill = document.getElementById('gps-progress-bar-fill');
-        const text  = document.getElementById('gps-progress-text');
+        const text = document.getElementById('gps-progress-text');
         if (fill) fill.style.width = pct + '%';
         if (text) text.textContent =
             `${(effectiveDist / 1000).toFixed(1).replace('.', ',')} km` +
@@ -1226,24 +1226,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (nextEl) nextEl.innerHTML = '🎉 Kaikki kokemuspisteet saavutettu!';
             return;
         }
-        const p    = points[nextPointIndex];
+        const p = points[nextPointIndex];
         const pLat = p._lat ?? p.lat;
         const pLng = p._lng ?? p.lng;
         if (pLat == null || pLng == null) return;
 
-        const dist     = Math.round(haversineMeters(userLat, userLng, pLat, pLng));
-        const arrivalR = p.arrival_radius  ?? p.properties?.arrival_radius ?? 30;
-        const warningR = p.warning_radius  ?? p.properties?.warning_radius ?? p.notificationDistance ?? 100;
+        const dist = Math.round(haversineMeters(userLat, userLng, pLat, pLng));
+        const arrivalR = p.arrival_radius ?? p.properties?.arrival_radius ?? 30;
+        const warningR = p.warning_radius ?? p.properties?.warning_radius ?? p.notificationDistance ?? 100;
 
         handlePointAudio(p, dist);
         updateNextPointDisplay(p, dist, nextPointIndex, points.length);
         updateMapProximity(p, dist, nextPointIndex);
 
-        const arrivalToastEl  = document.getElementById('arrival-toast');
+        const arrivalToastEl = document.getElementById('arrival-toast');
         const isArrivalToastVisible = arrivalToastEl && arrivalToastEl.classList.contains('visible');
-        const pointModalEl    = document.getElementById('point-modal');
-        const isModalActive   = pointModalEl && pointModalEl.classList.contains('active');
-        const isCooldown      = Date.now() < _arrivalCooldownUntil;
+        const pointModalEl = document.getElementById('point-modal');
+        const isModalActive = pointModalEl && pointModalEl.classList.contains('active');
+        const isCooldown = Date.now() < _arrivalCooldownUntil;
 
         if (isArrivalToastVisible || isModalActive || isCooldown) {
             _insideCount = 0; return;
@@ -1288,7 +1288,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     try {
                         const prevId = prev.id || `pt_${prev._lat || prev.lat}_${prev._lng || prev.lng}`;
                         return localStorage.getItem('unlocked_point_' + prevId) === 'true';
-                    } catch(e) { return false; }
+                    } catch (e) { return false; }
                 })();
                 if (!prevVisited) { _insideCount = 0; return; }
             }
@@ -1373,8 +1373,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             : `${dist} m`;
         const dots = Array.from({ length: total }, (_, i) =>
             visitedPoints.has(i) ? '<span style="color:#059669;">●</span>'
-            : (i === idx ? '<span style="color:#2563eb;">◉</span>'
-                         : '<span style="color:#cbd5e1;">○</span>')
+                : (i === idx ? '<span style="color:#2563eb;">◉</span>'
+                    : '<span style="color:#cbd5e1;">○</span>')
         ).join(' ');
         nextEl.innerHTML =
             `<span class="next-label">SEURAAVA ${idx + 1}/${total}</span>` +
@@ -1386,15 +1386,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     function markPointVisited(idx, p) {
         p._unlocked = true;
         const pointId = p.id || `pt_${p._lat || p.lat}_${p._lng || p.lng}`;
-        try { localStorage.setItem('unlocked_point_' + pointId, 'true'); } catch(e) {}
+        try { localStorage.setItem('unlocked_point_' + pointId, 'true'); } catch (e) { }
         if (p.locked_content) {
             if (p.locked_content.description) p.description = p.locked_content.description;
-            if (p.locked_content.imageUrl)    p.imageUrl    = p.locked_content.imageUrl;
-            if (p.locked_content.image)       p.image       = p.locked_content.image;
-            if (p.locked_content.audioUrl)    p.audioUrl    = p.locked_content.audioUrl;
-            if (p.locked_content.audio)       p.audio       = p.locked_content.audio;
-            if (p.locked_content.youtubeUrl)  p.youtubeUrl  = p.locked_content.youtubeUrl;
-            if (p.locked_content.infoLink)    p.infoLink    = p.locked_content.infoLink;
+            if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+            if (p.locked_content.image) p.image = p.locked_content.image;
+            if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+            if (p.locked_content.audio) p.audio = p.locked_content.audio;
+            if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+            if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
         }
         if (p._layer && p._layer.setStyle) p._layer.setStyle({ fillColor: '#059669', radius: 10 });
         setMarkerPulse(p, 'arrival');
@@ -1403,9 +1403,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (card) {
             card.style.borderLeft = '4px solid #059669';
             card.style.background = '#f0fdf4';
-            const badge  = card.querySelector('.point-locked-badge');
+            const badge = card.querySelector('.point-locked-badge');
             const teaser = card.querySelector('.point-locked-teaser');
-            if (badge)  { badge.style.background = '#dcfce7'; badge.style.color = '#15803d'; badge.innerHTML = '🔓 Sisältö avattu'; }
+            if (badge) { badge.style.background = '#dcfce7'; badge.style.color = '#15803d'; badge.innerHTML = '🔓 Sisältö avattu'; }
             if (teaser) { teaser.style.color = '#047857'; teaser.innerHTML = '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!'; }
         }
         updateAllMarkerStyles();
@@ -1418,16 +1418,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!points || !Array.isArray(points)) return;
         const activeIdx = nextPointIndex;
         points.forEach((p, idx) => {
-            const card    = document.getElementById(`point-card-${idx}`);
+            const card = document.getElementById(`point-card-${idx}`);
             const unlocked = window.isPointUnlocked ? window.isPointUnlocked(p) : true;
             if (arrivedPoints.has(idx)) {
                 if (p._layer && p._layer.setStyle) p._layer.setStyle({ fillColor: '#10b981', color: '#ffffff', weight: 3, radius: 13, fillOpacity: 1 });
                 setMarkerPulse(p, 'arrival');
                 if (card) {
                     card.style.borderLeft = '4px solid #10b981'; card.style.background = '#f0fdf4';
-                    const badge  = card.querySelector('.point-locked-badge');
+                    const badge = card.querySelector('.point-locked-badge');
                     const teaser = card.querySelector('.point-locked-teaser');
-                    if (badge)  { badge.style.background = '#bbf7d0'; badge.style.color = '#065f46'; badge.innerHTML = '📍 Saapunut'; }
+                    if (badge) { badge.style.background = '#bbf7d0'; badge.style.color = '#065f46'; badge.innerHTML = '📍 Saapunut'; }
                     if (teaser) { teaser.style.color = '#047857'; teaser.innerHTML = '📖 Avaa kokemuspiste tai paina Jatka alakortista'; }
                 }
             } else if (visitedPoints.has(idx)) {
@@ -1435,9 +1435,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setMarkerPulse(p, null);
                 if (card) {
                     card.style.borderLeft = '4px solid #059669'; card.style.background = '#f0fdf4';
-                    const badge  = card.querySelector('.point-locked-badge');
+                    const badge = card.querySelector('.point-locked-badge');
                     const teaser = card.querySelector('.point-locked-teaser');
-                    if (badge)  { badge.style.background = '#dcfce7'; badge.style.color = '#15803d'; badge.innerHTML = '🔓 Sisältö avattu'; }
+                    if (badge) { badge.style.background = '#dcfce7'; badge.style.color = '#15803d'; badge.innerHTML = '🔓 Sisältö avattu'; }
                     if (teaser) { teaser.style.color = '#047857'; teaser.innerHTML = '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!'; }
                 }
             } else if (idx === activeIdx) {
@@ -1445,9 +1445,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setMarkerPulse(p, 'approach');
                 if (card) {
                     card.style.borderLeft = '4px solid #2563eb'; card.style.background = '#eff6ff';
-                    const badge  = card.querySelector('.point-locked-badge');
+                    const badge = card.querySelector('.point-locked-badge');
                     const teaser = card.querySelector('.point-locked-teaser');
-                    if (badge)  { badge.style.background = '#dbeafe'; badge.style.color = '#1e40af'; badge.innerHTML = '🎯 Seuraava kohde'; }
+                    if (badge) { badge.style.background = '#dbeafe'; badge.style.color = '#1e40af'; badge.innerHTML = '🎯 Seuraava kohde'; }
                     if (teaser) { teaser.style.color = '#1d4ed8'; teaser.innerHTML = `📍 Suuntaa kohteelle (${p.unlock_radius || p.arrival_radius || 30} m) avataksesi tarinan`; }
                 }
             } else if (skippedPoints.has(idx)) {
@@ -1455,9 +1455,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setMarkerPulse(p, null);
                 if (card) {
                     card.classList.add('point-card-skipped');
-                    const badge  = card.querySelector('.point-locked-badge');
+                    const badge = card.querySelector('.point-locked-badge');
                     const teaser = card.querySelector('.point-locked-teaser');
-                    if (badge)  { badge.className = 'shortcut-badge'; badge.innerHTML = '⏭ Ohitettu'; }
+                    if (badge) { badge.className = 'shortcut-badge'; badge.innerHTML = '⏭ Ohitettu'; }
                     if (teaser) teaser.style.display = 'none';
                 }
             } else {
@@ -1481,7 +1481,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             for (let i = fromIndex + 1; i < targetIndex; i++) skippedPoints.add(i);
         }
         nextPointIndex = targetIndex;
-        progressIndex  = Math.max(progressIndex, targetIndex);
+        progressIndex = Math.max(progressIndex, targetIndex);
         updateAllMarkerStyles();
         if (targetIndex >= points.length) showRouteSummary(points);
     }
@@ -1493,10 +1493,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const summaryPanel = document.getElementById('route-summary-panel');
         if (!summaryPanel) return;
         const visitedCount = visitedPoints.size;
-        const totalCount   = points.length;
+        const totalCount = points.length;
         const skippedCount = skippedPoints.size;
         document.getElementById('summary-visited-count').textContent = visitedCount;
-        document.getElementById('summary-total-count').textContent   = totalCount;
+        document.getElementById('summary-total-count').textContent = totalCount;
         let skippedInfo = '';
         if (skippedCount > 0) {
             const skippedNames = Array.from(skippedPoints).sort((a, b) => a - b)
@@ -1515,7 +1515,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
             if (AudioCtx) _audioCtx = new AudioCtx();
         }
-        if (_audioCtx && _audioCtx.state === 'suspended') _audioCtx.resume().catch(() => {});
+        if (_audioCtx && _audioCtx.state === 'suspended') _audioCtx.resume().catch(() => { });
         return _audioCtx;
     }
 
@@ -1532,7 +1532,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function unlockRouteAudio() {
         getAudioCtx();
         Object.values(audioMap).forEach(audio => {
-            try { audio.load(); } catch(e) {}
+            try { audio.load(); } catch (e) { }
         });
     }
 
@@ -1540,7 +1540,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.addEventListener(evt, () => {
             unlockRouteAudio();
             if (navigator && typeof navigator.vibrate === 'function') {
-                try { navigator.vibrate(10); } catch(e) {}
+                try { navigator.vibrate(10); } catch (e) { }
             }
         }, { once: true, capture: true });
     });
@@ -1549,21 +1549,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const savedAudio = localStorage.getItem('route_audio_enabled');
         if (savedAudio === 'false') audioNotificationsEnabled = false;
-    } catch(e) {}
+    } catch (e) { }
 
     function updateAudioBtnUI() {
-        const btn   = document.getElementById('audio-status-btn');
+        const btn = document.getElementById('audio-status-btn');
         const label = document.getElementById('audio-label');
-        const dot   = document.getElementById('audio-dot');
+        const dot = document.getElementById('audio-dot');
         if (!btn) return;
         if (audioNotificationsEnabled) {
             btn.className = 'active';
             if (label) label.textContent = 'Äänet päällä';
-            if (dot)   dot.textContent   = '🔊';
+            if (dot) dot.textContent = '🔊';
         } else {
             btn.className = 'muted';
             if (label) label.textContent = 'Äänet pois';
-            if (dot)   dot.textContent   = '🔇';
+            if (dot) dot.textContent = '🔇';
         }
     }
     updateAudioBtnUI();
@@ -1583,7 +1583,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (fallbackBeepFn) fallbackBeepFn();
                 });
             }
-        } catch(e) {
+        } catch (e) {
             console.warn(`Äänen (${name}) käynnistys epäonnistui, käytetään Web Audio -fallbackia:`, e);
             if (fallbackBeepFn) fallbackBeepFn();
         }
@@ -1614,9 +1614,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     osc.start(noteStart); osc.stop(noteEnd);
                 });
             };
-            if (ctx.state === 'suspended') ctx.resume().then(() => playSound()).catch(() => {});
+            if (ctx.state === 'suspended') ctx.resume().then(() => playSound()).catch(() => { });
             else playSound();
-        } catch(e) {}
+        } catch (e) { }
     }
 
     function playTestBeep() {
@@ -1624,9 +1624,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     window.playTestBeep = playTestBeep;
 
-    window.toggleAudioNotifications = function() {
+    window.toggleAudioNotifications = function () {
         audioNotificationsEnabled = !audioNotificationsEnabled;
-        try { localStorage.setItem('route_audio_enabled', String(audioNotificationsEnabled)); } catch(e) {}
+        try { localStorage.setItem('route_audio_enabled', String(audioNotificationsEnabled)); } catch (e) { }
         if (audioNotificationsEnabled) {
             unlockRouteAudio();
             playTestBeep();
@@ -1644,8 +1644,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const ctx = getAudioCtx();
             if (!ctx) return;
             const playSound = () => {
-                const now  = ctx.currentTime;
-                const osc  = ctx.createOscillator();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain); gain.connect(ctx.destination);
                 osc.type = 'sine';
@@ -1655,9 +1655,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
                 osc.start(now); osc.stop(now + 0.2);
             };
-            if (ctx.state === 'suspended') ctx.resume().then(() => playSound()).catch(() => {});
+            if (ctx.state === 'suspended') ctx.resume().then(() => playSound()).catch(() => { });
             else playSound();
-        } catch(e) {}
+        } catch (e) { }
     }
 
     function playWarningBeep() {
@@ -1669,8 +1669,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const ctx = getAudioCtx();
             if (!ctx) return;
             const playSound = () => {
-                const now  = ctx.currentTime;
-                const osc  = ctx.createOscillator();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain); gain.connect(ctx.destination);
                 osc.type = 'sine';
@@ -1681,9 +1681,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
                 osc.start(now); osc.stop(now + 0.45);
             };
-            if (ctx.state === 'suspended') ctx.resume().then(() => playSound()).catch(() => {});
+            if (ctx.state === 'suspended') ctx.resume().then(() => playSound()).catch(() => { });
             else playSound();
-        } catch(e) {}
+        } catch (e) { }
     }
 
     function playArrivalBeep() {
@@ -1696,7 +1696,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (type === 'arrival') navigator.vibrate([250, 100, 250, 100, 700]);
                 else if (type === 'approach') navigator.vibrate([180, 80, 180]);
                 else if (type === 'test') navigator.vibrate([150, 70, 150]);
-            } catch(e) {}
+            } catch (e) { }
         }
     }
     function triggerFeedback(type) { triggerVibration(type); }
@@ -1710,10 +1710,10 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     function handlePointAudio(point, distance) {
         if (!point) return;
-        const warningRadius  = Number(point.warning_radius  ?? point.properties?.warning_radius ?? 100);
-        const arrivalRadius  = Number(point.arrival_radius  ?? point.properties?.arrival_radius ?? 30);
-        const isAudioWarningAllowed = (point.audio_warning  ?? point.properties?.audio_warning)  !== false;
-        const isAudioArrivalAllowed = (point.audio_arrival  ?? point.properties?.audio_arrival)  !== false;
+        const warningRadius = Number(point.warning_radius ?? point.properties?.warning_radius ?? 100);
+        const arrivalRadius = Number(point.arrival_radius ?? point.properties?.arrival_radius ?? 30);
+        const isAudioWarningAllowed = (point.audio_warning ?? point.properties?.audio_warning) !== false;
+        const isAudioArrivalAllowed = (point.audio_arrival ?? point.properties?.audio_arrival) !== false;
 
         // 1. WARNING audio (lähestyminen ~100 m)
         if (!point._audioWarningPlayed && warningRadius > 0 &&
@@ -1752,8 +1752,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     function showApproachingToast(p, distMeters) {
         approachToastVisible = true;
         const name = p.title || p.name || 'Kohde';
-        document.getElementById('toast-label').textContent      = 'Kohde lähestyy';
-        document.getElementById('toast-icon').textContent       = '📍';
+        document.getElementById('toast-label').textContent = 'Kohde lähestyy';
+        document.getElementById('toast-icon').textContent = '📍';
         document.getElementById('toast-point-name').textContent = name;
         document.getElementById('toast-point-dist').textContent = `Noin ${distMeters} m päässä`;
         const toast = document.getElementById('proximity-toast');
@@ -1792,7 +1792,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    window.closeArrivalToast = function() {
+    window.closeArrivalToast = function () {
         const toast = document.getElementById('arrival-toast');
         if (toast) toast.classList.remove('visible');
     };
@@ -1804,15 +1804,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         arrivedPoints.add(idx);
         p._unlocked = true;
         const pointId = p.id || `pt_${p._lat || p.lat}_${p._lng || p.lng}`;
-        try { localStorage.setItem('unlocked_point_' + pointId, 'true'); } catch(e) {}
+        try { localStorage.setItem('unlocked_point_' + pointId, 'true'); } catch (e) { }
         if (p.locked_content) {
             if (p.locked_content.description) p.description = p.locked_content.description;
-            if (p.locked_content.imageUrl)    p.imageUrl    = p.locked_content.imageUrl;
-            if (p.locked_content.image)       p.image       = p.locked_content.image;
-            if (p.locked_content.audioUrl)    p.audioUrl    = p.locked_content.audioUrl;
-            if (p.locked_content.audio)       p.audio       = p.locked_content.audio;
-            if (p.locked_content.youtubeUrl)  p.youtubeUrl  = p.locked_content.youtubeUrl;
-            if (p.locked_content.infoLink)    p.infoLink    = p.locked_content.infoLink;
+            if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+            if (p.locked_content.image) p.image = p.locked_content.image;
+            if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+            if (p.locked_content.audio) p.audio = p.locked_content.audio;
+            if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+            if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
         }
         updateAllMarkerStyles();
         showArrivedBar(idx, p);
@@ -1872,7 +1872,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 arrived: [...arrivedPoints], visited: [...visitedPoints],
                 skipped: [...skippedPoints], nextPointIndex, savedAt: Date.now()
             }));
-        } catch(e) {}
+        } catch (e) { }
     }
 
     function loadRouteProgress() {
@@ -1880,7 +1880,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const raw = localStorage.getItem('route_progress_' + routeId);
             if (!raw) return null;
             return JSON.parse(raw);
-        } catch(e) { return null; }
+        } catch (e) { return null; }
     }
 
     function restoreRouteProgress(points) {
@@ -1909,20 +1909,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         arrivedPoints.clear();
         skippedPoints.clear();
         nextPointIndex = idx;
-        progressIndex  = idx;
+        progressIndex = idx;
         window._maxProjDist = 0;
 
         // 2. Nollataan GPS-saapumislogiikan tilamuuttujat
-        _insideCount          = 0;
+        _insideCount = 0;
         _arrivalCooldownUntil = 0;
-        approachToastVisible  = false;
+        approachToastVisible = false;
 
         // 3. Nollataan off-route-tila täydellisesti
-        isOffRoute                = false;
-        consecutiveOffRouteCount  = 0;
-        lastReportedStepDistance  = 0;
-        routeState                = ROUTE_STATES.ON_ROUTE;
-        offRouteSince             = null;
+        isOffRoute = false;
+        consecutiveOffRouteCount = 0;
+        lastReportedStepDistance = 0;
+        routeState = ROUTE_STATES.ON_ROUTE;
+        offRouteSince = null;
 
         // 4. Off-route-seuranta pois päältä kunnes GPS vahvistaa aloituspiste
         _fallbackPointReached = false;
@@ -2018,7 +2018,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 4500);
     }
 
-    window.closeProximityToast = function() {
+    window.closeProximityToast = function () {
         document.getElementById('proximity-toast').classList.remove('visible');
         clearTimeout(window._toastTimer);
         approachToastVisible = false;
@@ -2050,47 +2050,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('arrival-modal-desc').textContent =
             point.description || point.short_description || '';
 
-        const imgEl  = document.getElementById('arrival-modal-img');
+        const imgEl = document.getElementById('arrival-modal-img');
         const imgUrl = point.imageUrl || point.image || (Array.isArray(point.images) && point.images[0]);
         if (imgUrl) { imgEl.src = imgUrl; imgEl.style.display = 'block'; }
         else imgEl.style.display = 'none';
 
         // Kuuntele tarina -painike
-        const listenBtn   = document.getElementById('btn-listen-story');
-        const listenIcon  = document.getElementById('listen-story-icon');
+        const listenBtn = document.getElementById('btn-listen-story');
+        const listenIcon = document.getElementById('listen-story-icon');
         const listenLabel = document.getElementById('listen-story-label');
 
         // Palauta painike alkutilaan
         listenBtn.classList.remove('playing');
-        if (listenIcon)  listenIcon.textContent  = '▶';
-        if (listenLabel) listenLabel.textContent  = 'Kuuntele tarina';
+        if (listenIcon) listenIcon.textContent = '▶';
+        if (listenLabel) listenLabel.textContent = 'Kuuntele tarina';
 
         listenBtn.onclick = () => {
             if (AudioEngine.isPlayingStory) {
                 AudioEngine.stop();
                 listenBtn.classList.remove('playing');
-                if (listenIcon)  listenIcon.textContent  = '▶';
-                if (listenLabel) listenLabel.textContent  = 'Kuuntele tarina';
+                if (listenIcon) listenIcon.textContent = '▶';
+                if (listenLabel) listenLabel.textContent = 'Kuuntele tarina';
             } else {
                 listenBtn.classList.add('playing');
-                if (listenIcon)  listenIcon.textContent  = '⏹';
-                if (listenLabel) listenLabel.textContent  = 'Pysäytä toisto';
+                if (listenIcon) listenIcon.textContent = '⏹';
+                if (listenLabel) listenLabel.textContent = 'Pysäytä toisto';
 
                 const audioUrl = point.audioUrl || point.audio_url ||
                     (point.audio && typeof point.audio === 'string' ? point.audio : null);
                 if (audioUrl && isValidAudioUrl(audioUrl)) {
                     AudioEngine.playStory(audioUrl, () => {
                         listenBtn.classList.remove('playing');
-                        if (listenIcon)  listenIcon.textContent  = '▶';
-                        if (listenLabel) listenLabel.textContent  = 'Kuuntele tarina';
+                        if (listenIcon) listenIcon.textContent = '▶';
+                        if (listenLabel) listenLabel.textContent = 'Kuuntele tarina';
                     });
                 } else {
                     // Fallback: lue kuvaus ääneen
                     const textToSpeak = point.description || point.title || point.name || '';
                     AudioEngine.speak(textToSpeak, () => {
                         listenBtn.classList.remove('playing');
-                        if (listenIcon)  listenIcon.textContent  = '▶';
-                        if (listenLabel) listenLabel.textContent  = 'Kuuntele tarina';
+                        if (listenIcon) listenIcon.textContent = '▶';
+                        if (listenLabel) listenLabel.textContent = 'Kuuntele tarina';
                     });
                 }
             }
@@ -2151,7 +2151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const first = window.routeLineCoords[0];
                 updateNearbyPlacesUI(first[1], first[0], true);
             }
-        } catch(e) { console.warn('[Lähistöllä] Latausvirhe:', e); }
+        } catch (e) { console.warn('[Lähistöllä] Latausvirhe:', e); }
     }
 
     function updateNearbyPlacesUI(userLat, userLng, force = false) {
@@ -2173,9 +2173,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         container.innerHTML = withDist.map(p => {
-            const name     = p.name || p.canonical_name || 'LaukaaInfo-kohde';
+            const name = p.name || p.canonical_name || 'LaukaaInfo-kohde';
             const category = p.type || 'Kohde';
-            const distStr  = p.distMeters >= 1000
+            const distStr = p.distMeters >= 1000
                 ? `${(p.distMeters / 1000).toFixed(1).replace('.', ',')} km`
                 : `${Math.round(p.distMeters)} m`;
             return `
@@ -2192,10 +2192,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).join('');
     }
 
-    window.toggleNearbySection = function() {
+    window.toggleNearbySection = function () {
         isNearbySectionCollapsed = !isNearbySectionCollapsed;
         const container = document.getElementById('nearby-places-container');
-        const btn       = document.getElementById('toggle-nearby-btn');
+        const btn = document.getElementById('toggle-nearby-btn');
         if (!container || !btn) return;
         if (isNearbySectionCollapsed) {
             container.style.display = 'none'; btn.textContent = 'Laajenna';
@@ -2257,7 +2257,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Päivitä seuraava piste -teksti
         setInterval(() => {
-            const pts  = window.routePoints || [];
+            const pts = window.routePoints || [];
             const name = pts[nextPointIndex]?.title || pts[nextPointIndex]?.name || `Piste ${nextPointIndex + 1}`;
             const dbgEl = document.getElementById('dbg-next-name');
             if (dbgEl) dbgEl.textContent = `#${nextPointIndex + 1} ${name}`;
@@ -2274,7 +2274,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         document.getElementById('dbg-speak-test').onclick = () => {
             AudioEngine.init();
-            const pts  = window.routePoints || [];
+            const pts = window.routePoints || [];
             const name = pts[nextPointIndex]?.title || 'Testikohde';
             AudioEngine.speak(`Lähestyt kohdetta: ${name}`);
         };
@@ -2303,7 +2303,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.getElementById('dbg-sim-180').onclick = () => simulateDistToNextPoint(180);
         document.getElementById('dbg-sim-100').onclick = () => simulateDistToNextPoint(100);
-        document.getElementById('dbg-sim-30').onclick  = () => simulateDistToNextPoint(30);
+        document.getElementById('dbg-sim-30').onclick = () => simulateDistToNextPoint(30);
         document.getElementById('dbg-sim-reset').onclick = () => {
             const pts = window.routePoints || [];
             if (nextPointIndex < pts.length) {
@@ -2326,15 +2326,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const handleUnlockSubmit = async () => {
         const inputEl = document.getElementById('access-code');
-        const code    = inputEl ? inputEl.value.trim() : '';
+        const code = inputEl ? inputEl.value.trim() : '';
         if (!code) return;
-        document.getElementById('btn-unlock').disabled    = true;
+        document.getElementById('btn-unlock').disabled = true;
         document.getElementById('btn-unlock').textContent = 'Tarkistetaan...';
         document.getElementById('unlock-error').style.display = 'none';
         await loadRoute(code);
         if (currentRouteData && !currentRouteData.access_granted) {
             document.getElementById('unlock-error').style.display = 'block';
-            document.getElementById('btn-unlock').disabled    = false;
+            document.getElementById('btn-unlock').disabled = false;
             document.getElementById('btn-unlock').textContent = 'Avaa reitti';
         }
     };
@@ -2354,7 +2354,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!url || typeof url !== 'string') return null;
         const trimmed = url.trim();
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-        const match  = trimmed.match(regExp);
+        const match = trimmed.match(regExp);
         if (match && match[2] && match[2].length === 11) return match[2];
         if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
         return null;
@@ -2375,7 +2375,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const t = url.trim();
         if (t.length < 5) return false;
         const l = t.toLowerCase();
-        if (['kuva','kuvat','image','images','photo','photos','none','null','undefined','-','kuva.jpg'].includes(l)) return false;
+        if (['kuva', 'kuvat', 'image', 'images', 'photo', 'photos', 'none', 'null', 'undefined', '-', 'kuva.jpg'].includes(l)) return false;
         if (isValidVideoUrl(t)) return false;
         if (t.startsWith('http://') || t.startsWith('https://') || t.startsWith('data:image/') ||
             t.startsWith('blob:') || t.startsWith('/') || t.startsWith('./')) return true;
@@ -2397,7 +2397,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const t = url.trim();
         if (t.length < 5) return false;
         const l = t.toLowerCase();
-        if (['audio','aanileike','aani','sound','none','null','undefined','-'].includes(l)) return false;
+        if (['audio', 'aanileike', 'aani', 'sound', 'none', 'null', 'undefined', '-'].includes(l)) return false;
         if (isValidVideoUrl(t) || isValidImageUrl(t)) return false;
         if (t.startsWith('http://') || t.startsWith('https://') || t.startsWith('data:audio/') ||
             t.startsWith('blob:') || t.startsWith('/') || t.startsWith('./')) return true;
@@ -2406,28 +2406,136 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     let pointSwiperInstance = null;
+    let pointLightboxSwiper = null;
+    let currentPointImages = [];
+    let currentPointImageIndex = 0;
+    const pointImageOrientations = {};
 
-    window.openPointModal = function(p) {
+    function updateMediaOrientation(idx) {
+        const mediaContainer = document.getElementById('point-modal-media-container');
+        if (!mediaContainer) return;
+        const isPortrait = !!pointImageOrientations[idx];
+        if (isPortrait) {
+            mediaContainer.classList.add('is-portrait');
+        } else {
+            mediaContainer.classList.remove('is-portrait');
+        }
+        if (pointSwiperInstance && pointSwiperInstance.update) {
+            setTimeout(() => { try { pointSwiperInstance.update(); } catch (e) { } }, 50);
+        }
+    }
+
+    function checkImageOrientation(url, idx) {
+        if (pointImageOrientations[idx] !== undefined) return;
+        const img = new Image();
+        img.onload = function () {
+            const isPortrait = img.naturalHeight > (img.naturalWidth * 1.05);
+            pointImageOrientations[idx] = isPortrait;
+            if (currentPointImageIndex === idx) {
+                updateMediaOrientation(idx);
+            }
+        };
+        img.src = url;
+    }
+
+    window.openPointLightbox = function (startIndex) {
+        if (!currentPointImages || currentPointImages.length === 0) return;
+        const lightbox = document.getElementById('point-lightbox');
+        const wrapper = document.getElementById('point-lightbox-wrapper');
+        const counter = document.getElementById('point-lightbox-counter');
+        const prevBtn = document.querySelector('.lki-lightbox-prev');
+        const nextBtn = document.querySelector('.lki-lightbox-next');
+        const pagination = document.querySelector('.lki-lightbox-pagination');
+        if (!lightbox || !wrapper) return;
+
+        currentPointImageIndex = startIndex || 0;
+        window._currentPointImageIndex = currentPointImageIndex;
+
+        wrapper.innerHTML = currentPointImages.map(img => `
+            <div class="swiper-slide">
+                <img src="${img}" alt="Suurennettu kuva">
+            </div>
+        `).join('');
+
+        if (pointLightboxSwiper) {
+            pointLightboxSwiper.destroy(true, true);
+            pointLightboxSwiper = null;
+        }
+
+        const isMulti = currentPointImages.length > 1;
+        if (counter) {
+            counter.style.display = isMulti ? 'block' : 'none';
+            counter.textContent = `${currentPointImageIndex + 1} / ${currentPointImages.length}`;
+        }
+        if (prevBtn) prevBtn.style.display = isMulti ? '' : 'none';
+        if (nextBtn) nextBtn.style.display = isMulti ? '' : 'none';
+        if (pagination) pagination.style.display = isMulti ? '' : 'none';
+
+        lightbox.style.display = 'flex';
+        void lightbox.offsetWidth;
+        lightbox.classList.add('active');
+
+        if (typeof Swiper !== 'undefined') {
+            pointLightboxSwiper = new Swiper('#point-lightbox-swiper', {
+                initialSlide: currentPointImageIndex,
+                loop: isMulti,
+                navigation: isMulti ? { nextEl: '.lki-lightbox-next', prevEl: '.lki-lightbox-prev' } : false,
+                pagination: isMulti ? { el: '.lki-lightbox-pagination', clickable: true } : false,
+                keyboard: { enabled: true },
+                on: {
+                    slideChange: function () {
+                        const realIdx = this.realIndex != null ? this.realIndex : this.activeIndex;
+                        currentPointImageIndex = realIdx;
+                        window._currentPointImageIndex = realIdx;
+                        if (counter) {
+                            counter.textContent = `${realIdx + 1} / ${currentPointImages.length}`;
+                        }
+                        if (pointSwiperInstance && pointSwiperInstance.slideToLoop) {
+                            try { pointSwiperInstance.slideToLoop(realIdx, 0); } catch (e) { }
+                        }
+                        updateMediaOrientation(realIdx);
+                    }
+                }
+            });
+        }
+    };
+
+    window.closePointLightbox = function () {
+        const lightbox = document.getElementById('point-lightbox');
+        if (lightbox) {
+            lightbox.classList.remove('active');
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+            }, 250);
+        }
+        if (pointLightboxSwiper) {
+            pointLightboxSwiper.destroy(true, true);
+            pointLightboxSwiper = null;
+        }
+        updateMediaOrientation(currentPointImageIndex);
+    };
+
+    window.openPointModal = function (p) {
         if (!p) return;
         const mediaContainer = document.getElementById('point-modal-media-container');
-        const tabsContainer  = document.getElementById('point-modal-tabs');
-        const linkContainer  = document.getElementById('point-modal-link-container');
+        const tabsContainer = document.getElementById('point-modal-tabs');
+        const linkContainer = document.getElementById('point-modal-link-container');
         mediaContainer.innerHTML = ''; mediaContainer.style.display = 'none';
         if (tabsContainer) { tabsContainer.innerHTML = ''; tabsContainer.style.display = 'none'; }
         if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
 
         const _allPoints = window.routePoints || [];
-        const _pointIdx  = _allPoints.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
+        const _pointIdx = _allPoints.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
         const _isArrived = arrivedPoints.has(_pointIdx);
 
         if (window.isPointUnlocked && !window.isPointUnlocked(p) && !_isArrived) {
             const modalTitle = p.title || p.name || 'Salainen kokemuspiste';
-            const radius     = p.unlock_radius || p.arrival_radius || 30;
-            const points     = window.routePoints || [];
-            const idx        = _pointIdx;
+            const radius = p.unlock_radius || p.arrival_radius || 30;
+            const points = window.routePoints || [];
+            const idx = _pointIdx;
             let sequenceNotice = '';
             if (idx > 0) {
-                const prevPoint   = points[idx - 1];
+                const prevPoint = points[idx - 1];
                 const prevUnlocked = window.isPointUnlocked(prevPoint);
                 if (!prevUnlocked) {
                     const prevName = prevPoint ? (prevPoint.title || prevPoint.name || `Piste #${idx}`) : `Piste #${idx}`;
@@ -2438,7 +2546,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const shortcutTargetIdLocked = p.shortcut_to || p.shortcutTo;
             if (shortcutTargetIdLocked) {
                 const targetPoint = points.find(pt => pt.id === shortcutTargetIdLocked);
-                const targetName  = targetPoint?.title || targetPoint?.name || 'myöhempään pisteeseen';
+                const targetName = targetPoint?.title || targetPoint?.name || 'myöhempään pisteeseen';
                 shortcutNotice = `<div style="margin-top:0.9rem;padding:0.75rem 0.9rem;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1.5px solid #fed7aa;border-radius:12px;font-size:0.82rem;color:#92400e;text-align:left;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:1.1rem;flex-shrink:0;">⏭</span><div><strong>Oikaisumahdollisuus:</strong> Tällä pisteellä voit halutessasi siirtyä suoraan pisteeseen <em>${targetName}</em>.</div></div>`;
             }
             document.getElementById('point-modal-title').textContent = modalTitle;
@@ -2456,7 +2564,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const modalTitle = p.title || p.name || 'Nimetön piste';
-        const modalDesc  = p.description || p.desc || p.text || p.details || '';
+        const modalDesc = p.description || p.desc || p.text || p.details || '';
         if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
 
         const rawVideoSources = [p.youtubeUrl, p.youtube_url, p.youtube, p.videoUrl, p.video_url, p.video, p.youtube_id, p.video_id, p.media, p.imageUrl, p.image].flat().filter(Boolean);
@@ -2517,17 +2625,55 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         function renderImageView(imgList) {
             mediaContainer.style.display = 'block';
+            currentPointImages = imgList;
+            currentPointImageIndex = 0;
+            window._currentPointImageIndex = 0;
+            Object.keys(pointImageOrientations).forEach(k => delete pointImageOrientations[k]);
+            mediaContainer.classList.remove('is-portrait');
+
             if (pointSwiperInstance) { pointSwiperInstance.destroy(true, true); pointSwiperInstance = null; }
+
+            imgList.forEach((url, i) => checkImageOrientation(url, i));
+
             if (imgList.length === 1) {
-                mediaContainer.innerHTML = `<img src="${imgList[0]}" alt="${modalTitle}" style="width:100%;height:100%;object-fit:contain;">`;
+                mediaContainer.innerHTML = `
+                    <div style="position:relative; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center;">
+                        <img src="${imgList[0]}" alt="${modalTitle}" style="width:100%; height:100%; object-fit:contain; cursor:zoom-in;" onclick="window.openPointLightbox(0)">
+                        <div class="lki-media-zoom-badge" onclick="window.openPointLightbox(0)">
+                            <span class="iconify" data-icon="material-symbols:fullscreen"></span> Avaa koko näyttöön
+                        </div>
+                    </div>`;
             } else {
-                mediaContainer.innerHTML = `<div class="swiper" id="point-modal-swiper"><div class="swiper-wrapper">${imgList.map(img => `<div class="swiper-slide"><img src="${img}" alt="${modalTitle}" style="width:100%;height:100%;object-fit:contain;"></div>`).join('')}</div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>`;
+                mediaContainer.innerHTML = `
+                    <div class="swiper" id="point-modal-swiper" style="width:100%; height:100%;">
+                        <div class="swiper-wrapper">
+                            ${imgList.map((img, i) => `
+                                <div class="swiper-slide" style="position:relative; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center;">
+                                    <img src="${img}" alt="${modalTitle}" style="width:100%; height:100%; object-fit:contain; cursor:zoom-in;" onclick="window.openPointLightbox(${i})">
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="lki-media-zoom-badge" onclick="window.openPointLightbox(window._currentPointImageIndex || 0)">
+                            <span class="iconify" data-icon="material-symbols:fullscreen"></span> Avaa koko näyttöön
+                        </div>
+                    </div>`;
                 setTimeout(() => {
                     if (typeof Swiper !== 'undefined') {
                         pointSwiperInstance = new Swiper('#point-modal-swiper', {
                             pagination: { el: '.swiper-pagination', clickable: true },
                             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                            loop: true
+                            loop: true,
+                            on: {
+                                slideChange: function () {
+                                    const realIdx = this.realIndex != null ? this.realIndex : this.activeIndex;
+                                    currentPointImageIndex = realIdx;
+                                    window._currentPointImageIndex = realIdx;
+                                    updateMediaOrientation(realIdx);
+                                }
+                            }
                         });
                     }
                 }, 50);
@@ -2563,7 +2709,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         try {
                             const win = window.open(targetLink, '_blank', 'noopener,noreferrer');
                             if (!win || win.closed || typeof win.closed === 'undefined') window.location.href = targetLink;
-                        } catch(e) { window.location.href = targetLink; }
+                        } catch (e) { window.location.href = targetLink; }
                         return;
                     }
                     tabsContainer.querySelectorAll('.point-modal-tab-btn').forEach(b => b.classList.remove('active'));
@@ -2600,22 +2746,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Oikaisu-paneeli
-        const shortcutTargetId  = p.shortcut_to || p.shortcutTo;
-        const shortcutPanelEl   = document.getElementById('shortcut-panel');
+        const shortcutTargetId = p.shortcut_to || p.shortcutTo;
+        const shortcutPanelEl = document.getElementById('shortcut-panel');
         const shortcutBtnNormal = document.getElementById('shortcut-btn-normal');
-        const shortcutBtnTake   = document.getElementById('shortcut-btn-take');
+        const shortcutBtnTake = document.getElementById('shortcut-btn-take');
         const shortcutTargetNameEl = document.getElementById('shortcut-target-name');
         if (shortcutPanelEl) shortcutPanelEl.classList.remove('visible');
 
         if (shortcutTargetId && shortcutPanelEl) {
-            const points     = window.routePoints || [];
+            const points = window.routePoints || [];
             const currentIdx = points.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
-            const targetIdx  = points.findIndex(pt => pt.id === shortcutTargetId);
+            const targetIdx = points.findIndex(pt => pt.id === shortcutTargetId);
             const isValidShortcut = (targetIdx > currentIdx && !visitedPoints.has(targetIdx) &&
                 !skippedPoints.has(targetIdx) && targetIdx > nextPointIndex - 1);
             if (isValidShortcut) {
                 const targetPoint = points[targetIdx];
-                const targetName  = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
+                const targetName = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
                 if (shortcutTargetNameEl) shortcutTargetNameEl.textContent = targetName;
                 const descEl = document.getElementById('shortcut-panel-desc');
                 if (descEl) {
@@ -2655,9 +2801,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     function closePointModal() {
+        if (window.closePointLightbox) {
+            window.closePointLightbox();
+        }
         const modal = document.getElementById('point-modal');
         if (modal) { modal.classList.remove('active'); modal.style.display = ''; }
-        document.getElementById('point-modal-media-container').innerHTML = '';
+        const mediaContainer = document.getElementById('point-modal-media-container');
+        if (mediaContainer) {
+            mediaContainer.innerHTML = '';
+            mediaContainer.classList.remove('is-portrait');
+        }
         if (pointSwiperInstance) { pointSwiperInstance.destroy(true, true); pointSwiperInstance = null; }
     }
 
@@ -2666,5 +2819,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('point-modal').addEventListener('click', (e) => {
         if (e.target.id === 'point-modal') closePointModal();
+    });
+
+    const closeLightboxBtn = document.getElementById('point-lightbox-close');
+    if (closeLightboxBtn) {
+        closeLightboxBtn.addEventListener('click', () => {
+            if (window.closePointLightbox) window.closePointLightbox();
+        });
+    }
+
+    const lightboxEl = document.getElementById('point-lightbox');
+    if (lightboxEl) {
+        lightboxEl.addEventListener('click', (e) => {
+            if (e.target.id === 'point-lightbox' || e.target.classList.contains('swiper-slide')) {
+                if (window.closePointLightbox) window.closePointLightbox();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lb = document.getElementById('point-lightbox');
+            if (lb && lb.classList.contains('active')) {
+                if (window.closePointLightbox) window.closePointLightbox();
+            } else {
+                closePointModal();
+            }
+        }
     });
 });

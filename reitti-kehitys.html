@@ -20,6 +20,169 @@
     <link rel="stylesheet" href="modal.css">
 
     <style>
+        /* ─── Pystykuvien skaalaus & Lightbox ─── */
+        .lki-modal-media {
+            transition: height 0.3s ease;
+        }
+        .lki-modal-media.is-portrait {
+            height: 62vh !important;
+            max-height: 580px !important;
+        }
+        .lki-modal-media img {
+            cursor: zoom-in;
+        }
+        @media (max-width: 768px) {
+            .lki-modal-media.is-portrait {
+                height: 52vh !important;
+                max-height: 56vh !important;
+            }
+        }
+        .lki-media-zoom-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.72);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: background 0.2s, transform 0.2s;
+            user-select: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .lki-media-zoom-badge:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.04);
+        }
+        .lki-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .lki-lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .lki-lightbox-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100001;
+            transition: background 0.2s, transform 0.2s;
+            line-height: 1;
+            outline: none;
+        }
+        .lki-lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+        }
+        .lki-lightbox-counter {
+            position: absolute;
+            top: 22px;
+            left: 22px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100001;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
+        .lki-lightbox-swiper {
+            width: 100%;
+            height: 100%;
+        }
+        .lki-lightbox-swiper .swiper-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            padding: 40px 16px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+        .lki-lightbox-swiper .swiper-slide img {
+            max-width: 96vw;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .lki-lightbox .swiper-button-prev,
+        .lki-lightbox .swiper-button-next {
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.45);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .lki-lightbox .swiper-button-prev:hover,
+        .lki-lightbox .swiper-button-next:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+        }
+        .lki-lightbox .swiper-button-prev::after,
+        .lki-lightbox .swiper-button-next::after {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .lki-lightbox .swiper-pagination-bullet {
+            background: #ffffff;
+            opacity: 0.45;
+            width: 8px;
+            height: 8px;
+            transition: all 0.25s ease;
+        }
+        .lki-lightbox .swiper-pagination-bullet-active {
+            background: #10b981;
+            opacity: 1;
+            width: 22px;
+            border-radius: 4px;
+        }
+
         /* Audio-kehitysversion erikoistyylit */
         
         /* Audio Start Overlay */
@@ -807,6 +970,18 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- POINT LIGHTBOX (Ruudunkokoinen kuva) -->
+<div id="point-lightbox" class="lki-lightbox" style="display:none;" aria-hidden="true">
+    <button class="lki-lightbox-close" id="point-lightbox-close" aria-label="Sulje">&times;</button>
+    <div class="lki-lightbox-counter" id="point-lightbox-counter" style="display:none;"></div>
+    <div class="swiper lki-lightbox-swiper" id="point-lightbox-swiper">
+        <div class="swiper-wrapper" id="point-lightbox-wrapper"></div>
+        <div class="swiper-button-prev lki-lightbox-prev"></div>
+        <div class="swiper-button-next lki-lightbox-next"></div>
+        <div class="swiper-pagination lki-lightbox-pagination"></div>
     </div>
 </div>
 
