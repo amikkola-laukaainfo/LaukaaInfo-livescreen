@@ -241,14 +241,14 @@ function updateReferences(dir) {
                     return pre + newName + post;
                 });
             }
-            fs.writeFileSync(fullPath, content);
+            fs.writeFileSync(fullPath, content, 'utf8');
         } else if (entry.name === 'sw.js') {
             let content = fs.readFileSync(fullPath, 'utf8');
             for (const [oldName, newName] of Object.entries(assetMap)) {
                 const regex = new RegExp(`(["'\\/]|\\.\\.\\/)${oldName}(["'\\?])`, 'g');
                 content = content.replace(regex, `$1${newName}$2`);
             }
-            fs.writeFileSync(fullPath, content);
+            fs.writeFileSync(fullPath, content, 'utf8');
         }
     }
 }

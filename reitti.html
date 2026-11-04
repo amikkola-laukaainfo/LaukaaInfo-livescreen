@@ -1069,12 +1069,11 @@
         /* ─── WONDERIN APP RECOMMENDATION BANNER ───────────────────────────── */
         .wonderin-app-banner {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 0.65rem;
             background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
             color: #ffffff;
-            padding: 0.9rem 1.15rem;
+            padding: 0.95rem 1.15rem;
             border-radius: 14px;
             margin-top: 1.25rem;
             box-shadow: 0 4px 15px rgba(5, 150, 105, 0.22);
@@ -1084,6 +1083,13 @@
         .wonderin-app-banner:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+        .wonderin-banner-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
         }
         .wonderin-app-info {
             display: flex;
@@ -1154,8 +1160,30 @@
             background: rgba(255, 255, 255, 0.3);
             color: #ffffff;
         }
+        .wonderin-banner-footer {
+            width: 100%;
+            padding-top: 0.55rem;
+            border-top: 1px solid rgba(167, 243, 208, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .wonderin-learn-more-link {
+            color: #d1fae5;
+            text-decoration: none;
+            font-size: 0.76rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.15s ease;
+        }
+        .wonderin-learn-more-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
         @media (max-width: 640px) {
-            .wonderin-app-banner {
+            .wonderin-banner-main {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0.85rem;
@@ -1201,21 +1229,29 @@
 
         <!-- Wonderin App Recommendation Banner -->
         <div id="wonderin-app-prompt" class="wonderin-app-banner" style="display: none;">
-            <div class="wonderin-app-info">
-                <div class="wonderin-app-icon">🌿</div>
-                <div>
-                    <div class="wonderin-app-title">Koe maastossa tai nojatuolissa Wonderinilla</div>
-                    <div class="wonderin-app-subtitle">GPS-opastus, äänitarinat ja elämykset suoraan reitillä</div>
+            <div class="wonderin-banner-main">
+                <div class="wonderin-app-info">
+                    <div class="wonderin-app-icon">🌿</div>
+                    <div>
+                        <div class="wonderin-app-title">Koe maastossa tai nojatuolissa Wonderinilla</div>
+                        <div class="wonderin-app-subtitle">GPS-opastus, äänitarinat ja elämykset suoraan reitillä</div>
+                    </div>
+                </div>
+                <div class="wonderin-actions">
+                    <a id="wonderin-web-open-link" href="#" target="_blank" class="wonderin-app-btn" title="Avaa Wonderin Web selaimessa">
+                        <span class="iconify" data-icon="material-symbols:language"></span>
+                        <span>Wonderin Web</span>
+                    </a>
+                    <a id="wonderin-android-open-link" href="#" class="wonderin-app-btn wonderin-app-btn-secondary" title="Avaa Wonderin Android-sovelluksessa">
+                        <span class="iconify" data-icon="material-symbols:android"></span>
+                        <span>Wonderin Android</span>
+                    </a>
                 </div>
             </div>
-            <div class="wonderin-actions">
-                <a id="wonderin-web-open-link" href="#" target="_blank" class="wonderin-app-btn" title="Avaa Wonderin Web selaimessa">
-                    <span class="iconify" data-icon="material-symbols:language"></span>
-                    <span>Wonderin Web</span>
-                </a>
-                <a id="wonderin-android-open-link" href="#" class="wonderin-app-btn wonderin-app-btn-secondary" title="Avaa Wonderin Android-sovelluksessa">
-                    <span class="iconify" data-icon="material-symbols:android"></span>
-                    <span>Wonderin Android</span>
+            <div class="wonderin-banner-footer">
+                <a href="/wonderin/esittely.html" target="_blank" class="wonderin-learn-more-link" title="Lue lisää Wonderin-palvelusta ja sovelluksista">
+                    <span class="iconify" data-icon="material-symbols:info-outline"></span>
+                    <span>Mistä Wonderinissa on kyse? Palvelun ja sovellusten esittely →</span>
                 </a>
             </div>
         </div>
