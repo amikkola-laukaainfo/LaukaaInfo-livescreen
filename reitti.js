@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize Wonderin App recommendation prompt
     const wonderinPrompt = document.getElementById('wonderin-app-prompt');
-    const wonderinLink = document.getElementById('wonderin-app-open-link');
-    if (wonderinPrompt && wonderinLink) {
+    const wonderinWebLink = document.getElementById('wonderin-web-open-link');
+    const wonderinAndroidLink = document.getElementById('wonderin-android-open-link') || document.getElementById('wonderin-app-open-link');
+    if (wonderinPrompt) {
         const isAndroid = /Android/i.test(navigator.userAgent);
         // Custom scheme (wonderin://reitti?id=...) works directly on devices with Wonderin
         // On Android, an intent URI ensures the Android OS launches the app or prompts
@@ -63,7 +64,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             ? `intent://reitti?id=${encodeURIComponent(routeId)}${partnerParam}#Intent;scheme=wonderin;package=com.mediazoo.wonderin;action=android.intent.action.VIEW;end`
             : `wonderin://reitti?id=${encodeURIComponent(routeId)}${partnerParam}`;
 
-        wonderinLink.href = wonderinIntentUrl;
+        if (wonderinAndroidLink) {
+            wonderinAndroidLink.href = wonderinIntentUrl;
+        }
+        if (wonderinWebLink) {
+            wonderinWebLink.href = `/wonderin/web/?id=${encodeURIComponent(routeId)}${partnerParam}`;
+        }
 
         // Display banner unless in embedded iframe mode
         if (!isEmbed) {

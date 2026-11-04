@@ -129,8 +129,8 @@ const assetMap = {};
                 const fullPath = path.join(dir, entry.name);
 
                 if (entry.isDirectory()) {
-                    // Älä minifioi kuvakansioita turhaan
-                    if (entry.name !== 'icons' && entry.name !== 'drive_cache') {
+                    // Älä minifioi kuvakansioita tai valmiiksi koottua Wonderin-sovellusta turhaan
+                    if (entry.name !== 'icons' && entry.name !== 'drive_cache' && entry.name !== 'wonderin') {
                         await minifyAndVersionFolder(fullPath);
                     }
                 } else {

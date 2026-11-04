@@ -1116,6 +1116,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .wonderin-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
         .wonderin-app-btn {
             background: #ffffff;
             color: #065f46;
@@ -1126,7 +1132,8 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            justify-content: center;
+            gap: 0.4rem;
             white-space: nowrap;
             flex-shrink: 0;
             transition: all 0.2s ease;
@@ -1135,6 +1142,34 @@
         .wonderin-app-btn:hover {
             background: #f0fdf4;
             color: #047857;
+            transform: translateY(-1px);
+        }
+        .wonderin-app-btn-secondary {
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: none;
+        }
+        .wonderin-app-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+        @media (max-width: 640px) {
+            .wonderin-app-banner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.85rem;
+            }
+            .wonderin-actions {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
+            .wonderin-app-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.65rem 1rem;
+            }
         }
         body.is-embed-mode .wonderin-app-banner {
             display: none !important;
@@ -1169,14 +1204,20 @@
             <div class="wonderin-app-info">
                 <div class="wonderin-app-icon">🌿</div>
                 <div>
-                    <div class="wonderin-app-title">Koe maastossa Wonderin-sovelluksella</div>
-                    <div class="wonderin-app-subtitle">GPS-seuranta, lähestymisäänet ja haptiikka</div>
+                    <div class="wonderin-app-title">Koe maastossa tai nojatuolissa Wonderinilla</div>
+                    <div class="wonderin-app-subtitle">GPS-opastus, äänitarinat ja elämykset suoraan reitillä</div>
                 </div>
             </div>
-            <a id="wonderin-app-open-link" href="#" class="wonderin-app-btn">
-                <span>Avaa sovelluksessa</span>
-                <span class="iconify" data-icon="material-symbols:open-in-new"></span>
-            </a>
+            <div class="wonderin-actions">
+                <a id="wonderin-web-open-link" href="#" target="_blank" class="wonderin-app-btn" title="Avaa Wonderin Web selaimessa">
+                    <span class="iconify" data-icon="material-symbols:language"></span>
+                    <span>Wonderin Web</span>
+                </a>
+                <a id="wonderin-android-open-link" href="#" class="wonderin-app-btn wonderin-app-btn-secondary" title="Avaa Wonderin Android-sovelluksessa">
+                    <span class="iconify" data-icon="material-symbols:android"></span>
+                    <span>Wonderin Android</span>
+                </a>
+            </div>
         </div>
 
         <!-- Partner Entitlement Welcome Banner -->
