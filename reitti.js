@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const routeId = urlParams.get('id');
+    let routeId = urlParams.get('id');
+    const KNOWN_ROUTE_SLUGS = {
+        'kankaan-reitti': 'c4f8662a-bf2e-4f06-839c-03e639f0f349',
+        'tertan-reitti': 'b1132afe-a2e6-44ea-a811-24df40a28b5f',
+        'muistokartta': '60ba1177-0478-484b-a19a-86115a72c6c6'
+    };
+    if (routeId && KNOWN_ROUTE_SLUGS[routeId.toLowerCase()]) {
+        routeId = KNOWN_ROUTE_SLUGS[routeId.toLowerCase()];
+    }
 
     const isResetLocks = urlParams.get('reset') === '1' || urlParams.get('reset') === 'true' || urlParams.get('reset_locks') === '1';
     if (isResetLocks) {
