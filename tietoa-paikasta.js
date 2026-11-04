@@ -1,4 +1,4 @@
-const MEDIA_BASE_URL = 'https://www.mediazoo.fi/laukaainfo-web/';
+﻿const MEDIA_BASE_URL = 'https://www.mediazoo.fi/laukaainfo-web/';
 
 function normalizeMediaUrl(url) {
     if (!url || typeof url !== 'string') return null;
@@ -3941,64 +3941,72 @@ async function loadRoutesForPlace(place) {
         let routes = [];
         let rpcSuccess = false;
 
-        // 2. Ensisijainen: get_content_for_context RPC
-        try {
-            const { data: rpcData, error: rpcErr } = await window.aiSb.rpc('get_content_for_context', {
-                p_mode: 'PLACE',
-                p_place_id: placeUuid,
-                p_types: ['route'],
-                p_limit: 20
-            });
+        // 2. Ensisijainen: suora haku routes-taulusta (myos private-reitit nakyvat lukolla)
+        {
+            const { data: directR, error: directErr2 } = await window.aiSb
+                .from('routes')
+                .select('id, place_id, title, description, visibility, access_type, category, distance_meters')
+                .eq('place_id', placeUuid)
+                .not('visibility', 'eq', 'deleted')
+                .not('visibility', 'eq', 'archived');
 
-            if (rpcErr) {
-                console.warn('[Routes] get_content_for_context RPC-virhe, aktivoidaan tekninen varalogiikka:', rpcErr);
-            } else {
+            if (!directErr2 && directR && directR.length > 0) {
                 rpcSuccess = true;
-                // RPC on ensisijainen totuus: jos tulos on tyhjä, säiliö pysyy piilossa
-                routes = (rpcData || []).map(r => ({
-                    id: r.content_id,
-                    title: r.title,
-                    description: r.description,
-                    visibility: 'public',
-                    category: 'Reitti',
-                    distance_meters: null
-                }));
+                routes = directR;
+            } else if (directErr2) {
+                console.warn('[Routes] Suora routes-haku epaonnistui:', directErr2);
             }
-        } catch (rpcExc) {
-            console.warn('[Routes] get_content_for_context poikkeus, aktivoidaan tekninen varalogiikka:', rpcExc);
         }
 
-        // 3. Varalogiikka (vain teknisessä RPC-virhetilanteessa, rajattu samoihin julkisuusreunaehtoihin)
-        if (!rpcSuccess) {
-            const { data: directRoutes, error: directErr } = await window.aiSb
-                .from('routes')
-                .select('id, place_id, title, description, visibility, category, distance_meters')
-                .eq('place_id', placeUuid)
-                .or('visibility.eq.public,visibility.eq.PUBLIC,visibility.is.null');
-
-            if (directErr) {
-                console.error('[Routes] Virhe haettaessa suoria reittejä varalogiikalla:', directErr);
-            }
-
-            let junctionRoutes = [];
+        // 2b. Jos place_id-haku tyhjaa, kokeile content_contexts-liitostaulua
+        if (!rpcSuccess || routes.length === 0) {
             try {
-                const { data: jData } = await window.aiSb
+                const { data: jData2 } = await window.aiSb
                     .from('content_contexts')
-                    .select('route_id, routes!inner(id, place_id, title, description, visibility, category, distance_meters)')
+                    .select('route_id, routes!inner(id, place_id, title, description, visibility, access_type, category, distance_meters)')
                     .eq('place_id', placeUuid)
-                    .not('route_id', 'is', null)
-                    .or('routes.visibility.eq.public,routes.visibility.eq.PUBLIC,routes.visibility.is.null');
-                if (jData) {
-                    junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+                    .not('route_id', 'is', null);
+                if (jData2 && jData2.length > 0) {
+                    const jRoutes = jData2.map(j => j.routes).filter(Boolean);
+                    const rMap = new Map(routes.map(r => [r.id, r]));
+                    jRoutes.forEach(r => { if (!rMap.has(r.id)) rMap.set(r.id, r); });
+                    routes = Array.from(rMap.values());
+                    if (routes.length > 0) rpcSuccess = true;
                 }
             } catch (e) {
                 // content_contexts optional fallback
             }
+        }
 
-            const routeMap = new Map();
-            (directRoutes || []).forEach(r => routeMap.set(r.id, r));
-            junctionRoutes.forEach(r => routeMap.set(r.id, r));
-            routes = Array.from(routeMap.values());
+        // 2c. Varalogiikka: get_content_for_context RPC (jos suora haku epaonnistui)
+        if (!rpcSuccess) {
+            try {
+                const { data: rpcData, error: rpcErr } = await window.aiSb.rpc('get_content_for_context', {
+                    p_mode: 'PLACE',
+                    p_place_id: placeUuid,
+                    p_types: ['route'],
+                    p_limit: 20
+                });
+                if (!rpcErr && rpcData) {
+                    rpcSuccess = true;
+                    const rpcRoutes = rpcData.map(r => ({
+                        id: r.content_id,
+                        title: r.title,
+                        description: r.description,
+                        visibility: 'public',
+                        access_type: null,
+                        category: 'Reitti',
+                        distance_meters: null
+                    }));
+                    const rMap2 = new Map(routes.map(r => [r.id, r]));
+                    rpcRoutes.forEach(r => { if (!rMap2.has(r.id)) rMap2.set(r.id, r); });
+                    routes = Array.from(rMap2.values());
+                } else if (rpcErr) {
+                    console.warn('[Routes] get_content_for_context RPC-virhe:', rpcErr);
+                }
+            } catch (rpcExc) {
+                console.warn('[Routes] get_content_for_context poikkeus:', rpcExc);
+            }
         }
 
         // 4. Renderöinti (säilytetty 1:1 ennallaan)
