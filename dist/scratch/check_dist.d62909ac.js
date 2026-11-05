@@ -1,0 +1,1 @@
+const fs=require("fs");if(fs.existsSync("dist/julkaise.html")){const s=fs.readFileSync("dist/julkaise.html","utf8");console.log("dist length:",s.length);const e=s.match(/supabase-config[^"'\s>]+/g);console.log("Matches:",e)}else console.log("dist does not exist");
