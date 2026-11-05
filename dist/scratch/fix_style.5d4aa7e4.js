@@ -1,0 +1,1 @@
+const fs=require("fs"),path=require("path"),filePath=path.join(__dirname,"..","style.css"),buffer=fs.readFileSync(filePath),cleanBuffer=buffer.filter(e=>0!==e);fs.writeFileSync(filePath,cleanBuffer),console.log("style.css fixed! Null bytes removed.");

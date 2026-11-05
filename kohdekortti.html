@@ -1168,6 +1168,15 @@
                 <div class="content-box">
                     <h2>Tietoa kohteesta</h2>
                     <p id="el-desc">Koko kuvaus tulee tähän.</p>
+
+                    <!-- Lisätietoja & Toiveet (additional_wishes) -->
+                    <div id="panel-wishes" style="display: none; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 1.5rem;">
+                        <h3 style="color: #7e22ce; font-size: 1.05rem; font-weight: 700; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="iconify" data-icon="mdi:information-outline" style="font-size: 1.25rem;"></span>
+                            <span>Lisätietoja &amp; Toiveet</span>
+                        </h3>
+                        <p id="el-wishes" style="color: #581c87; font-size: 0.95rem; line-height: 1.6; margin: 0; white-space: pre-wrap;"></p>
+                    </div>
                     
                     <div id="el-specific-fields" class="specific-fields" style="display: none;">
                         <!-- Tyyppikohtaiset kentät (esim. tapahtuma, yhdistys) renderöidään tänne -->
@@ -1266,6 +1275,14 @@
                         <div class="details">
                             <strong>Verkkosivut</strong>
                             <a href="#" target="_blank" id="el-website">-</a>
+                        </div>
+                    </div>
+
+                    <div class="info-row" id="row-extra-link" style="display: none;">
+                        <span class="icon iconify" data-icon="mdi:link-variant"></span>
+                        <div class="details">
+                            <strong>Lisätietoa &amp; Linkit</strong>
+                            <a href="#" target="_blank" id="el-extra-link">-</a>
                         </div>
                     </div>
                 </div>
@@ -1577,8 +1594,8 @@
                 description: p.content || p.description || '',
                 images: uniqueMedia,
                 formUrl: formUrl,
-                tags: Array.isArray(p.tags) ? p.tags : [],
-                quick_facts: Array.isArray(p.tags) ? p.tags : (Array.isArray(p.quick_facts) ? p.quick_facts : []),
+                tags: (Array.isArray(p.tags) ? p.tags : []).filter(t => typeof t !== 'string' || (!t.startsWith('_wishes:') && !t.startsWith('_access_key:') && !t.startsWith('_'))),
+                quick_facts: (Array.isArray(p.quick_facts) ? p.quick_facts : (Array.isArray(p.tags) ? p.tags : [])).filter(t => typeof t !== 'string' || (!t.startsWith('_wishes:') && !t.startsWith('_access_key:') && !t.startsWith('_'))),
                 place_id: p.place_id || null,
                 visibility: p.visibility,
                 access_key: accessKey,
@@ -1641,6 +1658,24 @@
                     phone: p.contact_phone || '',
                     website: p.link || p.website_url || ''
                 },
+                extraUrl: (() => {
+                    let u = p.extra_url || '';
+                    if (!u && p.post_links && Array.isArray(p.post_links)) {
+                        const el = p.post_links.find(l => l.link_type === 'info');
+                        if (el) u = el.url;
+                    }
+                    return u;
+                })(),
+                additionalWishes: (() => {
+                    let w = p.additional_wishes || p.notes || '';
+                    if (!w && Array.isArray(p.tags)) {
+                        const wt = p.tags.find(t => typeof t === 'string' && t.startsWith('_wishes:'));
+                        if (wt) {
+                            try { w = decodeURIComponent(wt.replace('_wishes:', '').trim()); } catch(e) { w = wt.replace('_wishes:', '').trim(); }
+                        }
+                    }
+                    return w;
+                })(),
                 event: null,
                 offer: null
             };
@@ -1725,7 +1760,13 @@
             if (!selector) return;
             selector.innerHTML = '';
 
-            items.forEach(k => {
+            // Vain julkiset kohteet valintalistaan! Piilotetut (unlisted/link/private) EIVÄT koskaan tule valikkoon.
+            const publicItems = (items || []).filter(k => {
+                const vis = (k.visibility || 'public').toLowerCase();
+                return vis !== 'unlisted' && vis !== 'link' && vis !== 'private';
+            });
+
+            publicItems.forEach(k => {
                 const opt = document.createElement('option');
                 opt.value = k.id;
                 const isSelected = selectedId && (k.id === selectedId || k.target_id === selectedId);
@@ -1990,6 +2031,13 @@
                 }
 
                 const selectedId = targetEntity ? targetEntity.id : kohteet[0].id;
+                
+                // Jos katsellaan piilotettua kohdetta (unlisted / link), piilotetaan oikean yläkulman vaihtovalikko
+                const isTargetHidden = targetEntity && (targetEntity.visibility === 'unlisted' || targetEntity.visibility === 'link' || targetEntity.visibility === 'private');
+                if (selector) {
+                    selector.style.display = isTargetHidden ? 'none' : '';
+                }
+
                 populateSelector(kohteet, selectedId);
                 renderEntity(selectedId);
 
@@ -2362,6 +2410,30 @@
                 wb.parentElement.parentElement.style.display = 'none';
             }
 
+            const extraLinkEl = document.getElementById('el-extra-link');
+            const extraUrlVal = entity.extraUrl || entity.extra_url || '';
+            if (extraLinkEl) {
+                if (extraUrlVal) {
+                    extraLinkEl.textContent = 'Avaa lisätiedot';
+                    extraLinkEl.href = extraUrlVal;
+                    extraLinkEl.parentElement.parentElement.style.display = 'flex';
+                } else {
+                    extraLinkEl.parentElement.parentElement.style.display = 'none';
+                }
+            }
+
+            const wishesPanel = document.getElementById('panel-wishes');
+            const wishesEl = document.getElementById('el-wishes');
+            const wishesText = (entity.additionalWishes || entity.additional_wishes || entity.notes || '').trim();
+            if (wishesPanel && wishesEl) {
+                if (wishesText) {
+                    wishesEl.textContent = wishesText;
+                    wishesPanel.style.display = 'block';
+                } else {
+                    wishesPanel.style.display = 'none';
+                }
+            }
+
             // Aikataulu-paneeli sivupalkissa (vain event-tyypille)
             const schedPanel = document.getElementById('event-schedule-panel');
             const schedEl = document.getElementById('el-schedule');
@@ -2429,7 +2501,7 @@
                 const addFact = (text) => {
                     if (!text || typeof text !== 'string') return;
                     const clean = text.trim();
-                    if (!clean) return;
+                    if (!clean || clean.startsWith('_wishes:') || clean.startsWith('_access_key:') || clean.startsWith('_')) return;
                     const norm = clean.toLowerCase();
                     for (const existing of factSet) {
                         if (existing.toLowerCase() === norm) return;
