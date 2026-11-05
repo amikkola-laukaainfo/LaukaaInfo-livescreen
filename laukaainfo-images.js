@@ -5,25 +5,18 @@
  * elementeille, joissa on data-slot="[slot_id]" (tai data-bg-slot / data-image-slot).
  * 
  * Säilyttää olemassa olevat gradientit ja sisältää fallback-varmistuksen!
- * 
- * v1.1 – Korjaus: tallennetaan CSS-gradientit synkronisesti ennen async-skriptien ajoa,
- *         ja ajetaan applySiteImages uudelleen viiveellä ylikirjoittamaan tietoa-paikasta.js
  */
 (function() {
   'use strict';
 
-  // Tuetaan sekä image-slots.json että site-images.json tiedostoja
   const CONFIG_PATHS = ['image-slots.json', 'site-images.json'];
   const cacheKey = Math.floor(Date.now() / (1000 * 60 * 10)); // 10 min välimuisti
   let slotMap = {};
   let isLoaded = false;
   const pendingCallbacks = [];
-
-  // ★ KRIITTINEN: Tallennetaan CSS-gradientit SYNKRONISESTI heti skriptin latautuessa,
-  // ennen kuin tietoa-paikasta.js tai muut async-skriptit ehtivät muuttaa tyylejä.
-  // Tämä varmistaa, että voimme palauttaa gradientit myöhemmin oikein.
   const cssBaseBackgrounds = {};
-  (function storeCssBackgrounds() {
+
+  function storeCssBackgrounds() {
     try {
       var els = document.querySelectorAll('[data-slot],[data-bg-slot],[data-image-slot]');
       for (var i = 0; i < els.length; i++) {
@@ -31,13 +24,16 @@
         var slotId = el.getAttribute('data-slot') || el.getAttribute('data-bg-slot') || el.getAttribute('data-image-slot');
         if (slotId && !cssBaseBackgrounds[slotId]) {
           var bg = window.getComputedStyle(el).backgroundImage;
-          if (bg && bg !== 'none') {
+          if (bg && bg !== 'none' && bg.includes('gradient')) {
             cssBaseBackgrounds[slotId] = bg;
           }
         }
       }
-    } catch (e) { /* jätetään huomiotta */ }
-  })();
+    } catch (e) { /* huomioimatta */ }
+  }
+
+  // Tallennetaan heti
+  storeCssBackgrounds();
 
   function fetchConfig(index) {
     if (index >= CONFIG_PATHS.length) {
@@ -80,9 +76,10 @@
         isLoaded = true;
         applySiteImages();
 
-        // ★ Ajetaan uudelleen 0.8s ja 2.5s viiveellä ylikirjoittamaan
-        // tietoa-paikasta.js:n async hero-asetus (joka pyyhkii gradientin)
-        setTimeout(function() { if (isLoaded) applySiteImages(); }, 800);
+        // Ajetaan uudelleen 500ms, 1200ms ja 2500ms viiveillä siltä varalta,
+        // että tietoa-paikasta.js tai muu async-skripti valmistuu myöhemmin
+        setTimeout(function() { if (isLoaded) applySiteImages(); }, 500);
+        setTimeout(function() { if (isLoaded) applySiteImages(); }, 1200);
         setTimeout(function() { if (isLoaded) applySiteImages(); }, 2500);
 
         while (pendingCallbacks.length > 0) {
@@ -91,15 +88,14 @@
         }
       })
       .catch(function(err) {
-        // Kokeillaan toista tiedostonimeä
         fetchConfig(index + 1);
       });
   }
 
   function applySiteImages(root) {
     root = root || document;
+    storeCssBackgrounds();
 
-    // 1. data-slot (AI Studion suositus) sekä data-bg-slot ja data-image-slot
     const elements = root.querySelectorAll('[data-slot], [data-bg-slot], [data-image-slot]');
 
     elements.forEach(function(el) {
@@ -122,19 +118,18 @@
         };
         el.src = targetUrl;
       } else {
-        // Taustakuvat (hero-bannerit, kortit jne.)
-        // ★ Käytetään talletettua CSS-gradienttia pohjana (ei inline-tyyliä,
-        //    joka saattaa olla tyhjennetty tai korvattu tietoa-paikasta.js:n toimesta)
         const baseBg = cssBaseBackgrounds[slotId] || '';
 
         if (baseBg && baseBg !== 'none' && /url\([^)]+\)/i.test(baseBg)) {
-          // Gradientti löytyy CSS:stä + siinä on jo url() — korvataan url oikealla kuvalla
           el.style.backgroundImage = baseBg.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
-        } else if (baseBg && baseBg !== 'none') {
-          // Gradientti löytyy CSS:stä mutta ei url() — lisätään kuva perään
+        } else if (baseBg && baseBg !== 'none' && baseBg.includes('gradient')) {
           el.style.backgroundImage = baseBg + ', url("' + targetUrl + '")';
+        } else if (el.classList.contains('place-identity-hero') || el.id === 'place-hero') {
+          // Varma oletusgradientti alueiden ja taajamien hero-otsikoille
+          el.style.backgroundImage = 'linear-gradient(135deg, rgba(0, 86, 179, 0.82) 0%, rgba(0, 40, 100, 0.9) 100%), url("' + targetUrl + '")';
+          el.style.backgroundSize = 'cover';
+          el.style.backgroundPosition = 'center';
         } else {
-          // Ei CSS-gradienttia — tarkistetaan nykyinen inline-tyyli fallbackina
           const currentStyle = el.style.backgroundImage || '';
           if (currentStyle && /url\([^)]+\)/i.test(currentStyle)) {
             el.style.backgroundImage = currentStyle.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
@@ -148,7 +143,6 @@
     });
   }
 
-  // Julkiset apufunktiot
   window.getSiteImageUrl = function(slotId, defaultFallback) {
     if (slotMap[slotId] && slotMap[slotId].url) {
       return slotMap[slotId].url;
@@ -166,7 +160,6 @@
     }
   };
 
-  // Tarkkaillaan dynaamisia lisäyksiä DOM:iin (kuten alueet.js kortit)
   const observer = new MutationObserver(function(mutations) {
     let hasTarget = false;
     for (let i = 0; i < mutations.length; i++) {
