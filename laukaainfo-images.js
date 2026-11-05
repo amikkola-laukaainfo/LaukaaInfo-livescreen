@@ -97,16 +97,14 @@
         // Taustakuvat (hero-bannerit, kortit jne.)
         const currentStyle = el.style.backgroundImage || window.getComputedStyle(el).backgroundImage || '';
 
-        // Jos elementissä on liukuväri (gradientti), säilytetään se luettavuuden vuoksi
-        if (currentStyle.includes('linear-gradient') || currentStyle.includes('radial-gradient')) {
-          const gradientMatch = currentStyle.match(/((?:linear|radial)-gradient\([^)]+\))/i);
-          if (gradientMatch) {
-            el.style.backgroundImage = gradientMatch[1] + ', url("' + targetUrl + '")';
-            return;
-          }
+        // Jos taustassa on jo url(...), korvataan vain kuvaosoite, jotta liukuvärit (linear-gradient) säilyvät ehjinä
+        if (/url\([^)]+\)/i.test(currentStyle)) {
+          el.style.backgroundImage = currentStyle.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
+        } else if (currentStyle.includes('gradient')) {
+          el.style.backgroundImage = currentStyle + ', url("' + targetUrl + '")';
+        } else {
+          el.style.backgroundImage = 'url("' + targetUrl + '")';
         }
-
-        el.style.backgroundImage = 'url("' + targetUrl + '")';
       }
     });
   }

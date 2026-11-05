@@ -1,1 +1,0 @@
-const fs=require("fs"),content=fs.readFileSync("julkaise.html","utf8"),checkTerms=["SUPABASE_URL","SUPABASE_KEY","supabaseClient"];checkTerms.forEach(e=>{const c=content.split("\n"),s=[];c.forEach((c,n)=>{c.includes(e)&&s.push(`${n+1}: ${c.trim()}`)}),console.log(`=== ${e} (${s.length}) ===`),s.forEach(e=>console.log(e))});

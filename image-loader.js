@@ -1,182 +1,164 @@
 /**
- * LaukaaInfo – Dynaaminen kuvien lataaja (image-loader.js)
+ * LaukaaInfo – Automaattinen kuvien lataaja (laukaainfo-images.js / image-loader.js)
  * 
- * Lukee keskitetyn site-images.json -tiedoston ja korvaa perussivujen
- * merkityt taustakuvat (data-bg-slot) ja kuvatagit (data-image-slot)
- * Supabase Storage -osoitteilla tai ulkoisilla linkeillä.
+ * Hakee image-slots.json (tai site-images.json) tiedoston ja asettaa kuvaosoitteet automaattisesti
+ * elementeille, joissa on data-slot="[slot_id]" (tai data-bg-slot / data-image-slot).
  * 
- * Säilyttää aina alkuperäisen kuvan luotettavana fallbackina!
+ * Säilyttää olemassa olevat gradientit ja sisältää fallback-varmistuksen!
  */
 (function() {
-    'use strict';
+  'use strict';
 
-    const CONFIG_URL = 'site-images.json';
-    let imageMap = {};
-    let isLoaded = false;
-    const pendingCallbacks = [];
+  // Tuetaan sekä image-slots.json että site-images.json tiedostoja
+  const CONFIG_PATHS = ['image-slots.json', 'site-images.json'];
+  const cacheKey = Math.floor(Date.now() / (1000 * 60 * 10)); // 10 min välimuisti
+  let slotMap = {};
+  let isLoaded = false;
+  const pendingCallbacks = [];
 
-    // Hakee ja parsii kuva-asetukset
-    async function initImageLoader() {
-        try {
-            // Lisätään aikaleima välimuistin ohittamiseksi (tunnin välein)
-            const cacheKey = Math.floor(Date.now() / (1000 * 60 * 10)); // 10 min cache
-            const res = await fetch(`${CONFIG_URL}?v=${cacheKey}`);
-            if (!res.ok) throw new Error(`Latausvirhe: ${res.status}`);
-            
-            const data = await res.json();
-            
-            // Muodostetaan id -> url kartta (tukee sekä array että object -muotoja)
-            if (Array.isArray(data.slots)) {
-                data.slots.forEach(slot => {
-                    if (slot && slot.id) {
-                        imageMap[slot.id] = {
-                            url: (slot.currentUrl || '').trim(),
-                            fallback: slot.fallbackUrl || '',
-                            label: slot.label || ''
-                        };
-                    }
-                });
-            } else if (data.slots && typeof data.slots === 'object') {
-                Object.keys(data.slots).forEach(id => {
-                    const slot = data.slots[id];
-                    imageMap[id] = {
-                        url: (typeof slot === 'string' ? slot : slot.currentUrl || '').trim(),
-                        fallback: slot.fallbackUrl || '',
-                        label: slot.label || ''
-                    };
-                });
-            }
-
-            isLoaded = true;
-
-            // Päivitetään sivun elementit
-            applySiteImages();
-
-            // Kutsutaan odottavat kuuntelijat
-            while (pendingCallbacks.length > 0) {
-                const cb = pendingCallbacks.shift();
-                try { cb(imageMap); } catch (e) { console.warn('image-loader callback error:', e); }
-            }
-
-        } catch (err) {
-            console.warn('[image-loader] Ei voitu ladata dynaamisia kuvia, käytetään oletuksia:', err.message);
-            isLoaded = true;
-        }
+  function fetchConfig(index) {
+    if (index >= CONFIG_PATHS.length) {
+      console.warn('LaukaaInfo image slots: Konfiguraatiotiedostoa ei löytynyt.');
+      return;
     }
 
-    /**
-     * Etsii ja päivittää kaikki data-bg-slot ja data-image-slot -elementit
-     */
-    function applySiteImages(root = document) {
-        if (!root) return;
+    const path = `${CONFIG_PATHS[index]}?v=${cacheKey}`;
+    fetch(path)
+      .then(function(res) {
+        if (!res.ok) throw new Error('Not found: ' + path);
+        return res.json();
+      })
+      .then(function(data) {
+        const slots = data.slots || data;
 
-        // 1. Taustakuvat (data-bg-slot)
-        const bgElements = root.querySelectorAll('[data-bg-slot]');
-        bgElements.forEach(el => {
-            const slotId = el.getAttribute('data-bg-slot');
-            if (!slotId || !imageMap[slotId]) return;
-
-            const targetUrl = imageMap[slotId].url;
-            if (!targetUrl) return; // Jos tyhjä, pidetään HTML:n oma kuva
-
-            // Tarkistetaan nykyinen taustatyyli (jos siinä on gradientti, säilytetään se)
-            const currentStyle = el.style.backgroundImage || window.getComputedStyle(el).backgroundImage || '';
-            
-            if (currentStyle.includes('linear-gradient') || currentStyle.includes('radial-gradient')) {
-                // Poimitaan mahdollinen liukuväri
-                const gradientMatch = currentStyle.match(/((?:linear|radial)-gradient\([^)]+\))/i);
-                if (gradientMatch) {
-                    el.style.backgroundImage = `${gradientMatch[1]}, url('${targetUrl}')`;
-                    return;
-                }
+        if (Array.isArray(slots)) {
+          slots.forEach(function(s) {
+            if (s && s.id) {
+              const activeUrl = (s.currentUrl || s.url || s.fallbackUrl || '').trim();
+              slotMap[s.id] = {
+                url: activeUrl,
+                fallback: s.fallbackUrl || '',
+                label: s.label || ''
+              };
             }
-
-            // Oletus: asetetaan suora taustakuva
-            el.style.backgroundImage = `url('${targetUrl}')`;
-        });
-
-        // 2. Kuvatagit (data-image-slot)
-        const imgElements = root.querySelectorAll('[data-image-slot]');
-        imgElements.forEach(img => {
-            const slotId = img.getAttribute('data-image-slot');
-            if (!slotId || !imageMap[slotId]) return;
-
-            const targetUrl = imageMap[slotId].url;
-            if (!targetUrl) return;
-
-            const originalSrc = img.src;
-            img.onerror = function() {
-                // Jos uusi kuva ei lataudu, palataan alkuperäiseen
-                img.src = originalSrc;
-                img.onerror = null;
+          });
+        } else if (typeof slots === 'object') {
+          Object.keys(slots).forEach(function(id) {
+            const s = slots[id];
+            const activeUrl = typeof s === 'string' ? s : (s.currentUrl || s.url || s.fallbackUrl || '').trim();
+            slotMap[id] = {
+              url: activeUrl,
+              fallback: s.fallbackUrl || '',
+              label: s.label || ''
             };
-            img.src = targetUrl;
-        });
-    }
-
-    /**
-     * Julkinen apumetodi: palauttaa slotin aktiivisen URL:n tai fallbackin
-     */
-    window.getSiteImageUrl = function(slotId, defaultFallback = '') {
-        if (imageMap[slotId] && imageMap[slotId].url) {
-            return imageMap[slotId].url;
+          });
         }
-        if (imageMap[slotId] && imageMap[slotId].fallback) {
-            return imageMap[slotId].fallback;
+
+        isLoaded = true;
+        applySiteImages();
+
+        while (pendingCallbacks.length > 0) {
+          const cb = pendingCallbacks.shift();
+          try { cb(slotMap); } catch (e) { console.warn(e); }
         }
-        return defaultFallback;
-    };
+      })
+      .catch(function(err) {
+        // Kokeillaan toista tiedostonimeä
+        fetchConfig(index + 1);
+      });
+  }
 
-    /**
-     * Julkinen metodi uuden elementtipuun päivittämiseen (esim. dynaamiset kortit)
-     */
-    window.applySiteImages = applySiteImages;
+  function applySiteImages(root) {
+    root = root || document;
 
-    /**
-     * Mahdollisuus rekisteröidä callback, joka suoritetaan kun kuvat on ladattu
-     */
-    window.onSiteImagesLoaded = function(cb) {
-        if (isLoaded) {
-            cb(imageMap);
+    // 1. data-slot (AI Studion suositus) sekä data-bg-slot ja data-image-slot
+    const elements = root.querySelectorAll('[data-slot], [data-bg-slot], [data-image-slot]');
+
+    elements.forEach(function(el) {
+      const slotId = el.getAttribute('data-slot') || el.getAttribute('data-bg-slot') || el.getAttribute('data-image-slot');
+      if (!slotId || !slotMap[slotId]) return;
+
+      const item = slotMap[slotId];
+      const targetUrl = item.url;
+      if (!targetUrl) return;
+
+      if (el.tagName.toLowerCase() === 'img') {
+        const originalSrc = el.src;
+        el.onerror = function() {
+          if (item.fallback && el.src !== item.fallback) {
+            el.src = item.fallback;
+          } else {
+            el.src = originalSrc;
+          }
+          el.onerror = null;
+        };
+        el.src = targetUrl;
+      } else {
+        // Taustakuvat (hero-bannerit, kortit jne.)
+        const currentStyle = el.style.backgroundImage || window.getComputedStyle(el).backgroundImage || '';
+
+        // Jos taustassa on jo url(...), korvataan vain kuvaosoite, jotta liukuvärit (linear-gradient) säilyvät ehjinä
+        if (/url\([^)]+\)/i.test(currentStyle)) {
+          el.style.backgroundImage = currentStyle.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
+        } else if (currentStyle.includes('gradient')) {
+          el.style.backgroundImage = currentStyle + ', url("' + targetUrl + '")';
         } else {
-            pendingCallbacks.push(cb);
+          el.style.backgroundImage = 'url("' + targetUrl + '")';
         }
-    };
-
-    // Tarkkaillaan dynaamisesti lisättäviä kortteja (kuten alueet.js kortit)
-    const observer = new MutationObserver((mutations) => {
-        let hasSlotElements = false;
-        for (const m of mutations) {
-            if (m.addedNodes.length > 0) {
-                for (const node of m.addedNodes) {
-                    if (node.nodeType === 1) { // ELEMENT_NODE
-                        if (node.hasAttribute('data-bg-slot') || node.hasAttribute('data-image-slot') ||
-                            node.querySelector('[data-bg-slot], [data-image-slot]')) {
-                            hasSlotElements = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (hasSlotElements) break;
-        }
-        if (hasSlotElements) {
-            applySiteImages();
-        }
+      }
     });
+  }
 
-    // Käynnistetään kun DOM on valmis
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            initImageLoader();
-            observer.observe(document.body, { childList: true, subtree: true });
-        });
-    } else {
-        initImageLoader();
-        if (document.body) {
-            observer.observe(document.body, { childList: true, subtree: true });
-        }
+  // Julkiset apufunktiot
+  window.getSiteImageUrl = function(slotId, defaultFallback) {
+    if (slotMap[slotId] && slotMap[slotId].url) {
+      return slotMap[slotId].url;
     }
+    return defaultFallback || (slotMap[slotId] && slotMap[slotId].fallback) || '';
+  };
 
+  window.applySiteImages = applySiteImages;
+
+  window.onSiteImagesLoaded = function(cb) {
+    if (isLoaded) {
+      cb(slotMap);
+    } else {
+      pendingCallbacks.push(cb);
+    }
+  };
+
+  // Tarkkaillaan dynaamisia lisäyksiä DOM:iin (kuten alueet.js kortit)
+  const observer = new MutationObserver(function(mutations) {
+    let hasTarget = false;
+    for (let i = 0; i < mutations.length; i++) {
+      const m = mutations[i];
+      if (m.addedNodes && m.addedNodes.length > 0) {
+        for (let j = 0; j < m.addedNodes.length; j++) {
+          const node = m.addedNodes[j];
+          if (node.nodeType === 1) {
+            if (node.hasAttribute('data-slot') || node.hasAttribute('data-bg-slot') || node.hasAttribute('data-image-slot') ||
+                node.querySelector('[data-slot], [data-bg-slot], [data-image-slot]')) {
+              hasTarget = true;
+              break;
+            }
+          }
+        }
+      }
+      if (hasTarget) break;
+    }
+    if (hasTarget) {
+      applySiteImages();
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      fetchConfig(0);
+      if (document.body) observer.observe(document.body, { childList: true, subtree: true });
+    });
+  } else {
+    fetchConfig(0);
+    if (document.body) observer.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 

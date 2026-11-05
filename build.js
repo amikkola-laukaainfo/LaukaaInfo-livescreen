@@ -12,11 +12,11 @@ async function runBuild() {
 
     // 1. Asennetaan paketit devDependencies-osioon (jos ei jo asennettu)
 console.log('1. Tarkistetaan ja asennetaan minifiintipaketit... (Tämä voi kestää hetken)');
-try {
-    execSync('npm install --no-save terser clean-css html-minifier-terser', { stdio: 'ignore' });
-} catch (e) {
-    console.log('Pakettien asennuksessa tapahtui virhe, mutta yritetään jatkaa.');
-}
+// try {
+//     execSync('npm install --no-save terser clean-css html-minifier-terser', { stdio: 'ignore' });
+// } catch (e) {
+//     console.log('Pakettien asennuksessa tapahtui virhe, mutta yritetään jatkaa.');
+// }
 
 const Terser = require('terser');
 const CleanCSS = require('clean-css');
