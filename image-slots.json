@@ -1,17 +1,7 @@
 {
   "version": "1.0",
-  "updated_at": "2026-11-05T15:00:00Z",
-  "storage_base_url": "https://iesfqckxotgsqcedvgea.supabase.co/storage/v1/object/public/site-images/",
+  "updated_at": "2026-11-05T17:05:26.716Z",
   "slots": [
-    {
-      "id": "lievestuore_hero",
-      "group": "Alueet & Kylät",
-      "page": "lievestuore.html",
-      "label": "Lievestuore – Pääotsikkokuva",
-      "aspectRatio": "21:9",
-      "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
-    },
     {
       "id": "laukaa_hero",
       "group": "Alueet & Kylät",
@@ -19,7 +9,19 @@
       "label": "Laukaan kirkonkylä – Pääotsikkokuva",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Kirkonkylän herobanneri sivun yläreunassa"
+    },
+    {
+      "id": "lievestuore_hero",
+      "group": "Alueet & Kylät",
+      "page": "lievestuore.html",
+      "label": "Lievestuore – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": "https://iesfqckxotgsqcedvgea.supabase.co/storage/v1/object/public/site-images/lievestuore_hero.jpg?v=1793898297162",
+      "description": "Lievestuoreen sivun herotausta",
+      "updatedAt": "2026-11-05T17:04:57.165Z"
     },
     {
       "id": "vihtavuori_hero",
@@ -28,7 +30,8 @@
       "label": "Vihtavuori – Pääotsikkokuva",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Vihtavuoren sivun herotausta"
     },
     {
       "id": "leppavesi_hero",
@@ -37,7 +40,8 @@
       "label": "Leppävesi – Pääotsikkokuva",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Leppäveden taajaman herotausta"
     },
     {
       "id": "vehnia_hero",
@@ -46,43 +50,28 @@
       "label": "Vehniä – Pääotsikkokuva",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Vehniän kyläsivun herotausta"
     },
     {
       "id": "koko_laukaa_hero",
       "group": "Alueet & Kylät",
       "page": "koko-laukaa.html",
-      "label": "Koko Laukaa – Pääotsikkokuva",
+      "label": "Koko Laukaa – Esittelytausta",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Koko Laukaan yleisesittelyn pääkuva"
     },
     {
-      "id": "card_laukaa",
+      "id": "card_laukaa_kk",
       "group": "Aluekortit (alueet.html)",
       "page": "alueet.html",
-      "label": "Laukaa – Kuntakortti",
+      "label": "Laukaan kirkonkylä – Kyläkortti",
       "aspectRatio": "16:9",
       "fallbackUrl": "kuvia/taajama_bg.png",
-      "currentUrl": ""
-    },
-    {
-      "id": "card_hankasalmi",
-      "group": "Aluekortit (alueet.html)",
-      "page": "alueet.html",
-      "label": "Hankasalmi – Seutukortti",
-      "aspectRatio": "16:9",
-      "fallbackUrl": "kuvia/metsa_bg.png",
-      "currentUrl": ""
-    },
-    {
-      "id": "card_jyvaskyla",
-      "group": "Aluekortit (alueet.html)",
-      "page": "alueet.html",
-      "label": "Jyväskylä – Kankaankortti",
-      "aspectRatio": "16:9",
-      "fallbackUrl": "kuvia/taajama_bg.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Alueet-sivun kirkonkylän nostokortin kuva"
     },
     {
       "id": "card_lievestuore",
@@ -91,7 +80,8 @@
       "label": "Lievestuore – Kyläkortti",
       "aspectRatio": "16:9",
       "fallbackUrl": "kuvia/taajama_bg.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Alueet-sivun Lievestuoreen nostokortin kuva"
     },
     {
       "id": "card_vihtavuori",
@@ -100,7 +90,8 @@
       "label": "Vihtavuori – Kyläkortti",
       "aspectRatio": "16:9",
       "fallbackUrl": "kuvia/taajama_bg.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Alueet-sivun Vihtavuoren nostokortin kuva"
     },
     {
       "id": "card_leppavesi",
@@ -109,7 +100,8 @@
       "label": "Leppävesi – Kyläkortti",
       "aspectRatio": "16:9",
       "fallbackUrl": "kuvia/taajama_bg.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Alueet-sivun Leppäveden nostokortin kuva"
     },
     {
       "id": "card_vehnia",
@@ -118,7 +110,48 @@
       "label": "Vehniä – Kyläkortti",
       "aspectRatio": "16:9",
       "fallbackUrl": "kuvia/metsa_bg.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Alueet-sivun Vehniän kyläkortin kuva"
+    },
+    {
+      "id": "card_vuontee",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Vuontee – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/metsa_bg.png",
+      "currentUrl": "",
+      "description": "Alueet-sivun Vuonteen kyläkortin kuva"
+    },
+    {
+      "id": "card_kuusa",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Kuusa – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/metsa_bg.png",
+      "currentUrl": "",
+      "description": "Alueet-sivun Kuusan kyläkortin kuva"
+    },
+    {
+      "id": "card_savio",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Savio – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/metsa_bg.png",
+      "currentUrl": "",
+      "description": "Alueet-sivun Savion kyläkortin kuva"
+    },
+    {
+      "id": "card_tarvaala",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Tarvaala – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/metsa_bg.png",
+      "currentUrl": "",
+      "description": "Alueet-sivun Tarvaalan kyläkortin kuva"
     },
     {
       "id": "ravintolat_header",
@@ -127,7 +160,8 @@
       "label": "Laukaan ravintolat – Yläbanneri",
       "aspectRatio": "21:9",
       "fallbackUrl": "laukaan_ravintolat_header.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Ravintolakooste-sivun pääotsikkokuva"
     },
     {
       "id": "autohuollot_header",
@@ -136,61 +170,158 @@
       "label": "Laukaan autohuollot – Yläbanneri",
       "aspectRatio": "21:9",
       "fallbackUrl": "laukaan_autohuollot_header.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Autohuoltojen ja korjaamoiden hakemiston banneri"
     },
     {
       "id": "parturit_header",
       "group": "Toimialasivut",
       "page": "laukaan-parturit-ja-kauneus.html",
-      "label": "Parturit & kauneus – Yläbanneri",
+      "label": "Parturit & Kauneus – Yläbanneri",
       "aspectRatio": "21:9",
       "fallbackUrl": "laukaan_parturit_header.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Parturi- ja kauneudenhoitopalveluiden banneri"
     },
     {
-      "id": "palvelun_esittely_hero",
-      "group": "Esittely & Info",
+      "id": "esittely_hero",
+      "group": "Toimialasivut",
       "page": "palvelun-esittely.html",
-      "label": "Palvelun esittely – Hero",
+      "label": "Palvelun esittely – Herotausta",
       "aspectRatio": "16:9",
       "fallbackUrl": "hero-kuva.webp",
-      "currentUrl": ""
-    },
-    {
-      "id": "ajankohtaista_hero",
-      "group": "Esittely & Info",
-      "page": "ajankohtaista.html",
-      "label": "Ajankohtaista – Pääkuva",
-      "aspectRatio": "16:9",
-      "fallbackUrl": "kuvia/ajankohtaista.jpg",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Palvelun esittelysivun herotausta"
     },
     {
       "id": "kauppa_hero",
-      "group": "Palvelut",
+      "group": "Toimialasivut",
       "page": "kauppa.html",
-      "label": "Kauppa / Tori – Pääkuva",
+      "label": "Kauppapaikka / Tori – Herotausta",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Kaupan ja toripalvelujen herotausta"
     },
     {
       "id": "palvelu_hero",
-      "group": "Palvelut",
+      "group": "Toimialasivut",
       "page": "palvelu.html",
-      "label": "Palveluhakemisto – Yläosa",
+      "label": "Palveluopas – Yläosa",
       "aspectRatio": "21:9",
       "fallbackUrl": "taivas_tausta.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Laukaan yleisen palveluoppaan banneri"
+    },
+    {
+      "id": "ajankohtaista_hero",
+      "group": "Toimialasivut",
+      "page": "ajankohtaista.html",
+      "label": "Ajankohtaista – Herotausta",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/ajankohtaista.jpg",
+      "currentUrl": "",
+      "description": "Ajankohtaista ja uutiset -sivun pääkuva"
     },
     {
       "id": "yhteisot_hero",
-      "group": "Palvelut",
+      "group": "Toimialasivut",
       "page": "yhteisot-ja-linkit.html",
       "label": "Yhdistykset & Yhteisöt – Yläosa",
       "aspectRatio": "21:9",
       "fallbackUrl": "network-silhouette.png",
-      "currentUrl": ""
+      "currentUrl": "",
+      "description": "Yhdistysten ja järjestöjen koontisivun yläbanneri"
+    },
+    {
+      "id": "cat_liikunta",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Liikunta, luonto ja ulkoilu",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/liikunta.jpg",
+      "currentUrl": "",
+      "description": "Ulkoilu- ja liikuntateeman teemakuva"
+    },
+    {
+      "id": "cat_terveys",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Terveys ja hyvinvointi",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/terveys.jpg",
+      "currentUrl": "",
+      "description": "Hyvinvointipalveluiden kategoriaikoni tai -kortti"
+    },
+    {
+      "id": "cat_elain",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Lemmikit ja eläimet",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/elain.jpg",
+      "currentUrl": "",
+      "description": "Lemmikkipalveluiden teemakortti"
+    },
+    {
+      "id": "cat_mokkipalvelut",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Mökkipalvelut ja vapaa-aika",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/mokkipalvelut.jpg",
+      "currentUrl": "",
+      "description": "Vapaa-ajan asukkaiden mökkipalvelujen kuva"
+    },
+    {
+      "id": "cat_remontointi",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Remontointi ja rakentaminen",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/remontointi.jpg",
+      "currentUrl": "",
+      "description": "Rakennus- ja remonttipalveluiden teemakuva"
+    },
+    {
+      "id": "cat_taloyhtio",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Taloyhtiö ja isännöinti",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/taloyhtio.jpg",
+      "currentUrl": "",
+      "description": "Taloyhtiöpalvelujen teemakuva"
+    },
+    {
+      "id": "cat_perhe",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Lapset ja perhepalvelut",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/lapset ja perhe.jpg",
+      "currentUrl": "",
+      "description": "Perheille suunnatut palvelut ja toiminta"
+    },
+    {
+      "id": "cat_haat",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Juhlat ja tapahtumapalvelut",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/haat.jpg",
+      "currentUrl": "",
+      "description": "Häät, juhlatilat ja tapahtumajärjestelyt"
+    },
+    {
+      "id": "cat_yrityskehitys",
+      "group": "Teemat & Kategoriat",
+      "page": "index.html / teemat",
+      "label": "Yrityksen perustaminen & kehitys",
+      "aspectRatio": "4:3",
+      "fallbackUrl": "kuvia/yrityskehittaminen.png",
+      "currentUrl": "",
+      "description": "Yritysneuvonta ja elinvoimapalvelut"
     }
   ]
 }
