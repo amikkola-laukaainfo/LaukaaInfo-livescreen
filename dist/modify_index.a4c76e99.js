@@ -1,1 +1,0 @@
-console.log('modify_index.js is currently disabled to prevent re-injecting "Tarkenna tarvetta" fields.');
