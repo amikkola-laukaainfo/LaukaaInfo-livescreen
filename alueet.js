@@ -275,9 +275,12 @@
                 `;
             }
 
+            const slotId = 'card_' + m.slug;
+            const currentImg = (window.getSiteImageUrl && window.getSiteImageUrl(slotId)) || m.image;
+
             return `
                 <div class="area-card" data-slug="${m.slug}">
-                    <div class="area-card-image" style="background-image: url('${m.image}')">
+                    <div class="area-card-image" data-slot="${slotId}" style="background-image: url('${currentImg}')">
                         <span class="area-badge" style="${badgeBg}">${m.badge || 'Kunta'}</span>
                     </div>
                     <div class="area-card-content">

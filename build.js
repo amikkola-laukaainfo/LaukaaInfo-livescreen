@@ -25,15 +25,9 @@ const minifyHtml = require('html-minifier-terser').minify;
 // 2. Luodaan tai tyhjennetään dist-kansio
 const distDir = path.join(__dirname, 'dist');
 if (fs.existsSync(distDir)) {
-    try {
-        fs.rmSync(distDir, { recursive: true, force: true });
-    } catch(e) {
-        console.log('Huom: dist-kansion tyhjennyksessä vaihtoehtoinen siivous.');
-    }
+    fs.rmSync(distDir, { recursive: true, force: true });
 }
-if (!fs.existsSync(distDir)) {
-    fs.mkdirSync(distDir, { recursive: true });
-}
+fs.mkdirSync(distDir);
 
 // 2.5 Suoritetaan tietämysgraafin rakentaminen ja yritysdatan modularisointi
 console.log('1.4 Rakennetaan tietämysgraafi...');
@@ -50,20 +44,6 @@ try {
     console.error('Virhe datan modularisoinnissa:', e.message);
 }
 
-console.log('1.55 Generoidaan SEO-hakemistosivut (/kohteet/ ja /teemat/)...');
-try {
-    execSync('node generate_seo_pages.js', { stdio: 'inherit' });
-} catch (e) {
-    console.error('Virhe SEO-sivujen generoinnissa:', e.message);
-}
-
-console.log('1.57 Generoidaan kohteet-hakemistosivu (/kohteet/index.html)...');
-try {
-    execSync('node generate_kohteet_index.js', { stdio: 'inherit' });
-} catch (e) {
-    console.error('Virhe kohteet-hakemiston generoinnissa:', e.message);
-}
-
 console.log('1.6 Generoidaan sitemap...');
 try {
     execSync('node generate_sitemap.js', { stdio: 'inherit' });
@@ -76,9 +56,9 @@ console.log('2. Kopioidaan tiedostot dist-kansioon...');
 function copyRecursive(src, dest) {
     const entries = fs.readdirSync(src, { withFileTypes: true });
     for (const entry of entries) {
-        // Ohitetaan nämä tiedostot ja kansiot tuotantoversiossa
-        if (['node_modules', '.git', 'dist', 'build.js', 'package.json', 'package-lock.json', 'scratch', 'reitti-kehitys.html', 'reitti-kehitys.js', 'diag_encoding.js'].includes(entry.name)) continue;
-        if (entry.name.endsWith('.md') || entry.name.endsWith('.map')) continue;
+        // Ohitetaan nämä tiedostot ja kansiot
+        if (['node_modules', '.git', 'dist', 'build.js', 'package.json', 'package-lock.json'].includes(entry.name)) continue;
+        if (entry.name.endsWith('.md')) continue;
 
         const srcPath = path.join(src, entry.name);
         const destPath = path.join(dest, entry.name);
@@ -123,35 +103,21 @@ const assetMap = {};
         }
 
         async function minifyAndVersionFolder(dir) {
-            if (!fs.existsSync(dir)) return;
             const entries = fs.readdirSync(dir, { withFileTypes: true });
             for (const entry of entries) {
                 const fullPath = path.join(dir, entry.name);
 
                 if (entry.isDirectory()) {
-                    // Älä minifioi kuvakansioita tai valmiiksi koottua Wonderin-sovellusta turhaan
-                    if (entry.name !== 'icons' && entry.name !== 'drive_cache' && entry.name !== 'wonderin') {
+                    // Älä minifioi kuvakansioita tai valmiiksi koottua lomakemoottoria turhaan
+                    if (entry.name !== 'icons' && entry.name !== 'drive_cache' && entry.name !== 'lomakkeet') {
                         await minifyAndVersionFolder(fullPath);
                     }
                 } else {
-                    if (entry.name.endsWith('.js') && entry.name !== 'sw.js' && !/\.[a-f0-9]{8}\.js$/.test(entry.name)) {
+                    if (entry.name.endsWith('.js') && entry.name !== 'sw.js') {
                         console.log(' -> Minifioidaan ja versioidaan JS:  ' + entry.name);
                         try {
                             const content = fs.readFileSync(fullPath, 'utf8');
-                            const result = await Terser.minify(content, {
-                                compress: {
-                                    drop_console: true,
-                                    drop_debugger: true,
-                                    passes: 2
-                                },
-                                mangle: {
-                                    toplevel: false
-                                },
-                                output: {
-                                    comments: false,
-                                    preamble: '/* © Mediazoo / LaukaaInfo - Elämyspolku Engine v1.0 */'
-                                }
-                            });
+                            const result = await Terser.minify(content, { compress: true, mangle: true });
                             if (result.error) throw result.error;
                             const newName = entry.name.replace('.js', `.${buildVersion}.js`);
                             const newPath = path.join(dir, newName);
@@ -161,7 +127,7 @@ const assetMap = {};
                         } catch (e) {
                             console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
                         }
-                    } else if (entry.name.endsWith('.css') && !/\.[a-f0-9]{8}\.css$/.test(entry.name)) {
+                    } else if (entry.name.endsWith('.css')) {
                         console.log(' -> Minifioidaan ja versioidaan CSS: ' + entry.name);
                         try {
                             const content = fs.readFileSync(fullPath, 'utf8');
@@ -217,7 +183,9 @@ function updateReferences(dir) {
     for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
-            updateReferences(fullPath);
+            if (entry.name !== 'lomakkeet') {
+                updateReferences(fullPath);
+            }
         } else if (entry.name.endsWith('.html')) {
             let content = fs.readFileSync(fullPath, 'utf8');
             
@@ -241,29 +209,19 @@ function updateReferences(dir) {
                     return pre + newName + post;
                 });
             }
-            fs.writeFileSync(fullPath, content, 'utf8');
+            fs.writeFileSync(fullPath, content);
         } else if (entry.name === 'sw.js') {
             let content = fs.readFileSync(fullPath, 'utf8');
             for (const [oldName, newName] of Object.entries(assetMap)) {
                 const regex = new RegExp(`(["'\\/]|\\.\\.\\/)${oldName}(["'\\?])`, 'g');
                 content = content.replace(regex, `$1${newName}$2`);
             }
-            fs.writeFileSync(fullPath, content, 'utf8');
+            fs.writeFileSync(fullPath, content);
         }
     }
 }
 
 updateReferences(distDir);
-
-// Kopioidaan dynaamisesti ladattavat scriptit myös alkuperäisillä nimillä fallbackiksi
-const dynamicScripts = ['nav-sync.js', 'site-nav.js'];
-for (const scriptName of dynamicScripts) {
-    const srcPath = path.join(__dirname, scriptName);
-    const destPath = path.join(distDir, scriptName);
-    if (fs.existsSync(srcPath) && !fs.existsSync(destPath)) {
-        fs.copyFileSync(srcPath, destPath);
-    }
-}
 
 // Luodaan version.json sw.js:lle ja frontendille
 fs.writeFileSync(path.join(distDir, 'version.json'), JSON.stringify({ version: buildVersion, date: new Date().toISOString() }, null, 2));

@@ -1,0 +1,318 @@
+Total occurrences found: 317
+ajankohtaista.html:196 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+alue.js:8 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+alue.js:23 [â] -> .replace(/[äÄàáâãå]/g, 'a')
+asiahaku.html:282 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+category.js:23 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+category.js:38 [â] -> .replace(/[äÄàáâãå]/g, 'a')
+clean_json.js:12 [Â] -> [/ÃƒÆ’Ã‚Â¤/g, 'ä'],
+clean_json.js:13 [Â] -> [/ÃƒÆ’Ã‚Â¶/g, 'ö'],
+clean_json.js:14 [Â] -> [/ÃƒÂ¤/g, 'ä'],
+clean_json.js:15 [Â] -> [/ÃƒÂ¶/g, 'ö'],
+clean_json.js:16 [Ã] -> [/Ãƒâ€ž/g, 'Ä'],
+clean_json.js:17 [Ã] -> [/Ãƒâ€“/g, 'Ö'],
+clean_json.js:20 [Ã] -> [/Ã¤/g, 'ä'],
+clean_json.js:21 [Ã] -> [/Ã¶/g, 'ö'],
+clean_json.js:22 [Ã] -> [/Ã„/g, 'Ä'],
+clean_json.js:23 [Ã] -> [/Ã–/g, 'Ö'],
+clean_json.js:24 [Ã] -> [/Ã…/g, 'Å'],
+clean_json.js:25 [Ã] -> [/Ã¥/g, 'å'],
+clean_json.js:26 [â] -> [/â€“/g, '–'],
+clean_json.js:27 [â] -> [/â€”/g, '—'],
+clean_json.js:28 [â] -> [/â€™/g, "'"],
+clean_json.js:29 [â] -> [/â€\u009d/g, '"'],
+clean_json.js:30 [â] -> [/â€œ/g, '"'],
+clean_json.js:31 [Ã] -> [/Ã¼/g, 'ü'],
+clean_json.js:32 [Ã] -> [/ÃŸ/g, 'ß'],
+clean_json.js:35 [Ã] -> [/Ãƒâ€¦/g, 'Å'],
+clean_json.js:36 [Â] -> [/ÃƒÂ¥/g, 'å']
+company_profiling_data.json:33520 [â] -> "note": "Sijainti osoitteessa Peurungantie 85, 41340 Laukaa. Etäisyys Jyväskylästä noin 25â€“32 km."
+company_profiling_data.json:43649 [Â] -> "note": "Pääasiallinen toiminta-alue Keski-Suomi (erityisesti Laukaa/Jyväskylä-seutu), tarvittaessa koko Suomen alue. 40 km säde Laukaasta i
+company_profiling_data.json:64224 [Â] -> "description": "Kiinteistönhoitopalveluihin erikoistunut osakeyhtiö. Palveluihin kuuluu kiinteistöjen kunnossapito, siivouspalvelut, lumen j
+company_profiling_data.json:67954 [Â] -> "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja ÃƒÂ  la carte -palveluihin, juhlapalveluihin j
+fix.js:5 [â] -> text = text.replace('KARTAT &amp; ELÄMYKSET â\xad', 'KARTAT &amp; ELÄMYKSET ⭐');
+fix.js:6 [â] -> // In case â­ is represented slightly differently in the file buffer due to parsing:
+fix.js:7 [â] -> text = text.replace(/KARTAT &amp; ELÄMYKSET â./g, 'KARTAT &amp; ELÄMYKSET ⭐');
+galleria.html:212 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+ilmoittaudu.html:238 [â] -> content: 'âœ“';
+ilmoittaudu_test.html:466 [Ã] -> <li><a href="leppavesi.html">LeppÃ¤vesi</a></li>
+ilmoittaudu_test.html:468 [Ã] -> <li><a href="vehnia.html">VehniÃ¤</a></li>
+ilmoittaudu_test.html:479 [Ã] -> <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">PÃ¤Ã¤tÃ¶ksenteko</a></li>
+ilmoittaudu_test.html:484 [Ã] -> <a href="#" class="nav-link" data-i18n="nav_paths">PÃ¤Ã¤tÃ¶sten polut <span class="arrow">ï¿½ï¿½</span></a>
+ilmoittaudu_test.html:490 [Ã] -> <a href="#" class="nav-link" data-i18n="nav_maps">Kartat &amp; ElÃ¤mykset <span class="arrow">ï¿½ï¿½</span></a>
+ilmoittaudu_test.html:496 [Ã] -> <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; lÃ¶ydetyt</a></li>
+ilmoittaudu_test.html:532 [Ã] -> <!-- PÃ¤Ã¤osio: KAUPPA -->
+ilmoittaudu_test.html:542 [Ã] -> <!-- PÃ¤Ã¤osio: HAKULINKIT -->
+ilmoittaudu_test.html:560 [Ã] -> <li><a href="leppavesi.html" class="sidebar-link">LeppÃ¤vesi</a></li>
+ilmoittaudu_test.html:562 [Ã] -> <li><a href="vehnia.html" class="sidebar-link">VehniÃ¤</a></li>
+ilmoittaudu_test.html:569 [Ã] -> <!-- PÃ¤Ã¤osio: AJANKOHTAISTA -->
+ilmoittaudu_test.html:578 [Ã] -> class="sidebar-link" data-i18n="nav_decisions">PÃ¤Ã¤tÃ¶ksenteko</a></li>
+ilmoittaudu_test.html:584 [Ã] -> <!-- PÃ¤Ã¤osio: Pï¿½ï¿½Tï¿½STEN POLUT -->
+ilmoittaudu_test.html:594 [Â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELï¿½MYKSET Ã¢Â­Â</h3>
+ilmoittaudu_test.html:600 [Ã] -> <li class="menu-item"><a href="kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; lÃ¶ydetyt</a>
+ilmoittaudu_test.html:616 [Ã] -> <h1>Julkaise ilmoituksia Laukaan syÃ¶tteeseen</h1>
+ilmoittaudu_test.html:617 [Ã] -> <p>Tavoita paikalliset asukkaat vÃ¤littÃ¶mÃ¤sti. Luo uutisia, tarjouksia tai tapahtumia helposti. <strong>Aloita maksutta (3 julkaisua)!</st
+ilmoittaudu_test.html:619 [Ã] -> ï¿½xaï¿½ Aloita maksutta tÃ¤stÃ¤
+ilmoittaudu_test.html:627 [Ã] -> <!-- Path 1: Feed Path (TÃ¤mÃ¤ sivu) -->
+ilmoittaudu_test.html:629 [Ã] -> <div class="path-badge">Olet tÃ¤ssÃ¤</div>
+ilmoittaudu_test.html:631 [Ã] -> <h3>YksittÃ¤iset julkaisut</h3>
+ilmoittaudu_test.html:632 [Ã] -> <p>Nopea tapa nÃ¤kyÃ¤ syÃ¶tteessÃ¤. Sopii yksittÃ¤isille tarjouksille ja tapahtumille.</p>
+ilmoittaudu_test.html:639 [Ã] -> <p>Haluatko pysyvÃ¤n nÃ¤kyvyyden ja oman yrityssivun? Valitse brÃ¤ndipolku. Alk. 15 ï¿½ï¿½/kk.</p>
+ilmoittaudu_test.html:640 [Ã] -> <div class="path-cta">Siirry brÃ¤ndipolulle &raquo;</div>
+ilmoittaudu_test.html:652 [Ã] -> <h3>LisÃ¤Ã¤ nÃ¤kyvyyttÃ¤ paikallisesti</h3>
+ilmoittaudu_test.html:653 [Ã] -> <p>SisÃ¤ltÃ¶si nÃ¤kyy laukaalaisille kÃ¤yttÃ¤jille ï¿½ siellÃ¤ missÃ¤ paikalliset etsivÃ¤t tietoa.</p>
+ilmoittaudu_test.html:657 [Ã] -> <h3>Kaikki yhdessÃ¤ paikassa</h3>
+ilmoittaudu_test.html:658 [Ã] -> <p>Oma jaettava yritysfeed ï¿½ kaikki julkaisusi yhdessÃ¤ paikassa, jaettavissa yhdellÃ¤ linkillÃ¤ Facebookiin, WhatsAppiin tai sÃ¤hkÃ¶post
+ilmoittaudu_test.html:663 [Ã] -> <p>Julkaise tapahtuma, tarjous tai ilmoitus muutamassa minuutissa ilman teknistÃ¤ osaamista.</p>
+ilmoittaudu_test.html:671 [Ã] -> <h2>Julkaisuvaihtoehdot syÃ¶tteeseen</h2>
+ilmoittaudu_test.html:672 [Ã] -> <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1.5rem; margin-bottom: 2rem;">Kaikki hinnat sisÃ¤ltÃ¤vÃ¤t alv 25,
+ilmoittaudu_test.html:679 [Ã] -> <div class="tier-tag">Uusi kÃ¤yttÃ¤jÃ¤?</div>
+ilmoittaudu_test.html:682 [Ã] -> <li>Kokeile feediÃ¤ vapaasti</li>
+ilmoittaudu_test.html:683 [Ã] -> <li>1 ilmainen julkaisu/kk sen jÃ¤lkeen</li>
+ilmoittaudu_test.html:684 [Ã] -> <li>Max 1 julkaisu/pÃ¤ivÃ¤</li>
+ilmoittaudu_test.html:690 [Ã] -> <div class="tier-name">YritysnÃ¤kyvyys (Kortti)</div>
+ilmoittaudu_test.html:695 [Ã] -> <li>Jatkuva nÃ¤kyvyys</li>
+ilmoittaudu_test.html:699 [Ã] -> <a href="lisaa-yritys.html" class="btn-cta premium" style="display:block; text-align:center; font-size:0.95rem; padding:0.8rem;">Lue lisÃ¤Ã¤
+ilmoittaudu_test.html:709 [Ã] -> <p class="subtitle">JÃ¤tÃ¤ tietosi ja otamme yhteyttÃ¤. Ei sitoumuksia, ei piilokuluja.</p>
+ilmo_old.html:479 [Â] -> <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">P+ñ+ñt+Âksenteko</a></li>
+ilmo_old.html:484 [Â] -> <a href="#" class="nav-link" data-i18n="nav_paths">P+ñ+ñt+Âsten polut <span class="arrow">Ôû+</span></a>
+ilmo_old.html:496 [Â] -> <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; l+Âydetyt</a></li>
+ilmo_old.html:578 [Â] -> class="sidebar-link" data-i18n="nav_decisions">P+ñ+ñt+Âksenteko</a></li>
+ilmo_old.html:600 [Â] -> <li class="menu-item"><a href="kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; l+Âydetyt</a>
+ilmo_old.html:616 [Â] -> <h1>Julkaise ilmoituksia Laukaan sy+Âtteeseen</h1>
+ilmo_old.html:617 [Â] -> <p>Tavoita paikalliset asukkaat v+ñlitt+Âm+ñsti. Luo uutisia, tarjouksia tai tapahtumia helposti. <strong>Aloita maksutta (3 julkaisua)!</st
+ilmo_old.html:632 [Â] -> <p>Nopea tapa n+ñky+ñ sy+Âtteess+ñ. Sopii yksitt+ñisille tarjouksille ja tapahtumille.</p>
+ilmo_old.html:653 [Â] -> <p>Sis+ñlt+Âsi n+ñkyy laukaalaisille k+ñytt+ñjille ÔÇô siell+ñ miss+ñ paikalliset etsiv+ñt tietoa.</p>
+ilmo_old.html:658 [Â] -> <p>Oma jaettava yritysfeed ÔÇô kaikki julkaisusi yhdess+ñ paikassa, jaettavissa yhdell+ñ linkill+ñ Facebookiin, WhatsAppiin tai s+ñhk+Âposti
+ilmo_old.html:671 [Â] -> <h2>Julkaisuvaihtoehdot sy+Âtteeseen</h2>
+ilmo_old.html:719 [Â] -> <label for="ilm-email">S+ñhk+Âposti *</label>
+ilmo_old.html:733 [Â] -> Kuulla lis+ñ+ñ ennen p+ñ+ñt+Âst+ñ
+ilmo_old.html:753 [Â] -> Ep+ñr+Âitk+Â? <a href="mailto:info@mediazoo.fi?subject=LaukaaInfo%20%E2%80%93%20lis%C3%A4tietopyynt%C3%B6&body=Nimi:%0D%0AYritys:%0D%0AKysym
+ilmo_old.html:788 [Â] -> `Nimi: ${name}\nYritys: ${company}\nS+ñhk+Âposti: ${email}\nTarve: ${tarve}\nViesti: ${message}`
+index.html:667 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+index.html:1707 [Â] -> data-i18n="need_haat_btn">Suunnittele häät Â»</a>
+index.html:2197 [â] -> asiakkaisiin. Alk. 15 â‚¬/kk.</p>
+index.html:2255 [â] -> yrityksille â€” kaikki taskussasi.
+kadonneet.html:188 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+kohdekartta.html:249 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+kohdekortit.html:289 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+koko-laukaa.html:73 [â] -> <title id="page-title">Alue â€“ LaukaaInfo</title>
+koko-laukaa.html:4433 [Ã] -> <h2 data-i18n="title_nearby_area">L&auml;hellÃ¤ tÃ¤tÃ¤ aluetta â€“ myÃ¶s nÃ¤mÃ¤ toimijat palvelevat sinua</h2>
+koko-laukaa.html:4817 [â] -> <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+laukaa.html:73 [Â] -> <title id="page-title">Alue Â– LaukaaInfo: Laukaa taskussasi Â– tiedä, löydä ja osallistu.</title>
+laukaa.html:4325 [Ã] -> <h2 data-i18n="title_nearby_area">L&auml;hellÃ¤ tÃ¤tÃ¤ aluetta â€“ myÃ¶s nÃ¤mÃ¤ toimijat palvelevat sinua</h2>
+laukaa.html:4697 [â] -> <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+laukaan-autohuollot.html:294 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+laukaan-parturit-ja-kauneus.html:294 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+laukaan-ravintolat.html:294 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+leppavesi.html:73 [Â] -> <title id="page-title">Alue Â– LaukaaInfo: Laukaa taskussasi Â– tiedä, löydä ja osallistu.</title>
+leppavesi.html:4325 [Ã] -> <h2 data-i18n="title_nearby_area">L&auml;hellÃ¤ tÃ¤tÃ¤ aluetta â€“ myÃ¶s nÃ¤mÃ¤ toimijat palvelevat sinua</h2>
+leppavesi.html:4697 [â] -> <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+lievestuore.html:73 [Â] -> <title id="page-title">Alue Â– LaukaaInfo: Laukaa taskussasi Â– tiedä, löydä ja osallistu.</title>
+lievestuore.html:757 [â] -> /* â”€â”€ Exploration Paths Swiper â”€â”€â”€ */
+lievestuore.html:5681 [Ã] -> <h2 data-i18n="title_nearby_area">L&auml;hellÃ¤ tÃ¤tÃ¤ aluetta â€“ myÃ¶s nÃ¤mÃ¤ toimijat palvelevat sinua</h2>
+lievestuore.html:6053 [â] -> <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+lisaa-yritys.html:685 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+maksuehto.html:230 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+media-spotlight.js:66 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+modal.js:14 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+muistokartta.html:322 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+palvelu.html:1012 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+palvelun-esittely.html:398 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+pikahaku.html:396 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+script.f3fdb606.js:1 [â] -> let allCompanies=[],allRssItems=[],allGeoEvents=[],currentCompany=null,currentMediaIndex=0,map=null,markers=null,isHomePage=!1,userCoords=nu
+script.js:55 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+script.js:67 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+searchEngine.js:258 [Â] -> .replace(/Ã£Â¤/g, 'ä').replace(/Ã£Â¶/g, 'ö')
+searchEngine.js:259 [Ã] -> .replace(/Ã£â€ž/g, 'ä').replace(/Ã£â€“/g, 'ö')
+searchEngine.js:260 [Ã] -> .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
+searchEngine.js:261 [Ã] -> .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
+searchEngine.js:262 [Ã] -> .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
+style.css:114 [Ã] -> /* Tummempi vÃ¤ri */
+style.css:329 [Ã] -> /* LisÃ¤tÃ¤Ã¤n marginaalia ankkurikohteille, jotta ne eivÃ¤t jÃ¤Ã¤ liian lÃ¤helle reunaa */
+style.css:355 [Ã] -> /* Premium-paketti: ErittÃ¤in voimakas punainen syke */
+style.css:416 [Ã] -> max-width: 850px; /* Hieman leveÃ¤mpi jotta logo mahtuu viereen */
+style.css:452 [Ã] -> filter: brightness(1.15) contrast(1.05); /* LisÃ¤tty valoisuutta ja kontrastia */
+style.css:527 [Ã] -> margin: 0 0 0.5rem; /* LisÃ¤tty marginaali alaotsikkoon */
+style.css:620 [â] -> /* Laajennettu tila â€“ koko ruudun korkeus */
+style.css:652 [Ã] -> /* KÃ¤Ã¤nnetÃ¤Ã¤n nuoli kun laajennettu */
+style.css:748 [Ã] -> Ylikirjoittaa laukaa.html jne. sisÃ¤iset tyylit
+style.css:809 [Ã] -> /* Ylikirjoitukset tÃ¤gÃ¤yksille, jotta ne rivittyvÃ¤t mobiilissa "oikealta ulos vuotamisen" sijaan */
+style.css:825 [Ã] -> /* Varmistetaan hakuehdotusten pysyminen kartan pÃ¤Ã¤llÃ¤ */
+style.css:892 [Ã] -> /* Isolla ruudulla sivun ylÃ¤osassa hieman lÃ¤pinÃ¤kyvÃ¤mpi */
+style.css:957 [Ã] -> /* KiinteÃ¤ leveys */
+style.css:1169 [Ã] -> /* Fallback selaimille jotka eivÃ¤t tue transformia */
+style.css:1189 [Ã] -> /* Jos selain tukee transformia, kÃ¤ytetÃ¤Ã¤n sitÃ¤ (sulavampi) */
+style.css:1429 [Ã] -> /* Ajankohtaista: tiedotteet + tapahtumat + palautteet rinnakkain isolla nÃ¤ytÃ¶llÃ¤ */
+style.css:1587 [Ã] -> /* KiinteÃ¤ korkeus uutisvirrassa */
+style.css:1669 [Ã] -> Kuvat poistettu tekijÃ¤noikeussyistÃ¤ â€“ korostettu
+style.css:1670 [Ã] -> typografia ja selkeÃ¤ visuaalinen hierarkia
+style.css:1696 [Ã] -> /* PÃ¤ivÃ¤mÃ¤Ã¤rÃ¤-badge tapahtumakortissa */
+style.css:1758 [Ã] -> /* "Lue lisÃ¤Ã¤"-linkki tapahtumakortissa */
+style.css:1779 [Ã] -> /* Events-card otsikko pienemmillÃ¤ nÃ¤ytÃ¶illÃ¤ */
+style.css:1872 [Ã] -> /* Tilaa hakukenttien, videon ja tiedon vÃ¤lille */
+style.css:1876 [Ã] -> /* 1. HakukentÃ¤t (YlimpÃ¤nÃ¤) */
+style.css:2040 [Ã] -> /* 2. Media (KeskellÃ¤) */
+style.css:2061 [Ã] -> /* TÃ„RKEÃ„: Pakotetaan video tÃ¤yttÃ¤mÃ¤Ã¤n koko kehyksen pystysuunnassa */
+style.css:2069 [Ã] -> /* EstetÃ¤Ã¤n 'puolikas' nÃ¤kymÃ¤ */
+style.css:2084 [Ã] -> /* Navigointipisteet videon ALAPUOLELLE (ei pÃ¤Ã¤lle) */
+style.css:2170 [Ã] -> /* Responsiivinen hienosÃ¤Ã¤tÃ¶ */
+style.css:2189 [Ã] -> /* Hyvin pieni tÃ¤yte mobiilissa */
+style.css:2191 [Ã] -> /* Pakotetaan sisÃ¤ltÃ¶ pysymÃ¤Ã¤n laatikossa */
+style.css:2198 [Ã] -> /* Kapeampi tÃ¤yte */
+style.css:2204 [Ã] -> /* Hieman pienempi pyÃ¶ristys mobiilissa */
+style.css:3143 [â] -> LaukaaInfo Feed Component â€” feed.css
+style.css:3482 [Ã] -> /* Footer "Ota yhteyttÃ¤" matalan kynnyksen CTA */
+style.css:4237 [Ã] -> /* Ã„lykkÃ¤Ã¤t pikahakupainikkeet etusivulle */
+style.css:4267 [Ã] -> /* Tunnisteiden (tagien) lisÃ¤vÃ¤rit */
+style.css:4432 [Ã] -> /* Ã„lykkÃ¤Ã¤t pikahakupainikkeet etusivulle */
+style.css:4462 [Ã] -> /* Tunnisteiden (tagien) lisÃ¤vÃ¤rit */
+style.css:4658 [Ã] -> /* AlaryhmÃ¤t sivupalkissa (NÃ¤kyy kartalla / Ei nÃ¤y kartalla) */
+style.css:5058 [Ã] -> .feature-card-img background-kuvat nÃ¤kyvÃ¤t oikein */
+style.css:5548 [Ã] -> /* White balance fix for SyntymÃ¤pÃ¤ivÃ¤t card */
+style.css:6499 [Ã] -> /* ===== Etusivu: kelluva "EsillÃ¤ nyt" ===== */
+style.css:6638 [â] -> MOBILE OPTIMIZATION â€“ matkamaalle.fi inspired
+style.css:6639 [â] -> v2026-05 â€“ ONLY affects max-width: 768px
+style.css:6643 [Ã] -> /* --- Accent colours: rikkaampi vÃ¤ripaletti --- */
+style.css:6645 [Ã] -> --accent-coral:  #c94c36;   /* lÃ¤mmin punainen / CTA */
+style.css:6646 [Ã] -> --accent-forest: #2e7d52;   /* metsÃ¤nvihreÃ¤ */
+style.css:6660 [Ã] -> /* Hae-nappi saa voimakkaamman vÃ¤rin */
+style.css:6669 [Ã] -> /* need-card hover-nappi vÃ¤rimuutos */
+style.css:6676 [â] -> NAVIGAATIO â€“ tiiviimpi mobiilissa
+style.css:6692 [Ã] -> HERO-OSIO â€“ kompaktimpi + keskitetty + WebView-ystÃ¤vÃ¤llinen
+style.css:6754 [Ã] -> /* WebView: poistaa Android-korostuksen (sininen hehku) hero-elementeiltÃ¤ */
+style.css:6769 [Ã] -> SECTION-OTSIKOT â€“ pienemmÃ¤t mobiilissa
+style.css:6793 [Ã] -> PADDINGIT â€“ koko nÃ¤ytÃ¶n leveys kÃ¤yttÃ¶Ã¶n
+style.css:6811 [â] -> PALVELUKORTIT (need-grid) â€“ 2 kolumnia, matalammat
+style.css:6841 [Ã] -> /* btn-need peittÃ¤Ã¤ koko kortin nÃ¤kymÃ¤ttÃ¶mÃ¤nÃ¤ klikkialueena */
+style.css:6869 [Ã] -> FEATURE-KORTIT (YhteisÃ¶llisyys, ElÃ¤mykset)
+style.css:6899 [â] -> HAKUOSIO â€“ matkamaalle.fi-tyylinen kortti
+style.css:6902 [Ã] -> /* Osion taustavÃ¤ri: lÃ¤mmin tumma teal */
+style.css:6946 [Ã] -> /* HakukentÃ¤n wrapper */
+style.css:6987 [Ã] -> PAIKALLINEN SYÃ–TE -NAPPI
+style.css:7012 [Ã] -> "MITÃ„ HALUAT TEHDÃ„?" -GATE-SECTION
+style.css:7128 [Ã] -> grid-template-columns: repeat(2, 1fr); /* 2 kolumnia myÃ¶s mobiilissa */
+style.css:7189 [Ã] -> -webkit-line-clamp: 2; /* Vain 2 riviÃ¤ tekstiÃ¤ mobiilissa */
+style.css:7193 [Ã] -> /* ErittÃ¤in kapeat puhelimet (max 380px) */
+style.css:7210 [Ã] -> /* Korjaus: poista punertava kosketuspalaute need-cardien pÃ¤Ã¤ltÃ¤ mobiilissa */
+style.css:7232 [Ã] -> /* Kortin hover/active-tila - pehmeÃ¤ skaalaus punaisen sijaan */
+style.css:7240 [Ã] -> ElÃ¤mykset & Kulttuuri -osion feature-kortit
+style.css:7241 [Ã] -> Kuvien lÃ¤pinÃ¤kyvyys vÃ¤hennetty (0.1 â†’ 0.25)
+style.css:7244 [Ã] -> /* ElÃ¤mykset & Kulttuuri -korttien tyylit - kuvat nÃ¤kyvÃ¤t paremmin */
+style.css:7251 [Ã] -> /* Korttien taustakuvan lÃ¤pinÃ¤kyvyyden vÃ¤hennys */
+style.css:7258 [Ã] -> /* Haalea taustakuva koko kortin takana - vÃ¤hennetÃ¤Ã¤n lÃ¤pinÃ¤kyvyyttÃ¤ */
+style.css:7268 [Ã] -> opacity: 0.25;  /* Muutettu 0.1 â†’ 0.25 (enemmÃ¤n nÃ¤kyvyyttÃ¤) */
+style.css:7274 [Ã] -> /* YksittÃ¤isten korttien taustakuvat */
+style.css:7294 [Ã] -> /* Pienoiskuva-alueen tyyli (ylÃ¤osan kuva) */
+style.css:7309 [Ã] -> /* Kortin sisÃ¤ltÃ¶alue - 50% lÃ¤pinÃ¤kyvyys, jotta taustakuva nÃ¤kyy hieman */
+style.css:7313 [Ã] -> background: rgba(255, 255, 255, 0.5); /* 50% lÃ¤pinÃ¤kyvÃ¤ valkoinen tausta */
+style.css:7333 [Ã] -> KÃ¤ytetÃ¤Ã¤n tuomaan vihreÃ¤Ã¤ vÃ¤ri-ilmettÃ¤
+style.css:7368 [Ã] -> /* SisÃ¤inen inline-banner (upotettava) */
+style.css:7388 [Ã] -> /* VihreÃ¤ tekstikorostus */
+style.css:7394 [Ã] -> /* VihreÃ¤ pehmeÃ¤ taustalaatikko */
+style.css:7402 [Ã] -> /* VihreÃ¤ badge */
+style.css:7414 [Ã] -> /* VihreÃ¤ vasen reunaviiva */
+style.css:7420 [Ã] -> /* VihreÃ¤ reunuspainike */
+style.css:7691 [Ã] -> SOME-YHTEISÃ–T (PÃ„IVITETYT TYYLIT)
+tarinakartta.html:166 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+temp_companies.json:2343 [â] -> "nimi": "Kynsiteknikko Kristi Ruul-Saariâ€‹",
+tietosuoja.html:237 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­ </h3>
+vehnia.html:73 [Â] -> <title id="page-title">Alue Â– LaukaaInfo: Laukaa taskussasi Â– tiedä, löydä ja osallistu.</title>
+vehnia.html:4325 [Ã] -> <h2 data-i18n="title_nearby_area">L&auml;hellÃ¤ tÃ¤tÃ¤ aluetta â€“ myÃ¶s nÃ¤mÃ¤ toimijat palvelevat sinua</h2>
+vehnia.html:4697 [â] -> <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+verkostokartta.html:188 [â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+vihtavuori.html:73 [Â] -> <title id="page-title">Alue Â– LaukaaInfo: Laukaa taskussasi Â– tiedä, löydä ja osallistu.</title>
+vihtavuori.html:4325 [Ã] -> <h2 data-i18n="title_nearby_area">L&auml;hellÃ¤ tÃ¤tÃ¤ aluetta â€“ myÃ¶s nÃ¤mÃ¤ toimijat palvelevat sinua</h2>
+vihtavuori.html:4697 [â] -> <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+yrityskortti.js:11 [â] -> .replace(/[äÄàáâãäå]/g, 'a')
+dist\ajankohtaista.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\alue.10fd331e.js:2 [â] -> const REGIONS_CSV_URL="https://www.mediazoo.fi/laukaainfo-web/get_alueet.php";let areaMetadata={};function slugify(e){return e?e.toString().
+dist\asiahaku.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\category.10fd331e.js:2 [â] -> !function(){let t=null,e=(new Map,[]),a="all",o=null,n="";const i={laukaa:{lat:62.41407,lon:25.95194},leppavesi:{lat:62.326386,lon:25.840924
+dist\clean_json.10fd331e.js:2 [Â] -> const fs=require("fs"),path=require("path"),files=["live_companies.json","temp_companies.json","companies_data.json"],replacements=[[/ÃƒÆ’Ã‚
+dist\company_profiling_data.json:33520 [â] -> "note": "Sijainti osoitteessa Peurungantie 85, 41340 Laukaa. Etäisyys Jyväskylästä noin 25â€“32 km."
+dist\company_profiling_data.json:43649 [Â] -> "note": "Pääasiallinen toiminta-alue Keski-Suomi (erityisesti Laukaa/Jyväskylä-seutu), tarvittaessa koko Suomen alue. 40 km säde Laukaasta i
+dist\company_profiling_data.json:64224 [Â] -> "description": "Kiinteistönhoitopalveluihin erikoistunut osakeyhtiö. Palveluihin kuuluu kiinteistöjen kunnossapito, siivouspalvelut, lumen j
+dist\company_profiling_data.json:67954 [Â] -> "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja ÃƒÂ  la carte -palveluihin, juhlapalveluihin j
+dist\fix.10fd331e.js:2 [â] -> const fs=require("fs");let text=fs.readFileSync("index.html","utf8");text=text.replace("SOME-YHTEIS?T (P?IVITETYT TYYLIT SIVULLE)","SOME-YHT
+dist\galleria.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\ilmoittaudu.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\ilmoittaudu_test.html:466 [Ã] -> <li><a href="leppavesi.html">LeppÃ¤vesi</a></li>
+dist\ilmoittaudu_test.html:468 [Ã] -> <li><a href="vehnia.html">VehniÃ¤</a></li>
+dist\ilmoittaudu_test.html:479 [Ã] -> <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">PÃ¤Ã¤tÃ¶ksenteko</a></li>
+dist\ilmoittaudu_test.html:484 [Ã] -> <a href="#" class="nav-link" data-i18n="nav_paths">PÃ¤Ã¤tÃ¶sten polut <span class="arrow">ï¿½ï¿½</span></a>
+dist\ilmoittaudu_test.html:490 [Ã] -> <a href="#" class="nav-link" data-i18n="nav_maps">Kartat &amp; ElÃ¤mykset <span class="arrow">ï¿½ï¿½</span></a>
+dist\ilmoittaudu_test.html:496 [Ã] -> <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; lÃ¶ydetyt</a></li>
+dist\ilmoittaudu_test.html:532 [Ã] -> <!-- PÃ¤Ã¤osio: KAUPPA -->
+dist\ilmoittaudu_test.html:542 [Ã] -> <!-- PÃ¤Ã¤osio: HAKULINKIT -->
+dist\ilmoittaudu_test.html:560 [Ã] -> <li><a href="leppavesi.html" class="sidebar-link">LeppÃ¤vesi</a></li>
+dist\ilmoittaudu_test.html:562 [Ã] -> <li><a href="vehnia.html" class="sidebar-link">VehniÃ¤</a></li>
+dist\ilmoittaudu_test.html:569 [Ã] -> <!-- PÃ¤Ã¤osio: AJANKOHTAISTA -->
+dist\ilmoittaudu_test.html:578 [Ã] -> class="sidebar-link" data-i18n="nav_decisions">PÃ¤Ã¤tÃ¶ksenteko</a></li>
+dist\ilmoittaudu_test.html:584 [Ã] -> <!-- PÃ¤Ã¤osio: Pï¿½ï¿½Tï¿½STEN POLUT -->
+dist\ilmoittaudu_test.html:594 [Â] -> <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELï¿½MYKSET Ã¢Â­Â</h3>
+dist\ilmoittaudu_test.html:600 [Ã] -> <li class="menu-item"><a href="kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; lÃ¶ydetyt</a>
+dist\ilmoittaudu_test.html:616 [Ã] -> <h1>Julkaise ilmoituksia Laukaan syÃ¶tteeseen</h1>
+dist\ilmoittaudu_test.html:617 [Ã] -> <p>Tavoita paikalliset asukkaat vÃ¤littÃ¶mÃ¤sti. Luo uutisia, tarjouksia tai tapahtumia helposti. <strong>Aloita maksutta (3 julkaisua)!</st
+dist\ilmoittaudu_test.html:619 [Ã] -> ï¿½xaï¿½ Aloita maksutta tÃ¤stÃ¤
+dist\ilmoittaudu_test.html:627 [Ã] -> <!-- Path 1: Feed Path (TÃ¤mÃ¤ sivu) -->
+dist\ilmoittaudu_test.html:629 [Ã] -> <div class="path-badge">Olet tÃ¤ssÃ¤</div>
+dist\ilmoittaudu_test.html:631 [Ã] -> <h3>YksittÃ¤iset julkaisut</h3>
+dist\ilmoittaudu_test.html:632 [Ã] -> <p>Nopea tapa nÃ¤kyÃ¤ syÃ¶tteessÃ¤. Sopii yksittÃ¤isille tarjouksille ja tapahtumille.</p>
+dist\ilmoittaudu_test.html:639 [Ã] -> <p>Haluatko pysyvÃ¤n nÃ¤kyvyyden ja oman yrityssivun? Valitse brÃ¤ndipolku. Alk. 15 ï¿½ï¿½/kk.</p>
+dist\ilmoittaudu_test.html:640 [Ã] -> <div class="path-cta">Siirry brÃ¤ndipolulle &raquo;</div>
+dist\ilmoittaudu_test.html:652 [Ã] -> <h3>LisÃ¤Ã¤ nÃ¤kyvyyttÃ¤ paikallisesti</h3>
+dist\ilmoittaudu_test.html:653 [Ã] -> <p>SisÃ¤ltÃ¶si nÃ¤kyy laukaalaisille kÃ¤yttÃ¤jille ï¿½ siellÃ¤ missÃ¤ paikalliset etsivÃ¤t tietoa.</p>
+dist\ilmoittaudu_test.html:657 [Ã] -> <h3>Kaikki yhdessÃ¤ paikassa</h3>
+dist\ilmoittaudu_test.html:658 [Ã] -> <p>Oma jaettava yritysfeed ï¿½ kaikki julkaisusi yhdessÃ¤ paikassa, jaettavissa yhdellÃ¤ linkillÃ¤ Facebookiin, WhatsAppiin tai sÃ¤hkÃ¶post
+dist\ilmoittaudu_test.html:663 [Ã] -> <p>Julkaise tapahtuma, tarjous tai ilmoitus muutamassa minuutissa ilman teknistÃ¤ osaamista.</p>
+dist\ilmoittaudu_test.html:671 [Ã] -> <h2>Julkaisuvaihtoehdot syÃ¶tteeseen</h2>
+dist\ilmoittaudu_test.html:672 [Ã] -> <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1.5rem; margin-bottom: 2rem;">Kaikki hinnat sisÃ¤ltÃ¤vÃ¤t alv 25,
+dist\ilmoittaudu_test.html:679 [Ã] -> <div class="tier-tag">Uusi kÃ¤yttÃ¤jÃ¤?</div>
+dist\ilmoittaudu_test.html:682 [Ã] -> <li>Kokeile feediÃ¤ vapaasti</li>
+dist\ilmoittaudu_test.html:683 [Ã] -> <li>1 ilmainen julkaisu/kk sen jÃ¤lkeen</li>
+dist\ilmoittaudu_test.html:684 [Ã] -> <li>Max 1 julkaisu/pÃ¤ivÃ¤</li>
+dist\ilmoittaudu_test.html:690 [Ã] -> <div class="tier-name">YritysnÃ¤kyvyys (Kortti)</div>
+dist\ilmoittaudu_test.html:695 [Ã] -> <li>Jatkuva nÃ¤kyvyys</li>
+dist\ilmoittaudu_test.html:699 [Ã] -> <a href="lisaa-yritys.html" class="btn-cta premium" style="display:block; text-align:center; font-size:0.95rem; padding:0.8rem;">Lue lisÃ¤Ã¤
+dist\ilmoittaudu_test.html:709 [Ã] -> <p class="subtitle">JÃ¤tÃ¤ tietosi ja otamme yhteyttÃ¤. Ei sitoumuksia, ei piilokuluja.</p>
+dist\ilmo_old.html:1 [Â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\index.html:1 [Â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\kadonneet.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\kohdekartta.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\kohdekortit.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\koko-laukaa.html:1 [Ã] -> ﻿<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragm
+dist\laukaa.html:1 [Â] -> ﻿<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragm
+dist\laukaan-autohuollot.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\laukaan-parturit-ja-kauneus.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\laukaan-ravintolat.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\leppavesi.html:1 [Â] -> ﻿<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragm
+dist\lievestuore.html:1 [Â] -> ﻿<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragm
+dist\lisaa-yritys.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\maksuehto.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\media-spotlight.10fd331e.js:2 [â] -> (async()=>{const e=document.getElementById("media-gallery-wrapper");if(!e)return;const a="sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu";le
+dist\modal.10fd331e.js:2 [â] -> window.LkiModal=function(){let e=null,t=null;function i(e){return e?e.toString().toLowerCase().trim().replace(/\s+/g,"-").replace(/[äÄàáâãäå
+dist\muistokartta.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\palvelu.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\palvelun-esittely.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\pikahaku.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\script.10fd331e.js:2 [â] -> window.allCompanies=window.allCompanies||[],window.companyDataPromise=window.companyDataPromise||null,"undefined"==typeof i18n&&(window.i18n
+dist\script.f3fdb606.js:1 [â] -> let allCompanies=[],allRssItems=[],allGeoEvents=[],currentCompany=null,currentMediaIndex=0,map=null,markers=null,isHomePage=!1,userCoords=nu
+dist\searchEngine.10fd331e.js:2 [Â] -> function getCategoryData(e,t){if(!e.profiling)return null;const i=t.replace(/_/g,"-");return e.profiling.categories?e.profiling.categories[t
+dist\tarinakartta.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\temp_companies.json:2343 [â] -> "nimi": "Kynsiteknikko Kristi Ruul-Saariâ€‹",
+dist\tietosuoja.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\vehnia.html:1 [Â] -> ﻿<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragm
+dist\verkostokartta.html:1 [â] -> <!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma
+dist\vihtavuori.html:1 [Â] -> ﻿<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragm
+dist\yrityskortti.10fd331e.js:2 [â] -> !function(){function e(e){return e?e.toString().toLowerCase().trim().replace(/\s+/g,"-").replace(/[äÄàáâãäå]/g,"a").replace(/[öÖòóôõöø]/g,"o
+dist\profiling\venues-and-events.json:29414 [Â] -> "note": "Pääasiallinen toiminta-alue Keski-Suomi (erityisesti Laukaa/Jyväskylä-seutu), tarvittaessa koko Suomen alue. 40 km säde Laukaasta i
+dist\profiling\venues-and-events.json:42959 [Â] -> "description": "Kiinteistönhoitopalveluihin erikoistunut osakeyhtiö. Palveluihin kuuluu kiinteistöjen kunnossapito, siivouspalvelut, lumen j
+dist\profiling\venues-and-events.json:45835 [Â] -> "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja ÃƒÂ  la carte -palveluihin, juhlapalveluihin j
+dist\profiling\wellbeing-and-family.json:3079 [â] -> "note": "Sijainti osoitteessa Peurungantie 85, 41340 Laukaa. Etäisyys Jyväskylästä noin 25â€“32 km."
+dist\tapahtumakartta_files\script.99791000.js:1 [â] -> window.allCompanies=window.allCompanies||[],window.companyDataPromise=window.companyDataPromise||null,"undefined"==typeof i18n&&(window.i18n
+profiling\venues-and-events.json:29414 [Â] -> "note": "Pääasiallinen toiminta-alue Keski-Suomi (erityisesti Laukaa/Jyväskylä-seutu), tarvittaessa koko Suomen alue. 40 km säde Laukaasta i
+profiling\venues-and-events.json:42959 [Â] -> "description": "Kiinteistönhoitopalveluihin erikoistunut osakeyhtiö. Palveluihin kuuluu kiinteistöjen kunnossapito, siivouspalvelut, lumen j
+profiling\venues-and-events.json:45835 [Â] -> "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja ÃƒÂ  la carte -palveluihin, juhlapalveluihin j
+profiling\wellbeing-and-family.json:3079 [â] -> "note": "Sijainti osoitteessa Peurungantie 85, 41340 Laukaa. Etäisyys Jyväskylästä noin 25â€“32 km."
+tapahtumakartta_files\script.99791000.js:1 [â] -> window.allCompanies=window.allCompanies||[],window.companyDataPromise=window.companyDataPromise||null,"undefined"==typeof i18n&&(window.i18n

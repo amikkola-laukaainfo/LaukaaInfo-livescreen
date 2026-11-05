@@ -1,0 +1,196 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-11-05T15:00:00Z",
+  "storage_base_url": "https://iesfqckxotgsqcedvgea.supabase.co/storage/v1/object/public/site-images/",
+  "slots": [
+    {
+      "id": "lievestuore_hero",
+      "group": "Alueet & Kylät",
+      "page": "lievestuore.html",
+      "label": "Lievestuore – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "laukaa_hero",
+      "group": "Alueet & Kylät",
+      "page": "laukaa.html",
+      "label": "Laukaan kirkonkylä – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "vihtavuori_hero",
+      "group": "Alueet & Kylät",
+      "page": "vihtavuori.html",
+      "label": "Vihtavuori – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "leppavesi_hero",
+      "group": "Alueet & Kylät",
+      "page": "leppavesi.html",
+      "label": "Leppävesi – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "vehnia_hero",
+      "group": "Alueet & Kylät",
+      "page": "vehnia.html",
+      "label": "Vehniä – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "koko_laukaa_hero",
+      "group": "Alueet & Kylät",
+      "page": "koko-laukaa.html",
+      "label": "Koko Laukaa – Pääotsikkokuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_laukaa",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Laukaa – Kuntakortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/taajama_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_hankasalmi",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Hankasalmi – Seutukortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/metsa_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_jyvaskyla",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Jyväskylä – Kankaankortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/taajama_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_lievestuore",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Lievestuore – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/taajama_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_vihtavuori",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Vihtavuori – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/taajama_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_leppavesi",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Leppävesi – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/taajama_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "card_vehnia",
+      "group": "Aluekortit (alueet.html)",
+      "page": "alueet.html",
+      "label": "Vehniä – Kyläkortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/metsa_bg.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "ravintolat_header",
+      "group": "Toimialasivut",
+      "page": "laukaan-ravintolat.html",
+      "label": "Laukaan ravintolat – Yläbanneri",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "laukaan_ravintolat_header.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "autohuollot_header",
+      "group": "Toimialasivut",
+      "page": "laukaan-autohuollot.html",
+      "label": "Laukaan autohuollot – Yläbanneri",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "laukaan_autohuollot_header.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "parturit_header",
+      "group": "Toimialasivut",
+      "page": "laukaan-parturit-ja-kauneus.html",
+      "label": "Parturit & kauneus – Yläbanneri",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "laukaan_parturit_header.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "palvelun_esittely_hero",
+      "group": "Esittely & Info",
+      "page": "palvelun-esittely.html",
+      "label": "Palvelun esittely – Hero",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "hero-kuva.webp",
+      "currentUrl": ""
+    },
+    {
+      "id": "ajankohtaista_hero",
+      "group": "Esittely & Info",
+      "page": "ajankohtaista.html",
+      "label": "Ajankohtaista – Pääkuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "kuvia/ajankohtaista.jpg",
+      "currentUrl": ""
+    },
+    {
+      "id": "kauppa_hero",
+      "group": "Palvelut",
+      "page": "kauppa.html",
+      "label": "Kauppa / Tori – Pääkuva",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "palvelu_hero",
+      "group": "Palvelut",
+      "page": "palvelu.html",
+      "label": "Palveluhakemisto – Yläosa",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "taivas_tausta.png",
+      "currentUrl": ""
+    },
+    {
+      "id": "yhteisot_hero",
+      "group": "Palvelut",
+      "page": "yhteisot-ja-linkit.html",
+      "label": "Yhdistykset & Yhteisöt – Yläosa",
+      "aspectRatio": "21:9",
+      "fallbackUrl": "network-silhouette.png",
+      "currentUrl": ""
+    }
+  ]
+}

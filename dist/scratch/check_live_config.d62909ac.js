@@ -1,0 +1,1 @@
+const https=require("https");https.get("https://laukaainfo.fi/supabase-config.a9dc83e4.js",o=>{let s="";o.on("data",o=>s+=o),o.on("end",()=>{console.log("supabase-config content sample:",s.substring(0,300))})}).on("error",console.error);
