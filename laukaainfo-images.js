@@ -5,6 +5,9 @@
  * elementeille, joissa on data-slot="[slot_id]" (tai data-bg-slot / data-image-slot).
  * 
  * Säilyttää olemassa olevat gradientit ja sisältää fallback-varmistuksen!
+ * 
+ * v1.1 – Korjaus: tallennetaan CSS-gradientit synkronisesti ennen async-skriptien ajoa,
+ *         ja ajetaan applySiteImages uudelleen viiveellä ylikirjoittamaan tietoa-paikasta.js
  */
 (function() {
   'use strict';
@@ -15,6 +18,26 @@
   let slotMap = {};
   let isLoaded = false;
   const pendingCallbacks = [];
+
+  // ★ KRIITTINEN: Tallennetaan CSS-gradientit SYNKRONISESTI heti skriptin latautuessa,
+  // ennen kuin tietoa-paikasta.js tai muut async-skriptit ehtivät muuttaa tyylejä.
+  // Tämä varmistaa, että voimme palauttaa gradientit myöhemmin oikein.
+  const cssBaseBackgrounds = {};
+  (function storeCssBackgrounds() {
+    try {
+      var els = document.querySelectorAll('[data-slot],[data-bg-slot],[data-image-slot]');
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        var slotId = el.getAttribute('data-slot') || el.getAttribute('data-bg-slot') || el.getAttribute('data-image-slot');
+        if (slotId && !cssBaseBackgrounds[slotId]) {
+          var bg = window.getComputedStyle(el).backgroundImage;
+          if (bg && bg !== 'none') {
+            cssBaseBackgrounds[slotId] = bg;
+          }
+        }
+      }
+    } catch (e) { /* jätetään huomiotta */ }
+  })();
 
   function fetchConfig(index) {
     if (index >= CONFIG_PATHS.length) {
@@ -57,6 +80,11 @@
         isLoaded = true;
         applySiteImages();
 
+        // ★ Ajetaan uudelleen 0.8s ja 2.5s viiveellä ylikirjoittamaan
+        // tietoa-paikasta.js:n async hero-asetus (joka pyyhkii gradientin)
+        setTimeout(function() { if (isLoaded) applySiteImages(); }, 800);
+        setTimeout(function() { if (isLoaded) applySiteImages(); }, 2500);
+
         while (pendingCallbacks.length > 0) {
           const cb = pendingCallbacks.shift();
           try { cb(slotMap); } catch (e) { console.warn(e); }
@@ -95,15 +123,26 @@
         el.src = targetUrl;
       } else {
         // Taustakuvat (hero-bannerit, kortit jne.)
-        const currentStyle = el.style.backgroundImage || window.getComputedStyle(el).backgroundImage || '';
+        // ★ Käytetään talletettua CSS-gradienttia pohjana (ei inline-tyyliä,
+        //    joka saattaa olla tyhjennetty tai korvattu tietoa-paikasta.js:n toimesta)
+        const baseBg = cssBaseBackgrounds[slotId] || '';
 
-        // Jos taustassa on jo url(...), korvataan vain kuvaosoite, jotta liukuvärit (linear-gradient) säilyvät ehjinä
-        if (/url\([^)]+\)/i.test(currentStyle)) {
-          el.style.backgroundImage = currentStyle.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
-        } else if (currentStyle.includes('gradient')) {
-          el.style.backgroundImage = currentStyle + ', url("' + targetUrl + '")';
+        if (baseBg && baseBg !== 'none' && /url\([^)]+\)/i.test(baseBg)) {
+          // Gradientti löytyy CSS:stä + siinä on jo url() — korvataan url oikealla kuvalla
+          el.style.backgroundImage = baseBg.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
+        } else if (baseBg && baseBg !== 'none') {
+          // Gradientti löytyy CSS:stä mutta ei url() — lisätään kuva perään
+          el.style.backgroundImage = baseBg + ', url("' + targetUrl + '")';
         } else {
-          el.style.backgroundImage = 'url("' + targetUrl + '")';
+          // Ei CSS-gradienttia — tarkistetaan nykyinen inline-tyyli fallbackina
+          const currentStyle = el.style.backgroundImage || '';
+          if (currentStyle && /url\([^)]+\)/i.test(currentStyle)) {
+            el.style.backgroundImage = currentStyle.replace(/url\([^)]+\)/i, 'url("' + targetUrl + '")');
+          } else if (currentStyle && currentStyle.includes('gradient')) {
+            el.style.backgroundImage = currentStyle + ', url("' + targetUrl + '")';
+          } else {
+            el.style.backgroundImage = 'url("' + targetUrl + '")';
+          }
         }
       }
     });
@@ -161,4 +200,3 @@
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
   }
 })();
-
