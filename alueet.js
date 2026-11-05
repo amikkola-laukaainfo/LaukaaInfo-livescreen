@@ -233,24 +233,51 @@
         }
 
         container.innerHTML = items.map(m => {
-            const villagesHtml = (m.villages || []).map(v => `
-                <a href="${v.url}" class="village-tag">
+            const isComingSoon = m.level === 'coming_soon';
+
+            const villagesHtml = (!isComingSoon && m.villages && m.villages.length > 0) ? (m.villages || []).map(v => `
+                <a href="${v.url}" class="village-tag" title="Näytä paikan tiedot">
                     <span class="iconify" data-icon="material-symbols:pin-drop"></span>
                     <span>${v.name}</span>
                 </a>
-            `).join('');
+            `).join('') : '';
 
-            const highlightsHtml = (m.highlights || []).slice(0, 3).map(h => `
+            const highlightsHtml = (!isComingSoon && m.highlights && m.highlights.length > 0) ? (m.highlights || []).slice(0, 3).map(h => `
                 <li style="display:flex; align-items:flex-start; gap:0.5rem; font-size:0.875rem; color:#334155; margin-bottom:0.35rem;">
                     <span class="iconify" data-icon="material-symbols:check-circle" style="color:#0284c7; flex-shrink:0; margin-top:0.2rem;"></span>
                     <span>${h}</span>
                 </li>
-            `).join('');
+            `).join('') : '';
+
+            const badgeBg = isComingSoon ? 'background: rgba(217, 119, 6, 0.95); color: #ffffff;' : '';
+
+            let footerHtml = '';
+            if (isComingSoon) {
+                footerHtml = `
+                    <div style="display:flex; align-items:center; gap:0.5rem; background:#f8fafc; color:#64748b; padding:0.65rem 1rem; border-radius:12px; font-size:0.85rem; font-weight:700; width:100%; justify-content:center; border:1.5px dashed #cbd5e1;">
+                        <span class="iconify" data-icon="material-symbols:hourglass-top" style="color:#d97706; font-size:1.15rem;"></span>
+                        <span>Kohteet ja sisällöt tulossa</span>
+                    </div>
+                `;
+            } else {
+                footerHtml = `
+                    ${m.portal_url ? `
+                        <a href="${m.portal_url}" class="btn btn-primary" ${m.portal_url.startsWith('http') || m.portal_url.includes('wonderin') ? 'target="_blank"' : ''}>
+                            <span>Avaa ${m.name}</span>
+                            <span class="iconify" data-icon="material-symbols:arrow-forward"></span>
+                        </a>
+                    ` : ''}
+                    <button type="button" class="btn btn-secondary" onclick="window.focusMunicipalityMap('${m.slug}')" title="Kohdista kartalle">
+                        <span class="iconify" data-icon="material-symbols:map"></span>
+                        <span>Kartalla</span>
+                    </button>
+                `;
+            }
 
             return `
                 <div class="area-card" data-slug="${m.slug}">
                     <div class="area-card-image" style="background-image: url('${m.image}')">
-                        <span class="area-badge">${m.badge || 'Kunta'}</span>
+                        <span class="area-badge" style="${badgeBg}">${m.badge || 'Kunta'}</span>
                     </div>
                     <div class="area-card-content">
                         <div class="area-card-header">
@@ -275,14 +302,7 @@
                         ` : ''}
 
                         <div class="area-card-footer">
-                            <a href="${m.portal_url}" class="btn btn-primary" ${m.portal_url.startsWith('http') || m.portal_url.includes('wonderin') ? 'target="_blank"' : ''}>
-                                <span>Avaa ${m.name}</span>
-                                <span class="iconify" data-icon="material-symbols:arrow-forward"></span>
-                            </a>
-                            <button type="button" class="btn btn-secondary" onclick="window.focusMunicipalityMap('${m.slug}')" title="Kohdista kartalle">
-                                <span class="iconify" data-icon="material-symbols:map"></span>
-                                <span>Kartalla</span>
-                            </button>
+                            ${footerHtml}
                         </div>
                     </div>
                 </div>

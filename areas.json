@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Keski-Suomen ja seutujen alueverkosto",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "updated": "2026-11-05"
   },
   "regions": [
@@ -52,11 +52,11 @@
       "zoom": 11,
       "level": "full_portal",
       "villages": [
-        { "name": "Kirkonkylä", "url": "/laukaa.html" },
-        { "name": "Lievestuore", "url": "/lievestuore.html" },
-        { "name": "Vihtavuori", "url": "/vihtavuori.html" },
-        { "name": "Leppävesi", "url": "/leppavesi.html" },
-        { "name": "Vehniä", "url": "/vehnia.html" }
+        { "name": "Kirkonkylä", "place_id": "55555555-5555-4555-a555-555555555555", "url": "/tietoa-paikasta.html?id=55555555-5555-4555-a555-555555555555" },
+        { "name": "Lievestuore", "place_id": "11111111-1111-4111-a111-111111111111", "url": "/tietoa-paikasta.html?id=11111111-1111-4111-a111-111111111111" },
+        { "name": "Vihtavuori", "place_id": "33333333-3333-4333-a333-333333333333", "url": "/tietoa-paikasta.html?id=33333333-3333-4333-a333-333333333333" },
+        { "name": "Leppävesi", "place_id": "44444444-4444-4444-a444-444444444444", "url": "/tietoa-paikasta.html?id=44444444-4444-4444-a444-444444444444" },
+        { "name": "Vehniä", "place_id": "66666666-6666-4666-a666-666666666666", "url": "/tietoa-paikasta.html?id=66666666-6666-4666-a666-666666666666" }
       ],
       "highlights": [
         "Kylpylähotelli Peurunka ja Peurunkavuori",
@@ -78,9 +78,9 @@
       "zoom": 11,
       "level": "curated_portal",
       "villages": [
-        { "name": "Kirkonkylä", "url": "/tapahtumakartta.html?kunta=hankasalmi" },
-        { "name": "Asemanseutu", "url": "/tapahtumakartta.html?kunta=hankasalmi" },
-        { "name": "Niemisjärvi", "url": "/tapahtumakartta.html?kunta=hankasalmi" }
+        { "name": "Kirkonkylä", "place_id": "77777777-7777-4777-a777-777777777777", "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777777" },
+        { "name": "Asemanseutu", "place_id": "77777777-7777-4777-a777-777777777701", "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777701" },
+        { "name": "Niemisjärvi", "place_id": "77777777-7777-4777-a777-777777777702", "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777702" }
       ],
       "highlights": [
         "Hankasalmen museokylä ja puukirkko",
@@ -102,9 +102,9 @@
       "zoom": 12,
       "level": "spots_only",
       "villages": [
-        { "name": "Kangas & Tourujoki", "url": "/reitti.html?id=c4f8662a-bf2e-4f06-839c-03e639f0f349" },
-        { "name": "Harju & Vesilinna", "url": "/wonderin/esittely.html" },
-        { "name": "Lutakon satama", "url": "/wonderin/esittely.html" }
+        { "name": "Kangas & Tourujoki", "place_id": "88888888-8888-4888-a888-888888888801", "url": "/tietoa-paikasta.html?id=88888888-8888-4888-a888-888888888801" },
+        { "name": "Harju & Vesilinna", "place_id": "88888888-8888-4888-a888-888888888802", "url": "/tietoa-paikasta.html?id=88888888-8888-4888-a888-888888888802" },
+        { "name": "Lutakon satama", "place_id": "88888888-8888-4888-a888-888888888803", "url": "/tietoa-paikasta.html?id=88888888-8888-4888-a888-888888888803" }
       ],
       "highlights": [
         "Kankaan alue ja Tourujoen luontopolku (Wonderin-reitti)",
@@ -117,24 +117,16 @@
       "slug": "muurame",
       "name": "Muurame",
       "region_id": "jyvaskylan-seutu",
-      "badge": "Tuleva kohdealue",
+      "badge": "Tulossa",
       "tagline": "Päijänteen rantoja, Riihivuoren maisemia ja luonnonrauhaa",
-      "description": "Aktiivinen ympäryskunta Jyväskylän eteläpuolella. Riihivuoren ulkoilualueet, Muuramenjoki ja Päijänteen saaristo.",
+      "description": "Muurame on aktiivinen ympäryskunta Jyväskylän eteläpuolella. Alueen kohteet, elämykset ja retkeilyreitit ovat parhaillaan valmistelussa ja tulossa osaksi verkostoa.",
       "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-      "portal_url": "#",
+      "portal_url": "",
       "center": [62.13, 25.67],
       "zoom": 11,
-      "level": "spots_only",
-      "villages": [
-        { "name": "Keskusta", "url": "#" },
-        { "name": "Riihivuori", "url": "#" },
-        { "name": "Kinkomaa", "url": "#" }
-      ],
-      "highlights": [
-        "Riihivuori Resort & näköalatasanne",
-        "Muuramejoen luontopolku ja kulttuuripolku",
-        "Päijänteen vesireitit"
-      ]
+      "level": "coming_soon",
+      "villages": [],
+      "highlights": []
     }
   ],
   "curated_routes": [
@@ -179,53 +171,8 @@
       "municipality": "Jyväskylä",
       "category": "Kulttuuri & Reitit",
       "coords": [62.247, 25.758],
-      "url": "/reitti.html?id=c4f8662a-bf2e-4f06-839c-03e639f0f349",
+      "url": "/tietoa-paikasta.html?id=88888888-8888-4888-a888-888888888801",
       "badge": "Wonderin-reitti"
-    },
-    {
-      "id": "spot-peurunka",
-      "name": "Kylpylähotelli Peurunka",
-      "municipality": "Laukaa",
-      "category": "Matkailu & Hyvinvointi",
-      "coords": [62.435, 25.852],
-      "url": "/index.html",
-      "badge": "Kohde"
-    },
-    {
-      "id": "spot-kuusaankoski",
-      "name": "Kuusaankoski & Kanava",
-      "municipality": "Laukaa",
-      "category": "Luonto & Kalastus",
-      "coords": [62.463, 25.938],
-      "url": "/laukaa.html",
-      "badge": "Nähtävyys"
-    },
-    {
-      "id": "spot-saraakallio",
-      "name": "Saraakallion kalliomaalaukset",
-      "municipality": "Laukaa",
-      "category": "Esihistoria & Luonto",
-      "coords": [62.485, 25.989],
-      "url": "/laukaa.html",
-      "badge": "Arkeologia"
-    },
-    {
-      "id": "spot-revontuli",
-      "name": "Revontuli Resort & Glass Igloos",
-      "municipality": "Hankasalmi",
-      "category": "Matkailu & Majoitus",
-      "coords": [62.348, 26.435],
-      "url": "/tapahtumakartta.html?kunta=hankasalmi",
-      "badge": "Lomakeskus"
-    },
-    {
-      "id": "spot-haka",
-      "name": "Häkärinteet",
-      "municipality": "Hankasalmi",
-      "category": "Talviurheilu & Aktiviteetit",
-      "coords": [62.327, 26.415],
-      "url": "/tapahtumakartta.html?kunta=hankasalmi",
-      "badge": "Laskettelu"
     },
     {
       "id": "spot-harju",
@@ -233,7 +180,7 @@
       "municipality": "Jyväskylä",
       "category": "Näköalapaikka & Puisto",
       "coords": [62.244, 25.742],
-      "url": "/wonderin/esittely.html",
+      "url": "/tietoa-paikasta.html?id=88888888-8888-4888-a888-888888888802",
       "badge": "Näköala"
     },
     {
@@ -242,18 +189,53 @@
       "municipality": "Jyväskylä",
       "category": "Satama & Kaupunkielämä",
       "coords": [62.238, 25.753],
-      "url": "/wonderin/esittely.html",
+      "url": "/tietoa-paikasta.html?id=88888888-8888-4888-a888-888888888803",
       "badge": "Satama"
     },
     {
-      "id": "spot-riihivuori",
-      "name": "Riihivuori Resort",
-      "municipality": "Muurame",
-      "category": "Näköala & Aktiviteetti",
-      "coords": [62.135, 25.642],
-      "url": "#",
-      "badge": "Ulkoilu"
+      "id": "spot-peurunka",
+      "name": "Kylpylähotelli Peurunka",
+      "municipality": "Laukaa",
+      "category": "Matkailu & Hyvinvointi",
+      "coords": [62.435, 25.852],
+      "url": "/tietoa-paikasta.html?name=Peurunka",
+      "badge": "Kohde"
+    },
+    {
+      "id": "spot-kuusaankoski",
+      "name": "Kuusaankoski & Kanava",
+      "municipality": "Laukaa",
+      "category": "Luonto & Kalastus",
+      "coords": [62.463, 25.938],
+      "url": "/tietoa-paikasta.html?name=Kuusaankoski",
+      "badge": "Nähtävyys"
+    },
+    {
+      "id": "spot-saraakallio",
+      "name": "Saraakallion kalliomaalaukset",
+      "municipality": "Laukaa",
+      "category": "Esihistoria & Luonto",
+      "coords": [62.485, 25.989],
+      "url": "/tietoa-paikasta.html?name=Saraakallio",
+      "badge": "Arkeologia"
+    },
+    {
+      "id": "spot-revontuli",
+      "name": "Revontuli Resort & Glass Igloos",
+      "municipality": "Hankasalmi",
+      "category": "Matkailu & Majoitus",
+      "coords": [62.348, 26.435],
+      "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777777",
+      "badge": "Lomakeskus"
+    },
+    {
+      "id": "spot-haka",
+      "name": "Häkärinteet",
+      "municipality": "Hankasalmi",
+      "category": "Talviurheilu & Aktiviteetit",
+      "coords": [62.327, 26.415],
+      "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777777",
+      "badge": "Laskettelu"
     }
   ]
 }
-

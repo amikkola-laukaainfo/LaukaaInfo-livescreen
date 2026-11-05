@@ -501,6 +501,30 @@
             text-decoration: underline;
         }
 
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffffff;
+            color: #0284c7;
+            border: 1.5px solid #bae6fd;
+            padding: 0.5rem 1.15rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .back-home-btn:hover {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 768px) {
             .alueet-hero {
                 padding: 3.5rem 1rem 2.5rem 1rem;
@@ -521,60 +545,18 @@
 </head>
 
 <body>
-    <!-- TOP NAV (Yhtenäinen sivustonavigaatio) -->
-    <nav class="top-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">
-                <img src="logo.png" alt="LaukaaInfo Logo">
-                <span data-i18n="hero_title">LaukaaInfo</span>
+    <!-- TOP NAV (Yksinkertaistettu: Vain Siirry Laukaainfo.fi etusivulle) -->
+    <nav class="top-nav" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;">
+        <div class="nav-container" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+            <a href="index.html" class="nav-logo" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
+                <img src="logo.png" alt="LaukaaInfo Logo" style="height: 36px; width: auto;">
+                <span style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #0f172a;">LaukaaInfo</span>
             </a>
-            <div class="desktop-nav">
-                <ul class="nav-links">
-                    <!-- 1. Löydä -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-i18n="nav_find">Löydä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="alueet.html" style="font-weight: 700; color: #0284c7;">Alueet (Keski-Suomi &amp; seutu)</a></li>
-                            <li><a href="tilannekuva.html">Laukaan tilannekuva</a></li>
-                            <li><a href="koko-laukaa.html">Kaikki palvelut</a></li>
-                            <li class="has-arrow">
-                                <a href="#" data-i18n="nav_areas">Taajamat</a>
-                                <ul class="nested-menu">
-                                    <li><a href="laukaa.html">Laukaa kk</a></li>
-                                    <li><a href="leppavesi.html">Leppävesi</a></li>
-                                    <li><a href="lievestuore.html">Lievestuore</a></li>
-                                    <li><a href="vehnia.html">Vehniä</a></li>
-                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
-                                    <li><a href="kohdekartta.html">Kaikki kartalla</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="kategoria.html">Teemat &amp; Kategoriat</a></li>
-                            <li><a href="index.html#search-section">Tarkempi haku</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- 2. Ajankohtaista -->
-                    <li class="nav-item">
-                        <a href="ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista</a>
-                    </li>
-
-                    <!-- 3. Kartat & Elämykset -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-i18n="nav_maps_experiences">Kartat &amp; Elämykset <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="alueet.html" style="font-weight: 700; color: #0284c7;">Alueet &amp; Seutu</a></li>
-                            <li><a href="kohdekartta.html">Karttakohteet</a></li>
-                            <li><a href="tarinakartta.html">Tarinakartta</a></li>
-                            <li><a href="tarinakartta.html#kavelyreitit-section">Reittikartta</a></li>
-                            <li><a href="muistokartta.html">Muistokartta</a></li>
-                            <li><a href="wonderin/esittely.html">Wonderin-esittely</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="palvelu.html" class="nav-link">Palvelut</a>
-                    </li>
-                </ul>
+            <div>
+                <a href="index.html" class="back-home-btn">
+                    <span class="iconify" data-icon="material-symbols:arrow-back"></span>
+                    <span>Siirry Laukaainfo.fi etusivulle</span>
+                </a>
             </div>
         </div>
     </nav>
