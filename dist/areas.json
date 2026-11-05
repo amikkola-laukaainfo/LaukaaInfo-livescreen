@@ -198,7 +198,7 @@
       "municipality": "Laukaa",
       "category": "Matkailu & Hyvinvointi",
       "coords": [62.435, 25.852],
-      "url": "/tietoa-paikasta.html?name=Peurunka",
+      "url": "/tietoa-paikasta.html?id=b04ed934-e927-42f9-9b40-1d7112a315f9",
       "badge": "Kohde"
     },
     {
@@ -207,7 +207,7 @@
       "municipality": "Laukaa",
       "category": "Luonto & Kalastus",
       "coords": [62.463, 25.938],
-      "url": "/tietoa-paikasta.html?name=Kuusaankoski",
+      "url": "/tietoa-paikasta.html?id=55555555-5555-4555-a555-555555555511",
       "badge": "Nähtävyys"
     },
     {
@@ -216,7 +216,7 @@
       "municipality": "Laukaa",
       "category": "Esihistoria & Luonto",
       "coords": [62.485, 25.989],
-      "url": "/tietoa-paikasta.html?name=Saraakallio",
+      "url": "/tietoa-paikasta.html?id=55555555-5555-4555-a555-555555555510",
       "badge": "Arkeologia"
     },
     {
@@ -225,7 +225,7 @@
       "municipality": "Hankasalmi",
       "category": "Matkailu & Majoitus",
       "coords": [62.348, 26.435],
-      "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777777",
+      "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777711",
       "badge": "Lomakeskus"
     },
     {
@@ -234,7 +234,7 @@
       "municipality": "Hankasalmi",
       "category": "Talviurheilu & Aktiviteetit",
       "coords": [62.327, 26.415],
-      "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777777",
+      "url": "/tietoa-paikasta.html?id=77777777-7777-4777-a777-777777777710",
       "badge": "Laskettelu"
     }
   ]

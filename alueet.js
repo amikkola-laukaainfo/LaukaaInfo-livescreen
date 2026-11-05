@@ -17,7 +17,8 @@
 
     async function initAlueetPage() {
         try {
-            const res = await fetch('areas.json');
+            // Lisätään aikaleima välimuistin ohittamiseksi (cache busting)
+            const res = await fetch('areas.json?v=' + Date.now());
             if (!res.ok) throw new Error('areas.json lataus epäonnistui: ' + res.status);
             areasData = await res.json();
         } catch (err) {
