@@ -1,0 +1,259 @@
+{
+  "meta": {
+    "title": "Keski-Suomen ja seutujen alueverkosto",
+    "version": "1.0.0",
+    "updated": "2026-11-05"
+  },
+  "regions": [
+    {
+      "id": "keski-suomi",
+      "name": "Keski-Suomi",
+      "type": "REGION",
+      "badge": "Maakunta",
+      "lead": "Järvien, koskien, harjujen ja elävien kylien sydänmaakunta.",
+      "description": "Keski-Suomi yhdistää urbaanin kaupunkielämän, uniikit teollisuushistorian tarinat sekä laajat kansallispuistot ja vesistöt. Alueverkostossa voit tutustua kuntien ja taajamien omiin kohteisiin ja tarinoihin.",
+      "image": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80",
+      "center": [62.4, 25.8],
+      "zoom": 9,
+      "stats": {
+        "municipalities_count": 8,
+        "places_count": 120,
+        "routes_count": 15
+      }
+    },
+    {
+      "id": "jyvaskylan-seutu",
+      "name": "Jyväskylän seutu",
+      "type": "SUBREGION",
+      "badge": "Kaupunkiseutu & Ympäryskunnat",
+      "lead": "Keskisen Suomen elävä kasvukeskus: kulttuuria, koulutusta, teollisuushistoriaa ja järviluontoa.",
+      "description": "Jyväskylän seutuun kuuluvat Jyväskylän kaupungin lisäksi muun muassa Laukaa, Hankasalmi, Muurame, Uurainen ja Toivakka. Seutu tarjoaa yhtenäisen elämys- ja retkeilyverkoston.",
+      "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+      "center": [62.35, 25.85],
+      "zoom": 10,
+      "stats": {
+        "municipalities_count": 4,
+        "places_count": 85,
+        "routes_count": 10
+      }
+    }
+  ],
+  "municipalities": [
+    {
+      "slug": "laukaa",
+      "name": "Laukaa",
+      "region_id": "jyvaskylan-seutu",
+      "badge": "Täysi portaali",
+      "tagline": "Koskien, kylien ja elämysten Laukaa",
+      "description": "Peurungan kylpylä- ja harjumaisemat, Kuusaankosken kuohut, Saraakallion kalliomaalaukset sekä aktiiviset taajamat Lievestuoreesta Vihtavuoreen.",
+      "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
+      "portal_url": "/index.html",
+      "center": [62.413, 25.952],
+      "zoom": 11,
+      "level": "full_portal",
+      "villages": [
+        { "name": "Kirkonkylä", "url": "/laukaa.html" },
+        { "name": "Lievestuore", "url": "/lievestuore.html" },
+        { "name": "Vihtavuori", "url": "/vihtavuori.html" },
+        { "name": "Leppävesi", "url": "/leppavesi.html" },
+        { "name": "Vehniä", "url": "/vehnia.html" }
+      ],
+      "highlights": [
+        "Kylpylähotelli Peurunka ja Peurunkavuori",
+        "Kuusaankosken kanava- ja koskialue",
+        "Saraakallion esihistorialliset kalliomaalaukset",
+        "Kuhankosken ja Lievestuoreen retkeilyreitit"
+      ]
+    },
+    {
+      "slug": "hankasalmi",
+      "name": "Hankasalmi",
+      "region_id": "jyvaskylan-seutu",
+      "badge": "Seutukohde",
+      "tagline": "Perinnekulttuuria, järviluontoa ja elämyksiä 9-tien varrella",
+      "description": "Hankasalmen kirkonkylä, Asemanseudun puukoulut ja taide, Lomakeskus Revontuli sekä Häkärinteiden talvielämykset.",
+      "image": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
+      "portal_url": "/tapahtumakartta.html?kunta=hankasalmi",
+      "center": [62.392, 26.439],
+      "zoom": 11,
+      "level": "curated_portal",
+      "villages": [
+        { "name": "Kirkonkylä", "url": "/tapahtumakartta.html?kunta=hankasalmi" },
+        { "name": "Asemanseutu", "url": "/tapahtumakartta.html?kunta=hankasalmi" },
+        { "name": "Niemisjärvi", "url": "/tapahtumakartta.html?kunta=hankasalmi" }
+      ],
+      "highlights": [
+        "Hankasalmen museokylä ja puukirkko",
+        "Revontuli Resort & Golf",
+        "Häkärinteet",
+        "Kallioahon ja Sepänmäen käsityöläisperinteet"
+      ]
+    },
+    {
+      "slug": "jyvaskyla",
+      "name": "Jyväskylä",
+      "region_id": "jyvaskylan-seutu",
+      "badge": "Kohteet & Reitit",
+      "tagline": "Kaupunkikulttuuria, Alvar Aaltoa ja Kankaan modernia kaupunkielämää",
+      "description": "Seudun sydän, jossa vanhat teollisuusmiljööt kuten Kangas heräävät henkiin digitaalisten tarinareittien ja kulttuurikohteiden muodossa.",
+      "image": "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&w=800&q=80",
+      "portal_url": "/wonderin/esittely.html",
+      "center": [62.242, 25.747],
+      "zoom": 12,
+      "level": "spots_only",
+      "villages": [
+        { "name": "Kangas & Tourujoki", "url": "/reitti.html?id=c4f8662a-bf2e-4f06-839c-03e639f0f349" },
+        { "name": "Harju & Vesilinna", "url": "/wonderin/esittely.html" },
+        { "name": "Lutakon satama", "url": "/wonderin/esittely.html" }
+      ],
+      "highlights": [
+        "Kankaan alue ja Tourujoen luontopolku (Wonderin-reitti)",
+        "Alvar Aalto -museo ja yliopistokampus",
+        "Harjun portaat ja Vesilinnan näkötorni",
+        "Jyväsjärven rantaraitti ja Lutakon satama"
+      ]
+    },
+    {
+      "slug": "muurame",
+      "name": "Muurame",
+      "region_id": "jyvaskylan-seutu",
+      "badge": "Tuleva kohdealue",
+      "tagline": "Päijänteen rantoja, Riihivuoren maisemia ja luonnonrauhaa",
+      "description": "Aktiivinen ympäryskunta Jyväskylän eteläpuolella. Riihivuoren ulkoilualueet, Muuramenjoki ja Päijänteen saaristo.",
+      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+      "portal_url": "#",
+      "center": [62.13, 25.67],
+      "zoom": 11,
+      "level": "spots_only",
+      "villages": [
+        { "name": "Keskusta", "url": "#" },
+        { "name": "Riihivuori", "url": "#" },
+        { "name": "Kinkomaa", "url": "#" }
+      ],
+      "highlights": [
+        "Riihivuori Resort & näköalatasanne",
+        "Muuramejoen luontopolku ja kulttuuripolku",
+        "Päijänteen vesireitit"
+      ]
+    }
+  ],
+  "curated_routes": [
+    {
+      "id": "c4f8662a-bf2e-4f06-839c-03e639f0f349",
+      "title": "Kankaan kuva- ja tarinareitti",
+      "municipality": "Jyväskylä",
+      "length": "3.3 km",
+      "duration": "45 min",
+      "type": "Historia & Tarinat",
+      "lead": "Tourujoen kuohuja, vanhan paperitehtaan muistoja ja uutta elämää Kankaalla.",
+      "image": "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&w=800&q=80",
+      "route_url": "/reitti.html?id=c4f8662a-bf2e-4f06-839c-03e639f0f349"
+    },
+    {
+      "id": "peurunka-reitti",
+      "title": "Peurunganhirven luontopolku",
+      "municipality": "Laukaa",
+      "length": "4.2 km",
+      "duration": "1 h 15 min",
+      "type": "Luonto & Hyvinvointi",
+      "lead": "Peurunkajärven harjuja, jylhää rantametsää ja esteettömiä reittiosuuksia.",
+      "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
+      "route_url": "/tarinakartta.html#kavelyreitit-section"
+    },
+    {
+      "id": "hankasalmi-perinne",
+      "title": "Hankasalmen kulttuuri- ja perinnekierros",
+      "municipality": "Hankasalmi",
+      "length": "2.8 km",
+      "duration": "40 min",
+      "type": "Kulttuuri & Arkkitehtuuri",
+      "lead": "Museokylän historiaa, Asemanseudun puurakennusperintöä ja kirkonmäkeä.",
+      "image": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
+      "route_url": "/tapahtumakartta.html?kunta=hankasalmi"
+    }
+  ],
+  "map_spots": [
+    {
+      "id": "spot-kangas",
+      "name": "Kankaan alue & Tourujoki",
+      "municipality": "Jyväskylä",
+      "category": "Kulttuuri & Reitit",
+      "coords": [62.247, 25.758],
+      "url": "/reitti.html?id=c4f8662a-bf2e-4f06-839c-03e639f0f349",
+      "badge": "Wonderin-reitti"
+    },
+    {
+      "id": "spot-peurunka",
+      "name": "Kylpylähotelli Peurunka",
+      "municipality": "Laukaa",
+      "category": "Matkailu & Hyvinvointi",
+      "coords": [62.435, 25.852],
+      "url": "/index.html",
+      "badge": "Kohde"
+    },
+    {
+      "id": "spot-kuusaankoski",
+      "name": "Kuusaankoski & Kanava",
+      "municipality": "Laukaa",
+      "category": "Luonto & Kalastus",
+      "coords": [62.463, 25.938],
+      "url": "/laukaa.html",
+      "badge": "Nähtävyys"
+    },
+    {
+      "id": "spot-saraakallio",
+      "name": "Saraakallion kalliomaalaukset",
+      "municipality": "Laukaa",
+      "category": "Esihistoria & Luonto",
+      "coords": [62.485, 25.989],
+      "url": "/laukaa.html",
+      "badge": "Arkeologia"
+    },
+    {
+      "id": "spot-revontuli",
+      "name": "Revontuli Resort & Glass Igloos",
+      "municipality": "Hankasalmi",
+      "category": "Matkailu & Majoitus",
+      "coords": [62.348, 26.435],
+      "url": "/tapahtumakartta.html?kunta=hankasalmi",
+      "badge": "Lomakeskus"
+    },
+    {
+      "id": "spot-haka",
+      "name": "Häkärinteet",
+      "municipality": "Hankasalmi",
+      "category": "Talviurheilu & Aktiviteetit",
+      "coords": [62.327, 26.415],
+      "url": "/tapahtumakartta.html?kunta=hankasalmi",
+      "badge": "Laskettelu"
+    },
+    {
+      "id": "spot-harju",
+      "name": "Harju & Vesilinnan näkötorni",
+      "municipality": "Jyväskylä",
+      "category": "Näköalapaikka & Puisto",
+      "coords": [62.244, 25.742],
+      "url": "/wonderin/esittely.html",
+      "badge": "Näköala"
+    },
+    {
+      "id": "spot-lutakko",
+      "name": "Lutakon satama & Rantaraitti",
+      "municipality": "Jyväskylä",
+      "category": "Satama & Kaupunkielämä",
+      "coords": [62.238, 25.753],
+      "url": "/wonderin/esittely.html",
+      "badge": "Satama"
+    },
+    {
+      "id": "spot-riihivuori",
+      "name": "Riihivuori Resort",
+      "municipality": "Muurame",
+      "category": "Näköala & Aktiviteetti",
+      "coords": [62.135, 25.642],
+      "url": "#",
+      "badge": "Ulkoilu"
+    }
+  ]
+}
+
