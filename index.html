@@ -1184,6 +1184,47 @@
 
         </section>
 
+<section id="feed-section" class="feed-accordion-section bg-full-white"
+            style="padding: 2.5rem 0 1rem; margin-bottom: 0;">
+
+            <div class="section-container">
+
+                <div class="feed-accordion"
+                    style="border: 1px solid #e2e8f0; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border-radius: 12px; overflow: hidden;">
+
+                    <button class="feed-accordion-header closed" id="toggle-feed-btn"
+                        style="align-items: center; background: #f8fafc; color: #0a2540; border-radius: 0; padding: 1.5rem 2rem; transition: all 0.2s ease; border: none; width: 100%; display: flex; justify-content: space-between;">
+
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+
+                            <span data-i18n="feed_title" style="color: #0a2540; font-size: 1.3rem; font-weight: 700;">Paikallinen syöte</span>
+
+                            <small
+                                style="font-size: 0.88rem; font-weight: normal; margin-top: 4px; color: #64748b;"
+                                data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset tarjoukset</small>
+
+                        </div>
+
+                        <span class="icon-btn" data-i18n="feed_open"
+                            style="background: #f1f5f9; color: #0a2540; border: 1px solid #cbd5e1; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem;">Avaa</span>
+
+                    </button>
+
+                    <div class="feed-accordion-content closed" id="feed-accordion-content"
+                        style="background: #f8fbff; border-radius: 0 0 12px 12px; border-top: 1px solid #e2e8f0;">
+
+                        <!-- Aktiivinen aineisto (Supabase posts -taulu) -->
+
+                        <div id="homepage-feed" data-feed-src="supabase" style="padding: 2rem;"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
 <section class="ticker-section"
             style="background-color: #f8fbff; padding: 0; margin-top: 2rem; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
 
@@ -1627,48 +1668,6 @@
                         <span data-i18n="home_some_btn">Selaa kaikkia yhteisöjä &rarr;</span>
 
                     </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-<section id="feed-section" class="feed-accordion-section bg-full-white"
-            style="padding: 3rem 0; margin-bottom: 0;">
-
-            <div class="section-container">
-
-                <div class="feed-accordion"
-                    style="border: 1px solid #e2e8f0; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border-radius: 12px; overflow: hidden;">
-
-                    <button class="feed-accordion-header closed" id="toggle-feed-btn"
-                        style="align-items: center; background: #f8fafc; color: #0a2540; border-radius: 0; padding: 1.5rem 2rem; transition: all 0.2s ease; border: none; width: 100%; display: flex; justify-content: space-between;">
-
-                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-
-                            <span data-i18n="feed_title" style="color: #0a2540; font-size: 1.3rem; font-weight: 700;">Paikallinen syöte</span>
-
-                            <small
-                                style="font-size: 0.88rem; font-weight: normal; margin-top: 4px; color: #64748b;"
-                                data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset tarjoukset</small>
-
-                        </div>
-
-                        <span class="icon-btn" data-i18n="feed_open"
-                            style="background: #f1f5f9; color: #0a2540; border: 1px solid #cbd5e1; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem;">Avaa</span>
-
-                    </button>
-
-                    <div class="feed-accordion-content closed" id="feed-accordion-content"
-                        style="background: #f8fbff; border-radius: 0 0 12px 12px; border-top: 1px solid #e2e8f0;">
-
-                        <!-- Aktiivinen aineisto (Supabase posts -taulu) -->
-
-                        <div id="homepage-feed" data-feed-src="supabase" style="padding: 2rem;"></div>
-
-                    </div>
 
                 </div>
 
