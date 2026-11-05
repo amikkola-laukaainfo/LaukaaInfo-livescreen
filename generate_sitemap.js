@@ -25,6 +25,9 @@ async function generateSitemap() {
     // 1. Staattiset pääsivut
     const staticPages = [
         'index.html',
+        { url: 'alueet.html', priority: '0.90', changefreq: 'weekly' },
+        { url: 'wonderin/esittely.html', priority: '0.85', changefreq: 'monthly' },
+        { url: 'tapahtumakartta.html', priority: '0.85', changefreq: 'daily' },
         'palvelun-esittely.html',
         'ilmoittaudu.html',
         'kauppa.html',
@@ -34,15 +37,24 @@ async function generateSitemap() {
         'lievestuore.html',
         'vehnia.html',
         'vihtavuori.html',
+        'koko-laukaa.html',
         'ajankohtaista.html',
         'asiahaku.html',
         'kohdekartta.html',
         'tarinakartta.html',
         'muistokartta.html',
+        'tilannekuva.html',
+        'reitti.html',
+        'reitti-partner.html',
         'kadonneet.html',
         'ilmoitukset.html',
         'verkostokartta.html',
         'pikahaku.html',
+        'keskustelu.html',
+        'toiminta.html',
+        'kohtaamiset.html',
+        'galleria.html',
+        'yhteisot-ja-linkit.html',
         'laukaan-ravintolat.html',
         'laukaan-autohuollot.html',
         'laukaan-parturit-ja-kauneus.html',
@@ -106,8 +118,11 @@ async function generateSitemap() {
 `;
 
     // Lisätään staattiset sivut
-    staticPages.forEach(page => {
-        xml += `<url>\n  <loc>${baseUrl}${page}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.80</priority>\n</url>\n`;
+    staticPages.forEach(item => {
+        const page = typeof item === 'string' ? item : item.url;
+        const prio = (typeof item === 'object' && item.priority) ? item.priority : '0.80';
+        const cf = (typeof item === 'object' && item.changefreq) ? `\n  <changefreq>${item.changefreq}</changefreq>` : '';
+        xml += `<url>\n  <loc>${baseUrl}${page}</loc>\n  <lastmod>${currentDate}</lastmod>${cf}\n  <priority>${prio}</priority>\n</url>\n`;
     });
 
     // Lisätään dynaamiset palvelusivut

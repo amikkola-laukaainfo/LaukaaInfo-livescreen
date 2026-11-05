@@ -424,7 +424,7 @@
                     badge: "Kohteet & Reitit",
                     tagline: "Kankaan tarinareitit ja kaupunkikulttuuri",
                     description: "Tourujoen kuohut, Kankaan vanha paperitehdas ja Alvar Aallon arkkitehtuuri.",
-                    image: "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&w=800&q=80",
+                    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
                     portal_url: "/reitti.html?id=c4f8662a-bf2e-4f06-839c-03e639f0f349",
                     center: [62.242, 25.747],
                     zoom: 12
