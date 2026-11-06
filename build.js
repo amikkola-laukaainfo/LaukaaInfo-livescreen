@@ -28,6 +28,7 @@ if (fs.existsSync(distDir)) {
     fs.rmSync(distDir, { recursive: true, force: true });
 }
 fs.mkdirSync(distDir);
+fs.writeFileSync(path.join(distDir, '.nojekyll'), '');
 
 // 2.5 Suoritetaan tietämysgraafin rakentaminen ja yritysdatan modularisointi
 console.log('1.4 Rakennetaan tietämysgraafi...');
@@ -108,8 +109,8 @@ const assetMap = {};
                 const fullPath = path.join(dir, entry.name);
 
                 if (entry.isDirectory()) {
-                    // Älä minifioi kuvakansioita tai valmiiksi koottua lomakemoottoria turhaan
-                    if (entry.name !== 'icons' && entry.name !== 'drive_cache' && entry.name !== 'lomakkeet') {
+                    // Älä minifioi kuvakansioita tai valmiiksi koottuja Vite-sovelluksia turhaan
+                    if (entry.name !== 'icons' && entry.name !== 'drive_cache' && entry.name !== 'lomakkeet' && entry.name !== 'tapahtumailmoitus') {
                         await minifyAndVersionFolder(fullPath);
                     }
                 } else {
@@ -183,7 +184,7 @@ function updateReferences(dir) {
     for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
-            if (entry.name !== 'lomakkeet') {
+            if (entry.name !== 'lomakkeet' && entry.name !== 'tapahtumailmoitus') {
                 updateReferences(fullPath);
             }
         } else if (entry.name.endsWith('.html')) {
