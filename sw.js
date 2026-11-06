@@ -31,6 +31,12 @@ self.addEventListener('activate', event => {
 
 // Nouto-strategia: Network First JS, HTML ja datatiedostoille jotta päivitykset tulevat heti läpi
 self.addEventListener('fetch', event => {
+    // Ohitetaan ulkoisten palvelimien pyynnöt (esim. suljin.fi, unsplash, supabase jne.)
+    // jolloin selain lataa ulkoiset kuvat ja mediat suoraan ilman ServiceWorker-virheitä
+    if (!event.request.url.startsWith(self.location.origin)) {
+        return;
+    }
+
     const url = new URL(event.request.url);
 
     // Dynamic Network First for HTML, JS and API/JSON data
