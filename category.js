@@ -637,11 +637,33 @@
                 if (c.media && c.media[0] && c.media[0].type === 'image') {
                     imageUrl = c.media[0].url;
                 } else {
+                    const categorySlotMap = {
+                        'auto ja kuljetus': 'fallback_cat_auto',
+                        'elintarvikkeet': 'fallback_cat_elintarvikkeet',
+                        'hyvinvointi ja terveys': 'fallback_cat_hyvinvointi',
+                        'juhlatilat': 'fallback_cat_juhlatilat',
+                        'kaupat ja ostokset': 'fallback_cat_kaupat',
+                        'majoitus': 'fallback_cat_majoitus',
+                        'palvelut': 'fallback_cat_palvelut',
+                        'rakentaminen ja remontointi': 'fallback_cat_rakentaminen',
+                        'ruokailu': 'fallback_cat_ruokailu',
+                        'muu': 'fallback_cat_muu'
+                    };
+
                     const cleanCat = (c.kategoria || '').replace(/-/g, ' ').trim().toLowerCase();
-                    const imagesArray = defaultImages[cleanCat] ||
-                        Object.entries(defaultImages).find(([k]) => k === cleanCat)?.[1] ||
-                        defaultImages['muu'];
-                    imageUrl = imagesArray[Math.floor(Math.random() * imagesArray.length)];
+                    const slotId = categorySlotMap[cleanCat] || 'fallback_cat_muu';
+                    const customSlotUrl = (typeof window.getSiteImageUrl === 'function')
+                        ? window.getSiteImageUrl(slotId, '')
+                        : '';
+
+                    if (customSlotUrl) {
+                        imageUrl = customSlotUrl;
+                    } else {
+                        const imagesArray = defaultImages[cleanCat] ||
+                            Object.entries(defaultImages).find(([k]) => k === cleanCat)?.[1] ||
+                            defaultImages['muu'];
+                        imageUrl = imagesArray[Math.floor(Math.random() * imagesArray.length)];
+                    }
                 }
                 mediaHtml = `<img src="${imageUrl}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:1rem;" alt="${c.nimi}">`;
 

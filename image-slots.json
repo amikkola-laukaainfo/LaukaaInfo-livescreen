@@ -322,6 +322,106 @@
       "fallbackUrl": "kuvia/yrityskehittaminen.png",
       "currentUrl": "",
       "description": "Yritysneuvonta ja elinvoimapalvelut"
+    },
+    {
+      "id": "fallback_cat_auto",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Auto ja kuljetus – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1549317661-bd32c8ce0be2?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva auto- ja kuljetusalan yrityksille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_elintarvikkeet",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Elintarvikkeet – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva elintarvikealan yrityksille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_hyvinvointi",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Hyvinvointi ja terveys – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva hyvinvointi- ja terveysalan yrityksille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_juhlatilat",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Juhlatilat – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva juhlatiloille ja tapahtumapaikoille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_kaupat",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Kaupat ja ostokset – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1481437156560-3205f6a55735?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva kaupoille ja myymälöille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_majoitus",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Majoitus – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva majoituspalveluille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_palvelut",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Palvelut – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1581561515277-2da15779ec36?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva yleisille palveluyrityksille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_rakentaminen",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Rakentaminen ja remontointi – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva rakennus- ja remonttialan toimijoille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_ruokailu",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Ruokailu ja ravintolat – Kortin oletuskuva",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Oletuskuva ravintoloille ja kahviloille, joilla ei ole omaa kuvaa"
+    },
+    {
+      "id": "fallback_cat_muu",
+      "group": "Toimialojen fallback-kuvat",
+      "page": "kategoria.html",
+      "label": "Yleinen varakuva (Muu) – Kortti",
+      "aspectRatio": "16:9",
+      "fallbackUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600",
+      "currentUrl": "",
+      "description": "Yleinen oletuskuva muille yrityksille, joilla ei ole omaa kuvaa"
     }
   ]
 }
