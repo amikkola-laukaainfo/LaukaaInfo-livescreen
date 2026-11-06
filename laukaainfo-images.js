@@ -54,8 +54,17 @@
           slots.forEach(function(s) {
             if (s && s.id) {
               const activeUrl = (s.currentUrl || s.url || s.fallbackUrl || '').trim();
+              const pool = (Array.isArray(s.images) && s.images.length > 0)
+                ? s.images.map(function(u) { return String(u || '').trim(); }).filter(Boolean)
+                : (activeUrl ? [activeUrl] : []);
+
+              const randomUrl = pool.length > 0
+                ? pool[Math.floor(Math.random() * pool.length)]
+                : activeUrl;
+
               slotMap[s.id] = {
-                url: activeUrl,
+                url: randomUrl,
+                images: pool,
                 fallback: s.fallbackUrl || '',
                 label: s.label || ''
               };
@@ -65,10 +74,19 @@
           Object.keys(slots).forEach(function(id) {
             const s = slots[id];
             const activeUrl = typeof s === 'string' ? s : (s.currentUrl || s.url || s.fallbackUrl || '').trim();
+            const pool = (s && Array.isArray(s.images) && s.images.length > 0)
+              ? s.images.map(function(u) { return String(u || '').trim(); }).filter(Boolean)
+              : (activeUrl ? [activeUrl] : []);
+
+            const randomUrl = pool.length > 0
+              ? pool[Math.floor(Math.random() * pool.length)]
+              : activeUrl;
+
             slotMap[id] = {
-              url: activeUrl,
-              fallback: s.fallbackUrl || '',
-              label: s.label || ''
+              url: randomUrl,
+              images: pool,
+              fallback: (s && s.fallbackUrl) || '',
+              label: (s && s.label) || ''
             };
           });
         }
@@ -144,8 +162,12 @@
   }
 
   window.getSiteImageUrl = function(slotId, defaultFallback) {
-    if (slotMap[slotId] && slotMap[slotId].url) {
-      return slotMap[slotId].url;
+    if (slotMap[slotId]) {
+      const s = slotMap[slotId];
+      if (s.images && s.images.length > 0) {
+        return s.images[Math.floor(Math.random() * s.images.length)];
+      }
+      if (s.url) return s.url;
     }
     return defaultFallback || (slotMap[slotId] && slotMap[slotId].fallback) || '';
   };
