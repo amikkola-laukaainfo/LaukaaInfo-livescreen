@@ -269,6 +269,281 @@
                 font-size: 2.2rem;
             }
         }
+
+        /* =========================================================
+           TAUSTA-AJATUS: Kortti & Pop-up Modal
+           ========================================================= */
+        .tausta-ajatus-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+            border: 1px solid #bfdbfe;
+            border-left: 6px solid #2563eb;
+            border-radius: 16px;
+            padding: 2rem 2.2rem;
+            margin: 0 0 2.5rem 0;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tausta-ajatus-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            margin-bottom: 0.8rem;
+        }
+
+        .tausta-ajatus-card h2 {
+            color: #0f172a !important;
+            font-size: 1.65rem !important;
+            margin-top: 0.3rem !important;
+            margin-bottom: 0.8rem !important;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.3;
+        }
+
+        .tausta-ajatus-card p {
+            color: #334155 !important;
+            font-size: 1.05rem !important;
+            line-height: 1.65;
+            margin-bottom: 1rem !important;
+        }
+
+        .tausta-ajatus-quote {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin: 1.2rem 0;
+            font-style: italic;
+            color: #1e293b;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .tausta-ajatus-hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-top: 1.5rem;
+        }
+
+        .tausta-ajatus-hero-btn:hover {
+            background: #ffffff;
+            color: #0056b3;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-open-tausta-modal {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-open-tausta-modal:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+        }
+
+        /* Modal Popup Overlay */
+        .tausta-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .tausta-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tausta-modal-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 820px;
+            max-height: 88vh;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .tausta-modal-overlay.active .tausta-modal-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .tausta-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.75rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tausta-modal-header-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2563eb;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tausta-modal-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.8rem;
+            line-height: 1;
+            color: #64748b;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .tausta-modal-close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .tausta-modal-body {
+            padding: 2rem 2.2rem;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tausta-modal-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            color: #0f172a;
+            margin: 0 0 1rem 0;
+            line-height: 1.25;
+        }
+
+        .tausta-modal-quote {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 1.1rem 1.4rem;
+            border-radius: 0 12px 12px 0;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: #1e3a8a;
+            line-height: 1.6;
+            margin-bottom: 1.8rem;
+        }
+
+        .tausta-modal-text p {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: #334155;
+            margin-bottom: 1.2rem;
+        }
+
+        .tausta-modal-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .tausta-modal-text strong {
+            color: #0f172a;
+        }
+
+        .tausta-modal-footer {
+            padding: 1.2rem 1.75rem;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .tausta-modal-primary-btn {
+            background: #0f172a;
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.3rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .tausta-modal-primary-btn:hover {
+            background: #1e293b;
+        }
+
+        @media (max-width: 640px) {
+            .tausta-modal-container {
+                max-height: 94vh;
+                border-radius: 16px;
+            }
+            .tausta-modal-body {
+                padding: 1.5rem;
+            }
+            .tausta-modal-heading {
+                font-size: 1.6rem;
+            }
+            .tausta-ajatus-card {
+                padding: 1.4rem;
+            }
+        }
     </style>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 </head>
@@ -472,6 +747,14 @@
         <h1>LaukaaInfo</h1>
         <h3 style="color: rgba(255,255,255,0.9); font-weight: 400; margin-top: 1rem;">Laukaan paikat, ihmiset, palvelut ja paikallinen tieto – yhdessä verkostossa.</h3>
         <p style="margin-top: 1rem;">Löydä paikka. Löydä palvelu. Löydä mitä alueella tapahtuu.</p>
+        
+        <div>
+            <button type="button" class="tausta-ajatus-hero-btn" onclick="openTaustaAjatusModal()" aria-haspopup="dialog">
+                <span class="iconify" data-icon="material-symbols:hub-outline" style="font-size: 1.3rem;"></span>
+                <span>Lue tausta-ajatus: <em>Yhteiskunta rakentuu verkostoista</em></span>
+                <span class="iconify" data-icon="material-symbols:arrow-forward-rounded" style="font-size: 1.1rem;"></span>
+            </button>
+        </div>
     </header>
 
     <main class="content-container">
@@ -483,6 +766,27 @@
                 <p>LaukaaInfo on yksityinen, epävirallinen paikallispalvelu, jota ylläpitää Tmi Mediazoo (Antti Mikkola, Lievestuore). Palvelu ei edusta Laukaan kuntaa eikä toimi sen toimeksiannosta. Sivuston tiedot perustuvat avoimiin RSS-syötteisiin, OpenStreetMap-kartta-aineistoon ja muihin julkisesti saatavilla oleviin tietolähteisiin. Virallisia tietoja kuntapalveluista saa suoraan osoitteesta <a href="https://www.laukaa.fi" target="_blank" rel="noopener">www.laukaa.fi</a>.</p>
             </div>
         </div>
+
+        <!-- Tausta-ajatus – Esittelykortti -->
+        <section class="tausta-ajatus-card" id="tausta-ajatus">
+            <div class="tausta-ajatus-badge">
+                <span class="iconify" data-icon="material-symbols:hub-outline" style="font-size: 1.1rem;"></span>
+                Tausta-ajatus
+            </div>
+            <h2>Yhteiskunta rakentuu verkostoista</h2>
+            <p>
+                Yhteiskunta ei toimi parhaiten silloin, kun kaikki päätökset ja palvelut keskittyvät muutamaan suureen keskukseen – mutta ei myöskään niin, että jokainen pieni yhteisö yrittää pärjätä täysin omillaan. Toimivin ratkaisu löytyy verkostosta, jossa paikalliset voimavarat, osaaminen ja tarpeet saadaan kohtaamaan myös paikkakuntarajojen yli.
+            </p>
+            <div class="tausta-ajatus-quote">
+                &ldquo;Vahvat paikallisyhteisöt eivät synny eristäytymällä, vaan löytämällä omat vahvuutensa ja liittymällä osaksi toimivaa verkostoa.&rdquo;
+            </div>
+            <div>
+                <button type="button" class="btn-open-tausta-modal" onclick="openTaustaAjatusModal()">
+                    <span class="iconify" data-icon="material-symbols:menu-book-outline" style="font-size: 1.2rem;"></span>
+                    Avaa koko tausta-ajatus (Pop-up)
+                </button>
+            </div>
+        </section>
 
         <h2>Tutustu Laukaaseen omalla tavallasi</h2>
         <p>LaukaaInfon sisältöä voi lähestyä useasta suunnasta.</p>
@@ -794,6 +1098,53 @@
 
     </main>
 
+    <!-- Tausta-ajatus Modal Popup -->
+    <div id="tausta-ajatus-modal" class="tausta-modal-overlay" onclick="handleTaustaBackdropClick(event)" role="dialog" aria-modal="true" aria-labelledby="tausta-modal-title">
+        <div class="tausta-modal-container">
+            <div class="tausta-modal-header">
+                <div class="tausta-modal-header-tag">
+                    <span class="iconify" data-icon="material-symbols:hub-outline" style="font-size: 1.1rem;"></span>
+                    <span>LaukaaInfo &bull; Tausta-ajatus</span>
+                </div>
+                <button type="button" class="tausta-modal-close-btn" onclick="closeTaustaAjatusModal()" aria-label="Sulje ikkuna">&times;</button>
+            </div>
+            
+            <div class="tausta-modal-body">
+                <h2 id="tausta-modal-title" class="tausta-modal-heading">Tausta-ajatus &ndash; Yhteiskunta rakentuu verkostoista</h2>
+                
+                <div class="tausta-modal-quote">
+                    &ldquo;Vahvat paikallisyhteisöt eivät synny eristäytymällä, vaan löytämällä omat vahvuutensa ja liittymällä osaksi toimivaa verkostoa.&rdquo;
+                </div>
+
+                <div class="tausta-modal-text">
+                    <p>Yhteiskunta ei toimi parhaiten silloin, kun kaikki päätökset, palvelut ja mahdollisuudet keskittyvät muutamaan suureen keskukseen. Mutta ei se toimi myöskään niin, että jokainen pieni yhteisö yrittää pärjätä täysin omillaan.</p>
+
+                    <p>Ehkä toimivin ratkaisu löytyy jostain näiden väliltä: verkostomaisesta yhteiskunnasta, jossa paikalliset yhteisöt ovat aktiivisia ja omaleimaisia, mutta samalla yhteydessä toisiinsa.</p>
+
+                    <p>Aikaisemmin kylät, taajamat ja pienet paikkakunnat muodostivat tällaisia verkostoja monella tavalla. Liikkuminen, kaupankäynti, palvelut ja ihmisten välinen yhteistyö yhdistivät paikkoja toisiinsa. Kaiken ei tarvinnut löytyä omasta kylästä, mutta paikallisella toiminnalla oli silti merkitystä.</p>
+
+                    <p>Vähitellen monet yhteydet ovat kuitenkin heikentyneet. Palvelut ja toiminta ovat keskittyneet suurempiin keskuksiin. Kun yksi palvelu tai kohtaamispaikka katoaa, sen ympäriltä voi kadota muutakin toimintaa. Syntyy helposti kierre, jossa vähenevä toiminta johtaa uusiin keskittämispäätöksiin.</p>
+
+                    <p>Toisaalta pelkkä hajauttaminenkaan ei ole ratkaisu. Kaikkea ei kannata eikä tarvitse järjestää joka paikassa erikseen. Olennaisempaa olisi löytää tapoja, joilla paikalliset voimavarat, osaaminen, ideat ja tarpeet saadaan kohtaamaan myös paikkakuntarajojen yli.</p>
+
+                    <p>Verkostomaisessa yhteiskunnassa jokaisella paikalla voi olla oma tehtävänsä ja merkityksensä. Yksi paikka voi tarjota tiloja, toinen osaamista, kolmas tapahtumia ja neljäs ihmisiä, jotka haluavat lähteä toteuttamaan uusia ideoita. Yhteistyö ei edellytä sitä, että kaikkien pitäisi olla samaa mieltä kaikesta. Riittää, että löytyy jokin yhteinen tavoite, jonka eteen voidaan tehdä yhdessä jotain.</p>
+
+                    <p>Myös keskustelun ja toiminnan välille tarvitaan parempi yhteys. Mielipiteiden vaihtaminen on tärkeää, mutta yhtä tärkeää olisi tehdä näkyväksi, mitä ihmiset voisivat yhdessä saada aikaan. Mitä tarvitaan? Mitä jo löytyy? Kuka voisi auttaa? Millä pienellä askeleella asiaa voisi viedä eteenpäin?</p>
+
+                    <p>Tässä ajattelussa paikallinen kehittäminen ei tarkoita vain palveluiden säilyttämistä tai uusien hankkeiden käynnistämistä. Se tarkoittaa myös ihmisten, yhdistysten, yritysten ja yhteisöjen välisten yhteyksien vahvistamista.</p>
+
+                    <p>Tavoitteena ei ole tehdä jokaisesta kylästä omaa keskusta, vaan antaa jokaiselle paikalle mahdollisuus olla aktiivinen ja tärkeä osa laajempaa verkostoa.</p>
+
+                    <p>Kun paikallinen toiminta ja laajemmat yhteydet tukevat toisiaan, syntyy yhteiskunta, joka ei ole liian keskittynyt eikä tarpeettomasti pirstoutunut &ndash; vaan joustava, yhteistyökykyinen ja elävä.</p>
+                </div>
+            </div>
+            
+            <div class="tausta-modal-footer">
+                <button type="button" class="tausta-modal-primary-btn" onclick="closeTaustaAjatusModal()">Sulje ikkuna</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-content">
             <p data-i18n="footer_copyright">© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
@@ -825,6 +1176,42 @@
                 });
             });
         });
+
+        // Tausta-ajatus Modal toiminnot
+        function openTaustaAjatusModal() {
+            const modal = document.getElementById('tausta-ajatus-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeTaustaAjatusModal() {
+            const modal = document.getElementById('tausta-ajatus-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function handleTaustaBackdropClick(event) {
+            if (event.target && event.target.id === 'tausta-ajatus-modal') {
+                closeTaustaAjatusModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' || event.key === 'Esc') {
+                closeTaustaAjatusModal();
+            }
+        });
+
+        // Avaa automaattisesti jos osoitteessa on hash tai parametri
+        if (window.location.hash === '#tausta-ajatus-modal' || window.location.search.includes('tausta-ajatus')) {
+            window.addEventListener('DOMContentLoaded', function() {
+                setTimeout(openTaustaAjatusModal, 300);
+            });
+        }
     </script>
     <script src="laukaainfo-images.js"></script>
 </body>
