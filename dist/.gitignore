@@ -19,13 +19,19 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Master data (if generated)
-# company_profiling_data.json
-alueet_insert.sql
-fix_ai_content_rls.sql
-fix_places_rls.sql
+# SQL-tiedostot (siirretty LAUKAAINFO-profilointi/sql/livescreen/)
+*.sql
+
+# Kehitysaikaiset skriptit
+*.py
+*.ps1
+*.bat
 generate_places_sql.js
-paikat_insert.sql
-places_api_function.sql
+
+# Kehitysaikaiset kansiot
+scratch/
+backup/
+temp_backup/
+__pycache__/
+
 dist/ajankohtaista.html
-backup/paikat_insert_20260818_0935.sql

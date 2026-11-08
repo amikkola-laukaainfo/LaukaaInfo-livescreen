@@ -1,1 +1,0 @@
-const{createClient:createClient}=require("@supabase/supabase-js"),supabase=createClient("https://duxluwyqxvbmkkjzuzkz.supabase.co","sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu");

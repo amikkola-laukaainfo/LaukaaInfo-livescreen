@@ -59,7 +59,16 @@ function copyRecursive(src, dest) {
     for (const entry of entries) {
         // Ohitetaan nämä tiedostot ja kansiot
         if (['node_modules', '.git', 'dist', 'build.js', 'package.json', 'package-lock.json'].includes(entry.name)) continue;
+        // Ohitetaan turhat/kehitysaikaiset kansiot
+        if (['scratch', 'backup', 'temp_backup', '__pycache__'].includes(entry.name)) continue;
+        // Ohitetaan kehitysaikaiset tiedostotyypit
         if (entry.name.endsWith('.md')) continue;
+        if (entry.name.endsWith('.sql')) continue;
+        if (entry.name.endsWith('.py')) continue;
+        if (entry.name.endsWith('.ps1')) continue;
+        if (entry.name.endsWith('.bat')) continue;
+        if (entry.name.endsWith('.csv')) continue;
+        if (entry.name.endsWith('.bak')) continue;
 
         const srcPath = path.join(src, entry.name);
         const destPath = path.join(dest, entry.name);
