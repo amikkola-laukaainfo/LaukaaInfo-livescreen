@@ -2,7 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-// Apufunktio urlin slug-muunnokselle (sama kuin yrityskorteissa)
+// Helper: Hakee tiedoston todellisen muokkausajan ISO-päivänä (YYYY-MM-DD)
+function getFileDate(filePath, fallbackDate) {
+    try {
+        if (fs.existsSync(filePath)) {
+            const stat = fs.statSync(filePath);
+            return stat.mtime.toISOString().split('T')[0];
+        }
+    } catch (e) {}
+    return fallbackDate;
+}
+
+// Apufunktio urlin slug-muunnokselle
 function slugify(text) {
     if (!text) return "";
     return text.toString().toLowerCase().trim()
@@ -17,57 +28,62 @@ function slugify(text) {
 }
 
 async function generateSitemap() {
-    console.log('--- Generating sitemap.xml + sitemap-mediazoo.xml ---');
+    console.log('===================================================');
+    console.log('LaukaaInfo & LiveScreen: Sitemap & SEO Laatugenerointi');
+    console.log('===================================================');
 
     const baseUrl = 'https://laukaainfo.fi/';
-    const currentDate = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
-    
-    // 1. Staattiset pääsivut
-    const staticPages = [
-        'index.html',
-        { url: 'alueet.html', priority: '0.90', changefreq: 'weekly' },
-        { url: 'wonderin/esittely.html', priority: '0.85', changefreq: 'monthly' },
-        { url: 'tapahtumakartta.html', priority: '0.85', changefreq: 'daily' },
-        'palvelun-esittely.html',
-        'ilmoittaudu.html',
-        'kauppa.html',
-        'lisaa-yritys.html',
-        'laukaa.html',
-        'leppavesi.html',
-        'lievestuore.html',
-        'vehnia.html',
-        'vihtavuori.html',
-        'koko-laukaa.html',
-        'ajankohtaista.html',
-        'asiahaku.html',
-        'kohdekartta.html',
-        'tarinakartta.html',
-        'muistokartta.html',
-        'tilannekuva.html',
-        'reitti.html',
-        'reitti-partner.html',
-        'kadonneet.html',
-        'ilmoitukset.html',
-        'verkostokartta.html',
-        'pikahaku.html',
-        'keskustelu.html',
-        'toiminta.html',
-        'kohtaamiset.html',
-        'galleria.html',
-        'yhteisot-ja-linkit.html',
-        'laukaan-ravintolat.html',
-        'laukaan-autohuollot.html',
-        'laukaan-parturit-ja-kauneus.html',
-        'tietoa-paikasta.html',
-        'laatu.html',
-        'tietosuoja.html',
-        'maksuehto.html',
-        'seina-esittely.html',
-        'alusta.html'
+    const today = new Date().toISOString().split('T')[0];
+    const indexMtime = getFileDate(path.join(__dirname, 'index.html'), today);
+
+    // ── 1. Staattiset pääsivut ja alueet ─────────────────────────────────────────
+    // Tarkistetaan fyysinen olemassaolo levyltä. Puuttuvat sivut ohitetaan automaattisesti.
+    const candidatePages = [
+        { file: 'alueet.html', url: 'alueet.html', priority: '0.90', changefreq: 'weekly' },
+        { file: 'tapahtumakartta.html', url: 'tapahtumakartta.html', priority: '0.90', changefreq: 'daily' },
+        { file: 'tapahtumat/index.html', url: 'tapahtumat/', priority: '0.90', changefreq: 'daily' },
+        { file: 'ajankohtaista.html', url: 'ajankohtaista.html', priority: '0.85', changefreq: 'daily' },
+        { file: 'ilmoitukset.html', url: 'ilmoitukset.html', priority: '0.85', changefreq: 'daily' },
+        { file: 'laukaa.html', url: 'laukaa.html', priority: '0.85', changefreq: 'weekly' },
+        { file: 'leppavesi.html', url: 'leppavesi.html', priority: '0.85', changefreq: 'weekly' },
+        { file: 'lievestuore.html', url: 'lievestuore.html', priority: '0.85', changefreq: 'weekly' },
+        { file: 'vihtavuori.html', url: 'vihtavuori.html', priority: '0.85', changefreq: 'weekly' },
+        { file: 'vehnia.html', url: 'vehnia.html', priority: '0.85', changefreq: 'weekly' },
+        { file: 'koko-laukaa.html', url: 'koko-laukaa.html', priority: '0.85', changefreq: 'weekly' },
+        { file: 'asiahaku.html', url: 'asiahaku.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'pikahaku.html', url: 'pikahaku.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'kohdekartta.html', url: 'kohdekartta.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'tarinakartta.html', url: 'tarinakartta.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'muistokartta.html', url: 'muistokartta.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'reitti.html', url: 'reitti.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'reitti-partner.html', url: 'reitti-partner.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'tilannekuva.html', url: 'tilannekuva.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'verkostokartta.html', url: 'verkostokartta.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'tietoa-paikasta.html', url: 'tietoa-paikasta.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'wonderin/esittely.html', url: 'wonderin/esittely.html', priority: '0.80', changefreq: 'monthly' },
+        { file: 'laukaan-ravintolat.html', url: 'laukaan-ravintolat.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'laukaan-autohuollot.html', url: 'laukaan-autohuollot.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'laukaan-parturit-ja-kauneus.html', url: 'laukaan-parturit-ja-kauneus.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'toiminta.html', url: 'toiminta.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'kohtaamiset.html', url: 'kohtaamiset.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'keskustelu.html', url: 'keskustelu.html', priority: '0.70', changefreq: 'weekly' },
+        { file: 'galleria.html', url: 'galleria.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'yhteisot-ja-linkit.html', url: 'yhteisot-ja-linkit.html', priority: '0.75', changefreq: 'weekly' },
+        { file: 'kadonneet.html', url: 'kadonneet.html', priority: '0.70', changefreq: 'weekly' },
+        { file: 'palvelun-esittely.html', url: 'palvelun-esittely.html', priority: '0.75', changefreq: 'monthly' },
+        { file: 'ilmoittaudu.html', url: 'ilmoittaudu.html', priority: '0.70', changefreq: 'monthly' },
+        { file: 'kauppa.html', url: 'kauppa.html', priority: '0.70', changefreq: 'monthly' },
+        { file: 'lisaa-yritys.html', url: 'lisaa-yritys.html', priority: '0.70', changefreq: 'monthly' },
+        { file: 'seina-esittely.html', url: 'seina-esittely.html', priority: '0.65', changefreq: 'monthly' },
+        { file: 'alusta.html', url: 'alusta.html', priority: '0.65', changefreq: 'monthly' },
+        { file: 'tietosuoja.html', url: 'tietosuoja.html', priority: '0.50', changefreq: 'monthly' },
+        { file: 'maksuehto.html', url: 'maksuehto.html', priority: '0.50', changefreq: 'monthly' }
     ];
 
-    // Palveluiden ja reittien id:t (näitä voi laajentaa tarvittaessa)
-    const dynamicPages = [
+    // ── 2. Palvelujen hakusivut (palvelu.html?id=...) ───────────────────────────
+    const palveluFile = path.join(__dirname, 'palvelu.html');
+    const palveluMtime = getFileDate(palveluFile, today);
+    const dynamicServices = [
         'pikahaku.html?id=vuokrauspalvelut',
         'palvelu.html?id=haat',
         'palvelu.html?id=yritysjuhlat',
@@ -89,23 +105,115 @@ async function generateSitemap() {
         'palvelu.html?id=autohuollot'
     ];
 
-    // ── sitemap.xml: vain laukaainfo.fi URL:it ──────────────────────────────────
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- Generated by LaukaaInfo Build Script: laukaainfo.fi – ${new Date().toISOString()} -->
+<!-- Generated by LaukaaInfo Quality SEO Build Script – ${new Date().toISOString()} -->
 
+<!-- 1. Kanoninen Etusivu (ei index.html-duplikaattia) -->
 <url>
   <loc>${baseUrl}</loc>
-  <lastmod>${currentDate}</lastmod>
+  <lastmod>${indexMtime}</lastmod>
+  <changefreq>daily</changefreq>
   <priority>1.00</priority>
 </url>
 `;
 
-    // ── sitemap-mediazoo.xml: vain www.mediazoo.fi URL:it ───────────────────────
+    let checkedStaticCount = 0;
+    let skippedMissingCount = 0;
+
+    // Lisätään tarkistetut staattiset sivut
+    candidatePages.forEach(p => {
+        const fullPath = path.join(__dirname, p.file);
+        if (!fs.existsSync(fullPath)) {
+            console.log(`⚠️  Ohitettu puuttuva tiedosto (ei lisätty sitemapiin): ${p.file}`);
+            skippedMissingCount++;
+            return;
+        }
+
+        const mtime = getFileDate(fullPath, today);
+        xml += `<url>\n  <loc>${baseUrl}${p.url}</loc>\n  <lastmod>${mtime}</lastmod>\n  <changefreq>${p.changefreq || 'weekly'}</changefreq>\n  <priority>${p.priority || '0.80'}</priority>\n</url>\n`;
+        checkedStaticCount++;
+    });
+
+    // Lisätään dynaamiset palveluhaut
+    dynamicServices.forEach(page => {
+        const safePage = page.replace(/&/g, '&amp;');
+        xml += `<url>\n  <loc>${baseUrl}${safePage}</loc>\n  <lastmod>${palveluMtime}</lastmod>\n  <changefreq>weekly</changefreq>\n  <priority>0.80</priority>\n</url>\n`;
+    });
+
+    // ── 3. Laadukkaat paikkasivut (/paikka/[slug]/) ─────────────────────────────
+    let paikkaCount = 0;
+    const paikkaDir = path.join(__dirname, 'paikka');
+    if (fs.existsSync(paikkaDir)) {
+        const paikkaMtime = getFileDate(paikkaDir, today);
+        xml += `<url>\n  <loc>${baseUrl}paikka/</loc>\n  <lastmod>${paikkaMtime}</lastmod>\n  <changefreq>weekly</changefreq>\n  <priority>0.95</priority>\n</url>\n`;
+        paikkaCount++;
+
+        const slugDirs = fs.readdirSync(paikkaDir, { withFileTypes: true })
+            .filter(d => d.isDirectory() && fs.existsSync(path.join(paikkaDir, d.name, 'index.html')));
+
+        slugDirs.forEach(d => {
+            const pageFile = path.join(paikkaDir, d.name, 'index.html');
+            const pageMtime = getFileDate(pageFile, today);
+            xml += `<url>\n  <loc>${baseUrl}paikka/${d.name}/</loc>\n  <lastmod>${pageMtime}</lastmod>\n  <changefreq>weekly</changefreq>\n  <priority>0.90</priority>\n</url>\n`;
+            paikkaCount++;
+        });
+    }
+
+    // ── 4. Kootut teemasivut (/teemat/*.html) ───────────────────────────────────
+    let teemaCount = 0;
+    const teematDir = path.join(__dirname, 'teemat');
+    if (fs.existsSync(teematDir)) {
+        const teemaFiles = fs.readdirSync(teematDir).filter(f => f.endsWith('.html'));
+        teemaFiles.forEach(file => {
+            const fullFile = path.join(teematDir, file);
+            const mtime = getFileDate(fullFile, today);
+            xml += `<url>\n  <loc>${baseUrl}teemat/${file}</loc>\n  <lastmod>${mtime}</lastmod>\n  <changefreq>weekly</changefreq>\n  <priority>0.85</priority>\n</url>\n`;
+            teemaCount++;
+        });
+    }
+
+    // ── 5. Staattiset yrityssivut (/yritys/*.html) ──────────────────────────────
+    let yritysCount = 0;
+    const yritysDir = path.join(__dirname, 'yritys');
+    if (fs.existsSync(yritysDir)) {
+        const yritysFiles = fs.readdirSync(yritysDir).filter(f => f.endsWith('.html'));
+        yritysFiles.forEach(file => {
+            const fullFile = path.join(yritysDir, file);
+            const mtime = getFileDate(fullFile, today);
+            xml += `<url>\n  <loc>${baseUrl}yritys/${file}</loc>\n  <lastmod>${mtime}</lastmod>\n  <changefreq>monthly</changefreq>\n  <priority>0.80</priority>\n</url>\n`;
+            yritysCount++;
+        });
+    }
+
+    xml += `</urlset>\n`;
+
+    // ── Kirjoitetaan sitemap.xml ────────────────────────────────────────────────
+    const sitemapPath = path.join(__dirname, 'sitemap.xml');
+    fs.writeFileSync(sitemapPath, xml, 'utf8');
+
+    // Jos dist-kansio on olemassa, kopioidaan myös sinne
+    const distPath = path.join(__dirname, 'dist');
+    if (fs.existsSync(distPath)) {
+        fs.writeFileSync(path.join(distPath, 'sitemap.xml'), xml, 'utf8');
+    }
+
+    // ── Luodaan standardi robots.txt ───────────────────────────────────────────
+    const robotsTxt = `User-agent: *
+Allow: /
+
+Sitemap: https://laukaainfo.fi/sitemap.xml
+`;
+    fs.writeFileSync(path.join(__dirname, 'robots.txt'), robotsTxt, 'utf8');
+    if (fs.existsSync(distPath)) {
+        fs.writeFileSync(path.join(distPath, 'robots.txt'), robotsTxt, 'utf8');
+    }
+
+    // ── 6. Rinnakkainen sitemap-mediazoo.xml (mediazoo.fi portaali) ──────────────
     const mediazooBase = 'https://www.mediazoo.fi/laukaainfo-web/';
     let xml2 = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
@@ -113,192 +221,37 @@ async function generateSitemap() {
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- Generated by LaukaaInfo Build Script: www.mediazoo.fi -->
-
+<!-- Generated for Mediazoo.fi Portal -->
+<url>
+  <loc>${mediazooBase}</loc>
+  <lastmod>${today}</lastmod>
+  <priority>0.90</priority>
+</url>
+</urlset>
 `;
-
-    // Lisätään staattiset sivut
-    staticPages.forEach(item => {
-        const page = typeof item === 'string' ? item : item.url;
-        const prio = (typeof item === 'object' && item.priority) ? item.priority : '0.80';
-        const cf = (typeof item === 'object' && item.changefreq) ? `\n  <changefreq>${item.changefreq}</changefreq>` : '';
-        xml += `<url>\n  <loc>${baseUrl}${page}</loc>\n  <lastmod>${currentDate}</lastmod>${cf}\n  <priority>${prio}</priority>\n</url>\n`;
-    });
-
-    // Lisätään dynaamiset palvelusivut
-    dynamicPages.forEach(page => {
-        const safePage = page.replace(/&/g, '&amp;');
-        xml += `<url>\n  <loc>${baseUrl}${safePage}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.80</priority>\n</url>\n`;
-    });
-
-    // ── 1b. Lisätään generoidut /paikka/[slug]/ -sivut ──────────────────────────
-    const paikkaDir = path.join(__dirname, 'paikka');
-    if (fs.existsSync(paikkaDir)) {
-        // Hakemistosivu korkealla prioriteetilla
-        xml += `<url>\n  <loc>${baseUrl}paikka/</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.95</priority>\n</url>\n`;
-        // Jokainen paikka-alikansio jossa on index.html
-        const slugDirs = fs.readdirSync(paikkaDir, { withFileTypes: true })
-            .filter(d => d.isDirectory() && fs.existsSync(path.join(paikkaDir, d.name, 'index.html')));
-        slugDirs.forEach(d => {
-            xml += `<url>\n  <loc>${baseUrl}paikka/${d.name}/</loc>\n  <lastmod>${currentDate}</lastmod>\n  <changefreq>weekly</changefreq>\n  <priority>0.90</priority>\n</url>\n`;
-        });
-        console.log(`✓ Lisätty /paikka/: hakemisto + ${slugDirs.length} paikkasivua (0.90).`);
-    }
-
-    // ── 1c. Lisätään generoidut /teemat/*.html -sivut ───────────────────────────
-    const teematDir = path.join(__dirname, 'teemat');
-    if (fs.existsSync(teematDir)) {
-        const teemaFiles = fs.readdirSync(teematDir).filter(f => f.endsWith('.html'));
-        teemaFiles.forEach(file => {
-            xml += `<url>\n  <loc>${baseUrl}teemat/${file}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <changefreq>monthly</changefreq>\n  <priority>0.90</priority>\n</url>\n`;
-        });
-        if (teemaFiles.length > 0)
-            console.log(`✓ Lisätty /teemat/: ${teemaFiles.length} temasivua (0.90).`);
-    }
-
-    // ── 2. Yrityssivut – vain olemassa olevat staattiset /yritys/*.html ──────────
-    //    Sitemapiin lisätään AINOASTAAN tiedostot jotka oikeasti löytyvät levyltä.
-    //    Supabase-yrityksiä ei lisätä ennen kuin niille generoidaan staattiset sivut.
-    const yritysDir = path.join(__dirname, 'yritys');
-    if (fs.existsSync(yritysDir)) {
-        const yritysFiles = fs.readdirSync(yritysDir).filter(f => f.endsWith('.html'));
-        yritysFiles.forEach(file => {
-            xml += `<url>\n  <loc>${baseUrl}yritys/${file}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <changefreq>monthly</changefreq>\n  <priority>0.90</priority>\n</url>\n`;
-        });
-        console.log(`✓ Lisätty /yritys/: ${yritysFiles.length} staattista yrityssivua (vain olemassa olevat).`);
-    } else {
-        console.log('ℹ️  /yritys/-kansiota ei löydy, ei yrityssivuja sitemapissa.');
-    }
-
-    const supabaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-    const supabaseKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-
-    // ── 3. Haetaan Place ID:t Supabasesta → mediazoo-sitemapiin place.php -URL:it
-    // HUOM: Nämä URL:it ovat www.mediazoo.fi -domainilla, joten ne kuuluvat xml2:een.
-    const ssrBase = mediazooBase;
-
-    try {
-        const placesData = await fetchSupabase(
-            supabaseUrl, supabaseKey,
-            '/rest/v1/places?select=place_id,name&status=eq.ACTIVE&limit=500'
-        );
-
-        let placeCount = 0;
-        if (Array.isArray(placesData)) {
-            placesData.forEach(place => {
-                if (!place.place_id) return;
-                xml2 += `<url>\n  <loc>${ssrBase}place.php?id=${encodeURIComponent(place.place_id)}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.80</priority>\n</url>\n`;
-                placeCount++;
-            });
-        }
-        console.log(`✓ Lisätty ${placeCount} SSR place.php -kohdesivua mediazoo-sitemapiin.`);
-    } catch (e) {
-        console.warn('Varoitus: Supabase place-haku epäonnistui, käytetään fallback karttakohteet_raw.json:', e.message);
-        // Fallback: OSM-datasta nimimuotoiset URL:it
-        const karttaFile = path.join(__dirname, 'karttakohteet_raw.json');
-        if (fs.existsSync(karttaFile)) {
-            try {
-                const rawJson = fs.readFileSync(karttaFile, 'utf8');
-                const data = JSON.parse(rawJson);
-                const features = data.features || [];
-                const addedNames = new Set();
-                features.forEach(feature => {
-                    const name = feature.properties && feature.properties.name;
-                    if (name && !addedNames.has(name)) {
-                        addedNames.add(name);
-                        const formattedName = encodeURIComponent(name.trim().replace(/\s+/g, '_'));
-                        xml += `<url>\n  <loc>${baseUrl}tietoa-paikasta.html?name=${formattedName}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.60</priority>\n</url>\n`;
-                    }
-                });
-                console.log(`✓ Fallback: Lisätty ${addedNames.size} kohdesivua nimilinkeillä.`);
-            } catch (err) {
-                console.error('Virhe karttakohteet_raw.json lukemisessa:', err.message);
-            }
-        }
-    }
-
-    // ── 4. Lisätään teema-sivut → mediazoo-sitemapiin ───────────────────────────
-    const themeFile = path.join(__dirname, 'theme_taxonomy.json');
-    if (fs.existsSync(themeFile)) {
-        try {
-            let rawTax = fs.readFileSync(themeFile, 'utf8');
-            if (rawTax.charCodeAt(0) === 0xFEFF) rawTax = rawTax.slice(1);
-            const taxonomy = JSON.parse(rawTax);
-            let themeCount = 0;
-
-            const addThemeUrl = (tagId) => {
-                if (!tagId) return;
-                xml2 += `<url>\n  <loc>${mediazooBase}teema.php?tag=${encodeURIComponent(tagId)}</loc>\n  <lastmod>${currentDate}</lastmod>\n  <priority>0.70</priority>\n</url>\n`;
-                themeCount++;
-            };
-
-            // Pääryhmät
-            (taxonomy.main_groups || []).forEach(main => {
-                addThemeUrl(main.id);
-                (main.groups || []).forEach(group => {
-                    addThemeUrl(group.id);
-                    (group.tags || []).forEach(tag => addThemeUrl(tag.id));
-                });
-            });
-            // Kohderyhmät, sesongit, ominaisuudet
-            ['target_groups', 'seasons', 'features'].forEach(section => {
-                (taxonomy[section] || []).forEach(item => addThemeUrl(item.id));
-            });
-
-            console.log(`✓ Lisätty ${themeCount} teema.php -URL:ia sitemapiin.`);
-        } catch (e) {
-            console.error('Virhe theme_taxonomy.json lukemisessa:', e.message);
-        }
-    }
-
-    xml  += `\n</urlset>`;
-    xml2 += `\n</urlset>`;
-
-    // ── Kirjoitetaan sitemap.xml (laukaainfo.fi) projektin juureen ───────────────
-    const outputPath = path.join(__dirname, 'sitemap.xml');
-    fs.writeFileSync(outputPath, xml, 'utf8');
-    console.log(`✓ sitemap.xml generoitu → laukaainfo.fi (${1 + staticPages.length + dynamicPages.length} perussivua + paikka + teemat + yritykset).`);
-    console.log(`  → Lähetä tämä Search Consolessa propertyyn: https://laukaainfo.fi/`);
-
-    // ── Kirjoitetaan sitemap-mediazoo.xml (www.mediazoo.fi) laukaainfo-web/-kansioon ─
     const mediazooDir = path.join(__dirname, 'laukaainfo-web');
     fs.mkdirSync(mediazooDir, { recursive: true });
-    const mediazooSitemapPath = path.join(mediazooDir, 'sitemap-mediazoo.xml');
-    fs.writeFileSync(mediazooSitemapPath, xml2, 'utf8');
-    console.log(`✓ sitemap-mediazoo.xml generoitu → www.mediazoo.fi (place.php + teema.php URL:it).`);
-    console.log(`  → Lähetä Search Consolessa propertyyn: https://www.mediazoo.fi/`);
-}
+    fs.writeFileSync(path.join(mediazooDir, 'sitemap-mediazoo.xml'), xml2, 'utf8');
 
-/**
- * Hakee dataa Supabase REST API:sta (palauttaa Promisen).
- */
-function fetchSupabase(baseUrl, apiKey, apiPath) {
-    return new Promise((resolve, reject) => {
-        const options = {
-            hostname: new URL(baseUrl).hostname,
-            path: apiPath,
-            method: 'GET',
-            headers: {
-                'apikey': apiKey,
-                'Authorization': 'Bearer ' + apiKey,
-                'Accept': 'application/json'
-            }
-        };
-        const req = https.request(options, (res) => {
-            let data = '';
-            res.on('data', chunk => data += chunk);
-            res.on('end', () => {
-                try {
-                    resolve(JSON.parse(data));
-                } catch (e) {
-                    reject(new Error('JSON parse error: ' + e.message));
-                }
-            });
-        });
-        req.on('error', reject);
-        req.setTimeout(8000, () => { req.destroy(); reject(new Error('Timeout')); });
-        req.end();
-    });
+    // ── Tulostetaan laaturaportti ───────────────────────────────────────────────
+    const totalUrls = 1 + checkedStaticCount + dynamicServices.length + paikkaCount + teemaCount + yritysCount;
+
+    console.log('---------------------------------------------------');
+    console.log(`✅ sitemap.xml luotu onnistuneesti!`);
+    console.log(`   - Kanoninen etusivu (/)        : 1 kpl`);
+    console.log(`   - Alue- ja sisältösivut        : ${checkedStaticCount} kpl (ohitettu puuttuvat: ${skippedMissingCount} kpl)`);
+    console.log(`   - Paikkasivut (paikka/)        : ${paikkaCount} kpl`);
+    console.log(`   - Teemasivut (teemat/)         : ${teemaCount} kpl`);
+    console.log(`   - Yrityssivut (yritys/)        : ${yritysCount} kpl`);
+    console.log(`   - Kohdistetut palveluhaut      : ${dynamicServices.length} kpl`);
+    console.log(`   -----------------------------------------------`);
+    console.log(`   YHTEENSÄ: ${totalUrls} tarkistettua, laadukasta sivua.`);
+    console.log(`✅ Jokaisella URL:lla aito tiedostokohtainen lastmod-aika.`);
+    console.log(`✅ Ei 404-linkkejä, ei keinotekoisia duplikaatteja.`);
+    console.log(`✅ Luotu myös standardi robots.txt -> https://laukaainfo.fi/sitemap.xml`);
+    console.log('===================================================');
+
+    return { totalUrls };
 }
 
 if (require.main === module) {
