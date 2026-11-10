@@ -31,20 +31,25 @@ if ($token) {
     }
 }
 
-// ── Pääsy katselukoodilla (aiempi sessio) ─────────────────────────────────────
+// ── Pääsy ID:llä (jos kartta on julkinen tai sessio on aktiivinen) ──────────────
 $map_id_param = $_GET['id'] ?? '';
-if (!$map && !empty($_SESSION['viewer_map_id']) && !$error) {
-    $target_id = $map_id_param ?: $_SESSION['viewer_map_id'];
-    if ($target_id === $_SESSION['viewer_map_id']) {
+if (!$map && !$error) {
+    $target_id = $map_id_param ?: ($_SESSION['viewer_map_id'] ?? '');
+    if ($target_id) {
         $res = supabase_request('GET',
             '/rest/v1/routes?id=eq.' . urlencode($target_id)
-            . '&experience_type=eq.MEMORY&select=id,title,description,view_expires_at,share_token',
+            . '&experience_type=eq.MEMORY&select=id,title,description,view_expires_at,share_token,visibility',
             null, null, true
         );
         if ($res['status'] === 200 && !empty($res['data'])) {
-            $map = $res['data'][0];
-            if ($map['view_expires_at'] && strtotime($map['view_expires_at']) < time()) {
-                $error = 'Katseluaika on päättynyt.'; $map = null;
+            $found = $res['data'][0];
+            $has_session = (!empty($_SESSION['viewer_map_id']) && $_SESSION['viewer_map_id'] === $target_id);
+            if ($has_session || ($found['visibility'] ?? '') === 'public') {
+                $map = $found;
+                if ($map['view_expires_at'] && strtotime($map['view_expires_at']) < time()) {
+                    $error = 'Katseluaika on päättynyt.';
+                    $map   = null;
+                }
             }
         }
     }
