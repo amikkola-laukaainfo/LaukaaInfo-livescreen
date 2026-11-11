@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Ladataan... – LaukaaInfo</title>
+
+    <!-- SEO: Dynaamisesti täytettävät meta-tagit -->
+    <meta name="description" id="meta-description" content="LaukaaInfo – paikallista tietoa Laukaasta.">
+    <meta property="og:title" id="og-title" content="LaukaaInfo – Kohdekortti">
+    <meta property="og:description" id="og-description" content="LaukaaInfo – paikallista tietoa Laukaasta.">
+    <meta property="og:image" id="og-image" content="https://laukaainfo.fi/logo.png">
+    <meta property="og:type" content="website">
+    <link rel="canonical" id="canonical-link" href="">
+
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js?v=20260713"></script>
+
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-dark: #003f8a;
+            --primary-light: #eff6ff;
+            --accent: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+            --shadow-md: 0 4px 16px rgba(15,23,42,0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* ── Topbar ── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        .topbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--primary-dark);
+            white-space: nowrap;
+        }
+        .topbar-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            margin-left: auto;
+        }
+        .topbar-back:hover { text-decoration: underline; }
+
+        /* ── Skeleton / Loading ── */
+        #loading-state {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 10px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ── Error state ── */
+        #error-state {
+            display: none;
+            max-width: 600px;
+            margin: 5rem auto;
+            padding: 2.5rem;
+            background: var(--surface);
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+        #error-state .error-icon { font-size: 3rem; margin-bottom: 1rem; }
+        #error-state h2 { font-family: 'Outfit', sans-serif; color: var(--primary-dark); margin: 0 0 0.5rem; }
+        #error-state p { color: var(--text-muted); margin: 0 0 1.5rem; }
+
+        /* ── Main card ── */
+        #main-card {
+            display: none;
+            max-width: 900px;
+            margin: 2.5rem auto 4rem;
+            padding: 0 1.25rem;
+        }
+
+        /* Hero kuva */
+        .hero-image-wrap {
+            width: 100%;
+            aspect-ratio: 16/7;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #1e293b;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .hero-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-image-wrap .type-pill {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(8px);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Header-block */
+        .card-header {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem 2rem 1.5rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 0 0 0.5rem;
+            line-height: 1.15;
+        }
+        .card-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin: 0 0 1.25rem;
+        }
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--border); }
+        .btn-outline:hover { background: var(--primary-light); }
+
+        /* Layout grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1.25rem;
+        }
+        @media (max-width: 720px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Sisältöblokki */
+        .block {
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.25rem;
+        }
+        .block h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .block h2 .iconify { color: var(--accent); font-size: 1.25rem; }
+
+        /* Metatietorivit */
+        .meta-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        .meta-row:last-child { border-bottom: none; }
+        .meta-icon { color: var(--accent); font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+        .meta-label { color: var(--text-muted); font-weight: 600; min-width: 90px; }
+        .meta-value a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .meta-value a:hover { text-decoration: underline; }
+
+        /* Tagit */
+        .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Ilmoituskortit */
+        .post-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            transition: box-shadow 0.15s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            background: var(--surface);
+        }
+        .post-card:hover { box-shadow: var(--shadow-md); }
+        .post-card-type {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+        .post-card-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 0.25rem; }
+        .post-card-date { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Reitit */
+        .route-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.6rem;
+            text-decoration: none;
+            color: inherit;
+            background: var(--surface);
+            transition: box-shadow 0.15s;
+        }
+        .route-card:hover { box-shadow: var(--shadow-md); }
+        .route-icon {
+            width: 42px; height: 42px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .route-name { font-weight: 700; font-size: 0.95rem; color: var(--primary-dark); }
+        .route-meta { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Kartta */
+        #map { width: 100%; height: 240px; border-radius: var(--radius-sm); }
+
+        /* Jakoilmoitus */
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 999;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        }
+        .toast.show { display: block; animation: fadeInUp 0.2s ease; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Testijuliste */
+        .test-banner {
+            background: linear-gradient(90deg, #fef3c7, #fef9ec);
+            border: 1px solid #fcd34d;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.25rem;
+            font-size: 0.85rem;
+            color: #92400e;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .test-banner strong { font-weight: 700; }
+        .test-banner code {
+            font-family: monospace;
+            background: rgba(0,0,0,0.07);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* Yrityskortti (sidebar) */
+        .company-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.6rem;
+            font-size: 0.875rem;
+        }
+        .company-pill .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            flex-shrink: 0;
+        }
+
+        @media print {
+            .topbar, .test-banner, .card-actions { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Topbar -->
+<nav class="topbar">
+    <span class="topbar-brand">📍 LaukaaInfo – Kohdekortti</span>
+    <a class="topbar-back" href="kohdekortit.html">
+        <span class="iconify" data-icon="mdi:arrow-left"></span> Kaikki kohteet
+    </a>
+</nav>
+
+<!-- Loading skeleton -->
+<div id="loading-state">
+    <div class="skeleton" style="height: 300px; border-radius: 20px; margin-bottom: 1.25rem;"></div>
+    <div class="skeleton" style="height: 160px; border-radius: 20px; margin-bottom: 1.25rem;"></div>
+    <div class="skeleton" style="height: 220px; border-radius: 20px;"></div>
+</div>
+
+<!-- Error state -->
+<div id="error-state">
+    <div class="error-icon">🔍</div>
+    <h2>Kohdetta ei löydy</h2>
+    <p id="error-msg">Tarkista URL-osoite tai kokeile hakea kohde koontisivulta.</p>
+    <a href="kohdekortit.html" class="btn btn-primary">
+        <span class="iconify" data-icon="mdi:view-grid"></span> Kaikki kohteet
+    </a>
+</div>
+
+<!-- Pääkortti -->
+<main id="main-card">
+
+    <!-- Testivaroitus -->
+    <div class="test-banner">
+        🧪 <span><strong>Testisivu</strong> — Dynaaminen pohja ideasta #1.
+        URL-parametri: <code id="debug-id">–</code> |
+        Supabase-taulu: <code>posts</code> + <code>places</code></span>
+    </div>
+
+    <!-- Hero kuva -->
+    <div id="hero-wrap" class="hero-image-wrap" style="display: none;">
+        <img id="hero-img" src="" alt="">
+        <span id="type-pill" class="type-pill">Kohde</span>
+    </div>
+
+    <!-- Otsikkokortti -->
+    <div class="card-header">
+        <h1 id="card-title" class="card-title">–</h1>
+        <p id="card-subtitle" class="card-subtitle"></p>
+        <div class="card-actions">
+            <button class="btn btn-primary" onclick="shareCard()">
+                <span class="iconify" data-icon="mdi:share-variant"></span> Jaa
+            </button>
+            <a id="btn-tietoa" href="#" class="btn btn-outline" style="display:none;">
+                <span class="iconify" data-icon="mdi:information-outline"></span> Tietoa paikasta
+            </a>
+            <a id="btn-route" href="#" class="btn btn-outline" target="_blank" rel="noopener" style="display:none;">
+                <span class="iconify" data-icon="mdi:navigation"></span> Reittiohjeet
+            </a>
+        </div>
+    </div>
+
+    <!-- Sisältöruudukko -->
+    <div class="content-grid">
+
+        <!-- Vasen palsta -->
+        <div>
+
+            <!-- Kuvaus -->
+            <div class="block" id="block-desc" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:text"></span> Kuvaus</h2>
+                <div id="card-desc" style="white-space: pre-wrap; color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;"></div>
+                <div id="card-content" style="display:none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text-main); line-height: 1.7;"></div>
+            </div>
+
+            <!-- Aikakohtaiset tiedot (tapahtumat, tarjoukset) -->
+            <div class="block" id="block-event" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:calendar-clock"></span> Aika ja paikka</h2>
+                <div id="event-fields"></div>
+            </div>
+
+            <!-- Liittyvät ilmoitukset tältä paikalta -->
+            <div class="block" id="block-posts" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:bulletin-board"></span> Muuta tältä paikalta</h2>
+                <div id="posts-list"></div>
+            </div>
+
+            <!-- Wonderin-reitit -->
+            <div class="block" id="block-routes" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:walk"></span> Reitit tässä paikassa</h2>
+                <div id="routes-list"></div>
+            </div>
+
+        </div>
+
+        <!-- Oikea palsta (sidebar) -->
+        <div>
+
+            <!-- Metatiedot -->
+            <div class="block" id="block-meta">
+                <h2><span class="iconify" data-icon="mdi:information"></span> Perustiedot</h2>
+                <div id="meta-rows"></div>
+            </div>
+
+            <!-- Kartta -->
+            <div class="block" id="block-map" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:map-marker"></span> Sijainti</h2>
+                <div id="map"></div>
+                <div style="text-align: right; margin-top: 0.6rem;">
+                    <a id="gmaps-link" href="#" target="_blank" rel="noopener" style="font-size: 0.85rem; font-weight: 600; color: var(--primary); text-decoration: none;">
+                        Avaa Google Mapsissa →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Paikkaan liittyvät yritykset -->
+            <div class="block" id="block-companies" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:store"></span> Paikan yritykset</h2>
+                <div id="companies-list"></div>
+            </div>
+
+            <!-- Tietoa paikasta -linkki -->
+            <div class="block" id="block-place-link" style="display:none;">
+                <h2><span class="iconify" data-icon="mdi:city"></span> Paikkatiedot</h2>
+                <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0 0 1rem;">Lisätietoja paikkakunnasta, historiasta ja verkostosta.</p>
+                <a id="place-fullpage-link" href="#" class="btn btn-outline" style="width: 100%; justify-content: center;">
+                    <span class="iconify" data-icon="mdi:arrow-right"></span> Avaa paikkasivu
+                </a>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<div id="toast" class="toast">🔗 Linkki kopioitu!</div>
+
+<!-- Leaflet kartta -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+(async function() {
+    const params  = new URLSearchParams(window.location.search);
+    const rawId   = params.get('id') || params.get('offer') || '';
+    const sb      = window.LaukaaSupabase;
+
+    // --- Debuggaus ---
+    document.getElementById('debug-id').textContent = rawId || '(ei id-parametria)';
+
+    if (!rawId) {
+        showError('Anna URL-parametri: <code>?id=kohteen-id</code>');
+        return;
+    }
+
+    // --- Hae kohde Supabasesta ---
+    try {
+        const { data: rows, error } = await sb
+            .from('posts')
+            .select(`
+                id, type, title, description, content, place_id,
+                organization_id, publisher_name, status, visibility,
+                image_url, youtube_url, link, target_id, target_type,
+                event_start_at, event_end_at, event_all_day, event_location_detail,
+                event_registration_url, offer_start_at, offer_end_at, offer_terms,
+                created_at, updated_at, contact_email, contact_phone, website_url, tags,
+                post_media(url, media_type),
+                post_links(url, title, link_type)
+            `)
+            .or(`id.eq.${rawId},target_id.eq.${rawId}`)
+            .limit(1);
+
+        if (error) throw error;
+
+        const post = rows && rows.length > 0 ? rows[0] : null;
+
+        if (!post) {
+            // Yritä hakea suoraan place_id:n perusteella
+            showError(`Kohdetta ID:llä <strong>${escHtml(rawId)}</strong> ei löydy.<br>Tarkista osoite tai palaa koontisivulle.`);
+            return;
+        }
+
+        // --- Renderöi kohde ---
+        await renderPost(post, sb, rawId);
+
+    } catch (err) {
+        console.error('Haku epäonnistui:', err);
+        showError('Tietokantavirhe: ' + escHtml(String(err.message || err)));
+    }
+})();
+
+// ── Renderöi kohde ──────────────────────────────────────────
+async function renderPost(post, sb, rawId) {
+    const typeLabelMap = {
+        event: 'Tapahtuma', offer: 'Tarjous', announcement: 'Ilmoitus',
+        news: 'Uutinen', service: 'Palvelu', place: 'Kohde',
+        activity: 'Aktiviteetti', organization: 'Yhdistys',
+        need_help: 'Apupyyntö', share: 'Jaettavaa', sale: 'Myydään',
+        trade: 'Vaihdetaan', general: 'Yleinen'
+    };
+
+    const typeLabel  = typeLabelMap[post.type] || post.type || 'Kohde';
+    const title      = post.title || 'Nimetön kohde';
+    const desc       = post.description || '';
+    const content    = post.content || '';
+    const coverImg   = getBestImage(post);
+
+    // SEO
+    document.getElementById('page-title').textContent   = `${title} – LaukaaInfo`;
+    document.getElementById('meta-description').content = desc.slice(0, 160);
+    document.getElementById('og-title').content         = `${title} – LaukaaInfo`;
+    document.getElementById('og-description').content   = desc.slice(0, 160);
+    if (coverImg) document.getElementById('og-image').content = coverImg;
+    document.getElementById('canonical-link').href      = `https://laukaainfo.fi/kohdekortti-testi.html?id=${encodeURIComponent(rawId)}`;
+
+    // Hero kuva
+    if (coverImg) {
+        const heroWrap = document.getElementById('hero-wrap');
+        const heroImg  = document.getElementById('hero-img');
+        heroImg.src = coverImg;
+        heroImg.alt = title;
+        heroWrap.style.display = 'block';
+        document.getElementById('type-pill').textContent = typeLabel;
+    }
+
+    // Otsikko
+    document.getElementById('card-title').textContent   = title;
+    document.getElementById('type-pill').textContent    = typeLabel;
+
+    // Alaotsikko (paikannimi tai julkaisija)
+    const sub = [post.publisher_name, post.event_location_detail].filter(Boolean).join(' · ');
+    if (sub) document.getElementById('card-subtitle').textContent = sub;
+
+    // Kuvaus
+    if (desc || content) {
+        document.getElementById('block-desc').style.display = 'block';
+        if (desc) document.getElementById('card-desc').textContent = desc;
+        if (content) {
+            const el = document.getElementById('card-content');
+            el.style.display = 'block';
+            el.innerHTML = content; // sisältö voi olla HTML
+        }
+    }
+
+    // Aikakohtaiset kentät
+    renderEventFields(post);
+
+    // Metatiedot
+    renderMeta(post, typeLabel);
+
+    // Paikkasivu-linkki
+    if (post.place_id) {
+        const placeLink = `tietoa-paikasta-testi.html?id=${encodeURIComponent(post.place_id)}`;
+        const btn = document.getElementById('btn-tietoa');
+        btn.href = placeLink;
+        btn.style.display = 'inline-flex';
+        document.getElementById('block-place-link').style.display = 'block';
+        document.getElementById('place-fullpage-link').href = placeLink;
+
+        // Hae paikkasivu Supabasesta
+        await loadPlaceData(post.place_id, sb);
+        // Hae muut ilmoitukset tältä paikalta
+        await loadRelatedPosts(post.id, post.place_id, sb);
+    }
+
+    // Kartta
+    if (post.target_type === 'PLACE' && post.target_id) {
+        await loadMapForTarget(post.target_id, sb);
+    }
+
+    // Reittiohjeet
+    if (post.link) {
+        const btnRoute = document.getElementById('btn-route');
+        btnRoute.href = post.link;
+        btnRoute.style.display = 'inline-flex';
+    }
+
+    // Näytä kortti
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('main-card').style.display = 'block';
+}
+
+// ── Aikakohtaiset kentät (tapahtumat, tarjoukset) ──────────
+function renderEventFields(post) {
+    const fields = [];
+
+    if (post.event_start_at) {
+        const s = new Date(post.event_start_at);
+        const e = post.event_end_at ? new Date(post.event_end_at) : null;
+        const opts = { timeZone: 'Europe/Helsinki', day: 'numeric', month: 'long', year: 'numeric' };
+        const tOpts = { timeZone: 'Europe/Helsinki', hour: '2-digit', minute: '2-digit' };
+
+        let timeStr = s.toLocaleDateString('fi-FI', opts);
+        if (!post.event_all_day) {
+            timeStr += ' klo ' + s.toLocaleTimeString('fi-FI', tOpts);
+            if (e) timeStr += ' – ' + (s.toDateString() === e.toDateString()
+                ? e.toLocaleTimeString('fi-FI', tOpts)
+                : e.toLocaleDateString('fi-FI', opts) + ' klo ' + e.toLocaleTimeString('fi-FI', tOpts));
+        } else if (e && s.toDateString() !== e.toDateString()) {
+            timeStr += ' – ' + e.toLocaleDateString('fi-FI', opts);
+        }
+        fields.push({ icon: 'mdi:calendar', label: 'Ajankohta', value: timeStr });
+    }
+
+    if (post.event_location_detail) {
+        fields.push({ icon: 'mdi:map-marker', label: 'Tapahtumapaika', value: post.event_location_detail });
+    }
+
+    if (post.event_registration_url) {
+        fields.push({
+            icon: 'mdi:clipboard-check', label: 'Ilmoittautuminen',
+            value: `<a href="${escHtml(post.event_registration_url)}" target="_blank" rel="noopener">Ilmoittaudu tästä →</a>`
+        });
+    }
+
+    if (post.offer_start_at || post.offer_end_at) {
+        const s = post.offer_start_at ? new Date(post.offer_start_at).toLocaleDateString('fi-FI') : '';
+        const e = post.offer_end_at   ? new Date(post.offer_end_at).toLocaleDateString('fi-FI')   : '';
+        fields.push({ icon: 'mdi:tag', label: 'Voimassa', value: [s, e].filter(Boolean).join(' – ') });
+    }
+
+    if (post.offer_terms) {
+        fields.push({ icon: 'mdi:information', label: 'Ehdot', value: post.offer_terms });
+    }
+
+    if (fields.length > 0) {
+        document.getElementById('block-event').style.display = 'block';
+        document.getElementById('event-fields').innerHTML = fields.map(f =>
+            `<div class="meta-row">
+                <span class="iconify meta-icon" data-icon="${f.icon}"></span>
+                <span class="meta-label">${f.label}</span>
+                <span class="meta-value">${f.value}</span>
+            </div>`
+        ).join('');
+    }
+}
+
+// ── Metatiedot ──────────────────────────────────────────────
+function renderMeta(post, typeLabel) {
+    const rows = [];
+    rows.push({ icon: 'mdi:tag-outline', label: 'Tyyppi', value: escHtml(typeLabel) });
+
+    if (post.publisher_name) {
+        rows.push({ icon: 'mdi:account', label: 'Julkaisija', value: escHtml(post.publisher_name) });
+    }
+    if (post.contact_phone && post.contact_phone !== '-') {
+        rows.push({ icon: 'mdi:phone', label: 'Puhelin',
+            value: `<a href="tel:${escHtml(post.contact_phone)}">${escHtml(post.contact_phone)}</a>` });
+    }
+    if (post.contact_email && post.contact_email !== '-') {
+        rows.push({ icon: 'mdi:email', label: 'Sähköposti',
+            value: `<a href="mailto:${escHtml(post.contact_email)}">${escHtml(post.contact_email)}</a>` });
+    }
+    if (post.website_url && post.website_url !== '-') {
+        const domain = (() => { try { return new URL(post.website_url).hostname; } catch { return post.website_url; } })();
+        rows.push({ icon: 'mdi:web', label: 'Verkkosivu',
+            value: `<a href="${escHtml(post.website_url)}" target="_blank" rel="noopener">${escHtml(domain)} →</a>` });
+    }
+    if (post.created_at) {
+        rows.push({ icon: 'mdi:clock-outline', label: 'Julkaistu',
+            value: new Date(post.created_at).toLocaleDateString('fi-FI') });
+    }
+    if (Array.isArray(post.tags) && post.tags.length > 0) {
+        rows.push({ icon: 'mdi:label-outline', label: 'Aihetunnisteet',
+            value: `<div class="tag-list">${post.tags.map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</div>` });
+    }
+
+    document.getElementById('meta-rows').innerHTML = rows.map(r =>
+        `<div class="meta-row">
+            <span class="iconify meta-icon" data-icon="${r.icon}"></span>
+            <span class="meta-label">${r.label}</span>
+            <span class="meta-value">${r.value}</span>
+        </div>`
+    ).join('');
+}
+
+// ── Paikkatiedot ────────────────────────────────────────────
+async function loadPlaceData(placeId, sb) {
+    try {
+        const { data: places } = await sb
+            .from('places')
+            .select('id, place_id, name, municipality, lat, lng, canonical_name')
+            .or(`id.eq.${placeId},place_id.eq.${placeId}`)
+            .limit(1);
+
+        if (!places || places.length === 0) return;
+        const place = places[0];
+
+        // Kartta
+        if (place.lat && place.lng) {
+            document.getElementById('block-map').style.display = 'block';
+            const map = L.map('map').setView([place.lat, place.lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap', maxZoom: 18
+            }).addTo(map);
+            L.marker([place.lat, place.lng]).addTo(map)
+                .bindPopup(place.name || placeId).openPopup();
+            document.getElementById('gmaps-link').href =
+                `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+        }
+
+        // Paikkasivu-linkki tekstissä
+        const pid = place.place_id || place.id;
+        document.getElementById('block-place-link').style.display = 'block';
+        document.getElementById('place-fullpage-link').href =
+            `tietoa-paikasta-testi.html?id=${encodeURIComponent(pid)}`;
+        document.getElementById('btn-tietoa').href =
+            `tietoa-paikasta-testi.html?id=${encodeURIComponent(pid)}`;
+
+    } catch (err) {
+        console.warn('Paikkatiedot:', err);
+    }
+}
+
+// ── Muut ilmoitukset tältä paikalta ────────────────────────
+async function loadRelatedPosts(currentId, placeId, sb) {
+    try {
+        const { data: posts } = await sb
+            .from('posts')
+            .select('id, type, title, created_at, event_start_at')
+            .eq('place_id', placeId)
+            .neq('id', currentId)
+            .eq('visibility', 'public')
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+        if (!posts || posts.length === 0) return;
+
+        const typeLabelMap = {
+            event: 'Tapahtuma', offer: 'Tarjous', announcement: 'Ilmoitus',
+            news: 'Uutinen', service: 'Palvelu', place: 'Kohde',
+            activity: 'Aktiviteetti', organization: 'Yhdistys'
+        };
+
+        document.getElementById('block-posts').style.display = 'block';
+        document.getElementById('posts-list').innerHTML = posts.map(p => {
+            const dateStr = p.event_start_at
+                ? new Date(p.event_start_at).toLocaleDateString('fi-FI')
+                : new Date(p.created_at).toLocaleDateString('fi-FI');
+            return `<a href="kohdekortti-testi.html?id=${encodeURIComponent(p.id)}" class="post-card">
+                <div class="post-card-type">${escHtml(typeLabelMap[p.type] || p.type)}</div>
+                <div class="post-card-title">${escHtml(p.title || '–')}</div>
+                <div class="post-card-date">${dateStr}</div>
+            </a>`;
+        }).join('');
+
+    } catch (err) {
+        console.warn('Liittyvät ilmoitukset:', err);
+    }
+}
+
+// ── Kartta kohteen sijainnista (target_id on place) ─────────
+async function loadMapForTarget(targetId, sb) {
+    try {
+        const { data: places } = await sb
+            .from('places')
+            .select('lat, lng, name')
+            .or(`id.eq.${targetId},place_id.eq.${targetId}`)
+            .limit(1);
+
+        if (places && places[0] && places[0].lat) {
+            const p = places[0];
+            document.getElementById('block-map').style.display = 'block';
+            const map = L.map('map').setView([p.lat, p.lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap', maxZoom: 18
+            }).addTo(map);
+            L.marker([p.lat, p.lng]).addTo(map).bindPopup(p.name || '').openPopup();
+            document.getElementById('gmaps-link').href =
+                `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`;
+        }
+    } catch (err) {
+        console.warn('Kartta:', err);
+    }
+}
+
+// ── Jako-toiminto ────────────────────────────────────────────
+function shareCard() {
+    const url = window.location.href;
+    const title = document.getElementById('card-title').textContent || 'Kohde';
+    if (navigator.share) {
+        navigator.share({ title: title + ' – LaukaaInfo', url }).catch(() => {});
+        return;
+    }
+    navigator.clipboard.writeText(url).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }).catch(() => { prompt('Kopioi linkki:', url); });
+}
+
+// ── Apufunktiot ──────────────────────────────────────────────
+function getBestImage(post) {
+    if (post.image_url) return post.image_url;
+    if (post.youtube_url) {
+        const m = post.youtube_url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+        if (m) return `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`;
+    }
+    if (post.post_media && post.post_media.length > 0) {
+        const img = post.post_media.find(m => m.media_type !== 'VIDEO');
+        if (img) return img.url;
+        const vid = post.post_media[0];
+        const m = (vid.url || '').match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+        if (m) return `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`;
+    }
+    return null;
+}
+
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showError(html) {
+    document.getElementById('loading-state').style.display = 'none';
+    const el = document.getElementById('error-state');
+    el.style.display = 'block';
+    document.getElementById('error-msg').innerHTML = html;
+}
+</script>
+
+</body>
+</html>
+
