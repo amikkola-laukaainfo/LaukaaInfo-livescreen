@@ -16,6 +16,11 @@ tapahtuma.html?id=abc123
 yritys.html?id=vuonteen-helmi
 ```
 
+**Status (11.11.2026):** Toteutettu toimivat testiversiot ja todennettu onnistuneeksi:
+- `kohdekortti-testi.html` (ilmoitukset / tapahtumat `posts`-taulusta `?id=`-parametrilla)
+- `tietoa-paikasta-testi.html` (paikkatiedot, tapahtumat, reitit ja yritykset `places`-taulusta)
+- Yksityiskohtainen vertailuraportti ja hyödyt: [TESTISIVUT_VERTAILU.md](TESTISIVUT_VERTAILU.md)
+
 **Hyödyt:**
 - Uuden kohteen lisääminen ei vaadi HTML-tiedostoa — pelkkä Supabase-rivi riittää
 - Sivun sisältö (kuvat, kuvaus, tapahtumat, reitit) haetaan dynaamisesti `place_id`:llä
