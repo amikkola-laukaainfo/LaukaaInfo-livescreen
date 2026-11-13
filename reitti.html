@@ -496,7 +496,7 @@
     // — kun v2.1-migraatio on ajettu, tänne tulee RPC-kutsu
     const { data: route, error } = await sb
         .from('routes')
-        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, place_name, virtual_enabled, producer_organization_id, content_producer')
+        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer')
         .eq('id', routeId)
         .maybeSingle();
 
@@ -536,7 +536,8 @@
 
     // Meta-rivi
     const metas = [];
-    if (route.place_name) metas.push(`<span><span class="iconify" data-icon="material-symbols:location-on"></span>${route.place_name}</span>`);
+    const placeName = route.places?.name || '';
+    if (placeName) metas.push(`<span><span class="iconify" data-icon="material-symbols:location-on"></span>${placeName}</span>`);
     if (route.distance_meters) metas.push(`<span><span class="iconify" data-icon="material-symbols:route"></span>${(route.distance_meters / 1000).toFixed(1)} km</span>`);
     if (route.virtual_enabled) metas.push(`<span><span class="iconify" data-icon="material-symbols:chair"></span>Nojatuolimatka</span>`);
     if (route.content_producer) metas.push(`<span><span class="iconify" data-icon="material-symbols:person"></span>${route.content_producer}</span>`);
