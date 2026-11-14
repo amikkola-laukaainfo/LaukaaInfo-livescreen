@@ -4258,9 +4258,9 @@ async function loadKseEventsForPlace(place) {
                 } catch (_) {}
             }
 
-            const rawId = item['@id'] || item.id || '';
-            const url = rawId.startsWith('http') ? rawId
-                : `https://keskisuomievents.fi/fi/event/${rawId.split(':').pop()}/`;
+            const rawId = item.id || item['@id'] || '';
+            const cleanId = rawId.split('/').filter(Boolean).pop()?.split(':').pop() || '';
+            const url = cleanId ? `https://keskisuomievents.fi/fi/event/${cleanId}/` : 'https://keskisuomievents.fi/fi/search?text=laukaa';
 
             matched.push({ title, timeLabel, locName: locNameRaw, url, startTime: item.start_time || '' });
         }
@@ -4302,10 +4302,20 @@ async function loadKseEventsForPlace(place) {
                     ${expanded ? '&#8963; Näytä vähemmän' : '&#8964; Näytä lisää tapahtumia (+' + hiddenCount + ')'}
                 </button>` : '';
 
+            // Jos tapahtumia paikassa <= 5, tarjotaan linkki yleiselle tapahtumasivulle
+            const allEventsLink = matched.length <= 5 ? `
+                <div style="margin-top:0.5rem;padding-top:0.5rem;">
+                    <a href="https://keskisuomievents.fi/fi/search?text=laukaa" target="_blank" rel="noopener noreferrer"
+                       style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.85rem;font-weight:600;color:#0284c7;text-decoration:none;">
+                        Kaikki Laukaan tapahtumat <span style="font-size:0.9rem;">&rarr;</span>
+                    </a>
+                </div>` : '';
+
             return `<div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;color:#64748b;text-transform:uppercase;margin-bottom:0.5rem;">
-                    &#128197; Tapahtumat täällä</div>
+                    &#128197; Tapahtumat lähellä</div>
                 <div id="kse-events-list">${rows}</div>
-                ${toggleBtn}`;
+                ${toggleBtn}
+                ${allEventsLink}`;
         }
 
         container.innerHTML = buildHtml();
