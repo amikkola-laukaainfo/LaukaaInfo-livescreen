@@ -1677,7 +1677,17 @@
         loadYritysVinkit(company.id);
 
         // 14. AI & SEO -lisädata (ai_and_seo)
+        // Ensin yritetään renderöidä jo tiedossa olevalla datalla (esim. window.__LAUKAAINFO_AI_SEO__)
         renderAiAndSeo(company);
+        // Jos ai_and_seo puuttuu company-objektista (dynaaminen sivu), haetaan se profilointitiedostoista
+        if (!company.ai_and_seo && !(company.enrichedData && company.enrichedData.ai_and_seo) && !window.__LAUKAAINFO_AI_SEO__) {
+            loadAiAndSeoFromProfiling(company.id).then(aiSeo => {
+                if (aiSeo) {
+                    company.ai_and_seo = aiSeo;
+                    renderAiAndSeo(company);
+                }
+            });
+        }
         loadAiContentFromSupabase(company.id);
 
         // 15. Kohtaamiset integraatio
@@ -2161,6 +2171,58 @@
         } catch (e) {
             console.error('Virhe JSON-LD -injektoinnissa:', e);
         }
+    }
+
+    /**
+     * Hakee yksittäisen yrityksen ai_and_seo-datan profilointitiedostoista (profiling/*.json).
+     * Käytetään dynaamisilla sivuilla, joissa window.__LAUKAAINFO_AI_SEO__ ei ole asetettu.
+     * @param {string} companyId - esim. "company-2" tai "2"
+     * @returns {Promise<object|null>}
+     */
+    async function loadAiAndSeoFromProfiling(companyId) {
+        const isDist = window.location.pathname.includes('/yritys/');
+        const prefix = isDist ? '../' : './';
+        const id = String(companyId);
+        const idWithPrefix = id.startsWith('company-') ? id : 'company-' + id;
+
+        try {
+            // 1. Kokeillaan ensin company_profiling_data.json (nopea, koko tiedosto)
+            const cpRes = await fetch(prefix + 'company_profiling_data.json?t=' + Date.now());
+            if (cpRes.ok) {
+                const cpData = await cpRes.json();
+                const profiles = cpData.profiles || cpData;
+                const hit = profiles[idWithPrefix] || profiles[id] || null;
+                if (hit && hit.ai_and_seo) {
+                    console.log('[AI&SEO] Löydetty company_profiling_data.json:', idWithPrefix);
+                    return hit.ai_and_seo;
+                }
+            }
+        } catch (e) {
+            console.warn('[AI&SEO] company_profiling_data.json haku epäonnistui:', e);
+        }
+
+        try {
+            // 2. Jos ei löydy, käydään läpi moduloidut profiling/*.json -tiedostot
+            const metaRes = await fetch(prefix + 'profiling/metadata.json?t=' + Date.now());
+            if (!metaRes.ok) return null;
+            const meta = await metaRes.json();
+            const files = meta.files || [];
+
+            for (const file of files) {
+                const fRes = await fetch(prefix + 'profiling/' + file + '?t=' + Date.now());
+                if (!fRes.ok) continue;
+                const fData = await fRes.json();
+                const hit = fData[idWithPrefix] || fData[id] || null;
+                if (hit && hit.ai_and_seo) {
+                    console.log('[AI&SEO] Löydetty profiling/' + file + ':', idWithPrefix);
+                    return hit.ai_and_seo;
+                }
+            }
+        } catch (e) {
+            console.warn('[AI&SEO] Profilointitiedostojen haku epäonnistui:', e);
+        }
+
+        return null;
     }
 
     /**

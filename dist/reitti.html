@@ -1,1 +1,648 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title id="page-title">Elämyspolku – LaukaaInfo</title><meta property="og:type" content="website"><meta property="og:title" id="og-title" content="Elämyspolku – LaukaaInfo"><meta property="og:description" id="og-description" content="Koe elämyspolku Wonderin-sovelluksella."><meta property="og:image" id="og-image" content=""><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet"><script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>:root{--accent:#059669;--accent-dk:#047857;--accent-lt:#ecfdf5;--text-main:#0f172a;--text-muted:#64748b;--bg:#f8fafc;--card-bg:#ffffff;--border:#e2e8f0}*,::after,::before{box-sizing:border-box}body{font-family:Manrope,sans-serif;background:var(--bg);color:var(--text-main);margin:0;padding:0;min-height:100vh}.page-wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem 4rem}.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);text-decoration:none;font-weight:600;font-size:.88rem;margin-bottom:1.25rem;transition:color .15s}.back-link:hover{color:var(--text-main)}.hero-card{background:var(--card-bg);border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.07);margin-bottom:1.25rem}.hero-cover{width:100%;height:220px;object-fit:cover;display:block;background:linear-gradient(135deg,#064e3b,#065f46)}.hero-cover-placeholder{width:100%;height:220px;background:linear-gradient(135deg,#064e3b 0,#0f766e 100%);display:flex;align-items:center;justify-content:center;font-size:4rem}.hero-body{padding:1.5rem}.route-badge{display:inline-block;padding:.2rem .65rem;background:var(--accent-lt);color:var(--accent);border-radius:50px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}.hero-body h1{margin:0 0 .5rem;font-size:1.75rem;line-height:1.2;color:var(--text-main)}.meta-row{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;color:var(--text-muted);font-size:.85rem;font-weight:600;margin-bottom:1rem;align-items:center}.meta-row span{display:inline-flex;align-items:center;gap:.3rem}.route-desc{color:var(--text-muted);line-height:1.65;font-size:.95rem;margin:0 0 1.5rem}.cta-section{display:flex;flex-direction:column;gap:.65rem}.cta-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.1rem}.btn-primary{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:.9rem 1.5rem;background:linear-gradient(135deg,#064e3b,var(--accent));color:#fff;border:none;border-radius:14px;font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(5,150,105,.3)}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(5,150,105,.38)}.btn-secondary{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:.8rem 1.5rem;background:var(--card-bg);color:var(--text-main);border:1.5px solid var(--border);border-radius:14px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s,transform .15s}.btn-secondary:hover{background:var(--bg);border-color:#cbd5e1;transform:translateY(-1px)}.code-card{background:var(--card-bg);border-radius:16px;padding:1.4rem 1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1.5px solid #fecdd3;margin-bottom:1.25rem;display:none}.code-card-title{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:1rem;margin-bottom:.4rem;color:#be123c}.code-card p{margin:0 0 1rem;font-size:.85rem;color:var(--text-muted);line-height:1.5}.code-input-row{display:flex;gap:.5rem}.code-input-row input{flex:1;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:.95rem;font-weight:700;letter-spacing:.08em;color:var(--text-main);outline:0;transition:border-color .15s}.code-input-row input:focus{border-color:var(--accent)}.code-input-row button{padding:.65rem 1.1rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:.88rem;font-weight:800;cursor:pointer;transition:background .15s;white-space:nowrap}.code-input-row button:hover{background:var(--accent-dk)}.code-error{margin-top:.5rem;font-size:.82rem;color:#be123c;display:none}.partner-card{background:linear-gradient(135deg,#eff6ff 0,#f0fdf4 100%);border:1.5px solid #93c5fd;border-radius:16px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:none}.partner-inner{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap}.partner-logo{width:44px;height:44px;border-radius:12px;background:#fff;border:1px solid #bfdbfe;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;overflow:hidden}.partner-logo img{width:100%;height:100%;object-fit:cover}.partner-label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#2563eb}.partner-name{font-size:.95rem;font-weight:800;color:var(--text-main)}.partner-msg{font-size:.78rem;color:#475569;margin-top:2px}.partner-badge{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:700;color:#166534;background:#dcfce7;border:1px solid #86efac;border-radius:20px;padding:4px 10px;white-space:nowrap}.info-card{background:var(--card-bg);border-radius:16px;padding:1.4rem 1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid var(--border);margin-bottom:1.25rem}.info-card h3{margin:0 0 .6rem;font-size:.95rem;font-weight:800;display:flex;align-items:center;gap:.4rem}.info-card p{margin:0;font-size:.84rem;color:var(--text-muted);line-height:1.55}.skeleton{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:8px}@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.error-state{text-align:center;padding:3rem 1rem;color:var(--text-muted)}.error-state .error-icon{font-size:3rem;margin-bottom:1rem}.error-state h2{color:var(--text-main);margin-bottom:.5rem}.page-footer{margin-top:2.5rem;text-align:center;font-size:.78rem;color:var(--text-muted)}.page-footer a{color:var(--accent);text-decoration:none;font-weight:600}.page-footer a:hover{text-decoration:underline}@media (max-width:480px){.hero-body h1{font-size:1.45rem}.btn-primary,.btn-secondary{font-size:.9rem;padding:.8rem 1.1rem}}</style></head><body><div class="page-wrap"><a href="index.html" id="back-link" class="back-link"><span class="iconify" data-icon="material-symbols:arrow-back"></span> Palaa</a><div id="partner-card" class="partner-card"><div class="partner-inner"><div class="partner-logo" id="partner-logo">🏨</div><div><div class="partner-label">Elämyksen tarjoaa</div><div class="partner-name" id="partner-name">–</div><div class="partner-msg" id="partner-msg">–</div></div><div class="partner-badge">✓ Käyttöoikeus aktivoitu</div></div></div><div id="code-card" class="code-card"><div class="code-card-title"><span class="iconify" data-icon="material-symbols:lock"></span> Suojattu elämyspolku</div><p>Tämä reitti on käytettävissä pääsykoodilla.</p><div class="code-input-row"><input type="text" id="code-input" placeholder="Syötä pääsykoodi" autocomplete="off" spellcheck="false"> <button id="code-btn">Avaa</button></div><div class="code-error" id="code-error">Virheellinen koodi. Yritä uudelleen.</div></div><div id="hero-card" class="hero-card"><div id="cover-wrap"><div class="hero-cover-placeholder skeleton" id="cover-placeholder"></div></div><div class="hero-body"><div class="route-badge" id="route-badge">Ladataan...</div><h1 id="route-title"><span class="skeleton" style="display:block;height:1.6em;width:70%;border-radius:6px"></span></h1><div class="meta-row" id="meta-row"></div><p class="route-desc" id="route-desc"></p><div class="cta-section" id="cta-section" style="display:none"><div class="cta-label">Avaa sovelluksessa</div><a id="btn-android" href="#" class="btn-primary"><span class="iconify" data-icon="material-symbols:smartphone"></span> Avaa Wonderin-sovelluksessa </a><a id="btn-web" href="#" target="_blank" class="btn-secondary"><span class="iconify" data-icon="material-symbols:language"></span> Avaa Wonderin-verkkoversio</a></div></div></div><div class="info-card" id="info-card" style="display:none"><h3><span class="iconify" data-icon="material-symbols:info-outline"></span> Mikä on Wonderin?</h3><p>Wonderin on elämysreittisovellus, joka opastaa sinua GPS:n avulla, kertoo paikan tarinan ääneen ja avaa reitin kohdepisteet saavuttuasi. Voit kulkea reitin myös virtuaalisesti kotisohvalta.</p></div><div class="page-footer"><a href="/wonderin/esittely.html">Lue lisää Wonderin-palvelusta →</a><br><br><span>LaukaaInfo.fi · <a href="index.html">Etusivulle</a></span></div></div><script>(async()=>{"use strict";const e=window.supabase.createClient("https://duxluwyqxvbmkkjzuzkz.supabase.co","sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu"),t=new URLSearchParams(location.search),n={"kankaan-reitti":"c4f8662a-bf2e-4f06-839c-03e639f0f349","tertan-reitti":"b1132afe-a2e6-44ea-a811-24df40a28b5f",muistokartta:"60ba1177-0478-484b-a19a-86115a72c6c6"};let o=t.get("id")||"";n[o.toLowerCase()]&&(o=n[o.toLowerCase()]);const a=t.get("code")||t.get("koodi")||t.get("pin")||"",i=t.get("partner")||t.get("token")||t.get("pool")||"",c=document.getElementById("route-title"),r=document.getElementById("route-badge"),s=document.getElementById("meta-row"),d=document.getElementById("route-desc"),l=document.getElementById("cover-wrap"),m=document.getElementById("cta-section"),p=document.getElementById("info-card"),u=document.getElementById("code-card"),y=document.getElementById("code-input"),g=document.getElementById("code-btn"),_=document.getElementById("code-error"),k=document.getElementById("partner-card"),f=document.getElementById("btn-android"),b=document.getElementById("btn-web"),v=document.getElementById("page-title"),E=document.getElementById("og-title"),I=document.getElementById("og-description"),h=document.getElementById("og-image");function w(e){document.getElementById("hero-card").innerHTML=`\n            <div class="error-state">\n                <div class="error-icon">🗺️</div>\n                <h2>Reittiä ei löytynyt</h2>\n                <p>${e}</p>\n            </div>`}if(document.getElementById("back-link").addEventListener("click",e=>{const t=document.referrer;t&&(t.includes("laukaainfo.fi")||t.includes(location.hostname))&&history.length>1&&(e.preventDefault(),history.back())}),!o)return void w("Reitin tunniste puuttuu URL-osoitteesta.");const{data:B,error:C}=await e.from("routes").select("id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer").eq("id",o).maybeSingle();if(C||!B)return void w("Reittiä ei löydy tai se ei ole julkinen.");const x="public"===B.visibility&&"PUBLIC"===B.access_type&&("FREE"===B.commercial_type||!B.commercial_type),L=(B.access_type,B.title||"Elämyspolku"),$=B.description||"",R=B.category||("MEMORY"===B.experience_type?"Muistokartta":"Elämyspolku");if(v.textContent=`${L} – LaukaaInfo`,E.setAttribute("content",L),I.setAttribute("content",$.slice(0,160)),r.textContent=R,c.textContent=L,d.textContent=$,B.cover_image){const e=document.createElement("img");e.className="hero-cover",e.src=B.cover_image,e.alt=L,h.setAttribute("content",B.cover_image),l.innerHTML="",l.appendChild(e)}else document.getElementById("cover-placeholder").textContent="🌿",document.getElementById("cover-placeholder").classList.remove("skeleton");const U=[],M=B.places?.name||"";function S(e){const t=/Android/i.test(navigator.userAgent),n=e?`&token=${encodeURIComponent(e)}`:"",a=t?`intent://reitti?id=${encodeURIComponent(o)}${n}#Intent;scheme=wonderin;package=com.mediazoo.wonderin;action=android.intent.action.VIEW;end`:`wonderin://reitti?id=${encodeURIComponent(o)}${n}`,i=`/wonderin/web/?id=${encodeURIComponent(o)}${n}`;f.href=a,b.href=i}if(M&&U.push(`<span><span class="iconify" data-icon="material-symbols:location-on"></span>${M}</span>`),B.distance_meters&&U.push(`<span><span class="iconify" data-icon="material-symbols:route"></span>${(B.distance_meters/1e3).toFixed(1)} km</span>`),B.virtual_enabled&&U.push('<span><span class="iconify" data-icon="material-symbols:chair"></span>Nojatuolimatka</span>'),B.content_producer&&U.push(`<span><span class="iconify" data-icon="material-symbols:person"></span>${B.content_producer}</span>`),s.innerHTML=U.join(""),i)try{const t=(()=>{try{let e=localStorage.getItem("wonderin_device_fp");return e||(e="fp_"+Math.random().toString(36).slice(2,12),localStorage.setItem("wonderin_device_fp",e)),e}catch{return"unknown"}})(),{data:n}=await e.rpc("redeem_partner_token",{p_token:i,p_fingerprint:t,p_client_type:"web"});if(n?.success&&n.partner)return k.style.display="block",document.getElementById("partner-name").textContent=n.partner.name||"–",document.getElementById("partner-msg").textContent=n.partner.welcome_message||"–",n.partner.logo_url&&(document.getElementById("partner-logo").innerHTML=`<img src="${n.partner.logo_url}" alt="${n.partner.name}">`),S(i),m.style.display="flex",void(p.style.display="block")}catch(e){console.warn("Partner token check failed",e)}if(x)return S(a||""),m.style.display="flex",void(p.style.display="block");async function j(t){const n=t.trim().toUpperCase();if(n){g.disabled=!0,_.style.display="none";try{const{data:t}=await e.rpc("get_route_with_access",{route_id:o,provided_code:n});if(t?.access_granted){u.style.display="none",S(n),m.style.display="flex",p.style.display="block";try{sessionStorage.setItem("route_code_"+o,n)}catch{}}else t?.rate_limited?(_.textContent="Liian monta yritystä. Odota hetki ja yritä uudelleen.",_.style.display="block"):(_.textContent="Virheellinen koodi. Yritä uudelleen.",_.style.display="block")}catch(e){console.warn("Code check failed",e),_.textContent="Yhteysvirhe. Tarkista verkko ja yritä uudelleen.",_.style.display="block"}finally{g.disabled=!1}}}u.style.display="block",a&&(y.value=a,j(a)),g.addEventListener("click",()=>j(y.value)),y.addEventListener("keydown",e=>{"Enter"===e.key&&j(y.value)})})()</script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Elämyspolku – LaukaaInfo</title>
+
+    <!-- Open Graph / some social share -->
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       id="og-title"       content="Elämyspolku – LaukaaInfo">
+    <meta property="og:description" id="og-description" content="Koe elämyspolku Wonderin-sovelluksella.">
+    <meta property="og:image"       id="og-image"       content="">
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --accent:     #059669;
+            --accent-dk:  #047857;
+            --accent-lt:  #ecfdf5;
+            --text-main:  #0f172a;
+            --text-muted: #64748b;
+            --bg:         #f8fafc;
+            --card-bg:    #ffffff;
+            --border:     #e2e8f0;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* ── Layout ── */
+        .page-wrap {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 4rem;
+        }
+
+        /* ── Back link ── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            margin-bottom: 1.25rem;
+            transition: color 0.15s;
+        }
+        .back-link:hover { color: var(--text-main); }
+
+        /* ── Hero card ── */
+        .hero-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-cover {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            background: linear-gradient(135deg, #064e3b, #065f46);
+        }
+        .hero-cover-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #064e3b 0%, #0f766e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .hero-body { padding: 1.5rem; }
+
+        .route-badge {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            background: var(--accent-lt);
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero-body h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.75rem;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1.25rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        .meta-row span { display: inline-flex; align-items: center; gap: 0.3rem; }
+
+        .route-desc {
+            color: var(--text-muted);
+            line-height: 1.65;
+            font-size: 0.95rem;
+            margin: 0 0 1.5rem;
+        }
+
+        /* ── CTA buttons ── */
+        .cta-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+        .cta-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.1rem;
+        }
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.5rem;
+            background: linear-gradient(135deg, #064e3b, var(--accent));
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 16px rgba(5,150,105,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(5,150,105,0.38);
+        }
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s, border-color 0.15s, transform 0.15s;
+        }
+        .btn-secondary:hover {
+            background: var(--bg);
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        /* ── Pääsykoodi (lukittu reitti) ── */
+        .code-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.4rem 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1.5px solid #fecdd3;
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+        .code-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            color: #be123c;
+        }
+        .code-card p {
+            margin: 0 0 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .code-input-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .code-input-row input {
+            flex: 1;
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .code-input-row input:focus { border-color: var(--accent); }
+        .code-input-row button {
+            padding: 0.65rem 1.1rem;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .code-input-row button:hover { background: var(--accent-dk); }
+        .code-error {
+            margin-top: 0.5rem;
+            font-size: 0.82rem;
+            color: #be123c;
+            display: none;
+        }
+
+        /* ── Partner banner ── */
+        .partner-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+            border: 1.5px solid #93c5fd;
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+        .partner-inner {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .partner-logo {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #bfdbfe;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .partner-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .partner-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #2563eb; }
+        .partner-name  { font-size: 0.95rem; font-weight: 800; color: var(--text-main); }
+        .partner-msg   { font-size: 0.78rem; color: #475569; margin-top: 2px; }
+        .partner-badge {
+            margin-left: auto;
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 0.72rem; font-weight: 700;
+            color: #166534; background: #dcfce7; border: 1px solid #86efac;
+            border-radius: 20px; padding: 4px 10px;
+            white-space: nowrap;
+        }
+
+        /* ── Info card (lataus) ── */
+        .info-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.4rem 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+        }
+        .info-card h3 {
+            margin: 0 0 0.6rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .info-card p {
+            margin: 0;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ── Skeleton loading ── */
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease-in-out infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ── Error state ── */
+        .error-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+        .error-state .error-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .error-state h2 { color: var(--text-main); margin-bottom: 0.5rem; }
+
+        /* ── Footer ── */
+        .page-footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .page-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 480px) {
+            .hero-body h1 { font-size: 1.45rem; }
+            .btn-primary, .btn-secondary { font-size: 0.9rem; padding: 0.8rem 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+    <!-- Back -->
+    <a href="index.html" id="back-link" class="back-link">
+        <span class="iconify" data-icon="material-symbols:arrow-back"></span>
+        Palaa
+    </a>
+
+    <!-- Partner banner (piilotettu aluksi) -->
+    <div id="partner-card" class="partner-card">
+        <div class="partner-inner">
+            <div class="partner-logo" id="partner-logo">🏨</div>
+            <div>
+                <div class="partner-label">Elämyksen tarjoaa</div>
+                <div class="partner-name" id="partner-name">–</div>
+                <div class="partner-msg"  id="partner-msg">–</div>
+            </div>
+            <div class="partner-badge">✓ Käyttöoikeus aktivoitu</div>
+        </div>
+    </div>
+
+    <!-- Pääsykoodi (piilotettu jos reitti on julkinen) -->
+    <div id="code-card" class="code-card">
+        <div class="code-card-title">
+            <span class="iconify" data-icon="material-symbols:lock"></span>
+            Suojattu elämyspolku
+        </div>
+        <p>Tämä reitti on käytettävissä pääsykoodilla.</p>
+        <div class="code-input-row">
+            <input type="text" id="code-input" placeholder="Syötä pääsykoodi" autocomplete="off" spellcheck="false">
+            <button id="code-btn">Avaa</button>
+        </div>
+        <div class="code-error" id="code-error">Virheellinen koodi. Yritä uudelleen.</div>
+    </div>
+
+    <!-- Hero (ladataan JS:ssä) -->
+    <div id="hero-card" class="hero-card">
+        <!-- Kuva tai placeholder -->
+        <div id="cover-wrap">
+            <div class="hero-cover-placeholder skeleton" id="cover-placeholder"></div>
+        </div>
+
+        <div class="hero-body">
+            <div class="route-badge" id="route-badge">Ladataan...</div>
+            <h1 id="route-title"><span class="skeleton" style="display:block;height:1.6em;width:70%;border-radius:6px;"></span></h1>
+            <div class="meta-row" id="meta-row"></div>
+            <p class="route-desc" id="route-desc"></p>
+
+            <!-- CTA-napit (piilotetaan kun reitti on lukittu) -->
+            <div class="cta-section" id="cta-section" style="display:none;">
+                <div class="cta-label">Avaa sovelluksessa</div>
+                <a id="btn-android" href="#" class="btn-primary">
+                    <span class="iconify" data-icon="material-symbols:smartphone"></span>
+                    Avaa Wonderin-sovelluksessa
+                </a>
+                <a id="btn-web" href="#" target="_blank" class="btn-secondary">
+                    <span class="iconify" data-icon="material-symbols:language"></span>
+                    Avaa Wonderin-verkkoversio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ohjekortti -->
+    <div class="info-card" id="info-card" style="display:none;">
+        <h3><span class="iconify" data-icon="material-symbols:info-outline"></span> Mikä on Wonderin?</h3>
+        <p>Wonderin on elämysreittisovellus, joka opastaa sinua GPS:n avulla, kertoo paikan tarinan ääneen ja avaa reitin kohdepisteet saavuttuasi. Voit kulkea reitin myös virtuaalisesti kotisohvalta.</p>
+    </div>
+
+    <div class="page-footer">
+        <a href="/wonderin/esittely.html">Lue lisää Wonderin-palvelusta →</a>
+        <br><br>
+        <span>LaukaaInfo.fi · <a href="index.html">Etusivulle</a></span>
+    </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+(async () => {
+    'use strict';
+
+    const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ── URL-parametrit ───────────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+
+    // Slug-tunnisteiden muunto UUID:ksi
+    const SLUG_MAP = {
+        'kankaan-reitti':       'c4f8662a-bf2e-4f06-839c-03e639f0f349',
+        'tertan-reitti':        'b1132afe-a2e6-44ea-a811-24df40a28b5f',
+        'muistokartta':         '60ba1177-0478-484b-a19a-86115a72c6c6',
+    };
+
+    let routeId = params.get('id') || '';
+    if (SLUG_MAP[routeId.toLowerCase()]) routeId = SLUG_MAP[routeId.toLowerCase()];
+
+    const urlCode         = params.get('code') || params.get('koodi') || params.get('pin') || '';
+    const urlPartnerToken = params.get('partner') || params.get('token') || params.get('pool') || '';
+
+    // ── DOM-viittaukset ──────────────────────────────────────────────
+    const $title        = document.getElementById('route-title');
+    const $badge        = document.getElementById('route-badge');
+    const $metaRow      = document.getElementById('meta-row');
+    const $desc         = document.getElementById('route-desc');
+    const $coverWrap    = document.getElementById('cover-wrap');
+    const $ctaSection   = document.getElementById('cta-section');
+    const $infoCard     = document.getElementById('info-card');
+    const $codeCard     = document.getElementById('code-card');
+    const $codeInput    = document.getElementById('code-input');
+    const $codeBtn      = document.getElementById('code-btn');
+    const $codeError    = document.getElementById('code-error');
+    const $partnerCard  = document.getElementById('partner-card');
+    const $btnAndroid   = document.getElementById('btn-android');
+    const $btnWeb       = document.getElementById('btn-web');
+    const $pageTitle    = document.getElementById('page-title');
+    const $ogTitle      = document.getElementById('og-title');
+    const $ogDesc       = document.getElementById('og-description');
+    const $ogImage      = document.getElementById('og-image');
+
+    // ── Älykäs Palaa-nappi ───────────────────────────────────────────
+    document.getElementById('back-link').addEventListener('click', e => {
+        const ref = document.referrer;
+        if (ref && (ref.includes('laukaainfo.fi') || ref.includes(location.hostname))) {
+            if (history.length > 1) { e.preventDefault(); history.back(); }
+        }
+    });
+
+    // ── Virhesivu ───────────────────────────────────────────────────
+    function showError(msg) {
+        document.getElementById('hero-card').innerHTML = `
+            <div class="error-state">
+                <div class="error-icon">🗺️</div>
+                <h2>Reittiä ei löytynyt</h2>
+                <p>${msg}</p>
+            </div>`;
+    }
+
+    if (!routeId) { showError('Reitin tunniste puuttuu URL-osoitteesta.'); return; }
+
+    // ── Hae metadata (vain julkiset kentät, EI GeoJSON) ─────────────
+    // Käytetään get_routes_list-tyylistä suodatettua SELECT:iä
+    // — kun v2.1-migraatio on ajettu, tänne tulee RPC-kutsu
+    const { data: route, error } = await sb
+        .from('routes')
+        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer')
+        .eq('id', routeId)
+        .maybeSingle();
+
+    if (error || !route) { showError('Reittiä ei löydy tai se ei ole julkinen.'); return; }
+
+    // ── Täytä perusmetadata ──────────────────────────────────────────
+    const isPublicFree = route.visibility === 'public'
+                      && route.access_type === 'PUBLIC'
+                      && (route.commercial_type === 'FREE' || !route.commercial_type);
+
+    const isLocked = route.access_type === 'CODE' || !isPublicFree;
+
+    const title   = route.title   || 'Elämyspolku';
+    const desc    = route.description || '';
+    const badgeText = route.category || (route.experience_type === 'MEMORY' ? 'Muistokartta' : 'Elämyspolku');
+
+    $pageTitle.textContent = `${title} – LaukaaInfo`;
+    $ogTitle.setAttribute('content', title);
+    $ogDesc.setAttribute('content', desc.slice(0, 160));
+    $badge.textContent = badgeText;
+    $title.textContent = title;
+    $desc.textContent  = desc;
+
+    // Kansikuva
+    if (route.cover_image) {
+        const img = document.createElement('img');
+        img.className = 'hero-cover';
+        img.src = route.cover_image;
+        img.alt = title;
+        $ogImage.setAttribute('content', route.cover_image);
+        $coverWrap.innerHTML = '';
+        $coverWrap.appendChild(img);
+    } else {
+        document.getElementById('cover-placeholder').textContent = '🌿';
+        document.getElementById('cover-placeholder').classList.remove('skeleton');
+    }
+
+    // Meta-rivi
+    const metas = [];
+    const placeName = route.places?.name || '';
+    if (placeName) metas.push(`<span><span class="iconify" data-icon="material-symbols:location-on"></span>${placeName}</span>`);
+    if (route.distance_meters) metas.push(`<span><span class="iconify" data-icon="material-symbols:route"></span>${(route.distance_meters / 1000).toFixed(1)} km</span>`);
+    if (route.virtual_enabled) metas.push(`<span><span class="iconify" data-icon="material-symbols:chair"></span>Nojatuolimatka</span>`);
+    if (route.content_producer) metas.push(`<span><span class="iconify" data-icon="material-symbols:person"></span>${route.content_producer}</span>`);
+    $metaRow.innerHTML = metas.join('');
+
+    // ── CTA-linkit ───────────────────────────────────────────────────
+    function buildAppLinks(code) {
+        const isAndroid  = /Android/i.test(navigator.userAgent);
+        const tokenParam = code ? `&token=${encodeURIComponent(code)}` : '';
+        const intentUrl  = isAndroid
+            ? `intent://reitti?id=${encodeURIComponent(routeId)}${tokenParam}#Intent;scheme=wonderin;package=com.mediazoo.wonderin;action=android.intent.action.VIEW;end`
+            : `wonderin://reitti?id=${encodeURIComponent(routeId)}${tokenParam}`;
+        const webUrl = `/wonderin/web/?id=${encodeURIComponent(routeId)}${tokenParam}`;
+
+        $btnAndroid.href = intentUrl;
+        $btnWeb.href     = webUrl;
+    }
+
+    // ── Partner-token ────────────────────────────────────────────────
+    if (urlPartnerToken) {
+        try {
+            const fp = (() => {
+                try {
+                    let v = localStorage.getItem('wonderin_device_fp');
+                    if (!v) { v = 'fp_' + Math.random().toString(36).slice(2, 12); localStorage.setItem('wonderin_device_fp', v); }
+                    return v;
+                } catch { return 'unknown'; }
+            })();
+
+            const { data: pd } = await sb.rpc('redeem_partner_token', {
+                p_token: urlPartnerToken, p_fingerprint: fp, p_client_type: 'web'
+            });
+
+            if (pd?.success && pd.partner) {
+                $partnerCard.style.display = 'block';
+                document.getElementById('partner-name').textContent = pd.partner.name || '–';
+                document.getElementById('partner-msg').textContent  = pd.partner.welcome_message || '–';
+                if (pd.partner.logo_url) {
+                    document.getElementById('partner-logo').innerHTML = `<img src="${pd.partner.logo_url}" alt="${pd.partner.name}">`;
+                }
+                buildAppLinks(urlPartnerToken);
+                $ctaSection.style.display = 'flex';
+                $infoCard.style.display   = 'block';
+                return; // valmis
+            }
+        } catch (e) { console.warn('Partner token check failed', e); }
+    }
+
+    // ── Julkinen reitti — näytä heti CTA ────────────────────────────
+    if (isPublicFree) {
+        buildAppLinks(urlCode || '');
+        $ctaSection.style.display = 'flex';
+        $infoCard.style.display   = 'block';
+        return;
+    }
+
+    // ── Lukittu reitti — näytä koodikenttä ──────────────────────────
+    $codeCard.style.display = 'block';
+
+    // Jos URL:ssä on koodi, kokeile automaattisesti
+    if (urlCode) {
+        $codeInput.value = urlCode;
+        tryCode(urlCode);
+    }
+
+    async function tryCode(code) {
+        const cleanCode = code.trim().toUpperCase();
+        if (!cleanCode) return;
+
+        $codeBtn.disabled = true;
+        $codeError.style.display = 'none';
+
+        try {
+            const { data: d } = await sb.rpc('get_route_with_access', {
+                route_id: routeId, provided_code: cleanCode
+            });
+
+            if (d?.access_granted) {
+                $codeCard.style.display = 'none';
+                buildAppLinks(cleanCode);
+                $ctaSection.style.display = 'flex';
+                $infoCard.style.display   = 'block';
+                // Tallenna selainistuntoon
+                try { sessionStorage.setItem('route_code_' + routeId, cleanCode); } catch {}
+            } else if (d?.rate_limited) {
+                $codeError.textContent = 'Liian monta yritystä. Odota hetki ja yritä uudelleen.';
+                $codeError.style.display = 'block';
+            } else {
+                $codeError.textContent = 'Virheellinen koodi. Yritä uudelleen.';
+                $codeError.style.display = 'block';
+            }
+        } catch (e) {
+            console.warn('Code check failed', e);
+            $codeError.textContent = 'Yhteysvirhe. Tarkista verkko ja yritä uudelleen.';
+            $codeError.style.display = 'block';
+        } finally {
+            $codeBtn.disabled = false;
+        }
+    }
+
+    $codeBtn.addEventListener('click', () => tryCode($codeInput.value));
+    $codeInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryCode($codeInput.value); });
+
+})();
+</script>
+
+</body>
+</html>
