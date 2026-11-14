@@ -4334,14 +4334,24 @@ async function loadKseEventsForPlace(place, otherRelatedItems = []) {
 
         let container = document.getElementById('place-kse-events');
         if (!container) {
-            const target = document.getElementById('encounters-section') || document.getElementById('place-content');
-            if (!target) return;
-            const wrapper = document.createElement('section');
-            wrapper.id = 'place-kse-events';
-            wrapper.style.cssText = 'margin:1.5rem 0;padding:0 0.5rem;';
-            target.insertAdjacentElement('beforebegin', wrapper);
-            container = wrapper;
+            const actSec = document.getElementById('activities-section') || document.getElementById('services-main-section');
+            if (actSec) {
+                const wrapper = document.createElement('section');
+                wrapper.id = 'place-kse-events';
+                wrapper.className = 'content-block';
+                actSec.insertAdjacentElement('afterend', wrapper);
+                container = wrapper;
+            } else {
+                const target = document.getElementById('encounters-section') || document.getElementById('place-content');
+                if (!target) return;
+                const wrapper = document.createElement('section');
+                wrapper.id = 'place-kse-events';
+                wrapper.className = 'content-block';
+                target.insertAdjacentElement('beforebegin', wrapper);
+                container = wrapper;
+            }
         }
+        container.style.display = 'block';
 
         const SHOW_INITIALLY = 2;
         const hiddenCount = allEvents.length - SHOW_INITIALLY;
@@ -4395,8 +4405,11 @@ async function loadKseEventsForPlace(place, otherRelatedItems = []) {
                     </a>
                 </div>` : '';
 
-            return `<div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;color:#64748b;text-transform:uppercase;margin-bottom:0.5rem;">
-                    📅 Tapahtumat lähellä</div>
+            return `
+                <h2 style="display:flex;align-items:center;gap:0.5rem;margin:0 0 0.8rem 0;font-family:'Manrope',sans-serif;font-size:1.25rem;font-weight:700;color:var(--text-main);">
+                    <span class="iconify" data-icon="material-symbols:event-outline" style="color:#0284c7;"></span>
+                    Tapahtumat lähellä
+                </h2>
                 <div id="kse-events-list">${rows}</div>
                 ${toggleBtn}
                 ${allEventsLink}`;
