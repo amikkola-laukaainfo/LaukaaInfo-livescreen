@@ -1,4 +1,4 @@
-﻿const MEDIA_BASE_URL = 'https://www.mediazoo.fi/laukaainfo-web/';
+const MEDIA_BASE_URL = 'https://www.mediazoo.fi/laukaainfo-web/';
 
 function normalizeMediaUrl(url) {
     if (!url || typeof url !== 'string') return null;
@@ -628,6 +628,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadThemesForPlace(placeData).catch(e => console.warn('[Themes] error:', e));
         loadPlaceObservations(placeData).catch(e => console.warn('[Observations] error:', e));
         loadWallPostsForPlace(placeData).catch(e => console.warn('[WallPosts] error:', e));
+        loadKseEventsForPlace(placeData).catch(e => console.warn('[KseEvents] error:', e));
 
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
         // place_media on AI Supabase -kannassa (aiSb)
@@ -4163,6 +4164,160 @@ async function loadThemesForPlace(placeData) {
         section.style.display = 'block';
     } catch (e) {
         console.warn('Virhe paikan teemojen haussa:', e);
+    }
+}
+
+// ── KSE-tapahtumat paikkakohtaisesti ──────────────────────────────────────────
+/**
+ * Hakee Keski-Suomi Events REST API:sta tapahtumat ja näyttää ne paikkasivulla.
+ * Max 2 tapahtumaa näkyvillä suoraan, loput haitarin alla.
+ * Suodatus:
+ *  - Koordinaattietäisyys max 500m (jos molemmilla on koordinaatit, yli 500m hylätään AINA).
+ *  - Nimimatching sallittu vain jos koordinaatit puuttuvat, ja vaatii tarkan nimen (ei geneerisiä kuntanimiä).
+ */
+async function loadKseEventsForPlace(place) {
+    const KSE_URL = 'https://keskisuomievents.fi/api/v1/event/?text=laukaa&start=today&sort=start_time&include=location&page_size=100';
+    const MAX_DISTANCE_M = 500; // Maksimi säde paikkasivulle
+
+    function haversineM(lat1, lon1, lat2, lon2) {
+        const R = 6371000;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    try {
+        const res = await fetch(KSE_URL, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return;
+        const json = await res.json();
+        const data = json.data || [];
+
+        // Siivotaan paikan nimestä kuntasanat ("laukaa", "laukaan") ja välimerkit
+        const rawPlaceName = (place.name || place.canonical_name || '').trim();
+        const cleanPlaceName = rawPlaceName.toLowerCase()
+            .replace(/\b(laukaan?|kirkonkylä|kunta|alue)\b/gi, '')
+            .replace(/[^a-z\u00e4\u00f6\u00e50-9\s]/gi, ' ')
+            .trim();
+
+        const hasPlaceCoords = (place.lat != null && place.lon != null && !isNaN(place.lat) && !isNaN(place.lon));
+        const matched = [];
+
+        for (const item of data) {
+            if (item.super_event_type === 'recurring') continue;
+            const location = item.location;
+            if (!location) continue;
+
+            const locNameRaw = (typeof location.name === 'object'
+                ? (location.name.fi || '') : (location.name || '')).trim();
+            const locNameLc = locNameRaw.toLowerCase();
+
+            const streetRaw = (typeof location.street_address === 'object'
+                ? (location.street_address.fi || '') : (location.street_address || '')).trim().toLowerCase();
+
+            const coords = location.position && location.position.coordinates;
+            const evLon = (coords && coords[0] != null && !isNaN(coords[0])) ? coords[0] : null;
+            const evLat = (coords && coords[1] != null && !isNaN(coords[1])) ? coords[1] : null;
+            const hasEventCoords = (evLat != null && evLon != null);
+
+            let isMatch = false;
+
+            if (hasPlaceCoords && hasEventCoords) {
+                // 1. Koordinaattivertailu: tapahtuman TÄYTYY olla alle 500m säteellä
+                const distM = haversineM(place.lat, place.lon, evLat, evLon);
+                if (distM <= MAX_DISTANCE_M) {
+                    isMatch = true;
+                } else {
+                    // Jos etäisyys on yli 500m, hylätään AINA (ei sallita nimiosumaa 5 km päästä!)
+                    continue;
+                }
+            } else if (!hasEventCoords || !hasPlaceCoords) {
+                // 2. Vain jos koordinaatteja EI ole käytettävissä, käytetään tarkkaa nimivertailua
+                if (cleanPlaceName.length >= 4) {
+                    const fullLocText = `${locNameLc} ${streetRaw}`;
+                    if (fullLocText.includes(cleanPlaceName)) {
+                        isMatch = true;
+                    }
+                }
+            }
+
+            if (!isMatch) continue;
+
+            // Otsikko
+            const title = (typeof item.name === 'object'
+                ? (item.name.fi || '') : (item.name || '')).trim();
+            if (!title) continue;
+
+            let timeLabel = '';
+            if (item.start_time) {
+                try {
+                    const d = new Date(item.start_time);
+                    const days = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
+                    timeLabel = `${days[d.getDay()]} ${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}. klo ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                } catch (_) {}
+            }
+
+            const rawId = item['@id'] || item.id || '';
+            const url = rawId.startsWith('http') ? rawId
+                : `https://keskisuomievents.fi/fi/event/${rawId.split(':').pop()}/`;
+
+            matched.push({ title, timeLabel, locName: locNameRaw, url, startTime: item.start_time || '' });
+        }
+
+        if (matched.length === 0) return;
+
+        let container = document.getElementById('place-kse-events');
+        if (!container) {
+            const target = document.getElementById('encounters-section') || document.getElementById('place-content');
+            if (!target) return;
+            const wrapper = document.createElement('section');
+            wrapper.id = 'place-kse-events';
+            wrapper.style.cssText = 'margin:1.5rem 0;padding:0 0.5rem;';
+            target.insertAdjacentElement('beforebegin', wrapper);
+            container = wrapper;
+        }
+
+        const SHOW_INITIALLY = 2;
+        const hiddenCount = matched.length - SHOW_INITIALLY;
+        let expanded = false;
+
+        function buildHtml() {
+            const visible = expanded ? matched : matched.slice(0, SHOW_INITIALLY);
+            const rows = visible.map(ev => `
+                <a href="${ev.url}" target="_blank" rel="noopener noreferrer"
+                   style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.65rem 0;text-decoration:none;color:#1e293b;border-bottom:1px solid #f1f5f9;">
+                    <span style="font-size:1.3rem;line-height:1;flex-shrink:0;">&#127903;</span>
+                    <span style="flex:1;min-width:0;">
+                        <span style="display:block;font-weight:600;font-size:0.95rem;">${ev.title}</span>
+                        ${ev.timeLabel ? `<span style="display:block;font-size:0.8rem;color:#0284c7;margin-top:0.1rem;">${ev.timeLabel}</span>` : ''}
+                        ${ev.locName ? `<span style="display:block;font-size:0.78rem;color:#94a3b8;">&#128205; ${ev.locName}</span>` : ''}
+                    </span>
+                    <span style="font-size:0.9rem;color:#94a3b8;flex-shrink:0;align-self:center;">&#8599;</span>
+                </a>`).join('');
+
+            const toggleBtn = hiddenCount > 0 ? `
+                <button id="kse-events-toggle"
+                    style="display:flex;align-items:center;gap:0.4rem;background:none;border:none;cursor:pointer;padding:0.5rem 0;font-size:0.85rem;color:#0284c7;font-weight:600;">
+                    ${expanded ? '&#8963; Näytä vähemmän' : '&#8964; Näytä lisää tapahtumia (+' + hiddenCount + ')'}
+                </button>` : '';
+
+            return `<div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;color:#64748b;text-transform:uppercase;margin-bottom:0.5rem;">
+                    &#128197; Tapahtumat täällä</div>
+                <div id="kse-events-list">${rows}</div>
+                ${toggleBtn}`;
+        }
+
+        container.innerHTML = buildHtml();
+        container.addEventListener('click', e => {
+            if (e.target.closest('#kse-events-toggle')) {
+                expanded = !expanded;
+                container.innerHTML = buildHtml();
+            }
+        });
+
+    } catch (e) {
+        console.warn('[KseEvents] error:', e);
     }
 }
 
