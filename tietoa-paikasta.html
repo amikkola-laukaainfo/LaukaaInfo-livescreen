@@ -1000,8 +1000,8 @@
                 margin-bottom: 2.5rem;
             }
             
-            #subplaces-section { order: 1; }
-            #intro-section { order: 2; }
+            #intro-section { order: 1; }
+            #subplaces-section { order: 2; }
             #place-themes-v4-section { order: 3; }
             #map-section { order: 4; }
             #media-section { order: 5; }
@@ -1310,6 +1310,14 @@
             <!-- Left Column -->
             <div class="left-col">
                 
+                <!-- 1. Perustiedot & AI-yhteenveto -->
+                <section id="intro-section" class="content-block">
+                    <h2>Tietoa paikasta</h2>
+                    <div id="display-description">
+                        <!-- Filled by JS -->
+                    </div>
+                </section>
+
                 <!-- 1.5. Alakohteet (näytetään vain pääkohteilla, joilla on child-paikkoja) -->
                 <section id="subplaces-section" class="content-block" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
@@ -1318,14 +1326,6 @@
                     </h2>
                     <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">Klikkauksella näet tarkemmat tiedot tai avaat kohteen omalle sivulleen.</p>
                     <div id="subplaces-list" class="subplaces-list"></div>
-                </section>
-
-                <!-- 1. Perustiedot & AI-yhteenveto -->
-                <section id="intro-section" class="content-block">
-                    <h2>Tietoa paikasta</h2>
-                    <div id="display-description">
-                        <!-- Filled by JS -->
-                    </div>
                 </section>
 
                 <!-- V4: Tutustu paikkaan näkökulmista (2-suuntainen silmukka teema.html:ään) -->
