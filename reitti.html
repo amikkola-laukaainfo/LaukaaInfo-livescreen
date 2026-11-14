@@ -14,6 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Leaflet karttakirjasto esikatselukartalle -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
         :root {
@@ -342,6 +345,111 @@
         .page-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
         .page-footer a:hover { text-decoration: underline; }
 
+        /* ── Esikatselukartta / Nojatuolikartta ── */
+        .map-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            border: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+        .map-card-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+        .map-card-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--text-main);
+        }
+        .map-card-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--accent-lt);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .preview-map-container {
+            width: 100%;
+            height: 360px;
+            background: #e2e8f0;
+            position: relative;
+            z-index: 1;
+        }
+        .map-card-footer {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            line-height: 1.4;
+        }
+        /* Custom Leaflet Marker Icons */
+        .preview-marker {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #059669;
+            border: 2px solid #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .preview-place-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            background: #1e40af;
+            border: 2px solid #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        /* Popup styles */
+        .preview-popup-content h4 {
+            margin: 0 0 4px;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .preview-popup-content p {
+            margin: 0;
+            font-size: 0.78rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+        .preview-popup-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .badge-place { background: #dbeafe; color: #1e40af; }
+        .badge-point { background: #dcfce7; color: #166534; }
+
         @media (max-width: 480px) {
             .hero-body h1 { font-size: 1.45rem; }
             .btn-primary, .btn-secondary { font-size: 0.9rem; padding: 0.8rem 1.1rem; }
@@ -410,6 +518,22 @@
                     Avaa Wonderin-verkkoversio
                 </a>
             </div>
+        </div>
+    </div>
+
+    <!-- Esikatselukartta / Nojatuoliversio (vain julkisille tai koodilla avatuille) -->
+    <div id="map-card" class="map-card">
+        <div class="map-card-header">
+            <div class="map-card-title">
+                <span class="iconify" data-icon="material-symbols:map"></span>
+                Reittikartta ja kohteet
+            </div>
+            <div class="map-card-badge" id="map-badge">Ladataan kohteita...</div>
+        </div>
+        <div id="preview-map" class="preview-map-container"></div>
+        <div class="map-card-footer">
+            <span class="iconify" data-icon="material-symbols:touch-app" style="font-size: 1.25rem; flex-shrink: 0; color: var(--accent);"></span>
+            <span>Voit tutustua kohteisiin klikkaamalla kartan merkkejä. Täyden GPS-opastuksen ja äänitarinat saat Wonderin-sovelluksella!</span>
         </div>
     </div>
 
@@ -496,7 +620,7 @@
     // — kun v2.1-migraatio on ajettu, tänne tulee RPC-kutsu
     const { data: route, error } = await sb
         .from('routes')
-        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer')
+        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer, route_geojson')
         .eq('id', routeId)
         .maybeSingle();
 
@@ -556,6 +680,128 @@
         $btnWeb.href     = webUrl;
     }
 
+    // ── Esikatselukartta (Nojatuoliversio) ───────────────────────────
+    let mapInstance = null;
+    function renderPreviewMap(rawGeoJson) {
+        if (!rawGeoJson || typeof L === 'undefined') return;
+        let geoJson = rawGeoJson;
+        if (typeof geoJson === 'string') {
+            try { geoJson = JSON.parse(geoJson); } catch (e) { return; }
+        }
+        if (!geoJson.features || !Array.isArray(geoJson.features)) return;
+
+        const $mapCard  = document.getElementById('map-card');
+        const $mapBadge = document.getElementById('map-badge');
+        $mapCard.style.display = 'block';
+
+        if (mapInstance) {
+            try { mapInstance.remove(); } catch (e) {}
+            mapInstance = null;
+        }
+
+        const map = L.map('preview-map', {
+            zoomControl: true,
+            scrollWheelZoom: false, // estää vieritysloukun kännykällä
+            attributionControl: false
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        const bounds = L.latLngBounds([]);
+        let destCount = 0;
+        let placeCount = 0;
+
+        // 1. Piirrä reittiviiva (LineString)
+        geoJson.features.forEach(f => {
+            if (f.geometry?.type === 'LineString' && Array.isArray(f.geometry.coordinates)) {
+                const latLngs = f.geometry.coordinates.map(c => [c[1], c[0]]);
+                if (latLngs.length > 0) {
+                    L.polyline(latLngs, {
+                        color: '#059669',
+                        weight: 5,
+                        opacity: 0.85,
+                        lineCap: 'round',
+                        lineJoin: 'round'
+                    }).addTo(map);
+                    bounds.extend(latLngs);
+                }
+            }
+        });
+
+        // 2. Piirrä kohteet ja paikkapisteet (Point)
+        geoJson.features.forEach(f => {
+            if (f.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates)) {
+                const lng = f.geometry.coordinates[0];
+                const lat = f.geometry.coordinates[1];
+                bounds.extend([lat, lng]);
+
+                const props = f.properties || {};
+                const isPlace = props.pointType === 'place' || props.point_type === 'place' || props.is_place_point === true || !!props.place_id;
+
+                let icon;
+                if (isPlace) {
+                    placeCount++;
+                    icon = L.divIcon({
+                        className: '',
+                        html: '<div class="preview-place-marker" title="LaukaaInfo-paikka">🏛️</div>',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+                } else {
+                    destCount++;
+                    const num = props.order || destCount;
+                    icon = L.divIcon({
+                        className: '',
+                        html: `<div class="preview-marker">${num}</div>`,
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14]
+                    });
+                }
+
+                const marker = L.marker([lat, lng], { icon }).addTo(map);
+
+                // Popup-sisältö
+                const titleText = props.title || props.name || 'Kohde';
+                const descText = props.description || (isPlace ? 'LaukaaInfo-paikkatieto' : '');
+                const badgeHtml = isPlace
+                    ? '<span class="preview-popup-badge badge-place">🏛️ LaukaaInfo-paikka</span>'
+                    : `<span class="preview-popup-badge badge-point">📍 Kohde ${props.order || destCount}</span>`;
+
+                const linkHtml = isPlace && props.place_id
+                    ? `<div style="margin-top:8px;"><a href="tietoa-paikasta.html?id=${encodeURIComponent(props.place_id)}" target="_blank" style="display:inline-block;padding:4px 10px;background:#059669;color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;text-decoration:none;">Tutustu paikkaan ↗</a></div>`
+                    : '';
+
+                const popupHtml = `
+                    <div class="preview-popup-content">
+                        ${badgeHtml}
+                        <h4>${titleText}</h4>
+                        ${descText ? `<p>${descText.slice(0, 160)}${descText.length > 160 ? '...' : ''}</p>` : ''}
+                        ${linkHtml}
+                    </div>
+                `;
+                marker.bindPopup(popupHtml);
+            }
+        });
+
+        // Keskitä kartta reittiin ja kohteisiin
+        if (bounds.isValid()) {
+            map.fitBounds(bounds, { padding: [35, 35] });
+        } else {
+            map.setView([62.41, 25.95], 13);
+        }
+
+        // Päivitä otsikkobadge
+        const counts = [];
+        if (destCount > 0) counts.push(`${destCount} kohdetta`);
+        if (placeCount > 0) counts.push(`🏛️ ${placeCount} paikkaa`);
+        $mapBadge.textContent = counts.join(' • ') || 'Reittikartta';
+
+        mapInstance = map;
+        setTimeout(() => map.invalidateSize(), 300);
+    }
+
     // ── Partner-token ────────────────────────────────────────────────
     if (urlPartnerToken) {
         try {
@@ -581,16 +827,22 @@
                 buildAppLinks(urlPartnerToken);
                 $ctaSection.style.display = 'flex';
                 $infoCard.style.display   = 'block';
+                if (pd.route?.route_geojson || route.route_geojson) {
+                    renderPreviewMap(pd.route?.route_geojson || route.route_geojson);
+                }
                 return; // valmis
             }
         } catch (e) { console.warn('Partner token check failed', e); }
     }
 
-    // ── Julkinen reitti — näytä heti CTA ────────────────────────────
+    // ── Julkinen reitti — näytä heti CTA ja esikatselukartta ──────────
     if (isPublicFree) {
         buildAppLinks(urlCode || '');
         $ctaSection.style.display = 'flex';
         $infoCard.style.display   = 'block';
+        if (route.route_geojson) {
+            renderPreviewMap(route.route_geojson);
+        }
         return;
     }
 
@@ -620,6 +872,9 @@
                 buildAppLinks(cleanCode);
                 $ctaSection.style.display = 'flex';
                 $infoCard.style.display   = 'block';
+                if (d.route?.route_geojson || route.route_geojson) {
+                    renderPreviewMap(d.route?.route_geojson || route.route_geojson);
+                }
                 // Tallenna selainistuntoon
                 try { sessionStorage.setItem('route_code_' + routeId, cleanCode); } catch {}
             } else if (d?.rate_limited) {
