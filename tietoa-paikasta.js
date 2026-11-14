@@ -394,8 +394,48 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 5. Yhdistä tiedot poistaen duplikaatit
         const allItemsMap = new Map();
+        const now = new Date();
         
         [...kohteet, ...tarjoukset].forEach(item => {
+            // Statussuodatus: ohitetaan luonnokset, piilotetut, arkistoidut ja poistetut
+            const st = String(item.status || '').toLowerCase().trim();
+            if (st === 'draft' || st === 'hidden' || st === 'rejected' || st === 'archived' || st === 'deleted' || st === 'inactive') {
+                return;
+            }
+            const vis = String(item.visibility || '').toLowerCase().trim();
+            if (vis === 'draft' || vis === 'hidden' || vis === 'private' || vis === 'archived') {
+                return;
+            }
+            if (item.is_published === false || item.is_active === false || item.is_hidden === true) {
+                return;
+            }
+
+            // Vanhentumistarkistus tapahtumille (esim. menneet lounaat/esitykset)
+            if (item.event) {
+                const endStr = item.event.endDate || item.event.end_date;
+                const startStr = item.event.startDate || item.event.start_date;
+                if (endStr && !isNaN(new Date(endStr).getTime())) {
+                    if (new Date(endStr) < now) return; // Tapahtuma on jo päättynyt!
+                } else if (startStr && !isNaN(new Date(startStr).getTime())) {
+                    // Jos vain alkamisaika, pidetään päättyneenä 24h alkamisen jälkeen
+                    if (new Date(new Date(startStr).getTime() + 24 * 3600 * 1000) < now) return;
+                }
+            }
+
+            // Vanhentumistarkistus tarjouksille
+            if (item.offer) {
+                const untilStr = item.offer.validUntil || item.offer.valid_until;
+                if (untilStr && !isNaN(new Date(untilStr).getTime())) {
+                    if (new Date(untilStr) < now) return; // Tarjous on vanhentunut!
+                }
+            }
+
+            // Yleinen expires_at / valid_until
+            const generalExp = item.expires_at || item.valid_until;
+            if (generalExp && !isNaN(new Date(generalExp).getTime())) {
+                if (new Date(generalExp) < now) return;
+            }
+
             const pId = item.place_id || item.placeId || (item.location && (item.location.place_id || item.location.placeId));
             let matches = false;
             if (pId) {
@@ -419,6 +459,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
             if (supabaseOffers) {
                 supabaseOffers.forEach(o => {
+                    const st = String(o.status || '').toLowerCase().trim();
+                    if (st === 'draft' || st === 'hidden' || st === 'rejected' || st === 'archived' || st === 'deleted' || st === 'inactive') return;
+                    if (o.is_published === false || o.is_active === false) return;
+                    if (o.valid_until && !isNaN(new Date(o.valid_until).getTime()) && new Date(o.valid_until) < now) return;
+
                     if (!allItemsMap.has(String(o.id))) {
                         allItemsMap.set(String(o.id), {
                             id: String(o.id),
@@ -2764,6 +2809,11 @@ async function loadEncountersForPlace(place) {
                     
                 if (contentsData) {
                     contentsData.forEach(item => {
+                        const st = String(item.status || '').toLowerCase().trim();
+                        if (st === 'draft' || st === 'hidden' || st === 'rejected' || st === 'archived' || st === 'deleted') return;
+                        const exp = item.metadata?.endDate || item.expires_at;
+                        if (exp && !isNaN(new Date(exp).getTime()) && new Date(exp) < new Date()) return;
+
                         allItems.push({
                             id: item.id,
                             type: item.type === 'EVENT' ? 'event' : item.type === 'OFFER' ? 'offer' : 'content_other',
@@ -2779,6 +2829,10 @@ async function loadEncountersForPlace(place) {
                 
                 if (offersData) {
                     offersData.forEach(item => {
+                        const st = String(item.status || '').toLowerCase().trim();
+                        if (st === 'draft' || st === 'hidden' || st === 'rejected' || st === 'archived' || st === 'deleted') return;
+                        if (item.valid_until && !isNaN(new Date(item.valid_until).getTime()) && new Date(item.valid_until) < new Date()) return;
+
                         allItems.push({
                             id: item.id,
                             type: (item.taxonomy && item.taxonomy.includes('Tapahtuma')) ? 'event' : 'offer',
@@ -4586,12 +4640,34 @@ async function loadWallPostsForPlace(placeData) {
 
         const addPost = (p, matchedPlaceId) => {
             if (!p || !p.id || seenIds.has(p.id)) return;
-            const st = (p.status || '').toLowerCase();
-            if (st === 'cleanup_pending' || st === 'deleted' || st === 'hidden' || st === 'rejected' || st === 'archived') return;
-            const vis = p.visibility;
-            if (vis && vis !== 'public' && vis !== 'approved') return;
+            
+            // 1. Statussuodatus: luonnos (draft), piilotettu (hidden), poistettu, hylätty, arkistoitu
+            const st = (p.status || '').toLowerCase().trim();
+            if (st === 'draft' || st === 'hidden' || st === 'cleanup_pending' || st === 'deleted' || 
+                st === 'rejected' || st === 'archived' || st === 'inactive' || st === 'pending') {
+                return;
+            }
+
+            // 2. Näkyvyys: ainoastaan public tai approved sallitaan
+            const vis = (p.visibility || '').toLowerCase().trim();
+            if (vis && vis !== 'public' && vis !== 'approved') {
+                return;
+            }
+            if (vis === 'draft' || vis === 'hidden' || vis === 'private' || vis === 'code_protected' || vis === 'archived') {
+                return;
+            }
+
+            // 3. Boolean-liput
+            if (p.is_published === false || p.is_active === false || p.is_hidden === true) {
+                return;
+            }
+
+            // 4. Vanhentuminen
             const exp = p.expires_at || p.valid_until;
-            if (exp && new Date(exp) < new Date()) return;
+            if (exp && !isNaN(new Date(exp).getTime()) && new Date(exp) < new Date()) {
+                return;
+            }
+
             seenIds.add(p.id);
             posts.push({ ...p, _matched_place_id: matchedPlaceId || p.place_id || null });
         };
