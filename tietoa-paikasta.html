@@ -1002,19 +1002,18 @@
             
             #intro-section { order: 1; }
             #subplaces-section { order: 2; }
-            #place-themes-v4-section { order: 3; }
-            #map-section { order: 4; }
-            #media-section { order: 5; }
-            #services-main-section { order: 6; }
-            #activities-section { order: 7; }
-            #place-kse-events { order: 8; }
-            #visitor-types-section { order: 9; }
-            #nearby-places-section { order: 10; }
-            #themes-section { order: 11; }
+            #wall-posts-section { order: 3; }
+            #timeline-section { order: 4; }
+            #encounters-section { order: 5; }
+            #media-section { order: 6; }
+            #services-main-section { order: 7; }
+            #activities-section { order: 8; }
+            #place-kse-events { order: 9; }
+            #map-section { order: 10; }
+            #visitor-types-section { order: 11; }
+            #nearby-places-section { order: 12; }
+            #themes-section { order: 13; }
             #events-section { order: 20; }
-            #wall-posts-section { order: 21; }
-            #encounters-section { order: 22; }
-            #timeline-section { order: 23; }
             #memories-section { order: 30; }
             #mixonet-network-banner { order: 40; }
             #mixonet-projects-section { order: 41; }
@@ -1328,14 +1327,56 @@
                     <div id="subplaces-list" class="subplaces-list"></div>
                 </section>
 
-                <!-- V4: Tutustu paikkaan näkökulmista (2-suuntainen silmukka teema.html:ään) -->
-                <section id="place-themes-v4-section" class="content-block" style="display: none;">
+                <!-- 1.6. Seinä-julkaisut tähän paikkaan liittyen (Ajankohtaista täällä) -->
+                <section id="wall-posts-section" class="content-block" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: #059669;" data-icon="material-symbols:forest-outline"></span>
-                        Tutustu paikkaan näkökulmista
+                        <span class="iconify" style="color: #7c3aed;" data-icon="material-symbols:campaign-outline"></span>
+                        Ajankohtaista täällä
                     </h2>
-                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem;">Tarkastele tätä paikkaa eri teemojen ja aihepiirien kautta.</p>
-                    <div id="place-themes-v4-list" style="display: flex; flex-wrap: wrap; gap: 0.6rem;"></div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+                        Organisaatioiden julkaisut ja ilmoitukset tähän paikkaan liittyen.
+                        <a href="seina.html" style="color: var(--color-forest); font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">→ Avaa koko seinä</a>
+                    </p>
+                    <div id="wall-posts-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Filled by loadWallPostsForPlace (tietoa-paikasta.js) -->
+                    </div>
+                </section>
+
+                <!-- 1.7. Havainnot (LostReFound) -->
+                <section class="content-block" id="timeline-section" style="display: none;">
+                    <details id="timeline-details" class="service-accordion">
+                        <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                                <span class="iconify" style="color: #059669;" data-icon="material-symbols:history-toggle-off"></span>
+                                <span>Viimeisimmät havainnot</span>
+                                <span id="timeline-count-badge" style="display: none; font-size: 0.8rem; font-weight: 700; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 50px;"></span>
+                            </h2>
+                            <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
+                        </summary>
+                        <div style="padding: 0 1.25rem 1.25rem;">
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Paikan maastohavainnot aikajärjestyksessä (LostReFound). Aiemmat havainnot säilyvät täällä arkistossa.</p>
+                            <div class="timeline" id="timeline-list">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+                    </details>
+                </section>
+
+                <!-- 1.8. Seinä-ilmoitukset ja aktiiviset ilmoitukset (Haitari) -->
+                <section id="encounters-section" class="content-block" style="display: none;">
+                    <details id="encounters-details" class="service-accordion" open>
+                        <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                                <span class="iconify" data-icon="material-symbols:campaign-outline" style="color: #f59e0b;"></span>
+                                Ilmoitukset ja tarjoukset
+                            </h2>
+                            <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
+                        </summary>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Paikkaan kytketyt ilmoitukset, uutiset, tarjoukset ja palvelupyynnöt.</p>
+                        <div id="encounters-list" style="margin-top: 1rem;">
+                            <!-- Filled by JS -->
+                        </div>
+                    </details>
                 </section>
 
                 <!-- 2. Kuvagalleria -->
@@ -1492,58 +1533,6 @@
                     <div id="events-list">
                         <!-- Filled by JS -->
                     </div>
-                </section>
-
-                <!-- Seinä-julkaisut tähän paikkaan liittyen -->
-                <section id="wall-posts-section" class="content-block" style="display: none;">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: #7c3aed;" data-icon="material-symbols:campaign-outline"></span>
-                        Ajankohtaista täällä
-                    </h2>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
-                        Organisaatioiden julkaisut ja ilmoitukset tähän paikkaan liittyen.
-                        <a href="seina.html" style="color: var(--color-forest); font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">→ Avaa koko seinä</a>
-                    </p>
-                    <div id="wall-posts-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Filled by loadWallPostsForPlace (tietoa-paikasta.js) -->
-                    </div>
-                </section>
-
-                <!-- 8. Seinä-ilmoitukset ja aktiiviset ilmoitukset (Haitari) -->
-                <section id="encounters-section" class="content-block" style="display: none;">
-                    <details id="encounters-details" class="service-accordion" open>
-                        <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
-                            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
-                                <span class="iconify" data-icon="material-symbols:campaign-outline" style="color: #f59e0b;"></span>
-                                Ilmoitukset ja tarjoukset
-                            </h2>
-                            <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
-                        </summary>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Paikkaan kytketyt ilmoitukset, uutiset, tarjoukset ja palvelupyynnöt.</p>
-                        <div id="encounters-list" style="margin-top: 1rem;">
-                            <!-- Filled by JS -->
-                        </div>
-                    </details>
-                </section>
-
-                <!-- 7. Havainnot (Timeline / Haitari oletuksena kiinni) -->
-                <section class="content-block" id="timeline-section" style="display: none;">
-                    <details id="timeline-details" class="service-accordion">
-                        <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
-                            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
-                                <span class="iconify" style="color: #059669;" data-icon="material-symbols:history-toggle-off"></span>
-                                <span>Viimeisimmät havainnot</span>
-                                <span id="timeline-count-badge" style="display: none; font-size: 0.8rem; font-weight: 700; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 50px;"></span>
-                            </h2>
-                            <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
-                        </summary>
-                        <div style="padding: 0 1.25rem 1.25rem;">
-                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Paikan maastohavainnot aikajärjestyksessä (LostReFound). Aiemmat havainnot säilyvät täällä arkistossa.</p>
-                            <div class="timeline" id="timeline-list">
-                                <!-- Filled by JS -->
-                            </div>
-                        </div>
-                    </details>
                 </section>
 
                 <!-- ========================================================
