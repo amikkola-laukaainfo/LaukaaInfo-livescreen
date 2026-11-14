@@ -213,6 +213,23 @@ if (fs.existsSync(wonderinSrc)) {
 
 ---
 
+## 11. Paikkasivun ja yrityskortin dynaaminen malli & mobiilioptiointi (14.11.2026) ⭐
+
+Toteutettu ja dokumentoitu yksityiskohtaisesti erilliseen tiedostoon: [YRITYSKORTTI_JA_PAIKKASIVU_KEHITYS.md](YRITYSKORTTI_JA_PAIKKASIVU_KEHITYS.md).
+
+- **Paikkasivun 3-tasoinen arkkitehtuuri:** 1. Mikä paikka on? $\rightarrow$ 2. Mitä tapahtuu nyt? $\rightarrow$ 3. Mitä voi kokea ja löytää?
+- **Elävä sisältömalli:** Tyhjät osiot piilotetaan automaattisesti, mutta yhteisöllisissä osioissa (kuten maastohavainnot) näytetään aktivoiva osallistumiskutsu ("Ei vielä havaintoja – lisää ensimmäinen!").
+- **Yrityskortin mobiilioptiointi:**
+  - Välilehdet: *Etusivu*, *Tiedot*, *Lisätiedot*, *Paikat*.
+  - Mobiilissa sujuva vaakasuuntainen sivuslider välilehdille (`scroll-snap-type`).
+  - Hillitty hero-yläosa: nimi ja tiedot tasattu vasempaan yläreunaan, kompakti 60px logo oikeassa yläkulmassa.
+  - Laajan esittelyprofiilin järjestys: esittelyteksti ensin, kuvaslideri sen jälkeen.
+- **Tulevaisuusvalmius:**
+  - Valmis omapäivitettävä lohko (`#company-self-service-block`).
+  - Semanttiset `data-wonderin-section` -merkinnät ja `window.getWonderinCompanyData()` -apufunktio Wonderin-yhteisöpisteelle.
+
+---
+
 ## Prioriteettijärjestys
 
 | # | Idea | Työmäärä | Vaikutus |

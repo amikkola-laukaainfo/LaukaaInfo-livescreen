@@ -113,3 +113,4 @@ Yrityskortin visuaalinen ilme yhtenäistettiin vastaamaan `tietoa-paikasta-testi
   - Hakee taustalla tapahtumia 5000 metriin asti ja suodattaa näkymää muistissa välittömästi ilman uutta verkkoviiveestä kärsivää kyselyä.
 - **Viimeisimmät haut (`HakuScreen.kt` & `RecentPlacesManager.kt`):**
   - Hakusivun hakukentän alapuolelle lisätty 5 viimeisimmän avatun kohteen muisti/ehdotuslista pikanappeina.
+
