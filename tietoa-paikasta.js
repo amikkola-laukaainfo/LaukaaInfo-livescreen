@@ -872,14 +872,10 @@ async function loadMemoriesForPlace(place) {
             .order('year', { ascending: true });
 
         if (memoriesError || !memoriesData || memoriesData.length === 0) {
-            memoriesList.innerHTML = `
-                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; text-align: center; color: #64748b;">
-                    <span class="iconify" data-icon="material-symbols:history-edu-outline" style="font-size: 2rem; margin-bottom: 0.5rem; color: #94a3b8;"></span>
-                    <p style="margin: 0; font-weight: 500;">Tälle paikalle ei ole vielä lisätty muistoja tai historiallista aineistoa.</p>
-                </div>
-            `;
+            memoriesSection.style.display = 'none';
             return;
         }
+        memoriesSection.style.display = 'block';
 
         // Hae lähteet erikseen
         const memoryIds = memoriesData.map(m => m.id);
@@ -4518,7 +4514,19 @@ async function loadPlaceObservations(placeInput) {
             .limit(10);
 
         if (error || !obs || obs.length === 0) {
-            section.style.display = 'none';
+            section.style.display = 'block';
+            const badge = document.getElementById('timeline-count-badge');
+            if (badge) badge.style.display = 'none';
+            list.innerHTML = `
+                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 1.5rem; text-align: center; margin-top: 0.5rem;">
+                    <span class="iconify" data-icon="material-symbols:add-location-alt-outline" style="font-size: 2.2rem; color: #0284c7; margin-bottom: 0.5rem; display: inline-block;"></span>
+                    <p style="margin: 0; color: #334155; font-size: 0.95rem; font-weight: 600;">Tälle paikalle ei ole vielä ilmoitettu havaintoja.</p>
+                    <p style="margin: 0.35rem 0 1rem; color: #64748b; font-size: 0.88rem;">Huomasitko jotain luonnossa tai reitillä? Lisää ensimmäinen havainto!</p>
+                    <button class="btn btn-primary" onclick="openLostrefoundModal()" style="display: inline-flex; align-items: center; gap: 0.5rem; margin: 0 auto; padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 10px; background: #0284c7; color: #fff; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(2,132,199,0.25);">
+                        <span class="iconify" data-icon="material-symbols:add-location-alt-outline"></span> Ilmoita havainto
+                    </button>
+                </div>
+            `;
             return;
         }
 
