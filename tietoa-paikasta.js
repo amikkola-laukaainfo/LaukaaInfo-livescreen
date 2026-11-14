@@ -1475,9 +1475,41 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
             svBtn.setAttribute('onclick', `window.open('https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${place.lat},${place.lon}', '_blank')`);
         }
 
-        // Lisätietolinkit (external_links) – popup streetview-napin viereen
-        const externalLinks = place.external_links;
-        if (Array.isArray(externalLinks) && externalLinks.length > 0) {
+        // Lisätietolinkit (external_links) – haetaan places-taulusta, aiProfileData:sta tai websitestä
+        let rawExternalLinks = place.external_links;
+        if ((!rawExternalLinks || (Array.isArray(rawExternalLinks) && rawExternalLinks.length === 0)) && aiProfileData && aiProfileData.external_links) {
+            rawExternalLinks = aiProfileData.external_links;
+        }
+        if (typeof rawExternalLinks === 'string') {
+            try { rawExternalLinks = JSON.parse(rawExternalLinks); } catch (e) { rawExternalLinks = []; }
+        }
+        let externalLinks = Array.isArray(rawExternalLinks) ? rawExternalLinks : [];
+
+        // Fallback: jos places.website on asetettu mutta ei external_links-taulukossa
+        if (place.website && !externalLinks.some(l => (typeof l === 'string' ? l : l.url) === place.website)) {
+            externalLinks.unshift({
+                type: 'OFFICIAL',
+                title: place.name || 'Virallinen verkkosivusto',
+                url: place.website,
+                verified: true
+            });
+        }
+
+        // Normalisoidaan linkit (tukee sekä merkkijonoja että olioita)
+        externalLinks = externalLinks.map(l => {
+            if (!l) return null;
+            if (typeof l === 'string') {
+                return { type: 'OFFICIAL', title: 'Verkkosivusto', url: l, verified: true };
+            }
+            return {
+                type: (l.type || 'OFFICIAL').toUpperCase(),
+                title: l.title || l.name || 'Verkkosivusto',
+                url: l.url || l.href || l.link || '',
+                verified: l.verified !== undefined ? l.verified : true
+            };
+        }).filter(l => l && l.url && /^https?:\/\//i.test(l.url));
+
+        if (externalLinks.length > 0) {
             const typeLabels = {
                 OFFICIAL: { label: 'Virallinen sivusto', icon: 'material-symbols:language', color: '#0284c7' },
                 CATALOG: { label: 'Tietokanta / Luettelo', icon: 'material-symbols:menu-book', color: '#7c3aed' },
@@ -1496,7 +1528,7 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
                 display: none; position: fixed; z-index: 9999;
                 background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
                 box-shadow: 0 16px 48px rgba(0,0,0,0.2); padding: 1.25rem;
-                min-width: 280px; max-width: 340px;
+                min-width: 280px; max-width: min(360px, calc(100vw - 24px));
                 animation: fadeInUp 0.18s ease;
             `;
 
@@ -1534,11 +1566,12 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
                 }
             });
 
-            // Luo nappi streetview-napin viereen
-            const svContainer = svBtn?.parentElement;
-            if (svContainer) {
+            // Luo nappi toimintopainikkeiden sekaan
+            const svContainer = svBtn?.parentElement || document.querySelector('.action-buttons');
+            if (svContainer && !document.getElementById('btn-external-links')) {
                 const extBtn = document.createElement('button');
                 extBtn.id = 'btn-external-links';
+                extBtn.className = 'btn btn-light';
                 extBtn.style.cssText = `
                     display: inline-flex; align-items: center; gap: 0.45rem;
                     padding: 0.5rem 1rem; background: #eff6ff; color: #1d4ed8;
@@ -1546,7 +1579,8 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
                     font-size: 0.82rem; font-weight: 700; transition: all 0.2s;
                     white-space: nowrap;
                 `;
-                extBtn.innerHTML = `<span class="iconify" data-icon="material-symbols:link" style="font-size:1rem;"></span> Lisätietoja`;
+                const btnLabel = externalLinks.length === 1 && externalLinks[0].title ? 'Verkkosivut' : 'Lisätietoja';
+                extBtn.innerHTML = `<span class="iconify" data-icon="material-symbols:link" style="font-size:1rem;"></span> ${btnLabel}`;
                 extBtn.onmouseover = () => { extBtn.style.background = '#dbeafe'; extBtn.style.borderColor = '#93c5fd'; };
                 extBtn.onmouseout = () => { extBtn.style.background = '#eff6ff'; extBtn.style.borderColor = '#bfdbfe'; };
                 extBtn.addEventListener('click', (e) => {
