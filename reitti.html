@@ -129,6 +129,101 @@
             margin: 0 0 1.5rem;
         }
 
+        /* ── Rinnakkaisversioiden valitsin ── */
+        .variants-section {
+            margin: 0 0 1.25rem;
+            display: none;
+        }
+        .variants-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .variants-slider {
+            display: flex;
+            gap: 0.6rem;
+            overflow-x: auto;
+            padding-bottom: 0.4rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        .variants-slider::-webkit-scrollbar {
+            height: 4px;
+        }
+        .variants-slider::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .variant-pill {
+            flex: 0 0 auto;
+            min-width: 130px;
+            max-width: 220px;
+            padding: 0.65rem 0.85rem;
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            user-select: none;
+        }
+        .variant-pill:hover {
+            border-color: #94a3b8;
+            background: #ffffff;
+            transform: translateY(-1px);
+        }
+        .variant-pill.active {
+            background: var(--accent-lt);
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.18);
+        }
+        .variant-pill-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.35rem;
+        }
+        .variant-pill-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .variant-pill.active .variant-pill-title {
+            color: var(--accent-dk);
+        }
+        .variant-pill-badge {
+            font-size: 0.62rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            color: #475569;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .variant-pill.active .variant-pill-badge {
+            background: var(--accent);
+            color: #ffffff;
+        }
+        .variant-pill-meta {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
         /* ── CTA buttons ── */
         .cta-section {
             display: flex;
@@ -506,6 +601,15 @@
             <div class="meta-row" id="meta-row"></div>
             <p class="route-desc" id="route-desc"></p>
 
+            <!-- Rinnakkaisversiot (slider / napit otsikoiden alla ennen CTA-nappeja) -->
+            <div class="variants-section" id="variants-section">
+                <div class="variants-label">
+                    <span class="iconify" data-icon="material-symbols:alt-route"></span>
+                    Valitse kierros:
+                </div>
+                <div class="variants-slider" id="variants-slider"></div>
+            </div>
+
             <!-- CTA-napit (piilotetaan kun reitti on lukittu) -->
             <div class="cta-section" id="cta-section" style="display:none;">
                 <div class="cta-label">Avaa sovelluksessa</div>
@@ -581,6 +685,8 @@
     const $metaRow      = document.getElementById('meta-row');
     const $desc         = document.getElementById('route-desc');
     const $coverWrap    = document.getElementById('cover-wrap');
+    const $variantsSection = document.getElementById('variants-section');
+    const $variantsSlider  = document.getElementById('variants-slider');
     const $ctaSection   = document.getElementById('cta-section');
     const $infoCard     = document.getElementById('info-card');
     const $codeCard     = document.getElementById('code-card');
@@ -620,52 +726,31 @@
     // — kun v2.1-migraatio on ajettu, tänne tulee RPC-kutsu
     const { data: route, error } = await sb
         .from('routes')
-        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer, route_geojson')
+        .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer, route_geojson, variant_group_id, variant_label, variant_sort_order')
         .eq('id', routeId)
         .maybeSingle();
 
     if (error || !route) { showError('Reittiä ei löydy tai se ei ole julkinen.'); return; }
 
-    // ── Täytä perusmetadata ──────────────────────────────────────────
-    const isPublicFree = route.visibility === 'public'
-                      && route.access_type === 'PUBLIC'
-                      && (route.commercial_type === 'FREE' || !route.commercial_type);
+    let currentRoute = route;
+    let groupVariants = [];
 
-    const isLocked = route.access_type === 'CODE' || !isPublicFree;
+    // Haetaan saman ryhmän rinnakkaisversiot, jos variant_group_id on olemassa
+    if (route.variant_group_id) {
+        try {
+            const { data: vList } = await sb
+                .from('routes')
+                .select('id, title, description, cover_image, distance_meters, category, experience_type, access_type, commercial_type, visibility, places:places!routes_place_id_fkey(name), virtual_enabled, producer_organization_id, content_producer, route_geojson, variant_group_id, variant_label, variant_sort_order')
+                .eq('variant_group_id', route.variant_group_id)
+                .order('variant_sort_order', { ascending: true });
 
-    const title   = route.title   || 'Elämyspolku';
-    const desc    = route.description || '';
-    const badgeText = route.category || (route.experience_type === 'MEMORY' ? 'Muistokartta' : 'Elämyspolku');
-
-    $pageTitle.textContent = `${title} – LaukaaInfo`;
-    $ogTitle.setAttribute('content', title);
-    $ogDesc.setAttribute('content', desc.slice(0, 160));
-    $badge.textContent = badgeText;
-    $title.textContent = title;
-    $desc.textContent  = desc;
-
-    // Kansikuva
-    if (route.cover_image) {
-        const img = document.createElement('img');
-        img.className = 'hero-cover';
-        img.src = route.cover_image;
-        img.alt = title;
-        $ogImage.setAttribute('content', route.cover_image);
-        $coverWrap.innerHTML = '';
-        $coverWrap.appendChild(img);
-    } else {
-        document.getElementById('cover-placeholder').textContent = '🌿';
-        document.getElementById('cover-placeholder').classList.remove('skeleton');
+            if (vList && vList.length > 1) {
+                groupVariants = vList.filter(v => v.visibility === 'public' || v.id === route.id);
+            }
+        } catch (e) {
+            console.warn('Virhe rinnakkaisversioiden haussa:', e);
+        }
     }
-
-    // Meta-rivi
-    const metas = [];
-    const placeName = route.places?.name || '';
-    if (placeName) metas.push(`<span><span class="iconify" data-icon="material-symbols:location-on"></span>${placeName}</span>`);
-    if (route.distance_meters) metas.push(`<span><span class="iconify" data-icon="material-symbols:route"></span>${(route.distance_meters / 1000).toFixed(1)} km</span>`);
-    if (route.virtual_enabled) metas.push(`<span><span class="iconify" data-icon="material-symbols:chair"></span>Nojatuolimatka</span>`);
-    if (route.content_producer) metas.push(`<span><span class="iconify" data-icon="material-symbols:person"></span>${route.content_producer}</span>`);
-    $metaRow.innerHTML = metas.join('');
 
     // ── CTA-linkit ───────────────────────────────────────────────────
     function buildAppLinks(code) {
@@ -678,6 +763,129 @@
 
         $btnAndroid.href = intentUrl;
         $btnWeb.href     = webUrl;
+    }
+
+    // ── Reitin ja sen metadatan esittäminen ───────────────────────────
+    function displayRoute(r, code) {
+        currentRoute = r;
+        routeId = r.id;
+
+        const isPublicFree = r.visibility === 'public'
+                          && r.access_type === 'PUBLIC'
+                          && (r.commercial_type === 'FREE' || !r.commercial_type);
+
+        const isLocked = r.access_type === 'CODE' || !isPublicFree;
+
+        const title   = r.title   || 'Elämyspolku';
+        const desc    = r.description || '';
+        const badgeText = r.category || (r.experience_type === 'MEMORY' ? 'Muistokartta' : r.experience_type === 'STORYMAP' ? 'Tarinakartta' : 'Elämyspolku');
+
+        $pageTitle.textContent = `${title} – LaukaaInfo`;
+        $ogTitle.setAttribute('content', title);
+        $ogDesc.setAttribute('content', desc.slice(0, 160));
+        $badge.textContent = badgeText;
+        $title.textContent = title;
+        $desc.textContent  = desc;
+
+        // Kansikuva
+        if (r.cover_image) {
+            const img = document.createElement('img');
+            img.className = 'hero-cover';
+            img.src = r.cover_image;
+            img.alt = title;
+            $ogImage.setAttribute('content', r.cover_image);
+            $coverWrap.innerHTML = '';
+            $coverWrap.appendChild(img);
+        } else {
+            $coverWrap.innerHTML = '<div class="hero-cover-placeholder" id="cover-placeholder">🌿</div>';
+        }
+
+        // Meta-rivi
+        const metas = [];
+        const placeName = r.places?.name || '';
+        if (placeName) metas.push(`<span><span class="iconify" data-icon="material-symbols:location-on"></span>${placeName}</span>`);
+        if (r.distance_meters) metas.push(`<span><span class="iconify" data-icon="material-symbols:route"></span>${(r.distance_meters / 1000).toFixed(1)} km</span>`);
+        if (r.virtual_enabled) metas.push(`<span><span class="iconify" data-icon="material-symbols:chair"></span>Nojatuolimatka</span>`);
+        if (r.content_producer) metas.push(`<span><span class="iconify" data-icon="material-symbols:person"></span>${r.content_producer}</span>`);
+        $metaRow.innerHTML = metas.join('');
+
+        buildAppLinks(code);
+
+        // Päivitä aktiivinen tila varianttinapeissa
+        if ($variantsSlider) {
+            Array.from($variantsSlider.children).forEach(child => {
+                child.classList.toggle('active', child.dataset.routeId === r.id);
+            });
+        }
+
+        // URL-päivitys ilman sivulatausta
+        try {
+            const newUrl = new URL(location.href);
+            newUrl.searchParams.set('id', r.id);
+            history.replaceState(null, '', newUrl.toString());
+        } catch (e) {}
+
+        // Käsitellään tilan mukaiset näkymät
+        if (isPublicFree || (code && !isLocked)) {
+            $codeCard.style.display = 'none';
+            $ctaSection.style.display = 'flex';
+            $infoCard.style.display   = 'block';
+            if (r.route_geojson) {
+                renderPreviewMap(r.route_geojson);
+            } else {
+                const $mapCard = document.getElementById('map-card');
+                if ($mapCard) $mapCard.style.display = 'none';
+            }
+        } else {
+            $codeCard.style.display = 'block';
+            $ctaSection.style.display = 'none';
+            $infoCard.style.display   = 'none';
+            const $mapCard = document.getElementById('map-card');
+            if ($mapCard) $mapCard.style.display = 'none';
+        }
+    }
+
+    // ── Renderöidään rinnakkaisversioiden slider (jos > 1 versio) ──────
+    if (groupVariants.length > 1) {
+        $variantsSection.style.display = 'block';
+        $variantsSlider.innerHTML = '';
+        groupVariants.forEach(v => {
+            const pill = document.createElement('button');
+            pill.type = 'button';
+            pill.className = 'variant-pill' + (v.id === currentRoute.id ? ' active' : '');
+            pill.dataset.routeId = v.id;
+
+            const vTitle = v.variant_label || (v.experience_type === 'STORYMAP' ? 'Tarinakartta' : v.title);
+            const badgeText = v.experience_type === 'STORYMAP'
+                ? 'Tarinakartta'
+                : (v.variant_sort_order === 0 ? 'Suositus' : 'Kierros');
+
+            let metaText = '';
+            if (v.distance_meters) {
+                metaText = (v.distance_meters / 1000).toFixed(1) + ' km';
+            } else if (v.experience_type === 'STORYMAP') {
+                metaText = 'Virtuaalitarina';
+            } else {
+                metaText = 'Elämyskierros';
+            }
+
+            pill.innerHTML = `
+                <div class="variant-pill-top">
+                    <span class="variant-pill-title">${vTitle}</span>
+                    <span class="variant-pill-badge">${badgeText}</span>
+                </div>
+                <div class="variant-pill-meta">${metaText}</div>
+            `;
+
+            pill.addEventListener('click', () => {
+                if (currentRoute.id === v.id) return;
+                displayRoute(v, urlCode || '');
+            });
+
+            $variantsSlider.appendChild(pill);
+        });
+    } else {
+        $variantsSection.style.display = 'none';
     }
 
     // ── Esikatselukartta (Nojatuoliversio) ───────────────────────────
@@ -802,6 +1010,9 @@
         setTimeout(() => map.invalidateSize(), 300);
     }
 
+    // ── Alustava esitys ──────────────────────────────────────────────
+    displayRoute(route, urlCode || '');
+
     // ── Partner-token ────────────────────────────────────────────────
     if (urlPartnerToken) {
         try {
@@ -827,27 +1038,13 @@
                 buildAppLinks(urlPartnerToken);
                 $ctaSection.style.display = 'flex';
                 $infoCard.style.display   = 'block';
-                if (pd.route?.route_geojson || route.route_geojson) {
-                    renderPreviewMap(pd.route?.route_geojson || route.route_geojson);
+                if (pd.route?.route_geojson || currentRoute.route_geojson) {
+                    renderPreviewMap(pd.route?.route_geojson || currentRoute.route_geojson);
                 }
                 return; // valmis
             }
         } catch (e) { console.warn('Partner token check failed', e); }
     }
-
-    // ── Julkinen reitti — näytä heti CTA ja esikatselukartta ──────────
-    if (isPublicFree) {
-        buildAppLinks(urlCode || '');
-        $ctaSection.style.display = 'flex';
-        $infoCard.style.display   = 'block';
-        if (route.route_geojson) {
-            renderPreviewMap(route.route_geojson);
-        }
-        return;
-    }
-
-    // ── Lukittu reitti — näytä koodikenttä ──────────────────────────
-    $codeCard.style.display = 'block';
 
     // Jos URL:ssä on koodi, kokeile automaattisesti
     if (urlCode) {
@@ -872,8 +1069,8 @@
                 buildAppLinks(cleanCode);
                 $ctaSection.style.display = 'flex';
                 $infoCard.style.display   = 'block';
-                if (d.route?.route_geojson || route.route_geojson) {
-                    renderPreviewMap(d.route?.route_geojson || route.route_geojson);
+                if (d.route?.route_geojson || currentRoute.route_geojson) {
+                    renderPreviewMap(d.route?.route_geojson || currentRoute.route_geojson);
                 }
                 // Tallenna selainistuntoon
                 try { sessionStorage.setItem('route_code_' + routeId, cleanCode); } catch {}
