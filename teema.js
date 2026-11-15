@@ -1079,15 +1079,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                             .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null');
 
                         // sbPlaces on alustettu rivillä 142 – ei ReferenceError
-                        sbPlaces = (sbPlaceData || []).map(p => ({
-                            id: p.place_id,
-                            name: p.name || p.canonical_name,
-                            type: p.type,
-                            description: p.description,
-                            municipality: p.municipality,
-                            isSupabase: true,
-                            source: 'place_tags'
-                        }));
+                        // Deduplikoi canonical_name-perusteella: sama paikka voi olla Supabasessa useampana rivinä
+                        const seenCanonicals = new Set();
+                        const seenNames = new Set();
+                        sbPlaces = (sbPlaceData || [])
+                            .map(p => ({
+                                id: p.place_id,
+                                name: p.name || p.canonical_name,
+                                canonical_name: p.canonical_name,
+                                type: p.type,
+                                description: p.description,
+                                municipality: p.municipality,
+                                isSupabase: true,
+                                source: 'place_tags'
+                            }))
+                            .filter(p => {
+                                // Suosi ensimmäistä osumaa; muut joilla sama canonical_name tai nimi ohitetaan
+                                const canonKey = (p.canonical_name || '').trim().toLowerCase();
+                                const nameKey = (p.name || '').trim().toLowerCase();
+                                if (canonKey && seenCanonicals.has(canonKey)) return false;
+                                if (nameKey && seenNames.has(nameKey)) return false;
+                                if (canonKey) seenCanonicals.add(canonKey);
+                                if (nameKey) seenNames.add(nameKey);
+                                return true;
+                            });
                     }
 
                     if (taggedEntities && taggedEntities.length > 0) {
@@ -1365,8 +1380,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         let matchedPlaceNodes = matchedPlaces.filter(p => (p.type || '').toLowerCase() !== 'event');
         
         // Lisää entity_tags-pohjaiset Supabase-paikat (ei duplikaatteja)
+        // Tarkistus 1: UUID-täsmäys (existing.id === p.id)
+        // Tarkistus 2: canonical_name-täsmäys (sama paikka eri UUID:lla)
+        // Tarkistus 3: normalisoitu nimi-täsmäys
         sbPlaces.forEach(p => {
-            if (!matchedPlaceNodes.find(existing => existing.id === p.id || existing.id === p.place_id)) {
+            const pCanon = (p.canonical_name || '').trim().toLowerCase();
+            const pName  = (p.name || '').trim().toLowerCase();
+            const isDupe = matchedPlaceNodes.find(existing => {
+                if (existing.id === p.id || existing.id === p.place_id) return true;
+                if (pCanon) {
+                    const eCanon = (existing.canonical_name || '').trim().toLowerCase();
+                    if (eCanon && eCanon === pCanon) return true;
+                }
+                if (pName) {
+                    const eName = (existing.name || '').trim().toLowerCase();
+                    if (eName && eName === pName) return true;
+                }
+                return false;
+            });
+            if (!isDupe) {
                 matchedPlaceNodes.push(p);
             }
         });
