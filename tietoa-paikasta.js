@@ -1254,6 +1254,53 @@ async function loadVirtualSpaceForPlace(place) {
                     iframe.src = targetSrc;
                 }
 
+                // Päivitetään frame-containerin koko orientaation mukaan
+                const frameContainer = document.getElementById('virtual-space-frame-container');
+                if (frameContainer) {
+                    const isPortrait = space.orientation === 'portrait';
+                    if (isPortrait) {
+                        // Pystysuunta: kapea ja pitkä, sopii mobiilinäytölle
+                        frameContainer.style.height = '';
+                        frameContainer.style.aspectRatio = '9/16';
+                        frameContainer.style.maxWidth = '460px';
+                        frameContainer.style.maxHeight = '85vh';
+                        frameContainer.style.margin = '0 auto';
+                    } else {
+                        // Vaakasuunta (oletus)
+                        frameContainer.style.height = '520px';
+                        frameContainer.style.aspectRatio = '';
+                        frameContainer.style.maxWidth = '';
+                        frameContainer.style.maxHeight = '';
+                        frameContainer.style.margin = '';
+                    }
+                }
+
+                // Kuunnellaan iframen lähettämiä viestejä todellisesta kuvasuhteesta (toimii pystykuvilla automaattisesti)
+                if (!window.__virtualSpaceMsgBound) {
+                    window.__virtualSpaceMsgBound = true;
+                    window.addEventListener('message', (ev) => {
+                        if (!ev.data) return;
+                        if (ev.data.type === 'VIRTUAL_SPACE_READY' || ev.data.type === 'VIRTUAL_SPACE_ASPECT_RATIO') {
+                            const fc = document.getElementById('virtual-space-frame-container');
+                            if (!fc) return;
+                            const isP = ev.data.orientation === 'portrait' || (ev.data.aspectRatio && ev.data.aspectRatio < 0.95);
+                            if (isP) {
+                                fc.style.height = '';
+                                fc.style.aspectRatio = ev.data.aspectRatio ? `${ev.data.aspectRatio}` : '9/16';
+                                fc.style.maxWidth = '460px';
+                                fc.style.maxHeight = '85vh';
+                                fc.style.margin = '0 auto';
+                            } else {
+                                fc.style.height = '520px';
+                                fc.style.aspectRatio = '';
+                                fc.style.maxWidth = '';
+                                fc.style.maxHeight = '';
+                                fc.style.margin = '';
+                            }
+                        }
+                    });
+                }
+
                 // Päivitetään välilehtien aktiivisuuskorostus
                 if (tabsContainer) {
                     Array.from(tabsContainer.children).forEach((btn) => {
