@@ -1166,6 +1166,100 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
     return results;
 }
 
+/**
+ * Lataa paikkaan kytketyn Paikkastudion virtuaalitilan / opastaulun (jos olemassa)
+ * ja näyttää interaktiivisen upotuksen tietoa-paikasta.html sivulla.
+ */
+async function loadVirtualSpaceForPlace(place) {
+    const section = document.getElementById('virtual-space-section');
+    const iframe = document.getElementById('virtual-space-iframe');
+    const titleEl = document.getElementById('virtual-space-title');
+    const descEl = document.getElementById('virtual-space-desc');
+    const fsBtn = document.getElementById('virtual-space-fullscreen-btn');
+
+    if (!section || !iframe) return;
+
+    if (!place) {
+        section.style.display = 'none';
+        iframe.src = '';
+        return;
+    }
+
+    const PAIKKASTUDIO_BASE = 'https://laukaainfo-paikkastudio.web.app';
+    const STUDIO_SB_URL = 'https://iesfqckxotgsqcedvgea.supabase.co';
+    const STUDIO_SB_KEY = 'sb_publishable_QYmlPFpXID_f6xhYZP9TZg_9IAvBzmT';
+
+    const placeId = place.id || '';
+    const placeCode = place.place_id || '';
+    const placeName = (place.name || place.canonical_name || '').toLowerCase();
+
+    try {
+        const conds = [];
+        if (placeId) conds.push(`place_id.eq.${encodeURIComponent(placeId)}`);
+        if (placeCode && placeCode !== placeId) conds.push(`place_id.eq.${encodeURIComponent(placeCode)}`);
+
+        let queryUrl = `${STUDIO_SB_URL}/rest/v1/digital_spaces?select=id,slug,title,description,place_id,cover_image_url,status&status=eq.published`;
+        if (conds.length > 0) {
+            queryUrl += `&or=(${conds.join(',')})`;
+        } else {
+            section.style.display = 'none';
+            return;
+        }
+
+        const resp = await fetch(queryUrl, {
+            headers: {
+                'apikey': STUDIO_SB_KEY,
+                'Authorization': `Bearer ${STUDIO_SB_KEY}`
+            }
+        });
+
+        let data = [];
+        if (resp.ok) {
+            data = await resp.json();
+        }
+
+        // Varahaku: jos ei suoraa ID-osumaa, mutta paikka liittyy Haarlaan
+        if ((!data || data.length === 0) && placeName.includes('haarla')) {
+            const fallbackResp = await fetch(
+                `${STUDIO_SB_URL}/rest/v1/digital_spaces?select=id,slug,title,description,place_id,cover_image_url,status&status=eq.published&slug=eq.haarla-konttori`,
+                {
+                    headers: {
+                        'apikey': STUDIO_SB_KEY,
+                        'Authorization': `Bearer ${STUDIO_SB_KEY}`
+                    }
+                }
+            );
+            if (fallbackResp.ok) {
+                data = await fallbackResp.json();
+            }
+        }
+
+        if (Array.isArray(data) && data.length > 0) {
+            const space = data[0];
+            if (titleEl) {
+                titleEl.textContent = space.title || 'Virtuaalinen tila & opastaulu';
+            }
+            if (descEl) {
+                descEl.textContent = space.description || 'Tutki kohteen digitaalista ympäristöä, esineitä ja arkistomateriaaleja.';
+            }
+            if (fsBtn) {
+                fsBtn.href = `${PAIKKASTUDIO_BASE}/space/${space.slug}`;
+            }
+            const targetSrc = `${PAIKKASTUDIO_BASE}/embed/${space.slug}`;
+            if (iframe.src !== targetSrc) {
+                iframe.src = targetSrc;
+            }
+            section.style.display = 'block';
+        } else {
+            section.style.display = 'none';
+            iframe.src = '';
+        }
+    } catch (err) {
+        console.warn('Paikkastudio virtuaalitilan haku epäonnistui:', err);
+        section.style.display = 'none';
+    }
+}
+
 async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = [], allCompanies = []) {
     const spinner = document.getElementById('loading-spinner');
     if (spinner) spinner.style.display = 'none';
@@ -1209,6 +1303,9 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
 
     const descEl = document.getElementById('display-description');
     if (descEl) descEl.innerHTML = descHtml;
+
+    // Lataa Paikkastudion virtuaalitila jos kohteelle on kytketty sellainen
+    loadVirtualSpaceForPlace(place);
 
     // Tilastot
     const effectiveCompanies = (Array.isArray(scoredCompanies) && scoredCompanies.length > 0)

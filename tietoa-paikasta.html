@@ -1315,6 +1315,28 @@
                     </div>
                 </section>
 
+                <!-- 1.2. Virtuaalinen tilakerros / Digitaalinen opastaulu (Paikkastudio) -->
+                <section id="virtual-space-section" class="content-block" style="display: none;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                            <span class="iconify" data-icon="material-symbols:view-in-ar" style="color: #d97706; font-size: 1.5rem;"></span>
+                            <span id="virtual-space-title">Virtuaalinen tila & opastaulu</span>
+                        </h2>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 0.72rem; font-weight: 700; background: rgba(217, 119, 6, 0.12); color: #d97706; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;">INTERAKTIIVINEN</span>
+                            <a id="virtual-space-fullscreen-btn" href="#" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; font-weight: 600; color: #d97706; text-decoration: none; padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(217,119,6,0.35); transition: background 0.15s;" onmouseover="this.style.background='rgba(217,119,6,0.1)'" onmouseout="this.style.background='transparent'">
+                                Avaa koko ruudulla ↗
+                            </a>
+                        </div>
+                    </div>
+                    <p id="virtual-space-desc" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0; margin-bottom: 1rem;">
+                        Tutki kohteen digitaalista ympäristöä, esineitä ja arkistomateriaaleja.
+                    </p>
+                    <div id="virtual-space-frame-container" style="width: 100%; height: 520px; border-radius: 14px; overflow: hidden; background: #0f0a05; border: 1px solid rgba(217, 119, 6, 0.25); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+                        <iframe id="virtual-space-iframe" src="" style="width: 100%; height: 100%; border: none;" allow="fullscreen; accelerometer; gyroscope"></iframe>
+                    </div>
+                </section>
+
                 <!-- 1.5. Alakohteet (näytetään vain pääkohteilla, joilla on child-paikkoja) -->
                 <section id="subplaces-section" class="content-block" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
