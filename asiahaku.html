@@ -432,6 +432,7 @@
                 { id: '2026-01', text: 'Kokous tammikuu 2026' }
             ],
             'kunnanvaltuusto': [
+                { id: '2026-11-v', text: 'Marraskuu 2026 -kokous', active: true },
                 { id: '2026-03-v', text: 'Valtuusto maaliskuu 2026', active: true },
                 { id: '2025-all-v', text: 'Vuoden 2025 kokoukset', active: true }
             ],
@@ -484,6 +485,8 @@
                 // Näytetään sivu1.html Kunnanhallituksen helmikuun 2026 kokoukselle
                 if (category === 'kunnanhallitus' && issue === '2026-02') {
                     iframe.src = 'logica/sivu1.html';
+                } else if (category === 'kunnanvaltuusto' && issue === '2026-11-v') {
+                    iframe.src = 'logica/16112026-kokous.html';
                 } else if (category === 'kunnanvaltuusto' && issue === '2026-03-v') {
                     iframe.src = 'logica/valtuusto232026.html';
                 } else if (category === 'kunnanvaltuusto' && issue === '2025-all-v') {
@@ -539,11 +542,11 @@
                     }, 100);
                 }
             } else {
-                // Oletusvalinta: Talousarvioehdotus 2027
-                categorySelect.value = 'kunnan-talous';
+                // Oletusvalinta: Marraskuu 2026 -kokous (kunnanvaltuusto)
+                categorySelect.value = 'kunnanvaltuusto';
                 categorySelect.dispatchEvent(new Event('change'));
                 setTimeout(() => {
-                    issueSelect.value = 'talousarvio2027';
+                    issueSelect.value = '2026-11-v';
                     updateEmbed();
                 }, 100);
             }
