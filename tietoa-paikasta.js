@@ -1198,7 +1198,7 @@ async function loadVirtualSpaceForPlace(place) {
         if (placeId) conds.push(`place_id.eq.${encodeURIComponent(placeId)}`);
         if (placeCode && placeCode !== placeId) conds.push(`place_id.eq.${encodeURIComponent(placeCode)}`);
 
-        let queryUrl = `${STUDIO_SB_URL}/rest/v1/digital_spaces?select=id,slug,title,description,place_id,cover_image_url,status&status=eq.published`;
+        let queryUrl = `${STUDIO_SB_URL}/rest/v1/digital_spaces?select=id,slug,title,description,place_id,cover_image_url,status,created_at,updated_at&status=eq.published&order=updated_at.desc`;
         if (conds.length > 0) {
             queryUrl += `&or=(${conds.join(',')})`;
         } else {
@@ -1221,7 +1221,7 @@ async function loadVirtualSpaceForPlace(place) {
         // Varahaku: jos ei suoraa ID-osumaa, mutta paikka liittyy Haarlaan
         if ((!data || data.length === 0) && placeName.includes('haarla')) {
             const fallbackResp = await fetch(
-                `${STUDIO_SB_URL}/rest/v1/digital_spaces?select=id,slug,title,description,place_id,cover_image_url,status&status=eq.published&slug=eq.haarla-konttori`,
+                `${STUDIO_SB_URL}/rest/v1/digital_spaces?select=id,slug,title,description,place_id,cover_image_url,status,created_at,updated_at&status=eq.published&slug=eq.haarla-konttori`,
                 {
                     headers: {
                         'apikey': STUDIO_SB_KEY,
@@ -1235,21 +1235,63 @@ async function loadVirtualSpaceForPlace(place) {
         }
 
         if (Array.isArray(data) && data.length > 0) {
-            const space = data[0];
-            if (titleEl) {
-                titleEl.textContent = space.title || 'Virtuaalinen tila & opastaulu';
-            }
-            if (descEl) {
-                descEl.textContent = space.description || 'Tutki kohteen digitaalista ympäristöä, esineitä ja arkistomateriaaleja.';
-            }
-            if (fsBtn) {
-                fsBtn.href = `${PAIKKASTUDIO_BASE}/space/${space.slug}`;
-            }
-            const targetSrc = `${PAIKKASTUDIO_BASE}/embed/${space.slug}`;
-            if (iframe.src !== targetSrc) {
-                iframe.src = targetSrc;
-            }
             section.style.display = 'block';
+
+            const tabsContainer = document.getElementById('virtual-space-tabs');
+
+            function activateSpace(space) {
+                if (titleEl) {
+                    titleEl.textContent = space.title || 'Virtuaalinen tila & opastaulu';
+                }
+                if (descEl) {
+                    descEl.textContent = space.description || 'Tutki kohteen digitaalista ympäristöä, esineitä ja arkistomateriaaleja.';
+                }
+                if (fsBtn) {
+                    fsBtn.href = `${PAIKKASTUDIO_BASE}/space/${space.slug}`;
+                }
+                const targetSrc = `${PAIKKASTUDIO_BASE}/embed/${space.slug}`;
+                if (iframe.src !== targetSrc) {
+                    iframe.src = targetSrc;
+                }
+
+                // Päivitetään välilehtien aktiivisuuskorostus
+                if (tabsContainer) {
+                    Array.from(tabsContainer.children).forEach((btn) => {
+                        const isActive = btn.dataset.slug === space.slug;
+                        btn.style.background = isActive ? '#d97706' : '#f8fafc';
+                        btn.style.color = isActive ? '#ffffff' : '#475569';
+                        btn.style.borderColor = isActive ? '#b45309' : '#e2e8f0';
+                        btn.style.fontWeight = isActive ? '700' : '600';
+                        btn.style.boxShadow = isActive ? '0 2px 6px rgba(217,119,6,0.25)' : 'none';
+                    });
+                }
+            }
+
+            // Jos samaan kohteeseen on kytketty useampi virtuaalitila, näytetään välilehdet/kytkimet
+            if (tabsContainer) {
+                if (data.length > 1) {
+                    tabsContainer.style.display = 'flex';
+                    tabsContainer.innerHTML = data.map((sp, idx) => `
+                        <button type="button" data-slug="${sp.slug}" style="display: inline-flex; align-items: center; gap: 0.45rem; padding: 6px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1px solid #e2e8f0; background: #f8fafc; color: #475569; transition: all 0.15s ease; white-space: nowrap; outline: none;" onmouseover="if(this.dataset.slug !== '${data[0].slug}'){this.style.background='#f1f5f9';}" onmouseout="if(!this.style.color.includes('255')){this.style.background='#f8fafc';}">
+                            <span class="iconify" data-icon="material-symbols:view-in-ar" style="font-size: 1rem;"></span>
+                            <span>${sp.title || `Virtuaalitila ${idx + 1}`}</span>
+                        </button>
+                    `).join('');
+
+                    data.forEach((sp) => {
+                        const btn = tabsContainer.querySelector(`[data-slug="${sp.slug}"]`);
+                        if (btn) {
+                            btn.addEventListener('click', () => activateSpace(sp));
+                        }
+                    });
+                } else {
+                    tabsContainer.style.display = 'none';
+                    tabsContainer.innerHTML = '';
+                }
+            }
+
+            // Aktivoidaan oletuksena ensimmäinen tila
+            activateSpace(data[0]);
         } else {
             section.style.display = 'none';
             iframe.src = '';
