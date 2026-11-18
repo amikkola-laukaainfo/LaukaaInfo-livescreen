@@ -94,7 +94,7 @@
                             <li><a href="${base}kohdekartta.html">Kaikki kohteet kartalla</a></li>
                         </ul>
                     </li>
-                    <li><a href="${base}kategoria.html">Kategoriat</a></li>
+                    <li><a href="${base}kategoria.html">Toimialat</a></li>
                     <li><a href="${base}index.html#search-section">Yleishaku</a></li>
                     <li><a href="${base}pikahaku.html">Pikahaku</a></li>
                     <li><a href="${base}index.html#service-needs">Verkostohaku</a></li>
@@ -139,7 +139,6 @@
                     <li><a href="${base}kadonneet.html">Löytökori</a></li>
                     <li><a href="${base}havainnot.html">Havainnot alueelta</a></li>
                     <li><a href="${base}alueet.html">Paikat alueella</a></li>
-                    <li><a href="${base}kategoria.html">Teemat alueella</a></li>
                     <li><a href="${base}kohdekortit.html?filter=project">Ideat ja projektit alueella</a></li>
                 </ul>
             </li>
@@ -149,7 +148,6 @@
                     <li><a href="${base}lisaa-yritys.html">Lisää yritys</a></li>
                     <li><a href="${base}ilmoittaudu.html">Julkaisukanavat</a></li>
                     <li><a href="${base}kauppa.html">Lisätietoa &amp; Julkaisupaketit</a></li>
-                    <li><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-weight: 600;">Kilpailutus</a></li>
                     <li><a href="${base}palvelun-esittely.html">Tietoa palvelusta ja yhteystiedot</a></li>
                 </ul>
             </li>
@@ -176,7 +174,7 @@
                             <li><a href="${base}kohdekartta.html" class="sidebar-link">Kaikki kohteet kartalla</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item"><a href="${base}kategoria.html" class="sidebar-link">Kategoriat</a></li>
+                    <li class="menu-item"><a href="${base}kategoria.html" class="sidebar-link">Toimialat</a></li>
                     <li class="menu-item"><a href="${base}index.html#search-section" class="sidebar-link">Yleishaku</a></li>
                     <li class="menu-item"><a href="${base}pikahaku.html" class="sidebar-link">Pikahaku</a></li>
                     <li class="menu-item"><a href="${base}index.html#service-needs" class="sidebar-link">Verkostohaku</a></li>
@@ -221,7 +219,6 @@
                     <li class="menu-item"><a href="${base}kadonneet.html" class="sidebar-link">Löytökori</a></li>
                     <li class="menu-item"><a href="${base}havainnot.html" class="sidebar-link">Havainnot alueelta</a></li>
                     <li class="menu-item"><a href="${base}alueet.html" class="sidebar-link">Paikat alueella</a></li>
-                    <li class="menu-item"><a href="${base}kategoria.html" class="sidebar-link">Teemat alueella</a></li>
                     <li class="menu-item"><a href="${base}kohdekortit.html?filter=project" class="sidebar-link">Ideat ja projektit alueella</a></li>
                 </ul>
             </div>
@@ -231,7 +228,6 @@
                     <li class="menu-item"><a href="${base}lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
                     <li class="menu-item"><a href="${base}ilmoittaudu.html" class="sidebar-link">Julkaisukanavat</a></li>
                     <li class="menu-item"><a href="${base}kauppa.html" class="sidebar-link">Lisätietoa &amp; Julkaisupaketit</a></li>
-                    <li class="menu-item"><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" rel="noopener noreferrer" class="sidebar-link" style="color: #0284c7; font-weight: 600;">Kilpailutus</a></li>
                     <li class="menu-item"><a href="${base}palvelun-esittely.html" class="sidebar-link">Tietoa palvelusta ja yhteystiedot</a></li>
                 </ul>
             </div>

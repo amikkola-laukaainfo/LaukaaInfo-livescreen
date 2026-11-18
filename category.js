@@ -102,7 +102,7 @@
         villageName = friendlyRegions[selectedRegion] || '';
         let displayTitle = '';
         if (isAll) {
-            displayTitle = villageName ? `Teemat & Kategoriat - ${villageName}` : 'Teemat & Kategoriat';
+            displayTitle = villageName ? `Teemat & toimialat - ${villageName}` : 'Teemat & toimialat';
             if (!document.body.dataset.category) {
                 const nameEl = document.getElementById('category-name');
                 if (nameEl) nameEl.textContent = displayTitle;
