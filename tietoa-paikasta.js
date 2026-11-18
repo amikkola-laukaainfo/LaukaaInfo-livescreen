@@ -4590,7 +4590,8 @@ async function loadKseEventsForPlace(place, otherRelatedItems = []) {
                 locName: place.name || '',
                 url: url,
                 image: img,
-                description: k.description || ''
+                description: k.description || '',
+                startTime: k.event?.startDate || k.offer?.validUntil || ''
             };
         });
 
@@ -4599,8 +4600,16 @@ async function loadKseEventsForPlace(place, otherRelatedItems = []) {
             if (otherRelContainer) otherRelContainer.style.display = 'none';
         }
 
-        // Kohdekortti nostetaan listan kärkeen
+        // Yhdistetään ja järjestetään aikajärjestykseen
         const allEvents = [...kohdeEntries, ...matched];
+        allEvents.sort((a, b) => {
+            const ta = a.startTime ? new Date(a.startTime).getTime() : 0;
+            const tb = b.startTime ? new Date(b.startTime).getTime() : 0;
+            if (ta && tb) return ta - tb;
+            if (ta) return -1;
+            if (tb) return 1;
+            return 0;
+        });
 
         let container = document.getElementById('place-kse-events');
         if (!container) {
@@ -4642,7 +4651,7 @@ async function loadKseEventsForPlace(place, otherRelatedItems = []) {
                             <span style="display:block;font-weight:700;font-size:0.95rem;color:#1e293b;line-height:1.25;">${ev.title}</span>
                             ${ev.timeLabel ? `<span style="display:block;font-size:0.8rem;color:#7c3aed;margin-top:0.15rem;font-weight:600;">${ev.timeLabel}</span>` : ''}
                         </span>
-                        <span style="font-size:0.85rem;color:#9333ea;font-weight:700;flex-shrink:0;align-self:center;">Avaa ↗</span>
+                        <span style="font-size:0.85rem;color:#9333ea;font-weight:700;flex-shrink:0;align-self:center;">Lue lisää LaukaaInfo.fi ↗</span>
                     </a>`;
                 }
 
@@ -4710,14 +4719,10 @@ async function loadPlaceObservations(placeInput) {
             if (Array.isArray(placeInput)) {
                 placeIds = placeInput;
             } else {
+                // Havainnot kohdistuvat VAIN tähän nimenomaiseen paikkaan
+                // (jos kohdistettu Haarlan rantaan, näkyy vain siellä; jos Lievestuoreelle, ei kohdistu alihierarkiaan)
                 if (placeInput.id) placeIds.push(placeInput.id);
                 if (placeInput.place_id) placeIds.push(placeInput.place_id);
-                if (Array.isArray(placeInput.subPlaces)) {
-                    placeInput.subPlaces.forEach(sp => {
-                        if (sp.id) placeIds.push(sp.id);
-                        if (sp.place_id) placeIds.push(sp.place_id);
-                    });
-                }
             }
         } else if (placeInput) {
             placeIds.push(placeInput);

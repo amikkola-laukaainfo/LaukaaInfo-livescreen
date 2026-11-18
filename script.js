@@ -1121,6 +1121,122 @@ window.storeLievestuoreItems = function(data) {
 
 
 /**
+ * Hakee LaukaaInfon omat kohdekortti-tapahtumat Supabasesta (posts-taulu)
+ * ja fallbackina kohdekortit/kohteet.json -tiedostosta.
+ */
+async function loadKohdekortitEvents() {
+    const kohdeEvents = [];
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const days = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
+    const formatEventDate = (d, endD) => {
+        if (!d || isNaN(d.getTime())) return '';
+        const day = days[d.getDay()];
+        const dateStr = `${day} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
+        const hasTime = d.getHours() !== 0 || d.getMinutes() !== 0;
+        const timeStr = hasTime ? ` klo ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` : '';
+        return `${dateStr}${timeStr}`;
+    };
+
+    // 1. Supabase posts -taulu (ensisijaisesti client, toissijaisesti REST)
+    try {
+        let posts = [];
+        if (window.LaukaaSupabase) {
+            const { data, error } = await window.LaukaaSupabase
+                .from('posts')
+                .select('id, target_id, title, description, content, image_url, event_start_at, event_end_at, publisher_name, municipality, status, visibility')
+                .eq('type', 'event')
+                .in('status', ['published', 'APPROVED'])
+                .eq('visibility', 'public')
+                .not('event_start_at', 'is', null);
+            if (!error && Array.isArray(data)) posts = data;
+        }
+
+        if (posts.length === 0) {
+            const sbUrl = window.SUPABASE_URL || 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+            const sbKey = window.SUPABASE_ANON_KEY || 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+            const res = await fetch(`${sbUrl}/rest/v1/posts?type=eq.event&status=in.(published,APPROVED)&visibility=eq.public&event_start_at=not.is.null&select=id,target_id,title,description,content,image_url,event_start_at,event_end_at,publisher_name,municipality`, {
+                headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data)) posts = data;
+            }
+        }
+
+        for (const p of posts) {
+            if (!p.event_start_at) continue;
+            const d = new Date(p.event_start_at);
+            if (isNaN(d.getTime())) continue;
+
+            const endD = p.event_end_at ? new Date(p.event_end_at) : null;
+            const compareDate = (endD && !isNaN(endD.getTime())) ? endD : d;
+            if (compareDate < todayStart) continue;
+
+            let desc = (p.description || p.content || '').replace(/<[^>]*>/g, ' ').trim();
+            if (desc.length > 140) desc = desc.substring(0, 140) + '...';
+
+            kohdeEvents.push({
+                title: p.title || 'Tapahtuma',
+                link: `kohdekortti.html?id=${encodeURIComponent(p.target_id || p.id)}`,
+                date: d,
+                dateStr: formatEventDate(d, endD),
+                imageUrl: p.image_url || '',
+                description: desc,
+                type: 'LaukaaInfo',
+                typeClass: 'event',
+                isKohdekortti: true,
+                isRss: false
+            });
+        }
+    } catch (e) {
+        console.warn('Virhe Supabase-tapahtumien latauksessa:', e);
+    }
+
+    // 2. Fallback JSON (kohdekortit/kohteet.json)
+    try {
+        const res = await fetch('kohdekortit/kohteet.json');
+        if (res.ok) {
+            const list = await res.json();
+            if (Array.isArray(list)) {
+                for (const k of list) {
+                    if (k.type !== 'event' || !k.event?.startDate) continue;
+                    const cleanName = (k.name || '').trim().toLowerCase();
+                    if (kohdeEvents.some(ke => ke.title.trim().toLowerCase() === cleanName)) continue;
+
+                    const d = new Date(k.event.startDate);
+                    if (isNaN(d.getTime())) continue;
+
+                    const endD = k.event.endDate ? new Date(k.event.endDate) : null;
+                    const compareDate = (endD && !isNaN(endD.getTime())) ? endD : d;
+                    if (compareDate < todayStart) continue;
+
+                    let desc = (k.shortDescription || k.description || '').replace(/<[^>]*>/g, ' ').trim();
+                    if (desc.length > 140) desc = desc.substring(0, 140) + '...';
+
+                    const img = (Array.isArray(k.images) && k.images[0]) || '';
+                    kohdeEvents.push({
+                        title: k.name || 'Tapahtuma',
+                        link: `kohdekortti.html?id=${encodeURIComponent(k.id)}`,
+                        date: d,
+                        dateStr: formatEventDate(d, endD),
+                        imageUrl: img,
+                        description: desc,
+                        type: 'LaukaaInfo',
+                        typeClass: 'event',
+                        isKohdekortti: true,
+                        isRss: false
+                    });
+                }
+            }
+        }
+    } catch (_) {}
+
+    return kohdeEvents;
+}
+
+/**
  * Yleiskäyttöinen RSS-haku merkistötuella ja kuvan poiminnalla.
  */
 async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
@@ -1197,23 +1313,39 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 // Erityiskäsittely visitlaukaa.fi/evofeed -syötteelle, jossa tapahtuman aika on sisältötekstissä
                 if (url.includes('evofeed')) {
                     const descText = item.querySelector('description')?.textContent || item.querySelector('content\\:encoded')?.textContent || '';
-                    const startMatch = descText.match(/START:\s*[^,]*,\s*(\d{1,2})\s*([a-zäö]{3,6})\s*(\d{4})\s*(\d{2}:\d{2}:\d{2})/i);
-                    if (startMatch) {
-                        const day = parseInt(startMatch[1]);
-                        const monthStr = startMatch[2].toLowerCase();
-                        const year = parseInt(startMatch[3]);
-                        const time = startMatch[4];
-                        const months = {
-                            'tammi': 0, 'helmi': 1, 'maali': 2, 'huhti': 3, 'touko': 4, 'kesä': 5,
-                            'heinä': 6, 'elo': 7, 'syys': 8, 'loka': 9, 'marras': 10, 'joulu': 11
-                        };
-                        let monthIdx = -1;
-                        for (const key in months) {
-                            if (monthStr.startsWith(key)) { monthIdx = months[key]; break; }
-                        }
-                        if (monthIdx !== -1) {
-                            const [h, m, s] = time.split(':').map(Number);
-                            dateObj = new Date(year, monthIdx, day, h, m, s);
+                    
+                    // 1. Keski-Suomi Events / evofeed -muoto: "Ajankohta: 17.11.2026 11:00–18:00" tai "5.11.2026 12:00–9.12.2026 17:00"
+                    const ajankohtaMatch = descText.match(/Ajankohta:<\/strong>\s*(\d{1,2})\.(\d{1,2})\.(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/i) ||
+                                           descText.match(/Ajankohta:\s*(\d{1,2})\.(\d{1,2})\.(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/i);
+                    if (ajankohtaMatch) {
+                        const day = parseInt(ajankohtaMatch[1], 10);
+                        const month = parseInt(ajankohtaMatch[2], 10) - 1;
+                        const year = parseInt(ajankohtaMatch[3], 10);
+                        const hour = ajankohtaMatch[4] ? parseInt(ajankohtaMatch[4], 10) : 0;
+                        const minute = ajankohtaMatch[5] ? parseInt(ajankohtaMatch[5], 10) : 0;
+                        dateObj = new Date(year, month, day, hour, minute);
+                    }
+
+                    // 2. Vanhempi muoto: "START: ..., 12 marras 2026 12:00:00"
+                    if (!dateObj) {
+                        const startMatch = descText.match(/START:\s*[^,]*,\s*(\d{1,2})\s*([a-zäö]{3,6})\s*(\d{4})\s*(\d{2}:\d{2}:\d{2})/i);
+                        if (startMatch) {
+                            const day = parseInt(startMatch[1]);
+                            const monthStr = startMatch[2].toLowerCase();
+                            const year = parseInt(startMatch[3]);
+                            const time = startMatch[4];
+                            const months = {
+                                'tammi': 0, 'helmi': 1, 'maali': 2, 'huhti': 3, 'touko': 4, 'kesä': 5,
+                                'heinä': 6, 'elo': 7, 'syys': 8, 'loka': 9, 'marras': 10, 'joulu': 11
+                            };
+                            let monthIdx = -1;
+                            for (const key in months) {
+                                if (monthStr.startsWith(key)) { monthIdx = months[key]; break; }
+                            }
+                            if (monthIdx !== -1) {
+                                const [h, m, s] = time.split(':').map(Number);
+                                dateObj = new Date(year, monthIdx, day, h, m, s);
+                            }
                         }
                     }
                 }
@@ -1260,8 +1392,25 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 const descriptionNode = item.querySelector('description') || item.querySelector('summary') || item.querySelector('content');
                 let description = descriptionNode ? descriptionNode.textContent : '';
                 description = description.replace(/<[^>]*>/g, ' ').trim();
-                if (url.includes('evofeed')) description = description.replace(/START:.*END:.*(?= )/g, '').trim();
+                if (url.includes('evofeed')) {
+                    description = description.replace(/START:.*END:.*(?= )/g, '').trim();
+                    description = description.replace(/^Ajankohta:[^P]*Paikka:[^\s]+\s*/i, '').trim();
+                }
                 description = description.substring(0, 120) + (description.length > 120 ? '...' : '');
+
+                let formattedDateStr = '';
+                if (dateObj && !isNaN(dateObj)) {
+                    if (isEvent) {
+                        const days = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
+                        const day = days[dateObj.getDay()];
+                        const timeStr = (dateObj.getHours() || dateObj.getMinutes())
+                            ? ` klo ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`
+                            : '';
+                        formattedDateStr = `${day} ${dateObj.getDate()}.${dateObj.getMonth() + 1}.${dateObj.getFullYear()}${timeStr}`;
+                    } else {
+                        formattedDateStr = dateObj.toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB');
+                    }
+                }
 
                 const rssItem = {
                     title,
@@ -1269,7 +1418,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                     date: dateObj,
                     imageUrl,
                     description,
-                    dateStr: dateObj && !isNaN(dateObj) ? dateObj.toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB') : '',
+                    dateStr: formattedDateStr,
                     type: typeLabel,
                     typeClass: typeClass,
                     isRss: true
@@ -1306,11 +1455,32 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 }
             }
 
+            // Jos kyseessä on tapahtumasyöte, haetaan ja miksataan mukaan myös LaukaaInfon omat kohdekortit
+            if (isEvent) {
+                try {
+                    const kohdeEvents = await loadKohdekortitEvents();
+                    if (kohdeEvents.length > 0) {
+                        for (const ke of kohdeEvents) {
+                            const dedupeK = ke.title.toLowerCase().trim();
+                            if (!seenTitles.has(dedupeK)) {
+                                seenTitles.add(dedupeK);
+                                parsedItems.push(ke);
+                                if (!allRssItems.find(i => i.link === ke.link)) {
+                                    allRssItems.push(ke);
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Kohdekorttien sekoitus tapahtumiin epäonnistui:', e);
+                }
+            }
+
             // After parsing ALL items, we can handle the display if container exists
             if (!container) return; // Background collection only
 
             // Järjestetään tapahtumat päivämäärän mukaan (lähin ensin)
-            if (container?.id === 'events-container') {
+            if (container?.id === 'events-container' || isEvent) {
                 parsedItems.sort((a, b) => {
                     const aValid = a.date && !isNaN(a.date);
                     const bValid = b.date && !isNaN(b.date);
@@ -1323,7 +1493,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 });
             }
 
-            const limit = 5;
+            const limit = (container?.id === 'events-container') ? 30 : 5;
             const finalItems = parsedItems.slice(0, limit);
 
             for (const item of finalItems) {
@@ -1353,17 +1523,23 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 }
 
                 if (isEventItem) {
-                    // Tapahtumakortti visitlaukaa.fi RSS-syötteestä — kuva ladataan syötteestä jos saatavilla
+                    // Tapahtumakortti: visitlaukaa.fi RSS-syötteestä tai LaukaaInfon kohdekortti
+                    const isKohde = !!item.isKohdekortti;
+                    const badgeText = isKohde ? 'LaukaaInfo' : item.type;
+                    const badgeStyle = isKohde ? 'background: #7c3aed; color: #fff;' : '';
+                    const linkTarget = isKohde ? '' : 'target="_blank" rel="noopener noreferrer"';
+                    const moreText = isKohde ? 'Lue lisää LaukaaInfo.fi →' : 'Lue lisää VisitLaukaa.fi →';
+
                     rssElement.innerHTML = `
                         ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image rss-event-image" loading="lazy" alt="${item.title}">` : ''}
                         <div class="rss-event-date-badge">
                             <span class="rss-event-date-icon">📅</span>
                             <span class="rss-event-date-text">${item.dateStr || '—'}</span>
-                            <span class="news-badge event">${item.type}</span>
+                            <span class="news-badge event" ${badgeStyle ? `style="${badgeStyle}"` : ''}>${badgeText}</span>
                         </div>
-                        <h3 class="rss-event-title"><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
+                        <h3 class="rss-event-title"><a href="${item.link}" ${linkTarget}>${item.title}</a></h3>
                         ${item.description ? `<p class="rss-event-desc">${item.description}</p>` : ''}
-                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="rss-event-link">Lue lisää VisitLaukaa.fi →</a>
+                        <a href="${item.link}" ${linkTarget} class="rss-event-link">${moreText}</a>
                     `;
                 } else {
                     rssElement.innerHTML = `
@@ -1375,6 +1551,43 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                     `;
                 }
                 if (container) container.appendChild(rssElement);
+            }
+
+            // Jos tapahtumia on enemmän kuin limit, tarjotaan painike loppujen avaamiseen
+            if (container?.id === 'events-container' && parsedItems.length > limit) {
+                const moreCount = parsedItems.length - limit;
+                const moreBtn = document.createElement('button');
+                moreBtn.id = 'more-events-btn';
+                moreBtn.className = 'btn-radar';
+                moreBtn.style.cssText = 'width: 100%; margin-top: 1rem; padding: 0.65rem 1rem; background: #fff7ed; border: 1.5px solid #fed7aa; color: #c2410c; font-weight: 700; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;';
+                moreBtn.innerHTML = `<span>▼</span> <span>Näytä lisää tapahtumia (+${moreCount})</span>`;
+                moreBtn.onclick = () => {
+                    const extraItems = parsedItems.slice(limit);
+                    for (const item of extraItems) {
+                        const rssElement = document.createElement('div');
+                        rssElement.className = 'rss-item rss-item--event';
+                        const isKohde = !!item.isKohdekortti;
+                        const badgeText = isKohde ? 'LaukaaInfo' : item.type;
+                        const badgeStyle = isKohde ? 'background: #7c3aed; color: #fff;' : '';
+                        const linkTarget = isKohde ? '' : 'target="_blank" rel="noopener noreferrer"';
+                        const moreText = isKohde ? 'Lue lisää LaukaaInfo.fi →' : 'Lue lisää VisitLaukaa.fi →';
+
+                        rssElement.innerHTML = `
+                            ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image rss-event-image" loading="lazy" alt="${item.title}">` : ''}
+                            <div class="rss-event-date-badge">
+                                <span class="rss-event-date-icon">📅</span>
+                                <span class="rss-event-date-text">${item.dateStr || '—'}</span>
+                                <span class="news-badge event" ${badgeStyle ? `style="${badgeStyle}"` : ''}>${badgeText}</span>
+                            </div>
+                            <h3 class="rss-event-title"><a href="${item.link}" ${linkTarget}>${item.title}</a></h3>
+                            ${item.description ? `<p class="rss-event-desc">${item.description}</p>` : ''}
+                            <a href="${item.link}" ${linkTarget} class="rss-event-link">${moreText}</a>
+                        `;
+                        container.insertBefore(rssElement, moreBtn);
+                    }
+                    moreBtn.remove();
+                };
+                container.appendChild(moreBtn);
             }
             return; // Onnistui!
         } catch (error) {
