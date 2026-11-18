@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
 :root {
+    --warm-brown-dark: #4a3020;
+    --warm-brown: #7c5539;
+    --warm-brown-light: #a87b56;
+    --warm-brown-sand: #d4b293;
+    --warm-brown-soft: #fbf7f2;
+    --warm-brown-bg: #f8f3ed;
+    --warm-brown-border: #e6d5c3;
     --primary-blue: #2563eb;
     --secondary-blue: #1e3a8a;
     --accent-blue: #3b82f6;
@@ -388,7 +395,7 @@ header.hero-split {
 }
 
 .hero-left {
-    background: linear-gradient(to right, rgba(0, 51, 102, 0.9) 0%, rgba(0, 51, 102, 0.5) 45%, transparent 85%);
+    background: linear-gradient(to right, rgba(74, 48, 32, 0.90) 0%, rgba(110, 76, 52, 0.58) 45%, rgba(165, 125, 92, 0.18) 75%, transparent 92%);
     flex: 1;
     display: flex;
     align-items: center;
@@ -603,7 +610,7 @@ header h1 {
     .hero-left {
         flex: unset;
         padding: 3rem 1.5rem;
-        background: var(--secondary-blue); /* Solid blue in mobile stack */
+        background: linear-gradient(135deg, #4a3020 0%, #7c5539 100%); /* Warm brown in mobile stack */
     }
 
     .hero-right {
@@ -682,7 +689,7 @@ header h1 {
    PLAIN HEADER (alisvudet ilman hero-split)
    ========================================= */
 header:not(.hero-split) {
-    background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+    background: linear-gradient(135deg, #5c3c26 0%, #8c5d3b 50%, #ad7c56 100%);
     padding: 3rem 0 2.5rem;
     margin-bottom: 2rem;
     border-bottom-left-radius: 28px;
@@ -748,7 +755,7 @@ header:not(.hero-split) p {
    Ylikirjoittaa laukaa.html jne. sisÃ¤iset tyylit
    ========================================= */
 section.region-hero {
-    background: var(--secondary-blue) !important;
+    background: linear-gradient(135deg, rgba(82, 54, 34, 0.92) 0%, rgba(135, 94, 62, 0.88) 100%) !important;
     clip-path: none !important;
     text-align: left !important;
     padding: 1.75rem 0 1.5rem !important;

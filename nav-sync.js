@@ -80,75 +80,75 @@
     function renderDesktopNav(base) {
         return `
             <li class="nav-item">
-                <a href="#" class="nav-link">Yritykset <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="#" class="nav-link" data-i18n="nav_companies">Yritykset <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}koko-laukaa.html">Koko Laukaa kartalla</a></li>
+                    <li><a href="${base}koko-laukaa.html" data-i18n="nav_all_laukaa_map">Koko Laukaa kartalla</a></li>
                     <li class="has-arrow">
-                        <a href="#">Taajamat</a>
+                        <a href="#" data-i18n="nav_areas">Taajamat</a>
                         <ul class="nested-menu">
                             <li><a href="${base}laukaa.html">Laukaa kk</a></li>
                             <li><a href="${base}leppavesi.html">Leppävesi</a></li>
                             <li><a href="${base}lievestuore.html">Lievestuore</a></li>
                             <li><a href="${base}vehnia.html">Vehniä</a></li>
                             <li><a href="${base}vihtavuori.html">Vihtavuori</a></li>
-                            <li><a href="${base}kohdekartta.html">Kaikki kohteet kartalla</a></li>
+                            <li><a href="${base}kohdekartta.html" data-i18n="nav_all_places_map">Kaikki kohteet kartalla</a></li>
                         </ul>
                     </li>
-                    <li><a href="${base}kategoria.html">Toimialat</a></li>
-                    <li><a href="${base}index.html#search-section">Yleishaku</a></li>
-                    <li><a href="${base}pikahaku.html">Pikahaku</a></li>
-                    <li><a href="${base}index.html#service-needs">Verkostohaku</a></li>
-                    <li><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-weight: 600;">Tarjouspyynnöt</a></li>
+                    <li><a href="${base}kategoria.html" data-i18n="nav_industries">Toimialat</a></li>
+                    <li><a href="${base}index.html#search-section" data-i18n="nav_general_search">Yleishaku</a></li>
+                    <li><a href="${base}pikahaku.html" data-i18n="nav_quicksearch">Pikahaku</a></li>
+                    <li><a href="${base}index.html#service-needs" data-i18n="nav_network_search">Verkostohaku</a></li>
+                    <li><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-weight: 600;" data-i18n="nav_tender_requests">Tarjouspyynnöt</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}ajankohtaista.html#events-card">Tapahtumat</a></li>
+                    <li><a href="${base}ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
                     <li class="has-arrow">
-                        <a href="#">Kunta RSS</a>
+                        <a href="#" data-i18n="nav_rss">Kunta RSS</a>
                         <ul class="nested-menu">
-                            <li><a href="${base}ajankohtaista.html#news-card">Tiedotteet</a></li>
-                            <li><a href="${base}ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
-                            <li><a href="${base}ajankohtaista.html#feedback-card">Palautteet</a></li>
+                            <li><a href="${base}ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
+                            <li><a href="${base}ajankohtaista.html#decisions-card" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                            <li><a href="${base}ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
                         </ul>
                     </li>
-                    <li><a href="${base}yhteisot-ja-linkit.html">Laukaa Somessa</a></li>
+                    <li><a href="${base}yhteisot-ja-linkit.html" data-i18n="nav_some">Laukaa Somessa</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}seina.html" class="nav-link">Julkaisut <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}seina.html" class="nav-link" data-i18n="nav_publications">Julkaisut <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}seina.html" style="font-weight: 700; color: #1e40af;">📢 LaukaaInfon Seinä</a></li>
-                    <li><a href="${base}kohtaamiset.html">LaukaaInfon Kierto</a></li>
-                    <li><a href="${base}kohdekortit.html">LaukaaInfon Tapahtumat ja tarjoukset</a></li>
-                    <li><a href="${base}toiminta.html">Yhdistysten Toimintataulu</a></li>
+                    <li><a href="${base}seina.html" style="font-weight: 700; color: #1e40af;" data-i18n="nav_wall">📢 LaukaaInfon Seinä</a></li>
+                    <li><a href="${base}kohtaamiset.html" data-i18n="nav_circle">LaukaaInfon Kierto</a></li>
+                    <li><a href="${base}kohdekortit.html" data-i18n="nav_events_offers">LaukaaInfon Tapahtumat ja tarjoukset</a></li>
+                    <li><a href="${base}toiminta.html" data-i18n="nav_association_board">Yhdistysten Toimintataulu</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Suurennuslasi 🔍 <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="#" class="nav-link" data-i18n="nav_magnifier">Suurennuslasi 🔍 <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}asiahaku.html">Päätösten polut</a></li>
+                    <li><a href="${base}asiahaku.html" data-i18n="nav_paths">Päätösten polut</a></li>
                     <li class="has-arrow">
-                        <a href="#">Reitit</a>
+                        <a href="#" data-i18n="nav_routes">Reitit</a>
                         <ul class="nested-menu">
-                            <li><a href="${base}tarinakartta.html">Perusreitit</a></li>
-                            <li><a href="https://laukaainfo.fi/wonderin/esittely.html" target="_blank" rel="noopener noreferrer">Wonderin elämysreitit</a></li>
+                            <li><a href="${base}tarinakartta.html" data-i18n="nav_basic_routes">Perusreitit</a></li>
+                            <li><a href="https://laukaainfo.fi/wonderin/esittely.html" target="_blank" rel="noopener noreferrer" data-i18n="nav_wonderin_routes">Wonderin elämysreitit</a></li>
                         </ul>
                     </li>
-                    <li><a href="${base}kadonneet.html">Löytökori</a></li>
-                    <li><a href="${base}havainnot.html">Havainnot alueelta</a></li>
-                    <li><a href="${base}alueet.html">Paikat alueella</a></li>
-                    <li><a href="${base}kohdekortit.html?filter=project">Ideat ja projektit alueella</a></li>
+                    <li><a href="${base}kadonneet.html" data-i18n="nav_lost_basket">Löytökori</a></li>
+                    <li><a href="${base}havainnot.html" data-i18n="nav_observations">Havainnot alueelta</a></li>
+                    <li><a href="${base}alueet.html" data-i18n="nav_places">Paikat alueella</a></li>
+                    <li><a href="${base}kohdekortit.html?filter=project" data-i18n="nav_ideas_projects">Ideat ja projektit alueella</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="${base}ilmoittaudu.html" class="nav-link">Ota yhteyttä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
+                <a href="${base}ilmoittaudu.html" class="nav-link" data-i18n="nav_contact">Ota yhteyttä <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="${base}lisaa-yritys.html">Lisää yritys</a></li>
-                    <li><a href="${base}ilmoittaudu.html">Julkaisukanavat</a></li>
-                    <li><a href="${base}kauppa.html">Lisätietoa &amp; Julkaisupaketit</a></li>
-                    <li><a href="${base}palvelun-esittely.html">Tietoa palvelusta ja yhteystiedot</a></li>
+                    <li><a href="${base}lisaa-yritys.html" data-i18n="nav_add_company">Lisää yritys</a></li>
+                    <li><a href="${base}ilmoittaudu.html" data-i18n="nav_channels">Julkaisukanavat</a></li>
+                    <li><a href="${base}kauppa.html" data-i18n="nav_packages">Lisätietoa &amp; Julkaisupaketit</a></li>
+                    <li><a href="${base}palvelun-esittely.html" data-i18n="nav_about_service_contact">Tietoa palvelusta ja yhteystiedot</a></li>
                 </ul>
             </li>
         `;
@@ -160,75 +160,75 @@
     function renderSidebarContent(base) {
         return `
             <div class="menu-section">
-                <h3 class="section-title">01 · YRITYKSET</h3>
+                <h3 class="section-title">01 · <span data-i18n="nav_companies">YRITYKSET</span></h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="${base}koko-laukaa.html" class="sidebar-link">Koko Laukaa kartalla</a></li>
+                    <li class="menu-item"><a href="${base}koko-laukaa.html" class="sidebar-link" data-i18n="nav_all_laukaa_map">Koko Laukaa kartalla</a></li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle"><span data-i18n="nav_areas">Taajamat</span> <span class="arrow">▼</span></a>
                         <ul class="submenu">
                             <li><a href="${base}laukaa.html" class="sidebar-link">Laukaa kk</a></li>
                             <li><a href="${base}leppavesi.html" class="sidebar-link">Leppävesi</a></li>
                             <li><a href="${base}lievestuore.html" class="sidebar-link">Lievestuore</a></li>
                             <li><a href="${base}vehnia.html" class="sidebar-link">Vehniä</a></li>
                             <li><a href="${base}vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
-                            <li><a href="${base}kohdekartta.html" class="sidebar-link">Kaikki kohteet kartalla</a></li>
+                            <li><a href="${base}kohdekartta.html" class="sidebar-link" data-i18n="nav_all_places_map">Kaikki kohteet kartalla</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item"><a href="${base}kategoria.html" class="sidebar-link">Toimialat</a></li>
-                    <li class="menu-item"><a href="${base}index.html#search-section" class="sidebar-link">Yleishaku</a></li>
-                    <li class="menu-item"><a href="${base}pikahaku.html" class="sidebar-link">Pikahaku</a></li>
-                    <li class="menu-item"><a href="${base}index.html#service-needs" class="sidebar-link">Verkostohaku</a></li>
-                    <li class="menu-item"><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" rel="noopener noreferrer" class="sidebar-link" style="color: #0284c7; font-weight: 600;">Tarjouspyynnöt</a></li>
+                    <li class="menu-item"><a href="${base}kategoria.html" class="sidebar-link" data-i18n="nav_industries">Toimialat</a></li>
+                    <li class="menu-item"><a href="${base}index.html#search-section" class="sidebar-link" data-i18n="nav_general_search">Yleishaku</a></li>
+                    <li class="menu-item"><a href="${base}pikahaku.html" class="sidebar-link" data-i18n="nav_quicksearch">Pikahaku</a></li>
+                    <li class="menu-item"><a href="${base}index.html#service-needs" class="sidebar-link" data-i18n="nav_network_search">Verkostohaku</a></li>
+                    <li class="menu-item"><a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" rel="noopener noreferrer" class="sidebar-link" style="color: #0284c7; font-weight: 600;" data-i18n="nav_tender_requests">Tarjouspyynnöt</a></li>
                 </ul>
             </div>
             <div class="menu-section">
-                <h3 class="section-title">02 · AJANKOHTAISTA</h3>
+                <h3 class="section-title">02 · <span data-i18n="nav_current">AJANKOHTAISTA</span></h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="${base}ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a></li>
+                    <li class="menu-item"><a href="${base}ajankohtaista.html#events-card" class="sidebar-link" data-i18n="nav_events">Tapahtumat</a></li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Kunta RSS <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle"><span data-i18n="nav_rss">Kunta RSS</span> <span class="arrow">▼</span></a>
                         <ul class="submenu">
-                            <li><a href="${base}ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a></li>
-                            <li><a href="${base}ajankohtaista.html#decisions-card" class="sidebar-link">Päätöksenteko</a></li>
-                            <li><a href="${base}ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a></li>
+                            <li><a href="${base}ajankohtaista.html#news-card" class="sidebar-link" data-i18n="nav_news">Tiedotteet</a></li>
+                            <li><a href="${base}ajankohtaista.html#decisions-card" class="sidebar-link" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                            <li><a href="${base}ajankohtaista.html#feedback-card" class="sidebar-link" data-i18n="nav_feedback">Palautteet</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item"><a href="${base}yhteisot-ja-linkit.html" class="sidebar-link">Laukaa Somessa</a></li>
+                    <li class="menu-item"><a href="${base}yhteisot-ja-linkit.html" class="sidebar-link" data-i18n="nav_some">Laukaa Somessa</a></li>
                 </ul>
             </div>
             <div class="menu-section">
-                <h3 class="section-title">03 · JULKAISUT</h3>
+                <h3 class="section-title">03 · <span data-i18n="nav_publications">JULKAISUT</span></h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="${base}seina.html" class="sidebar-link" style="font-weight: 700; color: #1e40af;">📢 LaukaaInfon Seinä</a></li>
-                    <li class="menu-item"><a href="${base}kohtaamiset.html" class="sidebar-link">LaukaaInfon Kierto</a></li>
-                    <li class="menu-item"><a href="${base}kohdekortit.html" class="sidebar-link">LaukaaInfon Tapahtumat ja tarjoukset</a></li>
-                    <li class="menu-item"><a href="${base}toiminta.html" class="sidebar-link">Yhdistysten Toimintataulu</a></li>
+                    <li class="menu-item"><a href="${base}seina.html" class="sidebar-link" style="font-weight: 700; color: #1e40af;" data-i18n="nav_wall">📢 LaukaaInfon Seinä</a></li>
+                    <li class="menu-item"><a href="${base}kohtaamiset.html" class="sidebar-link" data-i18n="nav_circle">LaukaaInfon Kierto</a></li>
+                    <li class="menu-item"><a href="${base}kohdekortit.html" class="sidebar-link" data-i18n="nav_events_offers">LaukaaInfon Tapahtumat ja tarjoukset</a></li>
+                    <li class="menu-item"><a href="${base}toiminta.html" class="sidebar-link" data-i18n="nav_association_board">Yhdistysten Toimintataulu</a></li>
                 </ul>
             </div>
             <div class="menu-section highlight-section">
-                <h3 class="section-title">04 · SUURENNUSLASI 🔍</h3>
+                <h3 class="section-title">04 · <span data-i18n="nav_magnifier">SUURENNUSLASI 🔍</span></h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="${base}asiahaku.html" class="sidebar-link">Päätösten polut</a></li>
+                    <li class="menu-item"><a href="${base}asiahaku.html" class="sidebar-link" data-i18n="nav_paths">Päätösten polut</a></li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Reitit <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle"><span data-i18n="nav_routes">Reitit</span> <span class="arrow">▼</span></a>
                         <ul class="submenu">
-                            <li><a href="${base}tarinakartta.html" class="sidebar-link">Perusreitit</a></li>
-                            <li><a href="https://laukaainfo.fi/wonderin/esittely.html" target="_blank" rel="noopener noreferrer" class="sidebar-link">Wonderin elämysreitit</a></li>
+                            <li><a href="${base}tarinakartta.html" class="sidebar-link" data-i18n="nav_basic_routes">Perusreitit</a></li>
+                            <li><a href="https://laukaainfo.fi/wonderin/esittely.html" target="_blank" rel="noopener noreferrer" class="sidebar-link" data-i18n="nav_wonderin_routes">Wonderin elämysreitit</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item"><a href="${base}kadonneet.html" class="sidebar-link">Löytökori</a></li>
-                    <li class="menu-item"><a href="${base}havainnot.html" class="sidebar-link">Havainnot alueelta</a></li>
-                    <li class="menu-item"><a href="${base}alueet.html" class="sidebar-link">Paikat alueella</a></li>
-                    <li class="menu-item"><a href="${base}kohdekortit.html?filter=project" class="sidebar-link">Ideat ja projektit alueella</a></li>
+                    <li class="menu-item"><a href="${base}kadonneet.html" class="sidebar-link" data-i18n="nav_lost_basket">Löytökori</a></li>
+                    <li class="menu-item"><a href="${base}havainnot.html" class="sidebar-link" data-i18n="nav_observations">Havainnot alueelta</a></li>
+                    <li class="menu-item"><a href="${base}alueet.html" class="sidebar-link" data-i18n="nav_places">Paikat alueella</a></li>
+                    <li class="menu-item"><a href="${base}kohdekortit.html?filter=project" class="sidebar-link" data-i18n="nav_ideas_projects">Ideat ja projektit alueella</a></li>
                 </ul>
             </div>
             <div class="menu-section">
-                <h3 class="section-title">05 · OTA YHTEYTTÄ</h3>
+                <h3 class="section-title">05 · <span data-i18n="nav_contact">OTA YHTEYTTÄ</span></h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="${base}lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
-                    <li class="menu-item"><a href="${base}ilmoittaudu.html" class="sidebar-link">Julkaisukanavat</a></li>
-                    <li class="menu-item"><a href="${base}kauppa.html" class="sidebar-link">Lisätietoa &amp; Julkaisupaketit</a></li>
-                    <li class="menu-item"><a href="${base}palvelun-esittely.html" class="sidebar-link">Tietoa palvelusta ja yhteystiedot</a></li>
+                    <li class="menu-item"><a href="${base}lisaa-yritys.html" class="sidebar-link" data-i18n="nav_add_company">Lisää yritys</a></li>
+                    <li class="menu-item"><a href="${base}ilmoittaudu.html" class="sidebar-link" data-i18n="nav_channels">Julkaisukanavat</a></li>
+                    <li class="menu-item"><a href="${base}kauppa.html" class="sidebar-link" data-i18n="nav_packages">Lisätietoa &amp; Julkaisupaketit</a></li>
+                    <li class="menu-item"><a href="${base}palvelun-esittely.html" class="sidebar-link" data-i18n="nav_about_service_contact">Tietoa palvelusta ja yhteystiedot</a></li>
                 </ul>
             </div>
         `;
