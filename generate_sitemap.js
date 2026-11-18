@@ -58,7 +58,6 @@ async function generateSitemap() {
         { file: 'reitti.html', url: 'reitti.html', priority: '0.80', changefreq: 'weekly' },
         { file: 'reitti-partner.html', url: 'reitti-partner.html', priority: '0.75', changefreq: 'weekly' },
         { file: 'tilannekuva.html', url: 'tilannekuva.html', priority: '0.75', changefreq: 'weekly' },
-        { file: 'verkostokartta.html', url: 'verkostokartta.html', priority: '0.75', changefreq: 'weekly' },
         { file: 'tietoa-paikasta.html', url: 'tietoa-paikasta.html', priority: '0.80', changefreq: 'weekly' },
         { file: 'wonderin/esittely.html', url: 'wonderin/esittely.html', priority: '0.80', changefreq: 'monthly' },
         { file: 'laukaan-ravintolat.html', url: 'laukaan-ravintolat.html', priority: '0.80', changefreq: 'weekly' },

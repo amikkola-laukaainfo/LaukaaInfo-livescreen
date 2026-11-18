@@ -404,7 +404,6 @@ async function generateSeoPages() {
         { loc: 'https://laukaainfo.fi/reitti-partner.html', priority: '0.80' },
         { loc: 'https://laukaainfo.fi/kadonneet.html', priority: '0.80' },
         { loc: 'https://laukaainfo.fi/ilmoitukset.html', priority: '0.80' },
-        { loc: 'https://laukaainfo.fi/verkostokartta.html', priority: '0.80' },
         { loc: 'https://laukaainfo.fi/pikahaku.html', priority: '0.80' },
         { loc: 'https://laukaainfo.fi/keskustelu.html', priority: '0.75' },
         { loc: 'https://laukaainfo.fi/toiminta.html', priority: '0.75' },

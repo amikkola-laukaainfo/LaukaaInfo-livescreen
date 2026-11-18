@@ -86,6 +86,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .badge-association{background:var(--green-light);color:#065f46;}
 .badge-announcement{background:#fef3c7;color:#92400e;}
 .badge-news{background:#e0f2fe;color:#0369a1;}
+.badge-project{background:#fdf4ff;color:#9333ea;border:1px solid #f0abfc;}
 .badge-other{background:#f1f5f9;color:var(--muted);}
 .badge-source{font-size:.65rem;padding:2px 7px;border-radius:50px;background:#f1f5f9;color:#64748b;font-weight:600;}
 
@@ -357,6 +358,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <span class="filter-pill" data-filter="event">📅 Tapahtumat</span>
     <span class="filter-pill" data-filter="offer">🎁 Tarjoukset</span>
     <span class="filter-pill" data-filter="announcement">📢 Tiedotteet &amp; Uutiset</span>
+    <span class="filter-pill" data-filter="project">💡 Ideat &amp; Projektit</span>
   </div>
 </div>
 
@@ -405,6 +407,8 @@ const TYPE_LABELS = {
   offer:        {label:'Tarjous',   cls:'badge-offer', icon:'🎁'},
   announcement: {label:'Tiedote',   cls:'badge-announcement', icon:'📢'},
   news:         {label:'Uutinen',   cls:'badge-news', icon:'📰'},
+  project:      {label:'Projekti / Idea', cls:'badge-project', icon:'💡'},
+  idea:         {label:'Idea',      cls:'badge-project', icon:'💡'},
   notice:       {label:'Ilmoitus',  cls:'badge-other', icon:'📌'},
   feed:         {label:'Feed',      cls:'badge-other', icon:'💬'},
   video:        {label:'Video',     cls:'badge-other', icon:'🎥'},
@@ -607,7 +611,7 @@ async function loadAll() {
       const { data, error } = await window.LaukaaSupabase
         .from('posts')
         .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at')
-        .in('type', ['event', 'offer', 'announcement', 'news', 'notice', 'feed', 'video'])
+        .in('type', ['event', 'offer', 'announcement', 'news', 'notice', 'feed', 'video', 'project', 'idea'])
         .in('status', ['published', 'APPROVED'])
         .eq('visibility', 'public');
 
@@ -819,12 +823,23 @@ function getItemDestination(item) {
     };
   }
 
+  // 1.5. Projektit ja ideat: ohjataan suoraan projekti-sivulle
+  const isProject = item.type === 'project' || item.type === 'idea' || item.target_type === 'project';
+  if (isProject) {
+    const projId = item.target_id || id;
+    return {
+      type: 'project',
+      url: projId ? `projekti.html?id=${encodeURIComponent(projId)}` : 'projekti.html',
+      label: '💡 Projekti',
+      title: 'Avaa projekti'
+    };
+  }
+
   // 2. Seinäjulkaisut: säilyvät seinällä ja ohjataan seina.html-sivulle (tiedotteet, uutiset)
   const isSeina = item.type === 'announcement' || 
                   item.type === 'news' || 
                   item.type === 'wall' || 
                   item.target_type === 'wall' || 
-                  item.target_type === 'project' ||
                   item.source === 'wall';
 
   if (isSeina) {
@@ -953,6 +968,8 @@ function render() {
       typeOk = true;
     } else if (activeFilter === 'announcement') {
       typeOk = item.type === 'announcement' || item.type === 'news';
+    } else if (activeFilter === 'project' || activeFilter === 'idea') {
+      typeOk = item.type === 'project' || item.type === 'idea' || item.target_type === 'project' || (item.tags || []).some(t => t.toLowerCase().includes('projekti') || t.toLowerCase().includes('idea'));
     } else {
       typeOk = item.type === activeFilter;
     }
@@ -1043,6 +1060,17 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
 
 // Tekstihaku
 document.getElementById('search-input').addEventListener('input', render);
+
+// Tarkistetaan URL-suodatinparametri (?filter=project tms.)
+const initialFilter = new URLSearchParams(window.location.search).get('filter');
+if (initialFilter) {
+  const targetPill = document.querySelector(`.filter-pill[data-filter="${initialFilter}"]`);
+  if (targetPill) {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    targetPill.classList.add('active');
+    activeFilter = initialFilter;
+  }
+}
 
 // Käynnistys
 loadAll();

@@ -67,7 +67,7 @@ function copyRecursive(src, dest) {
         if (entry.name.endsWith('.py')) continue;
         if (entry.name.endsWith('.ps1')) continue;
         if (entry.name.endsWith('.bat')) continue;
-        if (entry.name.endsWith('.csv')) continue;
+        if (entry.name.endsWith('.csv') && !['tarinakartta_data.csv', 'muistokartta_data.csv'].includes(entry.name)) continue;
         if (entry.name.endsWith('.bak')) continue;
 
         const srcPath = path.join(src, entry.name);
