@@ -388,14 +388,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <!-- MAIN -->
 <main class="cal-main">
   <div id="events-section">
-    <div class="section-label">📅 Tulevat tapahtumat</div>
+    <div class="section-label" id="events-label">📅 Tulevat tapahtumat</div>
     <div class="cards-grid" id="events-grid">
       <div class="empty-state"><div class="icon">⏳</div><p>Ladataan tapahtumia...</p></div>
     </div>
   </div>
 
   <div id="nodate-section" style="margin-top:1rem;">
-    <div class="section-label">🎁 Tarjoukset &amp; julkaisut</div>
+    <div class="section-label" id="nodate-label">🎁 Tarjoukset &amp; julkaisut</div>
     <div class="nodatecards" id="nodate-grid">
       <div class="empty-state"><div class="icon">⏳</div><p>Ladataan...</p></div>
     </div>
@@ -418,6 +418,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260713"></script>
 <script>
+// Mixonet Supabase (Projektit & Ideat)
+const MIXONET_SB_URL = 'https://btwerbixrydfalqrpnmg.supabase.co';
+const MIXONET_SB_KEY = 'sb_publishable_8kDfiOTrAwvdb8ziM9XNMQ_CWc-vfat';
+
 // JSON fallback -lähteet
 const JSON_SOURCES = [
   'kohdekortit/kohteet.json',
@@ -430,7 +434,7 @@ const TYPE_LABELS = {
   offer:        {label:'Tarjous',   cls:'badge-offer', icon:'🎁'},
   announcement: {label:'Tiedote',   cls:'badge-announcement', icon:'📢'},
   news:         {label:'Uutinen',   cls:'badge-news', icon:'📰'},
-  project:      {label:'Projekti / Idea', cls:'badge-project', icon:'💡'},
+  project:      {label:'Projekti',  cls:'badge-project', icon:'💡'},
   idea:         {label:'Idea',      cls:'badge-project', icon:'💡'},
   notice:       {label:'Ilmoitus',  cls:'badge-other', icon:'📌'},
   feed:         {label:'Feed',      cls:'badge-other', icon:'💬'},
@@ -705,6 +709,47 @@ async function loadAll() {
     console.warn('JSON-tiedostojen lataus epäonnistui:', e);
   }
 
+  // Mixonet-projektien haku (Mixonet projects -taulu)
+  let mixonetItems = [];
+  if (typeof supabase !== 'undefined') {
+    try {
+      const mixonetClient = supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
+        auth: { persistSession: false, storageKey: 'mixonet-anon-kohdekortit' }
+      });
+      const { data: projData, error: projError } = await mixonetClient
+        .from('projects')
+        .select('id, title, summary, description, cover_image_url, image_urls, place_id, status, visibility, is_published, created_at, updated_at, theme_custom, goal_custom')
+        .eq('visibility', 'PUBLIC')
+        .neq('is_published', false);
+
+      if (!projError && Array.isArray(projData)) {
+        mixonetItems = projData.map(p => {
+          const themeTags = p.theme_custom
+            ? p.theme_custom.split(',').map(s => s.trim()).filter(Boolean)
+            : [];
+          return {
+            id: p.id,
+            target_id: p.id,
+            target_type: 'project',
+            type: 'project',
+            status: p.status || 'ACTIVE',
+            name: p.title || 'Nimetön projekti',
+            shortDescription: p.summary || (p.description ? p.description.slice(0, 160) + '...' : ''),
+            description: p.description || p.summary || '',
+            images: p.cover_image_url ? [p.cover_image_url] : (p.image_urls || []),
+            place_id: p.place_id || null,
+            created_at: p.created_at,
+            updated_at: p.updated_at,
+            tags: themeTags.slice(0, 4),
+            source: 'mixonet'
+          };
+        });
+      }
+    } catch (err) {
+      console.warn('Mixonet-projektien haku epäonnistui:', err);
+    }
+  }
+
   // Yhdistetään sisällöt: Jos Supabase toimi, poistetaan JSON-duplikaatit
   if (supabaseSuccess) {
     const postsUuids = new Set(postsItems.map(p => p.id).filter(Boolean));
@@ -717,12 +762,17 @@ async function loadAll() {
       return true;
     }).map(j => ({ ...j, source: 'json_fallback' }));
 
-    allItems = [...postsItems, ...nonDuplicateJsonItems];
+    const nonDuplicateMixonet = mixonetItems.filter(m => !postsTargetIds.has(m.id) && !postsUuids.has(m.id));
+
+    allItems = [...postsItems, ...nonDuplicateMixonet, ...nonDuplicateJsonItems];
   } else {
-    // Supabase epäonnistui: käytetään pelkkää julkista JSON-dataa
-    allItems = jsonItems
-      .filter(j => j.visibility !== 'unlisted' && j.visibility !== 'link' && j.visibility !== 'private' && j.status !== 'draft')
-      .map(j => ({ ...j, source: 'json_fallback' }));
+    // Supabase epäonnistui: käytetään Mixonet-dataa ja julkista JSON-dataa
+    allItems = [
+      ...mixonetItems,
+      ...jsonItems
+        .filter(j => j.visibility !== 'unlisted' && j.visibility !== 'link' && j.visibility !== 'private' && j.status !== 'draft')
+        .map(j => ({ ...j, source: 'json_fallback' }))
+    ];
   }
 
   render();
@@ -733,18 +783,36 @@ function updateHeroTitles(kuntaSlug) {
   const title = document.getElementById('hero-title');
   const subtitle = document.getElementById('hero-subtitle');
 
-  if (kuntaSlug === 'kaikki') {
-    if (badge) badge.innerHTML = '🌐 LaukaaInfo &nbsp;·&nbsp; Kaikki kunnat';
-    if (title) title.textContent = 'Tapahtumat & Tarjoukset';
-    if (subtitle) subtitle.textContent = 'Kaikkien kuntien tapahtumat, tarjoukset ja suositukset yhdessä paikassa.';
-    document.title = 'Tapahtumat & Tarjoukset – Kaikki kunnat – LaukaaInfo';
+  const isAllMunis = kuntaSlug === 'kaikki';
+  const muni = availableKunnat.find(k => k.slug === kuntaSlug);
+  const muniName = isAllMunis ? 'Kaikki kunnat' : (muni ? muni.name : 'Laukaa');
+
+  if (badge) {
+    badge.innerHTML = isAllMunis
+      ? '🌐 LaukaaInfo &nbsp;·&nbsp; Kaikki kunnat'
+      : `📍 LaukaaInfo &nbsp;·&nbsp; ${muniName}`;
+  }
+
+  if (activeFilter === 'project' || activeFilter === 'idea') {
+    if (title) title.textContent = isAllMunis ? 'Ideat & Projektit' : `${muniName} – Ideat & Projektit`;
+    if (subtitle) subtitle.textContent = 'Tutustu alueen hankkeisiin, verkostoihin ja kehitysideoihin.';
+    document.title = `${isAllMunis ? 'Ideat & Projektit' : muniName + ' – Ideat & Projektit'} – LaukaaInfo`;
+  } else if (activeFilter === 'event') {
+    if (title) title.textContent = isAllMunis ? 'Tapahtumat' : `${muniName} – Tapahtumat`;
+    if (subtitle) subtitle.textContent = 'Kaikki alueen tulevat tapahtumat ja menot.';
+    document.title = `${isAllMunis ? 'Tapahtumat' : muniName + ' – Tapahtumat'} – LaukaaInfo`;
+  } else if (activeFilter === 'offer') {
+    if (title) title.textContent = isAllMunis ? 'Tarjoukset' : `${muniName} – Tarjoukset`;
+    if (subtitle) subtitle.textContent = 'Paikallisten yritysten parhaat tarjoukset ja edut.';
+    document.title = `${isAllMunis ? 'Tarjoukset' : muniName + ' – Tarjoukset'} – LaukaaInfo`;
+  } else if (activeFilter === 'announcement') {
+    if (title) title.textContent = isAllMunis ? 'Tiedotteet & Uutiset' : `${muniName} – Tiedotteet & Uutiset`;
+    if (subtitle) subtitle.textContent = 'Ajankohtaiset uutiset ja tiedotteet alueelta.';
+    document.title = `${isAllMunis ? 'Tiedotteet & Uutiset' : muniName + ' – Tiedotteet & Uutiset'} – LaukaaInfo`;
   } else {
-    const muni = availableKunnat.find(k => k.slug === kuntaSlug);
-    const muniName = muni ? muni.name : 'Laukaa';
-    if (badge) badge.innerHTML = `📍 LaukaaInfo &nbsp;·&nbsp; ${muniName}`;
-    if (title) title.textContent = `${muniName} – Tapahtumat & Tarjoukset`;
-    if (subtitle) subtitle.textContent = `Kaikki mitä kunnassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.`;
-    document.title = `${muniName} – Tapahtumat & Tarjoukset – LaukaaInfo`;
+    if (title) title.textContent = isAllMunis ? 'Tapahtumat & Tarjoukset' : `${muniName} – Tapahtumat & Tarjoukset`;
+    if (subtitle) subtitle.textContent = 'Kaikki mitä kunnassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.';
+    document.title = `${isAllMunis ? 'Tapahtumat & Tarjoukset' : muniName + ' – Tapahtumat & Tarjoukset'} – LaukaaInfo`;
   }
 }
 
@@ -922,6 +990,8 @@ function buildCard(item) {
     dateStr = `Voimassa ${formatDate(validUntil)} asti`;
   } else if (item.offer?.terms) {
     dateStr = item.offer.terms;
+  } else if (item.type === 'project' || item.type === 'idea') {
+    dateStr = item.status === 'ACTIVE' ? '🚀 Aktiivinen projekti' : (item.created_at ? `Julkaistu ${formatDate(item.created_at)}` : '💡 Avoin projekti');
   } else if (item.created_at) {
     dateStr = `Julkaistu ${formatDate(item.created_at)}`;
   }
@@ -933,7 +1003,11 @@ function buildCard(item) {
   if (isTicketLink) actionBtns.push(`<a href="${ticketUrl.trim()}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
   if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 www</a>`);
   if (dest && (item.id || item.target_id)) {
-    actionBtns.push(`<a href="${dest.url}" class="btn-card btn-card-secondary" title="${dest.title}">${dest.label}</a>`);
+    if (dest.type === 'project') {
+      actionBtns.push(`<a href="${dest.url}" class="btn-card btn-card-primary" title="${dest.title}">💡 Tutustu projektiin ↗</a>`);
+    } else {
+      actionBtns.push(`<a href="${dest.url}" class="btn-card btn-card-secondary" title="${dest.title}">${dest.label}</a>`);
+    }
   }
 
   let sourceBadge = '';
@@ -943,6 +1017,8 @@ function buildCard(item) {
     sourceBadge = '<span class="badge-source">💬 Feed</span>';
   } else if (item.source === 'posts') {
     sourceBadge = '<span class="badge-source">☁️ Julkaisu</span>';
+  } else if (item.source === 'mixonet' || dest.type === 'project') {
+    sourceBadge = '<span class="badge-source" style="background:#f3e8ff; color:#7e22ce; border:1px solid #d8b4fe;">🌐 Mixonet</span>';
   }
 
   return `
@@ -980,7 +1056,11 @@ function render() {
 
     // 2. Kuntakohtainen paikkasuodatus
     if (currentDescendantPlaceIds !== null) {
-      if (!item.place_id || !currentDescendantPlaceIds.has(item.place_id)) {
+      const isRegionalPlace = item.place_id === '54bf89b2-9e5d-46e0-9a9d-395f768c4195';
+      const isProjectOrIdea = item.type === 'project' || item.type === 'idea' || item.target_type === 'project';
+      const matchesPlace = item.place_id && currentDescendantPlaceIds.has(item.place_id);
+
+      if (!matchesPlace && !(isRegionalPlace || (isProjectOrIdea && !item.place_id))) {
         return false;
       }
     }
@@ -1017,6 +1097,35 @@ function render() {
 
   const withoutDate = filtered.filter(i => !withDate.includes(i));
 
+  const evSection = document.getElementById('events-section');
+  const evLabel   = document.getElementById('events-label');
+  const ndSection = document.getElementById('nodate-section');
+  const ndLabel   = document.getElementById('nodate-label');
+
+  if (activeFilter === 'project' || activeFilter === 'idea') {
+    if (evSection) evSection.style.display = 'none';
+    if (ndSection) ndSection.style.display = 'block';
+    if (ndLabel) ndLabel.innerHTML = '💡 Ideat ja projektit alueella';
+  } else if (activeFilter === 'event') {
+    if (evSection) evSection.style.display = 'block';
+    if (evLabel) evLabel.innerHTML = '📅 Tulevat tapahtumat';
+    if (ndSection) ndSection.style.display = 'none';
+  } else if (activeFilter === 'offer') {
+    if (evSection) evSection.style.display = 'none';
+    if (ndSection) ndSection.style.display = 'block';
+    if (ndLabel) ndLabel.innerHTML = '🎁 Ajankohtaiset tarjoukset';
+  } else if (activeFilter === 'announcement') {
+    if (evSection) evSection.style.display = 'none';
+    if (ndSection) ndSection.style.display = 'block';
+    if (ndLabel) ndLabel.innerHTML = '📢 Tiedotteet ja uutiset';
+  } else {
+    // all
+    if (evSection) evSection.style.display = 'block';
+    if (evLabel) evLabel.innerHTML = '📅 Tulevat tapahtumat';
+    if (ndSection) ndSection.style.display = 'block';
+    if (ndLabel) ndLabel.innerHTML = '🎁 Tarjoukset, projektit &amp; julkaisut';
+  }
+
   // Tapahtumien ruudukko kuukausierottimilla
   const evGrid = document.getElementById('events-grid');
   if (withDate.length === 0) {
@@ -1036,10 +1145,16 @@ function render() {
     evGrid.innerHTML = html;
   }
 
-  // Tarjoukset, tiedotteet ja muut julkaisut
+  // Tarjoukset, tiedotteet, projektit ja muut julkaisut
   const ndGrid = document.getElementById('nodate-grid');
   if (withoutDate.length === 0) {
-    ndGrid.innerHTML = `<div class="empty-state"><div class="icon">🎁</div><p>Ei tarjouksia tai muita julkaisuja valituilla ehdoilla.</p></div>`;
+    const emptyMsg = (activeFilter === 'project' || activeFilter === 'idea')
+      ? 'Ei ideoita tai projekteja valituilla ehdoilla.'
+      : (activeFilter === 'offer')
+      ? 'Ei tarjouksia valituilla ehdoilla.'
+      : 'Ei tarjouksia tai muita julkaisuja valituilla ehdoilla.';
+    const emptyIcon = (activeFilter === 'project' || activeFilter === 'idea') ? '💡' : '🎁';
+    ndGrid.innerHTML = `<div class="empty-state"><div class="icon">${emptyIcon}</div><p>${emptyMsg}</p></div>`;
   } else {
     // Järjestetään tuoreimmat ensin
     const sorted = [...withoutDate].sort((a,b) => {
@@ -1077,8 +1192,31 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
     pill.classList.add('active');
     activeFilter = pill.dataset.filter;
+
+    // Päivitä URL-parametri
+    const url = new URL(window.location.href);
+    if (activeFilter === 'all') {
+      url.searchParams.delete('filter');
+    } else {
+      url.searchParams.set('filter', activeFilter);
+    }
+    window.history.pushState({}, '', url);
+
+    updateHeroTitles(currentKuntaSlug);
     render();
   });
+});
+
+// Selaimen takaisin/eteenpäin -navigaatio
+window.addEventListener('popstate', () => {
+  const params = new URLSearchParams(window.location.search);
+  const filterParam = params.get('filter') || 'all';
+  activeFilter = filterParam;
+  document.querySelectorAll('.filter-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.filter === activeFilter);
+  });
+  updateHeroTitles(currentKuntaSlug);
+  render();
 });
 
 // Tekstihaku
