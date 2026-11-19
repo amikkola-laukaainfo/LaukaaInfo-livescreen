@@ -520,6 +520,58 @@
             font-size: 15px;
             cursor: pointer;
         }
+        .preview-audio-marker {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #7c3aed;
+            border: 2px solid #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .preview-company-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            background: #d97706;
+            border: 2px solid #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .preview-task-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            background: #6d28d9;
+            border: 2px solid #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .preview-virtual-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            background: #0891b2;
+            border: 2px solid #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+        }
         /* Popup styles */
         .preview-popup-content h4 {
             margin: 0 0 4px;
@@ -543,6 +595,10 @@
             text-transform: uppercase;
         }
         .badge-place { background: #dbeafe; color: #1e40af; }
+        .badge-company { background: #fef3c7; color: #92400e; }
+        .badge-audio { background: #f3e8ff; color: #6b21a8; }
+        .badge-task { background: #ede9fe; color: #5b21b6; }
+        .badge-virtual { background: #cffafe; color: #155e75; }
         .badge-point { background: #dcfce7; color: #166534; }
 
         @media (max-width: 480px) {
@@ -920,6 +976,10 @@
         const bounds = L.latLngBounds([]);
         let destCount = 0;
         let placeCount = 0;
+        let audioCount = 0;
+        let companyCount = 0;
+        let taskCount = 0;
+        let virtualCount = 0;
 
         // 1. Piirrä reittiviiva (LineString)
         geoJson.features.forEach(f => {
@@ -938,18 +998,44 @@
             }
         });
 
-        // 2. Piirrä kohteet ja paikkapisteet (Point)
+        // 2. Piirrä kohteet ja erikoispisteet (Point)
         geoJson.features.forEach(f => {
             if (f.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates)) {
                 const lng = f.geometry.coordinates[0];
                 const lat = f.geometry.coordinates[1];
+                const props = f.properties || {};
+
+                // Ohitetaan editorin sisäiset AI/rikastusankkurit
+                const pType = (props.pointType || props.point_type || props.type || '').toLowerCase();
+                const isAnchor = pType === 'anchor' || !!props.anchor_id || (props.id && String(props.id).startsWith('anchor_'));
+                if (isAnchor) return;
+
                 bounds.extend([lat, lng]);
 
-                const props = f.properties || {};
-                const isPlace = props.pointType === 'place' || props.point_type === 'place' || props.is_place_point === true || !!props.place_id;
+                const isAudio = pType === 'audio' || props.is_audio_point === true || (props.id && String(props.id).startsWith('audio_'));
+                const isPlace = pType === 'place' || props.is_place_point === true || !!props.place_id;
+                const isCompany = pType === 'company' || props.is_company_point === true || !!props.company_id;
+                const isTask = pType === 'task' || !!props.task_question;
+                const isVirtual = pType === 'virtual' || (!isCompany && !isPlace && (!!props.virtual_url || (!!props.virtual_space_slug && !props.description)));
 
                 let icon;
-                if (isPlace) {
+                let badgeHtml = '';
+                let titleText = props.title || props.name || '';
+                let descText = props.description || '';
+                let extraHtml = '';
+
+                if (isAudio) {
+                    audioCount++;
+                    icon = L.divIcon({
+                        className: '',
+                        html: '<div class="preview-audio-marker" title="Äänipiste">🎧</div>',
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14]
+                    });
+                    badgeHtml = '<span class="preview-popup-badge badge-audio">🎧 Äänipiste</span>';
+                    titleText = titleText || 'Äänipiste';
+                    descText = descText || props.arrival_tts || props.approach_tts || props.tts_text || 'Reitin varrella toistettava audio-ohjaus tai tarina.';
+                } else if (isPlace) {
                     placeCount++;
                     icon = L.divIcon({
                         className: '',
@@ -957,36 +1043,74 @@
                         iconSize: [30, 30],
                         iconAnchor: [15, 15]
                     });
+                    badgeHtml = '<span class="preview-popup-badge badge-place">🏛️ LaukaaInfo-paikka</span>';
+                    titleText = titleText || 'Paikka';
+                    descText = descText || 'LaukaaInfo-paikkatieto';
+                    if (props.place_id) {
+                        extraHtml = `<div style="margin-top:8px;"><a href="tietoa-paikasta.html?id=${encodeURIComponent(props.place_id)}" target="_blank" style="display:inline-block;padding:4px 10px;background:#059669;color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;text-decoration:none;">Tutustu paikkaan ↗</a></div>`;
+                    }
+                } else if (isCompany) {
+                    companyCount++;
+                    icon = L.divIcon({
+                        className: '',
+                        html: '<div class="preview-company-marker" title="Yrityspiste">🏢</div>',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+                    badgeHtml = '<span class="preview-popup-badge badge-company">🏢 Yrityspiste</span>';
+                    titleText = titleText || 'Yritys';
+                    descText = descText || props.esittely || '';
+                    const companyLink = props.linkki || props.infoLink || (props.company_id ? `yrityskortti.html?id=${encodeURIComponent(props.company_id)}` : '');
+                    if (companyLink) {
+                        extraHtml = `<div style="margin-top:8px;"><a href="${companyLink}" target="_blank" style="display:inline-block;padding:4px 10px;background:#d97706;color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;text-decoration:none;">Yrityskortti ↗</a></div>`;
+                    }
+                } else if (isTask) {
+                    taskCount++;
+                    icon = L.divIcon({
+                        className: '',
+                        html: '<div class="preview-task-marker" title="Tehtäväpiste">🧩</div>',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+                    badgeHtml = '<span class="preview-popup-badge badge-task">🧩 Tehtäväpiste</span>';
+                    titleText = titleText || 'Tehtävä';
+                    descText = props.task_question || descText || 'Ratkaise tehtävä paikan päällä Wonderin-sovelluksessa!';
+                } else if (isVirtual) {
+                    virtualCount++;
+                    icon = L.divIcon({
+                        className: '',
+                        html: '<div class="preview-virtual-marker" title="Virtuaalipiste">🌐</div>',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+                    badgeHtml = '<span class="preview-popup-badge badge-virtual">🌐 Virtuaalipiste (360°)</span>';
+                    titleText = titleText || props.virtual_space_title || 'Virtuaalitila';
+                    const vUrl = props.virtual_url || (props.virtual_space_slug ? (props.virtual_space_slug.startsWith('http') ? props.virtual_space_slug : 'https://laukaainfo-paikkastudio.web.app/embed/' + encodeURIComponent(props.virtual_space_slug)) : '');
+                    if (vUrl) {
+                        extraHtml = `<div style="margin-top:8px;"><a href="${vUrl}" target="_blank" style="display:inline-block;padding:4px 10px;background:#0891b2;color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;text-decoration:none;">Astu virtuaalitilaan ↗</a></div>`;
+                    }
                 } else {
+                    // Vain varsinaiset kohdepisteet numeroidaan (1..N)
                     destCount++;
-                    const num = props.order || destCount;
+                    const num = destCount;
                     icon = L.divIcon({
                         className: '',
                         html: `<div class="preview-marker">${num}</div>`,
                         iconSize: [28, 28],
                         iconAnchor: [14, 14]
                     });
+                    badgeHtml = `<span class="preview-popup-badge badge-point">📍 Kohde ${num}</span>`;
+                    titleText = titleText || `Kohde ${num}`;
                 }
 
                 const marker = L.marker([lat, lng], { icon }).addTo(map);
-
-                // Popup-sisältö
-                const titleText = props.title || props.name || 'Kohde';
-                const descText = props.description || (isPlace ? 'LaukaaInfo-paikkatieto' : '');
-                const badgeHtml = isPlace
-                    ? '<span class="preview-popup-badge badge-place">🏛️ LaukaaInfo-paikka</span>'
-                    : `<span class="preview-popup-badge badge-point">📍 Kohde ${props.order || destCount}</span>`;
-
-                const linkHtml = isPlace && props.place_id
-                    ? `<div style="margin-top:8px;"><a href="tietoa-paikasta.html?id=${encodeURIComponent(props.place_id)}" target="_blank" style="display:inline-block;padding:4px 10px;background:#059669;color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;text-decoration:none;">Tutustu paikkaan ↗</a></div>`
-                    : '';
 
                 const popupHtml = `
                     <div class="preview-popup-content">
                         ${badgeHtml}
                         <h4>${titleText}</h4>
                         ${descText ? `<p>${descText.slice(0, 160)}${descText.length > 160 ? '...' : ''}</p>` : ''}
-                        ${linkHtml}
+                        ${extraHtml}
                     </div>
                 `;
                 marker.bindPopup(popupHtml);
@@ -1003,7 +1127,11 @@
         // Päivitä otsikkobadge
         const counts = [];
         if (destCount > 0) counts.push(`${destCount} kohdetta`);
+        if (audioCount > 0) counts.push(`🎧 ${audioCount} äänipistettä`);
         if (placeCount > 0) counts.push(`🏛️ ${placeCount} paikkaa`);
+        if (companyCount > 0) counts.push(`🏢 ${companyCount} yritystä`);
+        if (taskCount > 0) counts.push(`🧩 ${taskCount} tehtävää`);
+        if (virtualCount > 0) counts.push(`🌐 ${virtualCount} virtuaalitilaa`);
         $mapBadge.textContent = counts.join(' • ') || 'Reittikartta';
 
         mapInstance = map;
