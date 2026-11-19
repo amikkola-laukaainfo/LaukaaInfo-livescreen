@@ -283,6 +283,68 @@
             transform: translateY(-1px);
         }
 
+        /* ── Google Maps ajo-ohjelinkki ── */
+        .btn-maps {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #ffffff;
+            color: #1e293b;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            margin-bottom: 0.9rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .btn-maps:hover {
+            border-color: #2563eb;
+            background: #f8fafc;
+            color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(37,99,235,0.12);
+        }
+        .btn-maps-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            border: 1px solid #bfdbfe;
+        }
+        .btn-maps-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            text-align: left;
+            overflow: hidden;
+        }
+        .btn-maps-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-maps:hover .btn-maps-title {
+            color: #1d4ed8;
+        }
+        .btn-maps-sub {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         /* ── Pääsykoodi (lukittu reitti) ── */
         .code-card {
             background: var(--card-bg);
@@ -657,6 +719,17 @@
             <div class="meta-row" id="meta-row"></div>
             <p class="route-desc" id="route-desc"></p>
 
+            <!-- Google Maps ajo-ohje lähtöpisteelle -->
+            <a id="btn-maps" href="#" target="_blank" rel="noopener noreferrer" class="btn-maps" style="display:none;">
+                <span class="btn-maps-icon">
+                    <span class="iconify" data-icon="material-symbols:directions-car"></span>
+                </span>
+                <span class="btn-maps-text">
+                    <span class="btn-maps-title">Ajo-ohjeet lähtöpisteelle (Google Maps) ↗</span>
+                    <span class="btn-maps-sub" id="maps-target-name">Lähtöpaikka</span>
+                </span>
+            </a>
+
             <!-- Rinnakkaisversiot (slider / napit otsikoiden alla ennen CTA-nappeja) -->
             <div class="variants-section" id="variants-section">
                 <div class="variants-label">
@@ -752,6 +825,8 @@
     const $partnerCard  = document.getElementById('partner-card');
     const $btnAndroid   = document.getElementById('btn-android');
     const $btnWeb       = document.getElementById('btn-web');
+    const $btnMaps      = document.getElementById('btn-maps');
+    const $mapsTargetName = document.getElementById('maps-target-name');
     const $pageTitle    = document.getElementById('page-title');
     const $ogTitle      = document.getElementById('og-title');
     const $ogDesc       = document.getElementById('og-description');
@@ -821,6 +896,57 @@
         $btnWeb.href     = webUrl;
     }
 
+    // ── Etsi reitin ensimmäinen kohdepiste tai lähtöpaikka ───────────
+    function getFirstRoutePoint(rawGeoJson) {
+        if (!rawGeoJson) return null;
+        let geoJson = rawGeoJson;
+        if (typeof geoJson === 'string') {
+            try { geoJson = JSON.parse(geoJson); } catch (e) { return null; }
+        }
+        if (!geoJson.features || !Array.isArray(geoJson.features)) return null;
+
+        // 1. Ensisijaisesti ensimmäinen varsinainen kohde- tai paikkapiste (ei ankkuri, ei ääni)
+        for (const f of geoJson.features) {
+            if (f.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates)) {
+                const props = f.properties || {};
+                const pType = (props.pointType || props.point_type || props.type || '').toLowerCase();
+                const isAnchor = pType === 'anchor' || !!props.anchor_id || (props.id && String(props.id).toLowerCase().startsWith('anchor'));
+                const isAudio = pType === 'audio' || pType === 'waypoint' || props.is_audio_point === true || (props.id && String(props.id).toLowerCase().startsWith('audio')) || !!props.play_mode;
+                if (isAnchor || isAudio) continue;
+
+                const lng = f.geometry.coordinates[0];
+                const lat = f.geometry.coordinates[1];
+                const title = props.title || props.name || '';
+                return { lat, lng, title };
+            }
+        }
+
+        // 2. Toissijaisesti mikä tahansa ei-ankkuri Point
+        for (const f of geoJson.features) {
+            if (f.geometry?.type === 'Point' && Array.isArray(f.geometry.coordinates)) {
+                const props = f.properties || {};
+                const pType = (props.pointType || props.point_type || props.type || '').toLowerCase();
+                const isAnchor = pType === 'anchor' || !!props.anchor_id || (props.id && String(props.id).toLowerCase().startsWith('anchor'));
+                if (isAnchor) continue;
+
+                const lng = f.geometry.coordinates[0];
+                const lat = f.geometry.coordinates[1];
+                const title = props.title || props.name || '';
+                return { lat, lng, title };
+            }
+        }
+
+        // 3. Viimeisenä reittiviivan ensimmäinen koordinaatti
+        for (const f of geoJson.features) {
+            if (f.geometry?.type === 'LineString' && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length > 0) {
+                const coord = f.geometry.coordinates[0];
+                return { lat: coord[1], lng: coord[0], title: 'Reitin alku' };
+            }
+        }
+
+        return null;
+    }
+
     // ── Reitin ja sen metadatan esittäminen ───────────────────────────
     function displayRoute(r, code) {
         currentRoute = r;
@@ -886,6 +1012,21 @@
             $codeCard.style.display = 'none';
             $ctaSection.style.display = 'flex';
             $infoCard.style.display   = 'block';
+
+            // Google Maps -navigointilinkki reitin ensimmäiselle pisteelle
+            const firstPoint = getFirstRoutePoint(r.route_geojson);
+            if (firstPoint && $btnMaps) {
+                $btnMaps.href = `https://www.google.com/maps/dir/?api=1&destination=${firstPoint.lat},${firstPoint.lng}`;
+                if ($mapsTargetName) {
+                    $mapsTargetName.textContent = firstPoint.title
+                        ? `Lähtöpaikka: ${firstPoint.title}`
+                        : `Koordinaatit: ${firstPoint.lat.toFixed(4)}, ${firstPoint.lng.toFixed(4)}`;
+                }
+                $btnMaps.style.display = 'inline-flex';
+            } else if ($btnMaps) {
+                $btnMaps.style.display = 'none';
+            }
+
             if (r.route_geojson) {
                 renderPreviewMap(r.route_geojson);
             } else {
@@ -896,6 +1037,7 @@
             $codeCard.style.display = 'block';
             $ctaSection.style.display = 'none';
             $infoCard.style.display   = 'none';
+            if ($btnMaps) $btnMaps.style.display = 'none';
             const $mapCard = document.getElementById('map-card');
             if ($mapCard) $mapCard.style.display = 'none';
         }
@@ -1007,12 +1149,16 @@
 
                 // Ohitetaan editorin sisäiset AI/rikastusankkurit
                 const pType = (props.pointType || props.point_type || props.type || '').toLowerCase();
-                const isAnchor = pType === 'anchor' || !!props.anchor_id || (props.id && String(props.id).startsWith('anchor_'));
+                const isAnchor = pType === 'anchor' || !!props.anchor_id || (props.id && String(props.id).toLowerCase().startsWith('anchor'));
                 if (isAnchor) return;
 
                 bounds.extend([lat, lng]);
 
-                const isAudio = pType === 'audio' || props.is_audio_point === true || (props.id && String(props.id).startsWith('audio_'));
+                const isAudio = pType === 'audio'
+                    || pType === 'waypoint'
+                    || props.is_audio_point === true
+                    || (props.id && String(props.id).toLowerCase().startsWith('audio'))
+                    || !!props.play_mode;
                 const isPlace = pType === 'place' || props.is_place_point === true || !!props.place_id;
                 const isCompany = pType === 'company' || props.is_company_point === true || !!props.company_id;
                 const isTask = pType === 'task' || !!props.task_question;
