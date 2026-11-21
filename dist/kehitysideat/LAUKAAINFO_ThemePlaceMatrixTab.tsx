@@ -527,6 +527,8 @@ export function ThemePlaceMatrixTab() {
         description: (cardData.description || '').trim(),
         content: (cardData.content || '').trim(),
         place_id: targetPlaceId,
+        tags: targetTagId ? [targetTagId] : [],
+        template_type: cardData.template_type || 'GUIDE',
         image_url: (cardData.image_url || '').trim() || null,
         publisher_name: (cardData.publisher_name || '').trim() || 'LaukaaInfo Toimitus',
         access_key: (cardData.access_key || '').trim() || null,
@@ -1702,7 +1704,7 @@ function KnowledgeCardModal({
   };
 
   const publicUrl = card?.id
-    ? `tietokortti.html?id=${card.id}`
+    ? `tietokortti.html?id=${card.id}${selectedPlaceId ? `&place=${selectedPlaceId}` : ''}${selectedTagId ? `&theme=${selectedTagId}` : ''}`
     : selectedPlaceId && selectedTagId
     ? `tietokortti.html?place=${selectedPlaceId}&theme=${selectedTagId}`
     : null;

@@ -953,16 +953,46 @@
                     if (place) {
                         currentPlace = place;
                         // Etsitään julkaisua ko. paikalle ja teemalle
-                        const { data: posts } = await sb
-                            .from('posts')
-                            .select('*, post_attachments(*), post_media(*)')
-                            .eq('place_id', place.place_id || place.id)
-                            .in('type', ['INFO', 'knowledge', 'article', 'news', 'notice'])
-                            .order('created_at', { ascending: false })
-                            .limit(1);
+                        // Kokeillaan ensin löytää post_themes -taulusta
+                        let foundPost = null;
+                        try {
+                            const { data: ptRows } = await sb
+                                .from('post_themes')
+                                .select('post_id')
+                                .or(`tag_id.eq.${themeParam},tag_id.ilike.%${themeParam}%`);
+                            if (ptRows && ptRows.length > 0) {
+                                const ptIds = ptRows.map(r => r.post_id).filter(Boolean);
+                                const { data: tPosts } = await sb
+                                    .from('posts')
+                                    .select('*, post_attachments(*), post_media(*)')
+                                    .in('id', ptIds)
+                                    .eq('place_id', place.place_id || place.id)
+                                    .in('type', ['INFO', 'knowledge', 'article', 'news', 'notice'])
+                                    .order('created_at', { ascending: false })
+                                    .limit(1);
+                                if (tPosts && tPosts.length > 0) {
+                                    foundPost = tPosts[0];
+                                }
+                            }
+                        } catch (e) {
+                            console.debug('post_themes haku epäonnistui:', e);
+                        }
 
-                        if (posts && posts.length > 0) {
-                            currentPost = posts[0];
+                        if (!foundPost) {
+                            const { data: posts } = await sb
+                                .from('posts')
+                                .select('*, post_attachments(*), post_media(*)')
+                                .eq('place_id', place.place_id || place.id)
+                                .in('type', ['INFO', 'knowledge', 'article', 'news', 'notice'])
+                                .order('created_at', { ascending: false })
+                                .limit(1);
+                            if (posts && posts.length > 0) {
+                                foundPost = posts[0];
+                            }
+                        }
+
+                        if (foundPost) {
+                            currentPost = foundPost;
                         }
                     }
                 }
@@ -982,8 +1012,26 @@
                     if (p) currentPlace = p;
                 }
 
-                // Haetaan teeman tiedot jos saatavilla
-                const tagId = themeParam || currentPost.tag_id || currentPost.tags?.[0] || 'retkeily';
+                // Haetaan teeman tiedot jos saatavilla:
+                // 1) URL:n themeParam
+                // 2) postin oma tag_id / tags
+                // 3) post_themes -taulusta haettu tag_id
+                let tagId = themeParam || currentPost.tag_id || (Array.isArray(currentPost.tags) ? currentPost.tags[0] : currentPost.tags);
+                if (!tagId && currentPost.id && sb) {
+                    try {
+                        const { data: pt } = await sb
+                            .from('post_themes')
+                            .select('tag_id')
+                            .eq('post_id', currentPost.id)
+                            .limit(1);
+                        if (pt && pt.length > 0 && pt[0].tag_id) {
+                            tagId = pt[0].tag_id;
+                        }
+                    } catch (e) {
+                        console.debug('post_themes tag_id haku epäonnistui:', e);
+                    }
+                }
+
                 if (sb && tagId) {
                     const { data: t } = await sb
                         .from('tags')
@@ -992,6 +1040,8 @@
                         .maybeSingle();
                     if (t) currentTag = t;
                 }
+
+                if (!tagId) tagId = 'retkeily';
 
                 renderTietokortti();
 
