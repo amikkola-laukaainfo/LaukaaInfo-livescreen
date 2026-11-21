@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.6c5719d9.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.6c5719d9.css">
-    <script src="../translations.6c5719d9.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.fbafe78a.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.fbafe78a.css">
+    <script src="../translations.fbafe78a.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
         <style>
         :root {
@@ -1338,7 +1338,7 @@
         .marketing-dropdown-content {
             display: none;
             position: absolute;
-            bottom: 105%;
+            top: calc(100% + 6px); min-width: 200px;
             left: 0;
             width: 100%;
             background: white;
@@ -1350,8 +1350,9 @@
             flex-direction: column;
             gap: 4px;
         }
-        .marketing-dropdown-content.show,
-        .marketing-dropdown-container.open .marketing-dropdown-content {
+        .marketing-dropdown.open .marketing-dropdown-content,
+        #marketing-dropdown-container.open .marketing-dropdown-content,
+        .marketing-dropdown-content.show {
             display: flex;
         }
         .marketing-dropdown-content a {
@@ -2082,7 +2083,7 @@
                             <span><span class="iconify" data-icon="material-symbols-light:print-outline"></span></span> Tulosta PDF-esite
                         </button>
                         <div class="marketing-dropdown" id="marketing-dropdown-container">
-                            <button class="qr-btn" id="btn-marketing-tools" onclick="toggleMarketingDropdown()" style="width: 100%; height: 100%;">
+                            <button class="qr-btn" id="btn-marketing-tools" onclick="toggleMarketingDropdown(event)" style="width: 100%; height: 100%;">
                                 <span><span class="iconify" data-icon="material-symbols-light:campaign"></span></span> Markkinointityökalut ▼
                             </button>
                             <div class="marketing-dropdown-content">
@@ -2434,10 +2435,11 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.6c5719d9.js?v=20260301"></script>
-    <script src="../yrityskortti.6c5719d9.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.fbafe78a.js?v=20260301"></script>
+    <script src="../yrityskortti.fbafe78a.js?v=20260304-DEBUG-2"></script>
     <script>
-        function toggleMarketingDropdown() {
+        function toggleMarketingDropdown(e) {
+            if (e) e.stopPropagation();
             document.getElementById('marketing-dropdown-container').classList.toggle('open');
         }
 
@@ -2499,8 +2501,8 @@
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../supabase-config.6c5719d9.js"></script>
-    <script src="../kohtaamiset.6c5719d9.js?v=20260708"></script>
+    <script src="../supabase-config.fbafe78a.js"></script>
+    <script src="../kohtaamiset.fbafe78a.js?v=20260708"></script>
 </body>
 
 </html>
