@@ -3163,12 +3163,12 @@ async function renderNearbyPlacesForCompany(companyId) {
             if (p.dist < 300) tagClass = 'tag-large';
             else if (p.dist > 1000) tagClass = 'tag-small';
 
-            // Näytetään oikea nimi (p.name) hashtagina, mutta haetaan kohde canonical-nimellä
+            // Näytetään oikea nimi (p.name) hashtagina, mutta linkitetään ensisijaisesti UUID:llä
             const displayName = p.name || p.canonical_name;
             const hashName = displayName.replace(/\s+/g, '');
-            const searchName = (p.canonical_name || p.name).replace(/\s+/g, '_');
+            const targetId = p.place_id || p.id || (p.canonical_name || p.name).replace(/\s+/g, '_');
 
-            return `<a href="${prefix}tietoa-paikasta.html?name=${encodeURIComponent(searchName)}" class="nearby-tag ${tagClass}">
+            return `<a href="${prefix}tietoa-paikasta.html?id=${encodeURIComponent(targetId)}" class="nearby-tag ${tagClass}">
                 #${hashName} <span class="dist">· ${distText}</span>
             </a>`;
         }).join('');

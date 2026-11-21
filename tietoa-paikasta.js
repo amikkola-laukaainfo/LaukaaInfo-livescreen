@@ -103,18 +103,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         } else if (placeNameParam) {
-            const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
-            const cleanNameValue = decodedName.replace(/["']/g, '').trim();
+            const rawParam = decodeURIComponent(placeNameParam).replace(/["']/g, '').trim();
+            const spaceParam = rawParam.replace(/[_]/g, ' ').trim();
+            const strippedName = spaceParam.replace(/\s+(laukaa|lievestuore|vihtavuori)$/i, '').trim();
 
+            // 1. Kokeillaan ensin tarkkaa nimen / canonical-nimen hakua (sekä alaviivoilla että välilyönneillä)
             const exactRes = await aiSb.from('places').select('*')
-                .or(`name.ilike.${cleanNameValue},canonical_name.ilike.${cleanNameValue}`)
+                .or(`canonical_name.ilike.${rawParam},name.ilike.${rawParam},canonical_name.ilike.${spaceParam},name.ilike.${spaceParam},name.ilike.${strippedName}`)
                 .limit(1);
             
             if (!exactRes.error && exactRes.data && exactRes.data.length > 0) {
                 placesData = exactRes.data;
             } else {
+                // 2. Jos tarkkaa ei löydy, kokeillaan osittaishakua
                 const wildcardRes = await aiSb.from('places').select('*')
-                    .or(`name.ilike.%${cleanNameValue}%,canonical_name.ilike.%${cleanNameValue}%`)
+                    .or(`canonical_name.ilike.%${rawParam}%,name.ilike.%${rawParam}%,canonical_name.ilike.%${spaceParam}%,name.ilike.%${spaceParam}%,name.ilike.%${strippedName}%`)
                     .limit(1);
                 placesData = wildcardRes.data;
                 placeError = wildcardRes.error;
@@ -3787,12 +3790,11 @@ async function renderNearbyPlaces(currentPlace) {
                 if (p.dist < 300) tagClass = 'tag-large';
                 else if (p.dist > 1000) tagClass = 'tag-small';
 
-                // Näytetään oikea nimi (p.name) hashtagina, mutta haetaan kohde canonical-nimellä
+                // Näytetään oikea nimi (p.name) hashtagina, mutta linkitetään aina UUID:llä (place_id)
                 const displayName = p.name || p.canonical_name;
-                const hashName = displayName.replace(/\s+/g, '');
-                const searchName = (p.canonical_name || p.name).replace(/\s+/g, '_');
+                const targetId = p.place_id || p.id || (p.canonical_name || p.name).replace(/\s+/g, '_');
 
-                return `<a href="tietoa-paikasta.html?name=${encodeURIComponent(searchName)}" class="nearby-tag ${tagClass}">${displayName} <span class="dist">\u00b7 ${distText}</span></a>`;
+                return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(targetId)}" class="nearby-tag ${tagClass}">${displayName} <span class="dist">\u00b7 ${distText}</span></a>`;
             }).join('');
         }
     } catch (e) {
