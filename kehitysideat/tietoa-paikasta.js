@@ -5172,7 +5172,9 @@ async function loadWallPostsForPlace(placeData) {
             let cardTargetUrl = '';
             let cardTargetText = '';
             if (p.type === 'INFO' || p.type === 'knowledge' || p.type === 'article' || p.template_type) {
-                cardTargetUrl = `tietokortti.html?id=${encodeURIComponent(p.id)}`;
+                const _tPlace = placeData?.canonical_name || placeData?.name || '';
+                const _tTheme = p.tag_id || (Array.isArray(p.tags) ? p.tags[0] : p.tags) || '';
+                cardTargetUrl = `tietokortti.html?id=${encodeURIComponent(p.id)}&place=${encodeURIComponent(_tPlace)}&theme=${encodeURIComponent(_tTheme)}`;
                 cardTargetText = '📖 Lue koko tietokortti →';
             } else if (p.type === 'event') {
                 cardTargetUrl = `kohdekortti.html?id=${encodeURIComponent(p.id)}`;

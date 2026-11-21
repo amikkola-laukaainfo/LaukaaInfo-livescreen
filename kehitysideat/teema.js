@@ -2440,7 +2440,7 @@ async function loadContextualTheme(tagParam, placeId) {
                         let linkTarget = `seina.html?post=${encodeURIComponent(post.id)}`;
                         let linkText = 'Lue koko julkaisu seinällä →';
                         if (post.type === 'INFO' || post.type === 'knowledge' || post.type === 'article' || post.template_type) {
-                            linkTarget = `tietokortti.html?id=${encodeURIComponent(post.id)}`;
+                            linkTarget = `tietokortti.html?id=${encodeURIComponent(post.id)}&place=${encodeURIComponent(placeId || '')}&theme=${encodeURIComponent(actualTagId || '')}`;
                             linkText = '📖 Lue koko tietokortti →';
                         } else if (post.type === 'event') {
                             linkTarget = `kohdekortti.html?id=${encodeURIComponent(post.id)}`;
