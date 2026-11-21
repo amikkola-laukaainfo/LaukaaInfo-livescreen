@@ -5132,8 +5132,8 @@ async function loadWallPostsForPlace(placeData) {
             return new Date(b.published_at || b.created_at) - new Date(a.published_at || a.created_at);
         });
 
-        const typeEmoji = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️', notice: '📣', article: '📰', story: '📖', video: '🎥' };
-        const typeFi   = { announcement: 'Ilmoitus', news: 'Uutinen', event: 'Tapahtuma', offer: 'Tarjous', notice: 'Ilmoitus', article: 'Artikkeli', story: 'Tarina', video: 'Video' };
+        const typeEmoji = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️', notice: '📣', article: '📖', story: '📖', video: '🎥', INFO: '📖', knowledge: '📖' };
+        const typeFi   = { announcement: 'Ilmoitus', news: 'Uutinen', event: 'Tapahtuma', offer: 'Tarjous', notice: 'Ilmoitus', article: 'Tietokortti', story: 'Tarina', video: 'Video', INFO: 'Tietokortti', knowledge: 'Tietokortti' };
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
         list.innerHTML = posts.slice(0, 10).map(p => {
@@ -5171,7 +5171,10 @@ async function loadWallPostsForPlace(placeData) {
 
             let cardTargetUrl = '';
             let cardTargetText = '';
-            if (p.type === 'event') {
+            if (p.type === 'INFO' || p.type === 'knowledge' || p.type === 'article' || p.template_type) {
+                cardTargetUrl = `tietokortti.html?id=${encodeURIComponent(p.id)}`;
+                cardTargetText = '📖 Lue koko tietokortti →';
+            } else if (p.type === 'event') {
                 cardTargetUrl = `kohdekortti.html?id=${encodeURIComponent(p.id)}`;
                 cardTargetText = 'Avaa tapahtumakortti →';
             } else if (p.type === 'offer') {

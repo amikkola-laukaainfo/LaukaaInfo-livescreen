@@ -1846,12 +1846,31 @@ async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName
         const db = window.LaukaaSupabase || aiSbClient;
         if (!db) return;
 
+        // Hae post_themes -linkkauksen kautta tietokortit (teema-ID perusteella)
+        let postIds = [];
+        if (tagId) {
+            try {
+                const { data: ptRows } = await db
+                    .from('post_themes')
+                    .select('post_id')
+                    .eq('tag_id', tagId);
+                if (ptRows && ptRows.length > 0) {
+                    postIds = ptRows.map(r => r.post_id).filter(Boolean);
+                }
+            } catch(e) { console.debug('post_themes-haku tietokorteille epäonnistui:', e); }
+        }
+
+        // Paikkakohtainen suorahaku + post_themes-tulokset yhdistettynä
         let query = db
             .from('posts')
-            .select('id, title, lead, description, content, image_url, place_id, template_type, source_info, publisher_name, created_at, published_at')
+            .select('id, title, lead, description, content, image_url, place_id, template_type, type, source_info, publisher_name, created_at, published_at')
             .in('type', ['INFO', 'knowledge', 'article']);
 
-        if (placeId) {
+        if (postIds.length > 0 && placeId) {
+            query = query.or(`place_id.eq.${placeId},target_id.eq.${placeId},id.in.(${postIds.join(',')})`);
+        } else if (postIds.length > 0) {
+            query = query.in('id', postIds);
+        } else if (placeId) {
             query = query.or(`place_id.eq.${placeId},target_id.eq.${placeId}`);
         }
 
@@ -1865,7 +1884,7 @@ async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName
             list.innerHTML = posts.map(post => {
                 const title = post.title || 'Nimetön tietokortti';
                 const lead = post.lead || post.description || '';
-                const template = post.template_type || 'TIETOKORTTI';
+                const template = post.template_type || post.type || 'TIETOKORTTI';
                 const dateStr = post.published_at || post.created_at
                     ? new Date(post.published_at || post.created_at).toLocaleDateString('fi-FI')
                     : '';
@@ -1897,7 +1916,7 @@ async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName
                                     ${dateStr}
                                 </span>
                                 <span style="display:inline-flex; align-items:center; gap:0.25rem; font-size:0.85rem; font-weight:700; color:var(--primary);">
-                                    Lue artikkeli →
+                                    Lue tietokortti →
                                 </span>
                             </div>
                         </div>
@@ -2420,7 +2439,10 @@ async function loadContextualTheme(tagParam, placeId) {
 
                         let linkTarget = `seina.html?post=${encodeURIComponent(post.id)}`;
                         let linkText = 'Lue koko julkaisu seinällä →';
-                        if (post.type === 'event') {
+                        if (post.type === 'INFO' || post.type === 'knowledge' || post.type === 'article' || post.template_type) {
+                            linkTarget = `tietokortti.html?id=${encodeURIComponent(post.id)}`;
+                            linkText = '📖 Lue koko tietokortti →';
+                        } else if (post.type === 'event') {
                             linkTarget = `kohdekortti.html?id=${encodeURIComponent(post.id)}`;
                             linkText = 'Avaa tapahtumakortti →';
                         } else if (post.type === 'offer') {

@@ -119,7 +119,7 @@ export function ThemePlaceMatrixTab() {
   const [showOnlyActiveTags, setShowOnlyActiveTags] = useState(false);
   const [maxPlaces, setMaxPlaces] = useState(50);
   const [maxTags, setMaxTags] = useState(30);
-  const [view, setView] = useState<'matrix' | 'place-summary' | 'tag-summary'>('place-summary');
+  const [view, setView] = useState<'matrix' | 'place-summary' | 'tag-summary' | 'cards'>('place-summary');
 
   // ── Datan lataus: Kanoninen theme_places + siirtymävarmistus ───────────────────
   const loadData = useCallback(async () => {
@@ -486,6 +486,25 @@ export function ThemePlaceMatrixTab() {
     }
   };
 
+  const handleDeleteKnowledgeCard = async (postId: string) => {
+    const card = knowledgeCards.find(c => c.id === postId);
+    const cardTitle = card?.title || 'tämä tietokortti';
+    if (!window.confirm(`Haluatko varmasti poistaa tietokortin "${cardTitle}"? Toimintoa ei voi peruuttaa.`)) {
+      return;
+    }
+    try {
+      await supabase.from('post_themes').delete().eq('post_id', postId);
+      const { error } = await supabase.from('posts').delete().eq('id', postId);
+      if (error) throw error;
+      setActionSuccess(`Tietokortti "${cardTitle}" poistettu onnistuneesti!`);
+      setTimeout(() => setActionSuccess(null), 3500);
+      await loadData();
+    } catch (err: any) {
+      console.error('Virhe poistettaessa tietokorttia:', err);
+      alert('Virhe poistettaessa tietokorttia: ' + (err.message || err));
+    }
+  };
+
   // ── Tietokorttien hallinta ja luonti ─────────────────────────────────────────
   const handleOpenKnowledgeModal = (placeId?: string, tagId?: string, card?: KnowledgeCardPost) => {
     setSelectedCardForEdit(card || null);
@@ -623,6 +642,15 @@ export function ThemePlaceMatrixTab() {
             <Grid3X3 size={14} className={view === 'matrix' ? 'text-emerald-600' : 'text-slate-400'} />
             📊 Matriisi
           </button>
+          <button
+            onClick={() => setView('cards')}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              view === 'cards' ? 'bg-white text-amber-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <BookOpen size={14} className={view === 'cards' ? 'text-amber-600' : 'text-slate-400'} />
+            📖 Tietokortit ({knowledgeCards.length})
+          </button>
         </div>
 
         <button
@@ -751,6 +779,15 @@ export function ThemePlaceMatrixTab() {
           onRemoveMapping={removeThemeMapping}
           onDeleteTheme={handleDeleteTheme}
         />
+      ) : view === 'cards' ? (
+        <UnifiedKnowledgeCardsView
+          cards={knowledgeCards}
+          places={places}
+          tags={tags}
+          onEditCard={(c) => handleOpenKnowledgeModal(c.place_id, c.tag_ids?.[0], c)}
+          onDeleteCard={handleDeleteKnowledgeCard}
+          onNewCard={() => handleOpenKnowledgeModal()}
+        />
       ) : (
         <UnifiedMatrixView
           places={filteredPlaces.slice(0, maxPlaces)}
@@ -863,6 +900,7 @@ export function ThemePlaceMatrixTab() {
           tags={tags}
           defaultPlaceId={modalDefaultPlaceId}
           defaultTagId={modalDefaultTagId}
+          onDelete={handleDeleteKnowledgeCard}
         />
       )}
     </div>
@@ -1576,6 +1614,7 @@ interface KnowledgeCardModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (card: Partial<KnowledgeCardPost>, placeId: string, tagId: string) => Promise<void>;
+  onDelete?: (postId: string) => Promise<void>;
   card: Partial<KnowledgeCardPost> | null;
   places: PlaceRow[];
   tags: TagRow[];
@@ -1587,6 +1626,7 @@ function KnowledgeCardModal({
   isOpen,
   onClose,
   onSave,
+  onDelete,
   card,
   places,
   tags,
@@ -1604,6 +1644,20 @@ function KnowledgeCardModal({
   const [status, setStatus] = useState(card?.status || 'published');
   const [templateType, setTemplateType] = useState(card?.template_type || 'GUIDE');
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    setSelectedPlaceId(card?.place_id || defaultPlaceId || places[0]?.place_id || '');
+    setSelectedTagId(card?.tag_ids?.[0] || card?.tags || defaultTagId || tags[0]?.tag_id || '');
+    setTitle(card?.title || '');
+    setDescription(card?.description || '');
+    setContent(card?.content || '');
+    setImageUrl(card?.image_url || '');
+    setPublisherName(card?.publisher_name || 'LaukaaInfo Toimitus');
+    setAccessKey(card?.access_key || '');
+    setStatus(card?.status || 'published');
+    setTemplateType(card?.template_type || 'GUIDE');
+  }, [card, defaultPlaceId, defaultTagId, places, tags]);
 
   if (!isOpen) return null;
 
@@ -1844,23 +1898,46 @@ function KnowledgeCardModal({
           </div>
 
           {/* Napit */}
-          <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-200">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSaving}
-              className="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all"
-            >
-              Peruuta
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 disabled:opacity-50"
-            >
-              {isSaving ? <Loader2 size={13} className="animate-spin" /> : <BookOpen size={13} />}
-              {card?.id ? 'Tallenna muutokset' : 'Tallenna ja julkaise'}
-            </button>
+          <div className="flex items-center justify-between gap-2 pt-4 border-t border-slate-200">
+            <div>
+              {card?.id && onDelete && (
+                <button
+                  type="button"
+                  disabled={isSaving || isDeleting}
+                  onClick={async () => {
+                    setIsDeleting(true);
+                    try {
+                      await onDelete(card.id!);
+                      onClose();
+                    } finally {
+                      setIsDeleting(false);
+                    }
+                  }}
+                  className="px-3.5 py-2 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  {isDeleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                  Poista tietokortti
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={isSaving || isDeleting}
+                className="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all"
+              >
+                Peruuta
+              </button>
+              <button
+                type="submit"
+                disabled={isSaving || isDeleting}
+                className="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 disabled:opacity-50"
+              >
+                {isSaving ? <Loader2 size={13} className="animate-spin" /> : <BookOpen size={13} />}
+                {card?.id ? 'Tallenna muutokset' : 'Tallenna ja julkaise'}
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -2221,6 +2298,274 @@ function UnifiedMatrixView({
         <span className="text-slate-400 ml-auto">
           Klikkaussykli solussa: <em>Lisää ensisijainen (★) → Vaihda toissijaiseksi (●) → Poista (·)</em>
         </span>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// 4. TIETOKORTTIEN LISTA- JA HALLINTANÄKYMÄ (📖 UnifiedKnowledgeCardsView)
+// ─────────────────────────────────────────────────────────────
+interface UnifiedKnowledgeCardsViewProps {
+  cards: KnowledgeCardPost[];
+  places: PlaceRow[];
+  tags: TagRow[];
+  onEditCard: (card: KnowledgeCardPost) => void;
+  onDeleteCard: (id: string) => Promise<void>;
+  onNewCard: () => void;
+}
+
+function UnifiedKnowledgeCardsView({
+  cards,
+  places,
+  tags,
+  onEditCard,
+  onDeleteCard,
+  onNewCard
+}: UnifiedKnowledgeCardsViewProps) {
+  const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const [filterPlaceId, setFilterPlaceId] = useState<string>('all');
+  const [filterTagId, setFilterTagId] = useState<string>('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const placeMap = useMemo(() => new Map(places.map(p => [p.place_id, p])), [places]);
+  const tagMap = useMemo(() => new Map(tags.map(t => [t.tag_id, t])), [tags]);
+
+  const filtered = useMemo(() => {
+    return cards.filter(c => {
+      if (filterStatus !== 'all' && (c.status || 'published') !== filterStatus) return false;
+      if (filterPlaceId !== 'all' && c.place_id !== filterPlaceId) return false;
+      if (filterTagId !== 'all') {
+        const cTags = c.tag_ids || [];
+        if (!cTags.includes(filterTagId)) return false;
+      }
+      if (search.trim()) {
+        const q = search.toLowerCase();
+        const pName = (c.place_id ? placeMap.get(c.place_id)?.name : '') || '';
+        const matchTitle = (c.title || '').toLowerCase().includes(q);
+        const matchDesc = (c.description || '').toLowerCase().includes(q);
+        const matchContent = (c.content || '').toLowerCase().includes(q);
+        const matchPlace = pName.toLowerCase().includes(q);
+        const matchKey = (c.access_key || '').toLowerCase().includes(q);
+        if (!matchTitle && !matchDesc && !matchContent && !matchPlace && !matchKey) return false;
+      }
+      return true;
+    });
+  }, [cards, search, filterStatus, filterPlaceId, filterTagId, placeMap]);
+
+  const handleDelete = async (card: KnowledgeCardPost) => {
+    setDeletingId(card.id);
+    try {
+      await onDeleteCard(card.id);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const getTemplateLabel = (type?: string) => {
+    switch (type) {
+      case 'GUIDE': return 'Opas / Reittiohje';
+      case 'HISTORY': return 'Historia / Perintö';
+      case 'INTRO': return 'Kohteen esittely';
+      case 'STORY': return 'Tarina / Muistelu';
+      default: return 'Tietokortti';
+    }
+  };
+
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
+      {/* Työkalurivi ja suodattimet */}
+      <div className="bg-white border-b border-slate-200 px-6 py-4 flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Etsi otsikolla, paikan nimellä, avaimella tai sisällöllä..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-amber-500"
+          />
+        </div>
+
+        {/* Tila */}
+        <select
+          value={filterStatus}
+          onChange={e => setFilterStatus(e.target.value as any)}
+          className="border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold bg-white text-slate-700 outline-none"
+        >
+          <option value="all">Kaikki tilat ({cards.length})</option>
+          <option value="published">🟢 Vain julkaistut ({cards.filter(c => (c.status || 'published') === 'published').length})</option>
+          <option value="draft">🟡 Vain luonnokset ({cards.filter(c => c.status === 'draft').length})</option>
+        </select>
+
+        {/* Paikka */}
+        <select
+          value={filterPlaceId}
+          onChange={e => setFilterPlaceId(e.target.value)}
+          className="border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold bg-white text-slate-700 outline-none max-w-[200px]"
+        >
+          <option value="all">Kaikki paikat</option>
+          {places.map(p => (
+            <option key={p.place_id} value={p.place_id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Teema */}
+        <select
+          value={filterTagId}
+          onChange={e => setFilterTagId(e.target.value)}
+          className="border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold bg-white text-slate-700 outline-none max-w-[180px]"
+        >
+          <option value="all">Kaikki teemat</option>
+          {tags.map(t => (
+            <option key={t.tag_id} value={t.tag_id}>
+              {t.name}
+            </option>
+          ))}
+        </select>
+
+        <button
+          onClick={onNewCard}
+          className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
+        >
+          <Plus size={14} /> Uusi tietokortti
+        </button>
+      </div>
+
+      {/* Lista / Taulukko */}
+      <div className="flex-1 overflow-y-auto p-6">
+        {filtered.length === 0 ? (
+          <div className="bg-white border border-dashed border-slate-300 rounded-2xl p-12 text-center max-w-lg mx-auto my-8">
+            <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3">
+              <BookOpen size={24} />
+            </div>
+            <h4 className="text-sm font-bold text-slate-800 mb-1">Ei tietokortteja valituilla suodattimilla</h4>
+            <p className="text-xs text-slate-500 mb-4">
+              {cards.length === 0
+                ? 'Järjestelmässä ei ole vielä yhtään tietokorttia. Luo ensimmäinen opas tai historiakuvaus!'
+                : 'Kokeile nollata suodattimet tai hakusana.'}
+            </p>
+            <button
+              onClick={onNewCard}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
+            >
+              <Plus size={14} /> Luo uusi tietokortti
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 max-w-6xl mx-auto">
+            {filtered.map(card => {
+              const place = card.place_id ? placeMap.get(card.place_id) : undefined;
+              const cardTagNames = (card.tag_ids || []).map(tid => tagMap.get(tid)?.name || tid);
+              const isDeleting = deletingId === card.id;
+
+              return (
+                <div
+                  key={card.id}
+                  className="bg-white border border-slate-200 hover:border-amber-300 rounded-2xl p-4 shadow-xs transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+                >
+                  {/* Vasen sarake: Kuva ja perustiedot */}
+                  <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                    {card.image_url ? (
+                      <img
+                        src={card.image_url}
+                        alt=""
+                        className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200"
+                        onError={(e) => { (e.target as any).style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-200">
+                        <BookOpen size={22} />
+                      </div>
+                    )}
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <h4 className="font-black text-sm text-slate-900 truncate">
+                          {card.title}
+                        </h4>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                          (card.status || 'published') === 'published'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : 'bg-amber-50 text-amber-700 border-amber-200'
+                        }`}>
+                          {(card.status || 'published') === 'published' ? '🟢 Julkaistu' : '🟡 Luonnos'}
+                        </span>
+                        <span className="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                          {getTemplateLabel(card.template_type)}
+                        </span>
+                      </div>
+
+                      {card.description && (
+                        <p className="text-xs text-slate-600 line-clamp-2 mb-2 leading-relaxed">
+                          {card.description}
+                        </p>
+                      )}
+
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+                        {place && (
+                          <span className="inline-flex items-center gap-1 font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md">
+                            <MapPin size={11} className="text-emerald-600" />
+                            {place.name}
+                          </span>
+                        )}
+
+                        {cardTagNames.map((name, i) => (
+                          <span key={i} className="inline-flex items-center gap-1 font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md">
+                            <Tag size={10} className="text-amber-600" />
+                            {name}
+                          </span>
+                        ))}
+
+                        {card.access_key && (
+                          <span className="inline-flex items-center gap-1 font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                            <Key size={10} /> {card.access_key}
+                          </span>
+                        )}
+
+                        {card.publisher_name && (
+                          <span className="text-slate-400">
+                            · {card.publisher_name}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Oikea sarake: Toimintopainikkeet */}
+                  <div className="flex items-center gap-2 shrink-0 border-t md:border-t-0 pt-2 md:pt-0 border-slate-100">
+                    <a
+                      href={`https://laukaainfo.fi/tietokortti.html?id=${card.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all"
+                      title="Avaa julkinen tietokortti.html uuteen välilehteen"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                    <button
+                      onClick={() => onEditCard(card)}
+                      className="px-3.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                    >
+                      Muokkaa
+                    </button>
+                    <button
+                      onClick={() => handleDelete(card)}
+                      disabled={isDeleting}
+                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-all disabled:opacity-50"
+                      title="Poista tietokortti"
+                    >
+                      {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
