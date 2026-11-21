@@ -404,7 +404,7 @@ function matchesTerms(text, terms) {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const tagParam = urlParams.get('tag');
+    const tagParam = urlParams.get('tag') || urlParams.get('theme');
 
     if (!tagParam) {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -1835,6 +1835,85 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// ── TIETOKORTTI-LOGIIKKA TEEMOILLE (Artikkeli-esitteet) ──
+async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName) {
+    const section = document.getElementById('knowledge-cards-section');
+    const list = document.getElementById('knowledge-cards-list');
+    const countBadge = document.getElementById('knowledge-cards-count');
+    if (!section || !list) return;
+
+    try {
+        const db = window.LaukaaSupabase || aiSbClient;
+        if (!db) return;
+
+        let query = db
+            .from('posts')
+            .select('id, title, lead, description, content, image_url, place_id, template_type, source_info, publisher_name, created_at, published_at')
+            .in('type', ['INFO', 'knowledge', 'article']);
+
+        if (placeId) {
+            query = query.or(`place_id.eq.${placeId},target_id.eq.${placeId}`);
+        }
+
+        const { data: posts, error } = await query
+            .or('status.eq.published,status.eq.APPROVED,status.is.null')
+            .order('created_at', { ascending: false })
+            .limit(10);
+
+        if (!error && posts && posts.length > 0) {
+            if (countBadge) countBadge.textContent = posts.length;
+            list.innerHTML = posts.map(post => {
+                const title = post.title || 'Nimetön tietokortti';
+                const lead = post.lead || post.description || '';
+                const template = post.template_type || 'TIETOKORTTI';
+                const dateStr = post.published_at || post.created_at
+                    ? new Date(post.published_at || post.created_at).toLocaleDateString('fi-FI')
+                    : '';
+                const imgHtml = post.image_url
+                    ? `<img src="${encodeURI(post.image_url)}" alt="${title}" style="width:100%; height:160px; object-fit:cover; display:block;" onerror="this.style.display='none'">`
+                    : '';
+
+                const cardUrl = `tietokortti.html?id=${encodeURIComponent(post.id)}&place=${encodeURIComponent(placeId || '')}&theme=${encodeURIComponent(tagId || '')}`;
+
+                return `
+                    <a href="${cardUrl}" class="list-item-card" style="display:flex; flex-direction:column; background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; text-decoration:none; color:inherit; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.04)'">
+                        ${imgHtml}
+                        <div style="padding:1.15rem; flex:1; display:flex; flex-direction:column;">
+                            <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.4rem; flex-wrap:wrap;">
+                                <span style="font-size:0.75rem; font-weight:800; color:var(--primary); text-transform:uppercase; background:var(--primary-light); padding:2px 8px; border-radius:50px;">
+                                    📖 ${template}
+                                </span>
+                                ${post.publisher_name ? `<span style="font-size:0.75rem; color:var(--text-light);">${post.publisher_name}</span>` : ''}
+                            </div>
+                            <h3 style="margin:0 0 0.45rem 0; font-family:Outfit,sans-serif; font-size:1.15rem; font-weight:700; color:var(--text-main); line-height:1.35;">
+                                ${title}
+                            </h3>
+                            ${lead ? `
+                                <p style="margin:0 0 0.9rem 0; font-size:0.88rem; color:var(--text-muted); line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">
+                                    ${lead}
+                                </p>` : ''}
+                            <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between; padding-top:0.6rem; border-top:1px solid #f1f5f9;">
+                                <span style="font-size:0.8rem; color:var(--text-light); font-weight:500;">
+                                    ${dateStr}
+                                </span>
+                                <span style="display:inline-flex; align-items:center; gap:0.25rem; font-size:0.85rem; font-weight:700; color:var(--primary);">
+                                    Lue artikkeli →
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+            section.style.display = 'block';
+        } else {
+            section.style.display = 'none';
+        }
+    } catch (err) {
+        console.warn('Virhe ladattaessa tietokortteja:', err);
+        section.style.display = 'none';
+    }
+}
+
 // ── REITTILOGIIKKA TEEMOILLE (059C – get_content_for_context RPC) ──
 async function loadThemeRoutes(themeName) {
     if (!aiSbClient) return;
@@ -2111,6 +2190,9 @@ async function loadContextualTheme(tagParam, placeId) {
             subtitleEl.innerHTML = `Tutustu teemaan ${safeHtml(tagDisplayName.toLowerCase())} alueella ${safeHtml(placeName)}. <a href="teema.html?tag=${encodeURIComponent(tagParam)}" style="color:#fff;text-decoration:underline;font-weight:700;margin-left:6px;">Katso kaikki kohteet koko Laukaassa →</a>`;
             subtitleEl.style.display = 'block';
         }
+
+        // 6b. Renderöi TIETOKORTIT (Artikkeli-esitteet)
+        await renderKnowledgeCardsForContext(actualTagId, placeId, tagDisplayName, placeName);
 
         // 7. Renderöi KOHTEET
         // RPC palauttaa sub_places (tai places). Jos suoria alikohteita ei ole, haetaan rinnakkaiset teemakohteet theme_places-taulusta.
