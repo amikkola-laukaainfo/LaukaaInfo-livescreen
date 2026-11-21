@@ -700,7 +700,70 @@ document.addEventListener('DOMContentLoaded', async () => {
                         renderPlaceGallery(galleryMedia);
                     }
                 }
-                // Fallback: aseta satunnainen paikallinen kuva jos ImageKit-kuvaa ei löydy
+                // Fallback 1: Teemakohtainen kuva Supabasesta (usage = 'THEME_FALLBACK')
+                if (!heroSet && mediaDb) {
+                    try {
+                        const candidateTags = [];
+                        if (placeData.type) {
+                            const pt = placeData.type.toLowerCase();
+                            candidateTags.push(pt);
+                            if (pt === 'nature') candidateTags.push('luonto', 'retkeily');
+                            if (pt === 'area' || pt === 'district') candidateTags.push('maaseutu', 'kyla', 'taajama');
+                        }
+                        if (placeData.place_type) {
+                            const ppt = placeData.place_type.toLowerCase();
+                            candidateTags.push(ppt);
+                            if (ppt === 'kylä' || ppt === 'kyla') candidateTags.push('maaseutu', 'kyla');
+                        }
+                        if (placeData.name && /kylä|perukka|kulmakunta|seutu|talo/i.test(placeData.name)) {
+                            candidateTags.push('maaseutu', 'kyla');
+                        }
+                        if (placeData.name && /ranta|järvi|uimala|laituri|satama/i.test(placeData.name)) {
+                            candidateTags.push('vesistot', 'uimarannat', 'jarvi');
+                        }
+                        if (placeData.name && /vuori|mäki|harju|luonto|polku|laavu/i.test(placeData.name)) {
+                            candidateTags.push('luonto', 'retkeily', 'nakopaikan');
+                        }
+
+                        // Haetaan paikan omat teemat theme_places -taulusta
+                        const { data: tpData } = await mediaDb.from('theme_places').select('tag_id').eq('place_id', placeIdStr);
+                        if (tpData && tpData.length > 0) {
+                            tpData.forEach(t => { if (t.tag_id) candidateTags.push(t.tag_id.toLowerCase()); });
+                        }
+
+                        // Haetaan aktiiviset teemakuvat Supabasesta
+                        const { data: themeMedia } = await mediaDb
+                            .from('place_media')
+                            .select('id, imagekit_path, place_media_tags(tag_id)')
+                            .eq('usage', 'THEME_FALLBACK')
+                            .eq('is_active', true);
+
+                        if (themeMedia && themeMedia.length > 0) {
+                            const matchedMedia = themeMedia.filter(m => {
+                                const mTags = (m.place_media_tags || []).map(t => (t.tag_id || '').toLowerCase());
+                                return mTags.some(mt => candidateTags.includes(mt));
+                            });
+
+                            const chosen = matchedMedia.length > 0
+                                ? matchedMedia[Math.floor(Math.random() * matchedMedia.length)]
+                                : themeMedia[Math.floor(Math.random() * themeMedia.length)];
+
+                            if (chosen && chosen.imagekit_path) {
+                                const heroSection = document.getElementById('place-hero');
+                                if (heroSection) {
+                                    heroSection.style.backgroundImage = `url('${chosen.imagekit_path}')`;
+                                    heroSection.style.backgroundSize = 'cover';
+                                    heroSection.style.backgroundPosition = 'center';
+                                    heroSet = true;
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Virhe teemakuvan sovituksessa:', e);
+                    }
+                }
+
+                // Fallback 2: Satunnainen paikallinen kuva, jos teemakuvaa ei löydetty
                 if (!heroSet && window.heroFallbackImages && window.heroFallbackImages.length > 0) {
                     const heroSection = document.getElementById('place-hero');
                     if (heroSection) {
