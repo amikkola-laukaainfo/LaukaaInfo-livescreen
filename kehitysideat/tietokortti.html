@@ -887,6 +887,7 @@
         let currentPlace = null;
         let currentTag = null;
         let currentPost = null;
+        let currentTagId = null;
         let sideMap = null;
 
         // Apufunktio: Toast-ilmoitus
@@ -1032,6 +1033,8 @@
                     }
                 }
 
+                if (!tagId) tagId = 'retkeily';
+
                 if (sb && tagId) {
                     const { data: t } = await sb
                         .from('tags')
@@ -1041,14 +1044,21 @@
                     if (t) currentTag = t;
                 }
 
-                if (!tagId) tagId = 'retkeily';
+                if (!currentTag && tagId) {
+                    currentTag = {
+                        name: tagId.charAt(0).toUpperCase() + tagId.slice(1),
+                        tag_id: tagId
+                    };
+                }
 
+                currentTagId = tagId;
                 renderTietokortti();
 
             } catch (err) {
                 console.error('Virhe ladattaessa tietokorttia:', err);
                 // Fallback demo-renderöinti
                 currentPost = getDemoKnowledgeCard(placeParam, themeParam);
+                currentTagId = tagId;
                 renderTietokortti();
             }
         }
@@ -1067,8 +1077,8 @@
             };
 
             const tag = currentTag || {
-                name: (themeParam || 'Retkeily').charAt(0).toUpperCase() + (themeParam || 'Retkeily').slice(1),
-                tag_id: themeParam || 'retkeily'
+                name: (currentTagId || themeParam || 'Retkeily').charAt(0).toUpperCase() + (currentTagId || themeParam || 'Retkeily').slice(1),
+                tag_id: currentTagId || themeParam || 'retkeily'
             };
 
             // Sivun title

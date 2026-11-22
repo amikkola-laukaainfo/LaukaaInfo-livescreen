@@ -332,6 +332,74 @@
             align-items: start;
         }
 
+        /* 2-sarakkeinen ruudukko tietokorteille ja sisällöille */
+        .list-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.15rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 768px) {
+            .list-grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Haitari / Accordion tyylit */
+        .accordion-block {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: #ffffff;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .accordion-block:hover {
+            border-color: #cbd5e1;
+        }
+        .accordion-header {
+            width: 100%;
+            padding: 1.1rem 1.35rem;
+            background: #ffffff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: background-color 0.2s;
+        }
+        .accordion-header:hover {
+            background-color: #f8fafc;
+        }
+        .accordion-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .accordion-icon {
+            transition: transform 0.25s ease;
+            font-size: 1.3rem;
+            color: var(--text-muted);
+        }
+        .accordion-block.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            padding: 0 1.35rem 1.35rem 1.35rem;
+            border-top: 1px solid var(--border-color);
+            background: #fafafa;
+        }
+        .accordion-block:not(.open) .accordion-content {
+            display: none;
+        }
+
         /* ── Kortit ── */
         .list-item-card {
             background: #ffffff;
@@ -741,16 +809,21 @@
                     <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.25rem;" id="knowledge-cards-desc">
                         Tutustu paikkaan ja teemaan syventyviin artikkeleihin, historiatietoihin ja oppaisiin.
                     </p>
-                    <div id="knowledge-cards-list" class="list-grid"></div>
+                    <div id="knowledge-cards-list" class="list-grid-2col"></div>
                 </section>
 
-                <section class="content-block" id="places-section">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:location-on-outline"></span>
-                        <span id="places-section-title">Paikat teemassa</span>
-                    </h2>
-                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.25rem;">Tutustu Laukaan kohteisiin ja alueisiin tämän näkökulman kautta.</p>
-                    <div id="places-list" class="list-grid"></div>
+                <section class="accordion-block open" id="places-section">
+                    <button type="button" class="accordion-header" onclick="this.parentElement.classList.toggle('open')">
+                        <span class="accordion-title-wrap">
+                            <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:location-on-outline"></span>
+                            <span id="places-section-title">Muita kohteita lähellä ja teemassa</span>
+                        </span>
+                        <span class="iconify accordion-icon" data-icon="material-symbols:keyboard-arrow-down"></span>
+                    </button>
+                    <div class="accordion-content">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0.85rem 0 1rem 0;">Tutustu lähialueen kohteisiin ja rinnakkaisiin paikkoihin tämän teeman kautta.</p>
+                        <div id="places-list" class="list-grid-2col"></div>
+                    </div>
                 </section>
 
                 <!-- Ajankohtaista (encounters + feed, tagipohjainen, EI paikkakonteksti) -->

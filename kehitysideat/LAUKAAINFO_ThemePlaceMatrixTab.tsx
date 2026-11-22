@@ -528,7 +528,6 @@ export function ThemePlaceMatrixTab() {
         content: (cardData.content || '').trim(),
         place_id: targetPlaceId,
         tags: targetTagId ? [targetTagId] : [],
-        template_type: cardData.template_type || 'GUIDE',
         image_url: (cardData.image_url || '').trim() || null,
         publisher_name: (cardData.publisher_name || '').trim() || 'LaukaaInfo Toimitus',
         access_key: (cardData.access_key || '').trim() || null,
@@ -2540,7 +2539,7 @@ function UnifiedKnowledgeCardsView({
                   {/* Oikea sarake: Toimintopainikkeet */}
                   <div className="flex items-center gap-2 shrink-0 border-t md:border-t-0 pt-2 md:pt-0 border-slate-100">
                     <a
-                      href={`https://laukaainfo.fi/tietokortti.html?id=${card.id}`}
+                      href={`https://laukaainfo.fi/tietokortti.html?id=${card.id}${card.place_id ? `&place=${card.place_id}` : ''}${card.tag_ids?.[0] ? `&theme=${card.tag_ids[0]}` : ''}`}
                       target="_blank"
                       rel="noreferrer"
                       className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all"
