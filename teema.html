@@ -507,6 +507,40 @@
                 grid-column: span 2;
             }
         }
+        /* Tietokorttien 3-sarakkeinen galleria isommilla näytöillä */
+        .knowledge-showcase-section {
+            max-width: 1200px;
+            margin: 2.5rem auto 1rem auto;
+            padding: 0 2rem;
+            box-sizing: border-box;
+        }
+        .knowledge-showcase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .knowledge-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .knowledge-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .knowledge-cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 992px) {
+            .knowledge-showcase-section {
+                padding: 0 1.25rem;
+                margin: 1.75rem auto 1rem auto;
+            }
+        }
     </style>
 </head>
 
@@ -783,6 +817,21 @@
             </div>
         </section>
 
+        <!-- TIETOKORTIT JA PAIKALLISOPPAAT (3-sarakkeinen galleria isommilla näytöillä) -->
+        <section class="knowledge-showcase-section" id="knowledge-cards-section" style="display: none;">
+            <div class="knowledge-showcase-header">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <span class="iconify" style="color: var(--primary); font-size: 1.5rem;" data-icon="material-symbols:menu-book-outline"></span>
+                    <h2 id="knowledge-cards-title" style="margin: 0; font-size: 1.4rem; font-weight: 800; font-family: Outfit, sans-serif;">Tietokortit ja oppaat</h2>
+                </div>
+                <span class="badge" id="knowledge-cards-count" style="font-size: 0.85rem; background: var(--primary-light); color: var(--primary); font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 9999px;">0</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0.25rem 0 1.25rem 0;" id="knowledge-cards-desc">
+                Tutustu paikkaan ja teemaan syventyviin artikkeleihin, historiatietoihin ja oppaisiin.
+            </p>
+            <div id="knowledge-cards-list" class="knowledge-cards-grid"></div>
+        </section>
+
         <div class="page-container">
             <!-- Pääpalsta -->
             <div class="left-col">
@@ -797,20 +846,6 @@
                 </section>
 
                 <!-- Paikat (V4: Teemasivun ensisijainen tehtävä on johdattaa käyttäjä paikkoihin) -->
-                <!-- TIETOKORTIT JA PAIKALLISOPPAAT (Artikkeli-esitteet) -->
-                <section class="content-block" id="knowledge-cards-section" style="display: none;">
-                    <h2 style="display: flex; align-items: center; justify-content: space-between;">
-                        <span style="display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="iconify" style="color: var(--primary);" data-icon="material-symbols:menu-book-outline"></span>
-                            <span id="knowledge-cards-title">Tietokortit ja oppaat</span>
-                        </span>
-                        <span class="badge" id="knowledge-cards-count" style="font-size: 0.8rem; background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 9999px;">0</span>
-                    </h2>
-                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.25rem;" id="knowledge-cards-desc">
-                        Tutustu paikkaan ja teemaan syventyviin artikkeleihin, historiatietoihin ja oppaisiin.
-                    </p>
-                    <div id="knowledge-cards-list" class="list-grid-2col"></div>
-                </section>
 
                 <section class="accordion-block open" id="places-section">
                     <button type="button" class="accordion-header" onclick="this.parentElement.classList.toggle('open')">
