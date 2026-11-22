@@ -1816,6 +1816,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Lataa Mixonet-teeman tiedot ja verkosto rinnakkain (ei estä muuta renderöintiä)
         loadMixonetThemeContext(searchTag);
         loadThemeRoutes(searchTag);
+        renderKnowledgeCardsForContext(searchTag, null, searchTag, null, null);
 
         // Piilota paikat/tapahtumat-osio jos tyhjä
         // (ei piiloteta jos kontekstuaalinen haku jo näytti tuloksia)
@@ -1846,70 +1847,115 @@ async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName
         const db = window.LaukaaSupabase || aiSbClient;
         if (!db) return;
 
-        // 1. Hae post_themes -linkkauksen kautta tietokorttien ID:t
-        let postIds = [];
-        if (tagId) {
-            try {
-                const { data: ptRows } = await db
-                    .from('post_themes')
-                    .select('post_id')
-                    .or(`tag_id.eq.${tagId},tag_id.ilike.%${tagId}%`);
-                if (ptRows && ptRows.length > 0) {
-                    postIds = ptRows.map(r => r.post_id).filter(Boolean);
-                }
-            } catch(e) { console.debug('post_themes-haku tietokorteille epäonnistui:', e); }
+        const catSlug = String(tagId || tagName || '').toLowerCase().trim();
+
+        // Selvitetään validi paikka-UUID
+        let validPlaceUuid = null;
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (placeId && uuidRegex.test(placeId)) {
+            validPlaceUuid = placeId;
+        } else if (altPlaceId && uuidRegex.test(altPlaceId)) {
+            validPlaceUuid = altPlaceId;
         }
 
-        // 2. Kysely posts-tauluun (huom: EI saraketta template_type, käytetään target_type & link)
-        let query = db
-            .from('posts')
-            .select('id, title, description, content, image_url, place_id, target_id, target_type, type, link, website_url, publisher_name, tags, created_at, published_at')
-            .in('type', ['INFO', 'knowledge', 'article']);
+        let posts = [];
 
-        // Paikkaehdot (tuetaan sekä UUID:tä että mahdollista nimeä)
-        const placeConds = [];
-        if (placeId) {
-            placeConds.push(`place_id.eq.${placeId}`);
-            placeConds.push(`target_id.eq.${placeId}`);
-        }
-        if (altPlaceId && altPlaceId !== placeId) {
-            placeConds.push(`place_id.eq.${altPlaceId}`);
-            placeConds.push(`target_id.eq.${altPlaceId}`);
-        }
-
-        if (postIds.length > 0 && placeConds.length > 0) {
-            query = query.or([...placeConds, `id.in.(${postIds.join(',')})`].join(','));
-        } else if (postIds.length > 0) {
-            query = query.in('id', postIds);
-        } else if (placeConds.length > 0) {
-            query = query.or(placeConds.join(','));
-        }
-
-        const { data: fetchedPosts, error } = await query
-            .or('status.eq.published,status.eq.APPROVED,status.is.null')
-            .order('created_at', { ascending: false })
-            .limit(20);
-
-        if (error) {
-            console.warn('Tietokorttikyselyvirhe:', error);
-        }
-
-        // 3. Suodatetaan että tietokortti vastaa joko teemaa (tagId/tags/postIds) tai paikkaa
-        let posts = (fetchedPosts || []).filter(post => {
-            // Jos teema on annettu, varmistetaan vastaavuus
-            if (tagId) {
-                const tLower = String(tagId).toLowerCase();
-                const postTags = Array.isArray(post.tags) ? post.tags.map(t => String(t).toLowerCase()) : [];
-                const matchesTag = postTags.some(t => t === tLower || t.includes(tLower) || tLower.includes(t));
-                const inPostIds = postIds.includes(post.id);
-                // Jos ei kumpikaan täsmää eikä paikka suoraan liity, ohitetaan
-                if (!matchesTag && !inPostIds && postTags.length > 0) {
-                    return false;
-                }
+        // 1. Kokeillaan uutta teemakategoria-RPC:tä (get_content_for_theme_category)
+        try {
+            const { data: rpcPosts, error: rpcErr } = await db.rpc('get_content_for_theme_category', {
+                p_category_slug: catSlug,
+                p_place_id: validPlaceUuid,
+                p_limit: 30
+            });
+            if (!rpcErr && rpcPosts && rpcPosts.length > 0) {
+                posts = rpcPosts;
             }
-            return true;
-        });
+        } catch (rpcEx) {
+            console.debug('get_content_for_theme_category fallback:', rpcEx);
+        }
 
+        // 2. Jos RPC ei palauttanut (tai kategoria ei vielä kategoriapuussa), käytetään suoraa kyselyä
+        if (posts.length === 0) {
+            let query = db
+                .from('posts')
+                .select('id, title, description, content, image_url, place_id, target_id, target_type, type, link, website_url, publisher_name, tags, created_at, published_at')
+                .in('type', ['INFO', 'knowledge', 'article']);
+
+            const placeConds = [];
+            if (validPlaceUuid) {
+                placeConds.push(`place_id.eq.${validPlaceUuid}`);
+                placeConds.push(`target_id.eq.${validPlaceUuid}`);
+            }
+
+            if (catSlug) {
+                query = query.contains('tags', [catSlug]);
+            }
+            if (placeConds.length > 0) {
+                query = query.or(placeConds.join(','));
+            }
+
+            const { data: fetchedPosts } = await query
+                .or('status.eq.published,status.eq.APPROVED,status.is.null')
+                .order('created_at', { ascending: false })
+                .limit(20);
+
+            if (fetchedPosts && fetchedPosts.length > 0) {
+                posts = fetchedPosts;
+            }
+        }
+
+        // 3. Renderöidään alikategoriapillerit (jos teemalla on alikategorioita)
+        try {
+            const { data: parentCat } = await db
+                .from('theme_categories')
+                .select('id, slug, name')
+                .eq('slug', catSlug)
+                .maybeSingle();
+
+            const existingBar = document.getElementById('knowledge-subcategories-bar');
+            if (parentCat) {
+                const { data: subcats } = await db
+                    .from('theme_categories')
+                    .select('slug, name, icon')
+                    .eq('parent_id', parentCat.id)
+                    .order('sort_order', { ascending: true });
+
+                if (subcats && subcats.length > 0) {
+                    let barEl = existingBar;
+                    if (!barEl) {
+                        barEl = document.createElement('div');
+                        barEl.id = 'knowledge-subcategories-bar';
+                        barEl.style.cssText = 'display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.25rem;';
+                        list.parentNode.insertBefore(barEl, list);
+                    }
+                    const placeParamStr = placeName ? `&place=${encodeURIComponent(placeName)}` : (validPlaceUuid ? `&place=${encodeURIComponent(validPlaceUuid)}` : '');
+                    barEl.innerHTML = `
+                        <a href="teema.html?theme=${encodeURIComponent(catSlug)}${placeParamStr}" 
+                           style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.85rem; border-radius:9999px; font-size:0.85rem; font-weight:700; text-decoration:none; background:var(--primary); color:white; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                            Kaikki
+                        </a>
+                    ` + subcats.map(sc => `
+                        <a href="teema.html?theme=${encodeURIComponent(sc.slug)}${placeParamStr}" 
+                           style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.85rem; border-radius:9999px; font-size:0.85rem; font-weight:600; text-decoration:none; background:white; color:var(--text-main); border:1px solid #e2e8f0; transition:all 0.15s;"
+                           onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'"
+                           onmouseout="this.style.borderColor='#e2e8f0';this.style.color='var(--text-main)'">
+                            <span class="iconify" data-icon="${sc.icon || 'material-symbols:label-outline'}"></span>
+                            ${sc.name}
+                        </a>
+                    `).join('');
+                    if (window.Iconify) window.Iconify.scan(barEl);
+                    barEl.style.display = 'flex';
+                } else if (existingBar) {
+                    existingBar.style.display = 'none';
+                }
+            } else if (existingBar) {
+                existingBar.style.display = 'none';
+            }
+        } catch (scErr) {
+            console.debug('Alikategorioiden haku:', scErr);
+        }
+
+        // 4. Renderöidään kortit
         if (posts && posts.length > 0) {
             if (countBadge) countBadge.textContent = posts.length;
             list.innerHTML = posts.map(post => {
@@ -1931,7 +1977,7 @@ async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName
                     'INTRO': 'Kohteen esittely',
                     'STORY': 'Tarina / Muistelu'
                 };
-                const template = templateLabelMap[tType] || 'Tietokortti';
+                const template = post.matched_category_name || templateLabelMap[tType] || 'Tietokortti';
 
                 const dateStr = post.published_at || post.created_at
                     ? new Date(post.published_at || post.created_at).toLocaleDateString('fi-FI')
