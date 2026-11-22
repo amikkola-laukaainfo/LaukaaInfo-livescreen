@@ -921,6 +921,61 @@
             return `${minutes} min lukuaika`;
         }
 
+        // Apufunktio: HTML-escape
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Apufunktio: Poimi kaikki linkit post-tietueesta
+        function extractPostLinks(post) {
+            if (!post) return [];
+            const urls = [];
+            const addUrl = (u) => {
+                if (!u || typeof u !== 'string') return;
+                const trimmed = u.trim();
+                if ((trimmed.startsWith('http://') || trimmed.startsWith('https://')) && !urls.includes(trimmed)) {
+                    urls.push(trimmed);
+                }
+            };
+
+            // 1. link-kenttä (JSON tai suora URL)
+            if (post.link) {
+                try {
+                    const parsed = JSON.parse(post.link);
+                    if (parsed && Array.isArray(parsed.links)) {
+                        parsed.links.forEach(addUrl);
+                    } else if (parsed && typeof parsed.link === 'string') {
+                        addUrl(parsed.link);
+                    }
+                } catch (_) {
+                    addUrl(post.link);
+                }
+            }
+
+            // 2. website_url
+            if (post.website_url) {
+                addUrl(post.website_url);
+            }
+
+            // 3. Mahdollinen suora links-array
+            if (Array.isArray(post.links)) {
+                post.links.forEach(addUrl);
+            }
+
+            // 4. Muut erilliset lomake/rekisteröintiosoitteet
+            ['form_url', 'event_registration_url'].forEach(k => {
+                if (post[k]) addUrl(post[k]);
+            });
+
+            return urls;
+        }
+
         // Alustus
         document.addEventListener('DOMContentLoaded', async () => {
             await loadTietokorttiData();
@@ -1102,6 +1157,25 @@
             document.getElementById('theme-name-text').textContent = tag.name.toUpperCase();
             document.getElementById('place-name-badge').textContent = place.name;
 
+            // Sisältöpohja / Tyyppibadge
+            const headerTypeBadge = document.getElementById('header-type-badge');
+            if (headerTypeBadge) {
+                let tType = (post.target_type || '').toUpperCase();
+                if (!tType && post.link) {
+                    try {
+                        const parsed = JSON.parse(post.link);
+                        if (parsed && parsed.template_type) tType = String(parsed.template_type).toUpperCase();
+                    } catch (_) {}
+                }
+                let typeLabel = '📖 Yleistieto';
+                if (tType === 'GUIDE') typeLabel = '🧭 Opas / Reittiohje';
+                else if (tType === 'HISTORY') typeLabel = '🏛️ Historia / Perintö';
+                else if (tType === 'INTRO') typeLabel = '✨ Kohteen esittely';
+                else if (tType === 'STORY') typeLabel = '📜 Tarina / Muistelu';
+                else if (tType === 'GENERAL') typeLabel = '📖 Yleistieto';
+                headerTypeBadge.textContent = typeLabel;
+            }
+
             // Otsikko ja Ingressi
             document.getElementById('article-title').textContent = post.title;
             document.getElementById('article-lead').textContent = post.lead || post.description || '';
@@ -1144,6 +1218,43 @@
                 bodyElem.innerHTML = `<p>${rawContent.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
             }
 
+            // Poimitaan tietokortin linkit
+            const links = extractPostLinks(post);
+
+            // Esitetään linkit artikkelin alapuolella toimivina hyperlinkkeinä
+            const existingLinksBox = document.getElementById('article-links-box');
+            if (existingLinksBox) existingLinksBox.remove();
+
+            if (links.length > 0) {
+                const linksBox = document.createElement('div');
+                linksBox.id = 'article-links-box';
+                linksBox.style.cssText = 'margin-top: 2.5rem; padding: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem;';
+                
+                let linksHtml = `
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-main);">
+                        <span class="iconify" data-icon="material-symbols:link" style="font-size: 1.25rem; color: var(--primary);"></span>
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Lisätietolähteet ja hyödylliset linkit</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                `;
+
+                links.forEach(url => {
+                    linksHtml += `
+                        <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 1rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.6rem; color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.15s ease;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='none';">
+                            <span style="display: flex; align-items: center; gap: 0.5rem; word-break: break-all;">
+                                <span class="iconify" data-icon="material-symbols:open-in-new" style="flex-shrink: 0; font-size: 1.1rem;"></span>
+                                <span>${escapeHtml(url)}</span>
+                            </span>
+                            <span style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;">Avaa ↗</span>
+                        </a>
+                    `;
+                });
+
+                linksHtml += `</div>`;
+                linksBox.innerHTML = linksHtml;
+                bodyElem.appendChild(linksBox);
+            }
+
             // Sivupalkin paikkakortti
             document.getElementById('side-place-name').textContent = place.name;
             document.getElementById('side-place-municipality').textContent = `${place.type || 'Kohde'} • ${place.municipality || 'Laukaa'}`;
@@ -1158,9 +1269,44 @@
                 document.getElementById('side-directions-link').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' Laukaa')}`;
             }
 
-            // Lähteet
+            // Lähteet sivupalkissa
             if (post.source_info) {
                 document.getElementById('source-primary-text').textContent = post.source_info;
+            } else if (post.publisher_name) {
+                document.getElementById('source-primary-text').textContent = post.publisher_name;
+            }
+
+            const sourcesList = document.getElementById('sources-list');
+            if (sourcesList && links.length > 0) {
+                // Poistetaan aiemmat dynaamiset linkit
+                const dynamicLinks = sourcesList.querySelectorAll('.dynamic-link-item');
+                dynamicLinks.forEach(el => el.remove());
+
+                links.forEach(url => {
+                    const li = document.createElement('li');
+                    li.className = 'dynamic-link-item';
+                    li.style.display = 'flex';
+                    li.style.alignItems = 'flex-start';
+                    li.style.gap = '0.4rem';
+                    li.style.marginTop = '0.4rem';
+
+                    let displayLabel = url;
+                    try {
+                        const u = new URL(url);
+                        displayLabel = u.hostname.replace(/^www\./, '');
+                        if (u.pathname && u.pathname !== '/') {
+                            displayLabel += (u.pathname.length > 20 ? u.pathname.slice(0, 18) + '...' : u.pathname);
+                        }
+                    } catch (_) {}
+
+                    li.innerHTML = `
+                        <span class="iconify" data-icon="material-symbols:open-in-new" style="color: var(--primary); flex-shrink: 0; margin-top: 3px;"></span>
+                        <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--primary); word-break: break-all; text-decoration: underline; font-weight: 500;">
+                            ${escapeHtml(displayLabel)} <span style="font-size: 0.75rem; color: var(--text-light);">↗</span>
+                        </a>
+                    `;
+                    sourcesList.appendChild(li);
+                });
             }
 
             // Sivupalkin teemasivulinkki
