@@ -1836,7 +1836,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ── TIETOKORTTI-LOGIIKKA TEEMOILLE (Artikkeli-esitteet) ──
-async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName) {
+async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName, altPlaceId) {
     const section = document.getElementById('knowledge-cards-section');
     const list = document.getElementById('knowledge-cards-list');
     const countBadge = document.getElementById('knowledge-cards-count');
@@ -1846,53 +1846,101 @@ async function renderKnowledgeCardsForContext(tagId, placeId, tagName, placeName
         const db = window.LaukaaSupabase || aiSbClient;
         if (!db) return;
 
-        // Hae post_themes -linkkauksen kautta tietokortit (teema-ID perusteella)
+        // 1. Hae post_themes -linkkauksen kautta tietokorttien ID:t
         let postIds = [];
         if (tagId) {
             try {
                 const { data: ptRows } = await db
                     .from('post_themes')
                     .select('post_id')
-                    .eq('tag_id', tagId);
+                    .or(`tag_id.eq.${tagId},tag_id.ilike.%${tagId}%`);
                 if (ptRows && ptRows.length > 0) {
                     postIds = ptRows.map(r => r.post_id).filter(Boolean);
                 }
             } catch(e) { console.debug('post_themes-haku tietokorteille epäonnistui:', e); }
         }
 
-        // Paikkakohtainen suorahaku + post_themes-tulokset yhdistettynä
+        // 2. Kysely posts-tauluun (huom: EI saraketta template_type, käytetään target_type & link)
         let query = db
             .from('posts')
-            .select('id, title, lead, description, content, image_url, place_id, template_type, type, source_info, publisher_name, created_at, published_at')
+            .select('id, title, description, content, image_url, place_id, target_id, target_type, type, link, website_url, publisher_name, tags, created_at, published_at')
             .in('type', ['INFO', 'knowledge', 'article']);
 
-        if (postIds.length > 0 && placeId) {
-            query = query.or(`place_id.eq.${placeId},target_id.eq.${placeId},id.in.(${postIds.join(',')})`);
-        } else if (postIds.length > 0) {
-            query = query.in('id', postIds);
-        } else if (placeId) {
-            query = query.or(`place_id.eq.${placeId},target_id.eq.${placeId}`);
+        // Paikkaehdot (tuetaan sekä UUID:tä että mahdollista nimeä)
+        const placeConds = [];
+        if (placeId) {
+            placeConds.push(`place_id.eq.${placeId}`);
+            placeConds.push(`target_id.eq.${placeId}`);
+        }
+        if (altPlaceId && altPlaceId !== placeId) {
+            placeConds.push(`place_id.eq.${altPlaceId}`);
+            placeConds.push(`target_id.eq.${altPlaceId}`);
         }
 
-        const { data: posts, error } = await query
+        if (postIds.length > 0 && placeConds.length > 0) {
+            query = query.or([...placeConds, `id.in.(${postIds.join(',')})`].join(','));
+        } else if (postIds.length > 0) {
+            query = query.in('id', postIds);
+        } else if (placeConds.length > 0) {
+            query = query.or(placeConds.join(','));
+        }
+
+        const { data: fetchedPosts, error } = await query
             .or('status.eq.published,status.eq.APPROVED,status.is.null')
             .order('created_at', { ascending: false })
-            .limit(10);
+            .limit(20);
 
-        if (!error && posts && posts.length > 0) {
+        if (error) {
+            console.warn('Tietokorttikyselyvirhe:', error);
+        }
+
+        // 3. Suodatetaan että tietokortti vastaa joko teemaa (tagId/tags/postIds) tai paikkaa
+        let posts = (fetchedPosts || []).filter(post => {
+            // Jos teema on annettu, varmistetaan vastaavuus
+            if (tagId) {
+                const tLower = String(tagId).toLowerCase();
+                const postTags = Array.isArray(post.tags) ? post.tags.map(t => String(t).toLowerCase()) : [];
+                const matchesTag = postTags.some(t => t === tLower || t.includes(tLower) || tLower.includes(t));
+                const inPostIds = postIds.includes(post.id);
+                // Jos ei kumpikaan täsmää eikä paikka suoraan liity, ohitetaan
+                if (!matchesTag && !inPostIds && postTags.length > 0) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        if (posts && posts.length > 0) {
             if (countBadge) countBadge.textContent = posts.length;
             list.innerHTML = posts.map(post => {
                 const title = post.title || 'Nimetön tietokortti';
-                const lead = post.lead || post.description || '';
-                const template = post.template_type || post.type || 'TIETOKORTTI';
+                const lead = post.description || '';
+                
+                // Määritetään sisältöpohja
+                let tType = (post.target_type || post.type || 'Yleistieto').toUpperCase();
+                if (post.link) {
+                    try {
+                        const parsed = JSON.parse(post.link);
+                        if (parsed && parsed.template_type) tType = String(parsed.template_type).toUpperCase();
+                    } catch (_) {}
+                }
+                const templateLabelMap = {
+                    'GENERAL': 'Yleistieto',
+                    'GUIDE': 'Opas / Reittiohje',
+                    'HISTORY': 'Historia / Perintö',
+                    'INTRO': 'Kohteen esittely',
+                    'STORY': 'Tarina / Muistelu'
+                };
+                const template = templateLabelMap[tType] || 'Tietokortti';
+
                 const dateStr = post.published_at || post.created_at
                     ? new Date(post.published_at || post.created_at).toLocaleDateString('fi-FI')
                     : '';
                 const imgHtml = post.image_url
-                    ? `<img src="${encodeURI(post.image_url)}" alt="${title}" style="width:100%; height:160px; object-fit:cover; display:block;" onerror="this.style.display='none'">`
+                    ? `<img src="${encodeURI(post.image_url)}" alt="${title.replace(/"/g, '&quot;')}" style="width:100%; height:160px; object-fit:cover; display:block;" onerror="this.style.display='none'">`
                     : '';
 
-                const cardUrl = `tietokortti.html?id=${encodeURIComponent(post.id)}&place=${encodeURIComponent(placeId || '')}&theme=${encodeURIComponent(tagId || '')}`;
+                const cardUrl = `tietokortti.html?id=${encodeURIComponent(post.id)}&place=${encodeURIComponent(placeId || altPlaceId || '')}&theme=${encodeURIComponent(tagId || '')}`;
 
                 return `
                     <a href="${cardUrl}" class="list-item-card" style="display:flex; flex-direction:column; background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; text-decoration:none; color:inherit; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.04)'">
@@ -2130,18 +2178,23 @@ async function loadContextualTheme(tagParam, placeId) {
     try {
         if (!aiSbClient) throw new Error('Supabase-client ei saatavilla');
 
-        // 1. Hae paikan nimi otsikkoa varten
+        // 1. Hae paikan nimi ja todellinen UUID otsikkoa ja kyselyjä varten
         let placeName = placeId;
+        let resolvedPlaceId = placeId;
+        const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         try {
-            const { data: placeRow } = await aiSbClient
-                .from('places')
-                .select('name, canonical_name')
-                .or(`place_id.eq.${placeId},id.eq.${placeId}`)
-                .single();
+            let placeQuery = aiSbClient.from('places').select('id, place_id, name, canonical_name');
+            if (UUID_REGEX.test(String(placeId).trim())) {
+                placeQuery = placeQuery.or(`place_id.eq.${placeId},id.eq.${placeId}`);
+            } else {
+                placeQuery = placeQuery.or(`canonical_name.ilike.${placeId},name.ilike.${placeId}`);
+            }
+            const { data: placeRow } = await placeQuery.limit(1).maybeSingle();
             if (placeRow) {
+                resolvedPlaceId = placeRow.place_id || placeRow.id || placeId;
                 placeName = placeRow.name || placeRow.canonical_name || placeId;
             }
-        } catch(e) { /* Jatketaan placeId:llä */ }
+        } catch(e) { console.debug('Paikkatunnisteen selvitys epäonnistui:', e); }
 
         // 2. Selvitä todellinen tag_id (slug voi erota näyttönimestä)
         const tagLower = tagParam.toLowerCase().trim();
@@ -2170,7 +2223,7 @@ async function loadContextualTheme(tagParam, placeId) {
         if (heroContent && !document.getElementById('ctx-place-backlink')) {
             const backLink = document.createElement('a');
             backLink.id = 'ctx-place-backlink';
-            backLink.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+            backLink.href = `tietoa-paikasta.html?id=${encodeURIComponent(resolvedPlaceId || placeId)}`;
             backLink.style.cssText = 'display:inline-flex;align-items:center;gap:0.35rem;font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.85);text-decoration:none;margin-bottom:0.5rem;transition:color 0.2s;';
             backLink.onmouseover = () => backLink.style.color = '#fff';
             backLink.onmouseout = () => backLink.style.color = 'rgba(255,255,255,0.85)';
@@ -2183,7 +2236,7 @@ async function loadContextualTheme(tagParam, placeId) {
         try {
             const { data: dbData, error: rpcError } = await aiSbClient.rpc(
                 'get_contextual_theme_dashboard',
-                { p_tag_id: actualTagId, p_place_id: placeId }
+                { p_tag_id: actualTagId, p_place_id: resolvedPlaceId }
             );
             if (!rpcError && dbData) dashboard = dbData;
         } catch(rpcEx) {
@@ -2211,7 +2264,7 @@ async function loadContextualTheme(tagParam, placeId) {
         }
 
         // 6b. Renderöi TIETOKORTIT (Artikkeli-esitteet)
-        await renderKnowledgeCardsForContext(actualTagId, placeId, tagDisplayName, placeName);
+        await renderKnowledgeCardsForContext(actualTagId, resolvedPlaceId, tagDisplayName, placeName, placeId);
 
         // 7. Renderöi KOHTEET
         // RPC palauttaa sub_places (tai places). Jos suoria alikohteita ei ole, haetaan rinnakkaiset teemakohteet theme_places-taulusta.
@@ -2378,10 +2431,13 @@ async function loadContextualTheme(tagParam, placeId) {
 
             let placePostIds = [];
             try {
-                const { data: ppRows } = await aiSbClient
-                    .from('post_places')
-                    .select('post_id')
-                    .eq('place_id', placeId);
+                let ppQuery = aiSbClient.from('post_places').select('post_id');
+                if (resolvedPlaceId && resolvedPlaceId !== placeId) {
+                    ppQuery = ppQuery.or(`place_id.eq.${resolvedPlaceId},place_id.eq.${placeId}`);
+                } else {
+                    ppQuery = ppQuery.eq('place_id', placeId);
+                }
+                const { data: ppRows } = await ppQuery;
                 if (ppRows && ppRows.length > 0) {
                     placePostIds = ppRows.map(r => r.post_id).filter(Boolean);
                 }
@@ -2399,7 +2455,8 @@ async function loadContextualTheme(tagParam, placeId) {
             const filteredPosts = (matchedPosts || []).filter(post => {
                 const pId = String(post.place_id || '').toLowerCase();
                 const targetPId = String(placeId || '').toLowerCase();
-                const isThisPlace = (pId && (pId === targetPId || pId.includes(targetPId))) || placePostIds.includes(post.id);
+                const resPId = String(resolvedPlaceId || '').toLowerCase();
+                const isThisPlace = (pId && (pId === targetPId || pId === resPId || pId.includes(targetPId))) || placePostIds.includes(post.id);
                 if (!isThisPlace) return false;
 
                 const hasTheme = themePostIds.includes(post.id) ||

@@ -801,9 +801,15 @@
         const fullPostUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + postUrl;
         const isPostAssoc = isOrgAssociation(orgId, orgName);
         const suggestUrl = (orgId && isPostAssoc) ? `toiminta.html?org=${encodeURIComponent(orgId)}&mode=suggest&ref_post=${encodeURIComponent(post.id)}&ref_title=${encodeURIComponent(post.title || '')}` : null;
+        const isSingleKnowledgeCard = (post.type === 'INFO' || post.type === 'knowledge' || post.type === 'article' || ['GENERAL', 'GUIDE', 'HISTORY', 'INTRO', 'STORY'].includes(String(post.target_type || '').toUpperCase()));
 
         document.getElementById('singlePostShareBar').innerHTML = `
           <div class="flex flex-wrap items-center gap-2">
+            ${isSingleKnowledgeCard ? `
+              <a href="tietokortti.html?id=${encodeURIComponent(post.id)}" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all flex items-center gap-1.5 no-underline shadow-xs">
+                <span>📖</span> <span>Avaa alkuperäinen tietokortti</span> <span class="text-amber-200">→</span>
+              </a>
+            ` : ''}
             <button onclick="copyToClipboard('${fullPostUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5" title="Kopioi linkki julkaisuun">
               <span>🔗</span> <span>Kopioi linkki</span>
             </button>
@@ -1911,11 +1917,26 @@
       function renderLinksHTML(linksList, targetId, targetType, orgId, postType, postId) {
         let html = '';
 
-        // Render target link if attached (e.g. Project / Event / Board Item)
+        // 1. Jos postaus on tietokortti (INFO, knowledge, article tai targetType on jokin tietokorttipohja):
+        const isKnowledgeCard = (
+          postType === 'INFO' || postType === 'knowledge' || postType === 'article' ||
+          ['GENERAL', 'GUIDE', 'HISTORY', 'INTRO', 'STORY'].includes(String(targetType || '').toUpperCase())
+        );
+
+        if (isKnowledgeCard && postId) {
+          const tietokorttiUrl = `tietokortti.html?id=${encodeURIComponent(postId)}`;
+          html += `
+            <a href="${tietokorttiUrl}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all no-underline">
+              <span>📖</span> <span>Avaa koko tietokortti</span> <span class="text-amber-200">→</span>
+            </a>
+          `;
+        }
+
+        // 2. Render target link if attached (e.g. Project / Event / Board Item)
         const effectiveTargetId = targetId || ((postType === 'event' || postType === 'offer') ? postId : null);
         const effectiveTargetType = targetType || postType;
 
-        if (effectiveTargetId) {
+        if (effectiveTargetId && !isKnowledgeCard) {
           let targetUrl = '';
           let targetLabel = '';
           if (effectiveTargetType === 'board_item') {
@@ -1953,6 +1974,10 @@
       // 11. Type Badge Helper
       function getTypeBadgeHTML(type) {
         switch (type) {
+          case 'INFO':
+          case 'knowledge':
+          case 'article':
+            return '<span class="text-[10px] px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-md font-bold">📖 Tietokortti</span>';
           case 'announcement':
             return '<span class="text-[10px] px-2 py-0.5 bg-violet-100 text-violet-800 rounded-md font-bold">📢 Ilmoitus</span>';
           case 'event':
