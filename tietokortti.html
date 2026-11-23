@@ -1316,7 +1316,7 @@
 
             // Alaosan Teemanostot
             document.getElementById('see-all-theme-link').href = themePageUrl;
-            renderRelatedCards(tag, place);
+            renderRelatedCards(tag, place, currentPost ? currentPost.id : null);
         }
 
         // Alustaa pienen Leaflet-kartan
@@ -1344,35 +1344,131 @@
                 .bindPopup(`<strong>${title}</strong>`);
         }
 
-        // Liittyvien sisältöjen renderöinti
-        function renderRelatedCards(tag, place) {
+        // Liittyvien sisältöjen dynaaminen renderöinti (Supabase posts + älykäs täydennys)
+        async function renderRelatedCards(tag, place, excludePostId) {
             const grid = document.getElementById('related-cards-grid');
-            grid.innerHTML = `
-                <a href="teema.html?place=${encodeURIComponent(place.canonical_name || 'lievestuore')}&theme=retkeily" class="related-card">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" class="related-img" alt="Reitti">
-                    <div class="related-content">
-                        <div class="related-badge">Alueopas</div>
-                        <h4 class="related-title">Lievestuoreen retkeilyreitit ja taukopaikat</h4>
-                        <p class="related-desc">Kattava opastus Lievestuoreen alueen laavuille, tulentekopaikoille ja luontopoluille.</p>
-                    </div>
-                </a>
-                <a href="tietoa-paikasta.html?id=haarlan_ranta_laukaa" class="related-card">
-                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=500&q=80" class="related-img" alt="Kalastus">
-                    <div class="related-content">
-                        <div class="related-badge">Kalastus & Luonto</div>
-                        <h4 class="related-title">Haarlan ranta – kalastus ja virkistysalue</h4>
-                        <p class="related-desc">Rantaan pääsy, kalastusmahdollisuudet ja alueen säännöt sekä laiturit.</p>
-                    </div>
-                </a>
-                <a href="teema.html?place=${encodeURIComponent(place.canonical_name || 'lievestuore')}&theme=historia" class="related-card">
-                    <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=500&q=80" class="related-img" alt="Historia">
-                    <div class="related-content">
-                        <div class="related-badge">Historia</div>
-                        <h4 class="related-title">Lievestuoreen rautatieaseman historia</h4>
-                        <p class="related-desc">Rautatien ja asemamiljöön merkitys Lievestuoreen teollistumiselle ja kehitykselle.</p>
-                    </div>
-                </a>
-            `;
+            if (!grid) return;
+
+            const placeId = place?.place_id || place?.id || place?.canonical_name || '';
+            const placeSlug = place?.canonical_name || place?.name || 'laukaa';
+            const tagId = tag?.tag_id || tag?.name || 'retkeily';
+
+            let dynamicCards = [];
+
+            // 1. Haetaan Supabasen posts-taulusta muut samaan paikkaan tai samaan teemaan liittyvät tietokortit
+            const db = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+            if (db) {
+                try {
+                    let query = db
+                        .from('posts')
+                        .select('id, title, description, content, image_url, place_id, target_id, target_type, type, tags, published_at, created_at')
+                        .or('status.eq.published,status.eq.APPROVED,status.is.null')
+                        .order('created_at', { ascending: false })
+                        .limit(8);
+
+                    if (excludePostId) {
+                        query = query.neq('id', excludePostId);
+                    }
+
+                    const { data: dbPosts, error: dbErr } = await query;
+                    if (!dbErr && dbPosts && dbPosts.length > 0) {
+                        // Suodatetaan ne, jotka liittyvät samaan paikkaan tai samaan teemaan
+                        dynamicCards = dbPosts.filter(p => {
+                            const pType = (p.type || '').toLowerCase();
+                            const isKnowledge = ['info', 'knowledge', 'article', 'guide', 'story', 'notice'].includes(pType) ||
+                                Boolean(p.target_type);
+
+                            const matchesPlace = placeId && (
+                                p.place_id === placeId ||
+                                p.target_id === placeId ||
+                                (p.place_id && place?.canonical_name && p.place_id.toLowerCase().includes(place.canonical_name.toLowerCase()))
+                            );
+
+                            const cleanTag = String(tagId).toLowerCase();
+                            const matchesTag = Array.isArray(p.tags) && p.tags.some(t => String(t).toLowerCase() === cleanTag);
+
+                            return isKnowledge && (matchesPlace || matchesTag);
+                        });
+                    }
+                } catch (fetchErr) {
+                    console.debug('Liittyvien korttien dynaaminen haku notice:', fetchErr);
+                }
+            }
+
+            // Renderöidään haetut tietokortit
+            let html = '';
+            if (dynamicCards.length > 0) {
+                html = dynamicCards.slice(0, 4).map(post => {
+                    const cardUrl = `tietokortti.html?id=${encodeURIComponent(post.id)}&place=${encodeURIComponent(placeSlug)}&theme=${encodeURIComponent(tagId)}`;
+                    const imgUrl = post.image_url || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80';
+                    const rawType = (post.target_type || post.type || 'Tietokortti').toUpperCase();
+                    const templateLabelMap = {
+                        'GENERAL': 'Yleistieto',
+                        'GUIDE': 'Opas / Reitti',
+                        'HISTORY': 'Historia',
+                        'INTRO': 'Kohteen esittely',
+                        'STORY': 'Tarina / Muistelu',
+                        'INFO': 'Tietokortti'
+                    };
+                    const badgeText = templateLabelMap[rawType] || 'Paikallistieto';
+                    const lead = post.description || (post.content ? post.content.replace(/^[#\s]+/, '').substring(0, 140) : '');
+
+                    return `
+                        <a href="${cardUrl}" class="related-card">
+                            <img src="${imgUrl}" class="related-img" alt="${(post.title || '').replace(/"/g, '&quot;')}" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80'">
+                            <div class="related-content">
+                                <div class="related-badge">${badgeText}</div>
+                                <h4 class="related-title">${post.title || 'Nimetön tietokortti'}</h4>
+                                <p class="related-desc">${lead || 'Lue lisää paikallistietoa ja tutustu aiheeseen.'}</p>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            }
+
+            // Jos dynaamisia kortteja oli alle 3, täydennetään laadukkailla kontekstuaalisilla teema/paikkakorteilla
+            if (dynamicCards.length < 3) {
+                const pName = place?.name || 'Lievestuore';
+                const pSlug = place?.canonical_name || 'lievestuore';
+
+                const fallbacks = [
+                    {
+                        url: `teema.html?place=${encodeURIComponent(pSlug)}&theme=retkeily`,
+                        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80',
+                        badge: 'Alueopas',
+                        title: `${pName}n retkeilyreitit ja taukopaikat`,
+                        desc: `Kattava opastus ${pName}n alueen laavuille, tulentekopaikoille ja luontopoluille.`
+                    },
+                    {
+                        url: `tietoa-paikasta.html?id=${encodeURIComponent(place?.place_id || 'haarlan_ranta_laukaa')}`,
+                        img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=500&q=80',
+                        badge: 'Kohdeopas',
+                        title: `${pName}n ranta- ja virkistysalueet`,
+                        desc: 'Rantaan pääsy, kalastus- ja veneilymahdollisuudet sekä alueen palvelut.'
+                    },
+                    {
+                        url: `teema.html?place=${encodeURIComponent(pSlug)}&theme=historia`,
+                        img: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=500&q=80',
+                        badge: 'Historia',
+                        title: `${pName}n kulttuuri- ja tehdashistoria`,
+                        desc: `Merkittävät historialliset kohteet, miljööt ja perinteet ${pName}lla.`
+                    }
+                ];
+
+                const needed = 3 - dynamicCards.length;
+                html += fallbacks.slice(0, needed).map(fb => `
+                    <a href="${fb.url}" class="related-card">
+                        <img src="${fb.img}" class="related-img" alt="${fb.title.replace(/"/g, '&quot;')}">
+                        <div class="related-content">
+                            <div class="related-badge">${fb.badge}</div>
+                            <h4 class="related-title">${fb.title}</h4>
+                            <p class="related-desc">${fb.desc}</p>
+                        </div>
+                    </a>
+                `).join('');
+            }
+
+            grid.innerHTML = html;
         }
 
         // Demosisältö malliksi
