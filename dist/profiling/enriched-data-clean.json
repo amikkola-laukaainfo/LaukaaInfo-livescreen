@@ -1,6 +1,102 @@
 {
   "companies": [
     {
+      "id": "316",
+      "name": "Laukaan Pitopalvelu",
+      "website": "https://www.laukaanpitopalvelu.fi",
+      "status": "done",
+      "results": {
+        "companyId": "316",
+        "website": "https://www.laukaanpitopalvelu.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "aapo@laukaanpitopalvelu.fi",
+          "phone": "0400 356 844"
+        },
+        "interestingLinks": [
+          {
+            "type": "tilaa",
+            "url": "https://www.laukaanpitopalvelu.fi/#"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:01:59.606Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "315",
+      "name": "Äijäparkki",
+      "website": "https://www.aijaparkki.fi",
+      "status": "done",
+      "results": {
+        "companyId": "315",
+        "website": "https://www.aijaparkki.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "asiakaspalvelu@multamesta.fi",
+          "phone": "+358 500 635 217",
+          "contactPage": "https://www.aijaparkki.fi/yhteystiedot"
+        },
+        "interestingLinks": [
+          {
+            "type": "yhteystiedot",
+            "url": "https://www.aijaparkki.fi/yhteystiedot"
+          }
+        ],
+        "lastAnalyzed": "2026-06-14T15:43:00.652Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "314",
+      "name": "Valkolan kyläyhdistys ry",
+      "website": "https://valkolankyla.yhdistysavain.fi",
+      "status": "done",
+      "results": {
+        "companyId": "314",
+        "website": "https://valkolankyla.yhdistysavain.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/profile.php?id=61565702764493"
+          }
+        ],
+        "contacts": {
+          "contactPage": "https://valkolankyla.yhdistysavain.fi/yhteystiedot/"
+        },
+        "interestingLinks": [
+          {
+            "type": "yhteystiedot",
+            "url": "https://valkolankyla.yhdistysavain.fi/yhteystiedot/"
+          },
+          {
+            "type": "hinnasto",
+            "url": "https://valkolankyla.yhdistysavain.fi/kylatalo-2/vuokraus/hinnasto/"
+          }
+        ],
+        "lastAnalyzed": "2026-06-14T15:43:00.656Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
       "id": "305",
       "name": "Sähköpalvelu Valoisat Oy",
       "website": "https://www.valoisat.fi",
@@ -145,6 +241,39 @@
       }
     },
     {
+      "id": "272",
+      "name": "Rengaskanava Oy",
+      "website": "https://rengaskanava.fi/",
+      "status": "done",
+      "results": {
+        "companyId": "272",
+        "website": "https://rengaskanava.fi/",
+        "booking": {
+          "found": true,
+          "provider": "Online Booking",
+          "url": "https://rengaskanava.fi/#elementor-action%3Aaction%3Dpopup%3Aopen%26settings%3DeyJpZCI6IjIyNDkiLCJ0b2dnbGUiOmZhbHNlfQ%3D%3D"
+        },
+        "socialLinks": [],
+        "contacts": {
+          "phone": "020 743 4590",
+          "contactPage": "https://rengaskanava.fi/yhteystiedot/"
+        },
+        "interestingLinks": [
+          {
+            "type": "palvelut",
+            "url": "https://rengaskanava.fi/karcher-autopesukone/"
+          },
+          {
+            "type": "yhteystiedot",
+            "url": "https://rengaskanava.fi/yhteystiedot/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:51:13.141Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
       "id": "37",
       "name": "Arskan Autopalvelu",
       "website": "https://www.arskanautopalvelu.fi",
@@ -176,6 +305,59 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "38",
+      "name": "Asennuspalvelu J.Karvinen Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "39",
+      "name": "Autokorjaamo Heikki Valkonen (AD Autokorjaamo)",
+      "website": "https://ad-finland.com/autokorjaamo/laukaa/ad-autokorjaamo-heikki-valkonen_55/",
+      "status": "done",
+      "results": {
+        "companyId": "39",
+        "website": "https://ad-finland.com/autokorjaamo/laukaa/ad-autokorjaamo-heikki-valkonen_55/",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "heku1@luukku.com",
+          "phone": "+358 50 434 3122",
+          "contactPage": "https://ad-finland.com/autokorjaamo/laukaa/ad-autokorjaamo-heikki-valkonen_55/"
+        },
+        "interestingLinks": [
+          {
+            "type": "AD-korjaamon yritysesittely ja palvelut",
+            "url": "https://ad-finland.com/autokorjaamo/laukaa/ad-autokorjaamo-heikki-valkonen_55/"
+          },
+          {
+            "type": "Korjaamon tiedot ja tarjouspyyntö",
+            "url": "https://www.autokorjaamo.fi/korjaamot/ad-autokorjaamo-heikki-valkonen-106"
+          },
+          {
+            "type": "Autohuollon palvelut ja automerkit",
+            "url": "https://autojerry.fi/autokorjaamo/laukaa/ad-autokorjaamo-heikki-valkonen/"
+          },
+          {
+            "type": "AD-korjaamot Keski-Suomessa",
+            "url": "https://ad-finland.com/autokorjaamo/keski-suomi/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T08:10:46.612Z",
+        "isAiAssisted": true
+      }
+    },
+    {
+      "id": "40",
+      "name": "Autokorjaamo J Ala-Könni Oy",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "41",
@@ -211,6 +393,12 @@
       }
     },
     {
+      "id": "42",
+      "name": "Automaalaamo Autokori Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "45",
       "name": "GTI Car Center Oy",
       "website": "https://www.gticarcenter.fi",
@@ -230,6 +418,42 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "47",
+      "name": "Gyvers Garage",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "48",
+      "name": "Hytösen korjaamo",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "49",
+      "name": "Jannen Autokorjaus",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "50",
+      "name": "Jeltek",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "51",
+      "name": "JKL Asennus Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "54",
+      "name": "Konehuolto Myyryläinen Oy",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "55",
@@ -271,6 +495,18 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "56",
+      "name": "LRA-Raskashuolto Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "57",
+      "name": "Möykky Oy",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "58",
@@ -370,6 +606,12 @@
       }
     },
     {
+      "id": "61",
+      "name": "RJJ - Huolto & Pesu Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "62",
       "name": "Scania Suomi Oy",
       "website": "https://www.scania.com",
@@ -448,6 +690,66 @@
       }
     },
     {
+      "id": "64",
+      "name": "Service Palonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "66",
+      "name": "SK Raskashuolto",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "67",
+      "name": "T:mi Ari Hokkanen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "68",
+      "name": "T:mi Autopalvelu Timo Lehtonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "69",
+      "name": "T:mi Autopesu Hietex",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "70",
+      "name": "T:mi Huolto-Kaksikko S. Roiha",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "71",
+      "name": "T:mi Jarkon korjaus ja apu",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "72",
+      "name": "T:mi Jarno Räty",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "73",
+      "name": "T:mi Jukka Häkkinen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "74",
+      "name": "T:mi Monitoimi Kiiski",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "75",
       "name": "T:mi T. Lauttaanaho",
       "website": "https://www.lauttaanaho.com",
@@ -476,6 +778,24 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "76",
+      "name": "T:mi Tero Hytönen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "77",
+      "name": "T:mi Tommi Kauppinen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "78",
+      "name": "Tecvest Oy",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "79",
@@ -540,65 +860,10 @@
       }
     },
     {
-      "id": "253",
-      "name": "Laukaan Autohuoltamo Oy (ST1 KAHVILA)",
-      "website": "https://www.st1.fi",
-      "status": "done",
-      "results": {
-        "companyId": "253",
-        "website": "https://www.st1.fi",
-        "booking": {
-          "found": false,
-          "provider": "",
-          "url": ""
-        },
-        "socialLinks": [
-          {
-            "platform": "Facebook",
-            "url": "https://www.facebook.com/st1suomi"
-          },
-          {
-            "platform": "Instagram",
-            "url": "https://www.instagram.com/st1suomi/"
-          },
-          {
-            "platform": "LinkedIn",
-            "url": "https://fi.linkedin.com/company/st1-suomi"
-          },
-          {
-            "platform": "YouTube",
-            "url": "https://www.youtube.com/user/St1Suomi"
-          }
-        ],
-        "contacts": {
-          "contactPage": "https://www.st1.fi/yksityisille/ota-yhteytta"
-        },
-        "interestingLinks": [
-          {
-            "type": "tuotteet",
-            "url": "https://www.st1.fi/yksityisille/tuotteet"
-          },
-          {
-            "type": "palvelut",
-            "url": "https://www.st1.fi/yksityisille/palvelut"
-          },
-          {
-            "type": "yhteystiedot",
-            "url": "https://www.st1.fi/yksityisille/ota-yhteytta"
-          },
-          {
-            "type": "tilaa",
-            "url": "https://www.st1.fi/yksityisille/tuotteet/lammitysoljy"
-          },
-          {
-            "type": "shop",
-            "url": "https://play.google.com/store/apps/details?id=fi.st1.bank.prod"
-          }
-        ],
-        "lastAnalyzed": "2026-06-12T09:25:53.901Z",
-        "isPlaywrightSimulated": true,
-        "isAiAssisted": false
-      }
+      "id": "81",
+      "name": "Vuonteen Kolaripaja",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "83",
@@ -706,6 +971,24 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "87",
+      "name": "Kalaliike Pentti Rossi",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "88",
+      "name": "Keliapakari",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "89",
+      "name": "Keski-Suomen Lihavarras Oy",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "92",
@@ -879,6 +1162,24 @@
       }
     },
     {
+      "id": "97",
+      "name": "T:mi Juhani P.E. Lampinen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "98",
+      "name": "T:mi Tökös",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "99",
+      "name": "Tmi Riihipellon Leipäpuu Kotileipomo",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "294",
       "name": "Koivulan savukala",
       "website": "https://koivulansavukala.fi/",
@@ -920,6 +1221,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "274",
+      "name": "Kotihoito A-M Huttunen",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "269",
@@ -968,6 +1275,12 @@
       }
     },
     {
+      "id": "3",
+      "name": "Eevan fysioterapia",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "6",
       "name": "Fysioterapia Ehyt",
       "website": "https://www.fysioterapiaehyt.fi/",
@@ -982,7 +1295,8 @@
         },
         "socialLinks": [],
         "contacts": {
-          "email": "fysioterapiaehyt@gmail.com"
+          "email": "fysioterapiaehyt@gmail.com",
+          "phone": "0503640445"
         },
         "interestingLinks": [
           {
@@ -994,10 +1308,28 @@
             "url": "https://www.fysioterapiaehyt.fi/hinnasto/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:25:57.552Z",
+        "lastAnalyzed": "2026-11-23T07:02:24.501Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "7",
+      "name": "Fysioterapia Oiva Ky",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "8",
+      "name": "Fysioterapiapalvelu Hannele Kerkelä",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "9",
+      "name": "Hermoratahieroja Hilkka Jokitalo",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "10",
@@ -1038,6 +1370,30 @@
       }
     },
     {
+      "id": "11",
+      "name": "Hierontapalvelu Soul&Body",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "12",
+      "name": "Hierontapalvelut Anni Lappalainen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "15",
+      "name": "Katja Säpsä",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "16",
+      "name": "Hieroja Anni Piilonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "18",
       "name": "Laukaan Toimintaterapia",
       "website": "https://www.laukaantoimintaterapia.fi",
@@ -1069,6 +1425,18 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "20",
+      "name": "Liikkeen Viisaus",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "23",
+      "name": "OneFit",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "27",
@@ -1106,7 +1474,7 @@
             "url": "https://www.ruskanriemut.fi/yhteystiedot/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:25:58.216Z",
+        "lastAnalyzed": "2026-11-23T07:02:35.461Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1254,7 +1622,7 @@
         "socialLinks": [],
         "contacts": {},
         "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:25:59.866Z",
+        "lastAnalyzed": "2026-11-23T07:02:46.949Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1290,6 +1658,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "35",
+      "name": "Tmi Tuula Laiho",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "36",
@@ -1333,6 +1707,95 @@
       }
     },
     {
+      "id": "106",
+      "name": "Hermoratahieronta KIPaway",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "107",
+      "name": "Hieroja Veijo Karvonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "108",
+      "name": "Hierontahelmi",
+      "website": "https://hierontahelmilaukaa.fi/",
+      "status": "done",
+      "results": {
+        "companyId": "108",
+        "website": "https://hierontahelmilaukaa.fi/",
+        "booking": {
+          "found": true,
+          "provider": "Online Booking",
+          "url": "https://storage.googleapis.com/prod_booksalon_fi/salon_pictures/629334c07cd5f40006f2b47c.jpg"
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/hierontahelmi/"
+          }
+        ],
+        "contacts": {
+          "email": "jutta.hierontahelmi@outlook.com",
+          "phone": "+358456755219"
+        },
+        "interestingLinks": [],
+        "lastAnalyzed": "2026-11-23T07:51:13.142Z",
+        "isPlaywrightSimulated": false,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "109",
+      "name": "Hierontapalvelu Virpi Myyryläinen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "110",
+      "name": "In Essence",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "111",
+      "name": "Keski-Suomen Hieronta- ja lymfaterapiakeskus",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "112",
+      "name": "Koulutettu hieroja Antti-Pekka Ahonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "113",
+      "name": "Koulutettu hieroja Veera Vihtari",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "114",
+      "name": "Luontaishoitola Enkelihuone",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "115",
+      "name": "Marjo Niininen koulutettu hieroja",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "122",
+      "name": "Tmi Maarit Roth HR-Hieronta",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "125",
       "name": "Kauneuspuoti Amelie",
       "website": "https://www.kauneuspuotiamelie.fi",
@@ -1369,10 +1832,22 @@
             "url": "https://kauneuspuotiamelie.fi/yhteystiedot/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:00.708Z",
+        "lastAnalyzed": "2026-11-23T07:03:09.533Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "126",
+      "name": "Astellen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "127",
+      "name": "Evellina's Beauty",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "128",
@@ -1389,6 +1864,7 @@
         },
         "socialLinks": [],
         "contacts": {
+          "phone": "+358409679225",
           "contactPage": "https://www.evenails.fi/#yhteystiedot"
         },
         "interestingLinks": [
@@ -1405,10 +1881,28 @@
             "url": "https://www.evenails.fi/#yhteystiedot"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:01.135Z",
+        "lastAnalyzed": "2026-11-23T07:03:23.765Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "130",
+      "name": "Parturi-Kampaamo Carpe Diem",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "132",
+      "name": "Hiushuone Sonja",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "135",
+      "name": "Kauneushoitola Ania",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "136",
@@ -1465,6 +1959,115 @@
       }
     },
     {
+      "id": "137",
+      "name": "Kauneuspörssi",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "140",
+      "name": "Kosmetologi Helena Manninen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "146",
+      "name": "Parturi-Kampaamo Anita Kuniala",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "147",
+      "name": "Parturi-Kampaamo Anne-Maria Arvola",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "148",
+      "name": "Parturi-Kampaamo Doris",
+      "website": "https://kampaamodoris.fi/",
+      "status": "done",
+      "results": {
+        "companyId": "148",
+        "website": "https://kampaamodoris.fi/",
+        "booking": {
+          "found": true,
+          "provider": "Online Booking",
+          "url": "https://kampaamodoris.fi/ajanvaraus/"
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/kampaamodoris/"
+          },
+          {
+            "platform": "Instagram",
+            "url": "https://www.instagram.com/parturikampaamodoris/"
+          }
+        ],
+        "contacts": {
+          "contactPage": "https://kampaamodoris.fi/ajanvaraus/"
+        },
+        "interestingLinks": [
+          {
+            "type": "palvelut",
+            "url": "https://kampaamodoris.fi/palvelut/"
+          },
+          {
+            "type": "tuotteet",
+            "url": "https://kampaamodoris.fi/palvelut/#hiustenhoitotuotteet"
+          },
+          {
+            "type": "hinnasto",
+            "url": "https://kampaamodoris.fi/hinnasto/"
+          },
+          {
+            "type": "yhteystiedot",
+            "url": "https://kampaamodoris.fi/ajanvaraus/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:51:13.144Z",
+        "isPlaywrightSimulated": false,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "149",
+      "name": "Parturi-kampaamo Minna Näreaho",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "150",
+      "name": "Parturi-Kampaamo Paulan Kampa",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "151",
+      "name": "Parturi-Kampaamo Raija Viinikainen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "152",
+      "name": "Parturi-Kampaamo Sandy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "153",
+      "name": "Parturi-Kampaamo Tuula Häkkinen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "156",
+      "name": "Pieni Helmi",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "158",
       "name": "Kynsiteknikko Kristi Ruul-Saari​",
       "website": "https://www.kynsistudiokrissu.com",
@@ -1507,6 +2110,60 @@
       }
     },
     {
+      "id": "159",
+      "name": "Hiushuone Soma",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "160",
+      "name": "Spirello",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "162",
+      "name": "T.mi Jaana Jämbäck",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "163",
+      "name": "Tia's hair and beauty",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "164",
+      "name": "Tmi Anni Nurminen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "165",
+      "name": "Tmi Helppasi",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "167",
+      "name": "Tmi Katja Vehviläinen (Parturi-kampaamo",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "168",
+      "name": "Tmi Kia Janhonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "169",
+      "name": "Tmi Mari Virtanen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "170",
       "name": "Tmi Saana Oksanen",
       "website": "https://www.timma.fi/eloisa",
@@ -1543,10 +2200,16 @@
         "socialLinks": [],
         "contacts": {},
         "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:26:02.540Z",
+        "lastAnalyzed": "2026-11-23T07:03:31.557Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "172",
+      "name": "Tmi SaraBella/Salon Belleza Gloriosa Sara Aho",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "173",
@@ -1609,6 +2272,12 @@
         "isPlaywrightSimulated": false,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "204",
+      "name": "Laukaan Kotipalvelu",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "293",
@@ -1745,6 +2414,12 @@
       }
     },
     {
+      "id": "277",
+      "name": "Sarahovin kokoustilat",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "276",
       "name": "Vuonteen Helmi",
       "website": "https://www.vuonteenhelmi.fi",
@@ -1780,7 +2455,7 @@
             "url": "https://www.vuonteenhelmi.fi/kauppa/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:04.039Z",
+        "lastAnalyzed": "2026-11-23T07:03:43.269Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1855,6 +2530,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "250",
+      "name": "Karlvik Ravintola",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "282",
@@ -1997,6 +2678,67 @@
       }
     },
     {
+      "id": "271",
+      "name": "Fenno optiikka",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "270",
+      "name": "Tertan kahvila- ja puoti",
+      "website": "https://kampaamodoris.fi/",
+      "status": "done",
+      "results": {
+        "companyId": "270",
+        "website": "https://kampaamodoris.fi/",
+        "booking": {
+          "found": true,
+          "provider": "Online Booking",
+          "url": "https://kampaamodoris.fi/ajanvaraus/"
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/kampaamodoris/"
+          },
+          {
+            "platform": "Instagram",
+            "url": "https://www.instagram.com/parturikampaamodoris/"
+          }
+        ],
+        "contacts": {
+          "contactPage": "https://kampaamodoris.fi/ajanvaraus/"
+        },
+        "interestingLinks": [
+          {
+            "type": "palvelut",
+            "url": "https://kampaamodoris.fi/palvelut/"
+          },
+          {
+            "type": "tuotteet",
+            "url": "https://kampaamodoris.fi/palvelut/#hiustenhoitotuotteet"
+          },
+          {
+            "type": "hinnasto",
+            "url": "https://kampaamodoris.fi/hinnasto/"
+          },
+          {
+            "type": "yhteystiedot",
+            "url": "https://kampaamodoris.fi/ajanvaraus/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:51:13.587Z",
+        "isPlaywrightSimulated": false,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "13",
+      "name": "Iloinen Noita Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "17",
       "name": "Laukaan Apteekki",
       "website": "https://www.laukaanapteekki.fi",
@@ -2134,6 +2876,43 @@
       }
     },
     {
+      "id": "90",
+      "name": "Laukaan Säästö-Market Oy",
+      "website": "https://www.laukaansaastomarket.fi/",
+      "status": "done",
+      "results": {
+        "companyId": "90",
+        "website": "https://www.laukaansaastomarket.fi/",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "markku.kaurola@elisanet.fi",
+          "phone": "+358 40 641 8092",
+          "contactPage": "https://www.laukaansaastomarket.fi/i/asiakaspalvelu/5/"
+        },
+        "interestingLinks": [
+          {
+            "type": "Verkkokauppa ja tuotevalikoima",
+            "url": "https://www.laukaansaastomarket.fi/"
+          },
+          {
+            "type": "Asiakaspalvelu ja yhteystiedot",
+            "url": "https://www.laukaansaastomarket.fi/i/asiakaspalvelu/5/"
+          },
+          {
+            "type": "Tietosuojaseloste",
+            "url": "https://www.laukaansaastomarket.fi/i/tietosuojaseloste/4/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T08:12:14.492Z",
+        "isAiAssisted": true
+      }
+    },
+    {
       "id": "100",
       "name": "Tokmanni Oy",
       "website": "https://www.tokmanni.fi",
@@ -2207,6 +2986,12 @@
       }
     },
     {
+      "id": "129",
+      "name": "Fieldhill Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "134",
       "name": "Joudukas",
       "website": "https://www.joudukas.fi",
@@ -2237,6 +3022,24 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "141",
+      "name": "Laukaan Kultakello Avoin yhtiö",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "142",
+      "name": "Merjan Risu&Ruusut",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "143",
+      "name": "Miruma",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "166",
@@ -2536,6 +3339,18 @@
       }
     },
     {
+      "id": "287",
+      "name": "Tarvaalan Kalamaja",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "286",
+      "name": "Multamäen leirikeskus",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "285",
       "name": "Country Häkkinen Lomamökit",
       "website": "https://www.countryhakkinen.fi",
@@ -2562,7 +3377,7 @@
             "url": "https://countryhakkinen.fi/index.php/tuulilasin-korjauspalvelut/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:11.025Z",
+        "lastAnalyzed": "2026-11-23T07:04:03.365Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -2633,6 +3448,24 @@
       }
     },
     {
+      "id": "292",
+      "name": "Mika Nuorva Valokuvaaja",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "291",
+      "name": "Keijo Penttinen PS Studio",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "273",
+      "name": "Onnellinen Studio",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "2",
       "name": "Mediazoo",
       "website": "https://www.mediazoo.fi",
@@ -2646,12 +3479,65 @@
           "url": ""
         },
         "socialLinks": [],
-        "contacts": {},
-        "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:26:12.546Z",
+        "contacts": {
+          "email": "info@mediazoo.fi",
+          "phone": "+358 41 465 5290",
+          "contactPage": "https://mediazoo.fi/yhteystiedot/"
+        },
+        "interestingLinks": [
+          {
+            "type": "Etusivu",
+            "url": "https://www.mediazoo.fi/"
+          },
+          {
+            "type": "Palvelut ja tuotegalleria",
+            "url": "https://www.mediazoo.fi/"
+          },
+          {
+            "type": "Digitointipalvelut",
+            "url": "https://mediazoo.fi/digitoinnit.html"
+          },
+          {
+            "type": "Videotuotanto ja videokuvaus",
+            "url": "https://mediazoo.fi/videokuvaaja-keski-suomi-jyvaskyla-laukaa/"
+          },
+          {
+            "type": "Diojen ja valokuvien digitointi / Hinnasto",
+            "url": "https://mediazoo.fi/diat.html"
+          },
+          {
+            "type": "Kaitafilmit",
+            "url": "https://mediazoo.fi/kaitafilmi.html"
+          },
+          {
+            "type": "Videokasettien digitointi",
+            "url": "https://mediazoo.fi/vhs.html"
+          },
+          {
+            "type": "Muut digitointipalvelut",
+            "url": "https://mediazoo.fi/muut.html"
+          },
+          {
+            "type": "Yhteystiedot ja tarjouspyyntö",
+            "url": "https://mediazoo.fi/yhteystiedot/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:05:10.810Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
+    },
+    {
+      "id": "53",
+      "name": "K&K Peni Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "91",
+      "name": "Laukaan yrityspalvelut",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "101",
@@ -2757,7 +3643,7 @@
             "url": "https://www.katinca.fi/yhteystiedot.html"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:13.235Z",
+        "lastAnalyzed": "2026-11-23T07:05:26.118Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -2798,6 +3684,24 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "116",
+      "name": "Ohjelmatoimisto Ja - He Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "120",
+      "name": "Proxta Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "121",
+      "name": "Rock Tekniikka Ky",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "123",
@@ -2998,6 +3902,12 @@
       }
     },
     {
+      "id": "155",
+      "name": "Pieneläintuhkaamo Usva OY",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "174",
       "name": "Topiron Ky",
       "website": "https://www.topiron.fi",
@@ -3073,6 +3983,18 @@
       }
     },
     {
+      "id": "178",
+      "name": "Almek",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "180",
+      "name": "Arkkitiimi Osuuskunta",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "182",
       "name": "Colliers Finland Oy",
       "website": "https://www.colliersasunnot.com",
@@ -3118,6 +4040,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "187",
+      "name": "IR-Kiinteistöt Irja Hokkeri",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "188",
@@ -3189,6 +4117,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "190",
+      "name": "Isännöitsijätoimisto Heikki Valkonen Ky",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "193",
@@ -3358,6 +4292,12 @@
       }
     },
     {
+      "id": "205",
+      "name": "Laukaan Pitkäniemen kiinteistöhuolto Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "206",
       "name": "Laukaan Puhtaanapito Oy",
       "website": "https://www.laukaanpuhtaanapito.fi",
@@ -3439,6 +4379,12 @@
       }
     },
     {
+      "id": "209",
+      "name": "Lehtomäen traktoripalvelu",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "210",
       "name": "Lievestuoreen Lämpö Oy",
       "website": "https://lievestuoreenlampo.fi/wp/",
@@ -3469,6 +4415,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "217",
+      "name": "Monitac",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "222",
@@ -3551,6 +4503,18 @@
       }
     },
     {
+      "id": "232",
+      "name": "TeePee kiinteistöpalvelut Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "235",
+      "name": "Tmi Eero Ylönen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "254",
       "name": "Laukaan Korppi Oy",
       "website": "https://www.mustakorppi.fi",
@@ -3588,6 +4552,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "267",
+      "name": "Hevosklinikka Laukaa",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "59",
@@ -3653,6 +4623,66 @@
       }
     },
     {
+      "id": "144",
+      "name": "Module Keittiö ja Rakennuspalvelu",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "145",
+      "name": "Monipalvelu Suomivirta",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "157",
+      "name": "Rakentajainpalvelu Järvinen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "161",
+      "name": "Sähköpalvelu M Leminen Ky",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "175",
+      "name": "Veisto- ja Kalustetyö M. Ojala",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "179",
+      "name": "Apponen Pekka Juhani",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "181",
+      "name": "Atte Isokangas Tmi",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "183",
+      "name": "Duuni-Simppa Ky",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "184",
+      "name": "EXS Finland Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "185",
+      "name": "Hento Works",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "186",
       "name": "Ilmalämpöpumput Tmi Forsström",
       "website": "https://www.tmiforsström.fi",
@@ -3694,6 +4724,30 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "191",
+      "name": "IV-urakointi Lehtonen Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "192",
+      "name": "Kiinteistöjen korjaus ja huolto Lehtiö Jarmo",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "194",
+      "name": "Jyvä-IV Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "195",
+      "name": "Jyväsesudun LVI Oy",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "201",
@@ -3772,6 +4826,12 @@
       }
     },
     {
+      "id": "203",
+      "name": "Laukaan Arkiapupalvelut",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "207",
       "name": "Laukaan Renki-Palvelut",
       "website": "https://www.renki-palvelut.fi/",
@@ -3804,6 +4864,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "211",
+      "name": "LVI-Hanaman",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "212",
@@ -3981,6 +5047,108 @@
       }
     },
     {
+      "id": "218",
+      "name": "Osk. JS Keski-Suomi",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "219",
+      "name": "Pikkupiika Kaarina",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "220",
+      "name": "Pinta-Putki Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "221",
+      "name": "Putki Pee Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "224",
+      "name": "T:mi Harri Lekander",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "225",
+      "name": "t:mi Ilkka Kanerva",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "226",
+      "name": "T:mi Jukka-Pekka Olkkonen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "227",
+      "name": "T:mi Maria Fägerholt",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "229",
+      "name": "T:mi Porrastyö",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "230",
+      "name": "T.mi Susanna Niiniranta",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "231",
+      "name": "Talotekniikka Väyrynen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "233",
+      "name": "Tmi Aki Tuppurainen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "234",
+      "name": "VaskiTeam",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "236",
+      "name": "Tmi Marika Kurkipuro",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "237",
+      "name": "Tmi Tuula Rutanen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "238",
+      "name": "Toiminimi Veikko Nieminen",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "239",
+      "name": "WoodIT",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "296",
       "name": "Bistro Puulaaki",
       "website": "https://www.bistropuulaaki.fi",
@@ -4061,43 +5229,10 @@
       }
     },
     {
-      "id": "268",
-      "name": "Jyväs Pakari Lievestuore",
-      "website": "https://www.jyvaspakari.fi",
-      "status": "done",
-      "results": {
-        "companyId": "268",
-        "website": "https://www.jyvaspakari.fi",
-        "booking": {
-          "found": false,
-          "provider": "",
-          "url": ""
-        },
-        "socialLinks": [
-          {
-            "platform": "Facebook",
-            "url": "https://www.facebook.com/Jyv%C3%A4s-Pakari-429299893807516/?ref=ts&fref=ts"
-          },
-          {
-            "platform": "Instagram",
-            "url": "https://www.instagram.com/jyvaspakari/"
-          }
-        ],
-        "contacts": {
-          "email": "info@jyvaspakari.fi",
-          "phone": "+358103270650",
-          "contactPage": "https://xn--jyvspakari-s5a.fi/yhteystiedot/"
-        },
-        "interestingLinks": [
-          {
-            "type": "yhteystiedot",
-            "url": "https://xn--jyvspakari-s5a.fi/yhteystiedot/"
-          }
-        ],
-        "lastAnalyzed": "2026-06-12T09:26:26.513Z",
-        "isPlaywrightSimulated": true,
-        "isAiAssisted": false
-      }
+      "id": "93",
+      "name": "Lähipalvelu ja Grilli Jokis",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "103",
@@ -4162,6 +5297,12 @@
       }
     },
     {
+      "id": "243",
+      "name": "Laukaan Tupaswilla Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "246",
       "name": "Bitoxo Oy (RAVINTOLA VIHTAHOUSU)",
       "website": "https://www.vihtahousu.fi",
@@ -4188,6 +5329,18 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "249",
+      "name": "Jabo -afrin",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "252",
+      "name": "Koskikahvio Ky Juhani Hänninen",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "255",
@@ -4345,6 +5498,30 @@
       }
     },
     {
+      "id": "259",
+      "name": "Ruokalandia Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "260",
+      "name": "T:mi Lounaskahvio Huumo (Ysitien grilli)",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "261",
+      "name": "T. Lamio",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "262",
+      "name": "Tmi Medya",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "263",
       "name": "Varjolan Tilan Matkailu Oy",
       "website": "https://www.varjola.com",
@@ -4382,6 +5559,12 @@
         "isPlaywrightSimulated": false,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "264",
+      "name": "VL-Marketing",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "266",
@@ -4460,6 +5643,12 @@
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
+    },
+    {
+      "id": "131",
+      "name": "Huonekaluliike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
+      "website": "",
+      "status": "not_started"
     },
     {
       "id": "306",
@@ -4553,6 +5742,30 @@
       }
     },
     {
+      "id": "309",
+      "name": "Johtakee Oy",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "310",
+      "name": "Suomen säkkikauppa",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "312",
+      "name": "Päivin pieni kukkapuoti",
+      "website": "",
+      "status": "not_started"
+    },
+    {
+      "id": "311",
+      "name": "Suunnittelu- ja rakennuttamispalvelu Marko Viik",
+      "website": "",
+      "status": "not_started"
+    },
+    {
       "id": "313",
       "name": "Laukaan Kädenjälki ry",
       "website": "https://www.kadenjalkilaukaa.fi",
@@ -4591,5 +5804,5 @@
       }
     }
   ],
-  "lastSaved": "2026-06-12T10:24:06.640Z"
+  "lastSaved": "2026-11-23T08:12:23.226Z"
 }
