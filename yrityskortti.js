@@ -470,15 +470,29 @@
         }
     }
 
+    /** Tunnistaa maksulliset yritykset (Mediazoo, Vuonteen Helmi jne.) jotka pidetään aina ON-tilassa */
+    function isPaidProfile(company) {
+        if (!company) return false;
+        if (company.tyyppi === 'maksu' || company.tyyppi === 'paid' || company.is_paid === true || company.account_tier === 'paid') return true;
+        const id = String(company.id || '').replace('company-', '');
+        if (id === '2' || id === '276') return true;
+        const nimi = (company.nimi || company.name || '').toLowerCase();
+        if (nimi.includes('mediazoo') || nimi.includes('vuonteen helmi')) return true;
+        return false;
+    }
+
     function renderCompanyDetails(company, siteSettings) {
         // --- ON/OFF näkyvyyslogiikka (2 tasoa) ---
         // Taso 1: palvelun yleiskytkin (settings.json -> business_profiles_enabled)
         // Taso 2: yrityskohtainen tila (company.visibility_status === 'OFF')
-        // Vanha is_expired-logiikka säilyy yhteensopivuuden vuoksi
+        // TÄRKEÄÄ: Maksu-profiilit (Mediazoo, Vuonteen Helmi jne.) EIVÄT KOSKAAN mene piiloon, vaikka laittaa OFF!
         const settings = siteSettings || { business_profiles_enabled: true };
-        const isBasicVisibility = (settings.business_profiles_enabled === false)
+        const isPaid = isPaidProfile(company);
+        const isBasicVisibility = !isPaid && (
+            (settings.business_profiles_enabled === false)
             || (company.visibility_status === 'OFF')
-            || (company.is_expired === true);
+            || (company.is_expired === true)
+        );
 
         if (isBasicVisibility) {
             renderBasicVisibilityCompanyCard(company);
