@@ -614,7 +614,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         // JOS place_id ON ANNETTU, KÄYTETÄÄN KONTEKSTUAALISTA HAKUA
-        const placeIdParam = urlParams.get('place_id');
+        const placeIdParam = urlParams.get('place_id') || urlParams.get('place');
         if (placeIdParam && aiSbClient) {
             console.log("Kontekstuaalinen teemahaku: place_id=", placeIdParam);
             try {

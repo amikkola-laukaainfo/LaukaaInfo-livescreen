@@ -989,8 +989,8 @@
     <script>
         (function() {
             const params = new URLSearchParams(window.location.search);
-            const placeId = params.get('place_id');
-            const tag = params.get('tag');
+            const placeId = params.get('place_id') || params.get('place');
+            const tag = params.get('tag') || params.get('theme');
             if (placeId) {
                 const banner = document.getElementById('context-banner');
                 const backLink = document.getElementById('context-back-link');
