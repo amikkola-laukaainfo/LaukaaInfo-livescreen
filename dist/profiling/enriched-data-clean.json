@@ -349,7 +349,7 @@
             "url": "https://ad-finland.com/autokorjaamo/keski-suomi/"
           }
         ],
-        "lastAnalyzed": "2026-11-23T08:10:46.612Z",
+        "lastAnalyzed": "2026-11-23T08:54:46.068Z",
         "isAiAssisted": true
       }
     },
@@ -2878,7 +2878,7 @@
     {
       "id": "90",
       "name": "Laukaan Säästö-Market Oy",
-      "website": "https://www.laukaansaastomarket.fi/",
+      "website": "",
       "status": "done",
       "results": {
         "companyId": "90",
@@ -4119,8 +4119,8 @@
       }
     },
     {
-      "id": "190",
-      "name": "Isännöitsijätoimisto Heikki Valkonen Ky",
+      "id": "ROW-193",
+      "name": "Yritys 193",
       "website": "",
       "status": "not_started"
     },
@@ -5804,5 +5804,5 @@
       }
     }
   ],
-  "lastSaved": "2026-11-23T08:39:06.063Z"
+  "lastSaved": "2026-11-23T08:55:00.751Z"
 }
