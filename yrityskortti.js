@@ -60,8 +60,114 @@
         loadCompanyDetails(companyId);
     });
 
+    // --- ON/OFF: Näkyvyysasetukset (settings.json) ---
+    // settings.json haetaan kerran, tulokset välimuistiin sessio-storageen
+    async function loadSiteSettings() {
+        try {
+            const cached = sessionStorage.getItem('laukaainfo_site_settings');
+            if (cached) return JSON.parse(cached);
+            const prefix = window.location.pathname.includes('/yritys/') ? '../' : './';
+            const res = await fetch(prefix + 'settings.json?t=' + Date.now());
+            if (!res.ok) return { business_profiles_enabled: true };
+            const data = await res.json();
+            sessionStorage.setItem('laukaainfo_site_settings', JSON.stringify(data));
+            return data;
+        } catch (e) {
+            return { business_profiles_enabled: true };
+        }
+    }
+
+    /** Perustietonäkyvyys (OFF-tila): nimi, osoite, sijainti ja kunnioittava aktivointikehote.
+     *  EI poista yritystä paikkatietoverkostosta – sijainti ja etäisyyslaskenta säilyvät. */
+    function renderBasicVisibilityCompanyCard(company) {
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('card-content').style.display = 'block';
+
+        document.title = `${company.nimi} – LaukaaInfo`;
+
+        const header = document.querySelector('.card-header');
+        if (header) {
+            header.style.background = 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)';
+            header.style.color = '#334155';
+            header.classList.remove('has-gallery');
+        }
+
+        document.getElementById('display-name').textContent = company.nimi;
+        document.getElementById('display-category').textContent = company.kategoria || '';
+
+        // Piilotetaan mainosmainen sisältö
+        const headlineEl = document.getElementById('display-headline');
+        if (headlineEl) { headlineEl.textContent = ''; headlineEl.style.display = 'none'; }
+
+        const descEl = document.getElementById('display-description');
+        if (descEl) {
+            descEl.textContent = '';
+            const descWrap = descEl.closest('.description-block') || descEl.parentElement;
+            if (descWrap) descWrap.style.display = 'none';
+        }
+
+        const addrEl = document.getElementById('display-address');
+        if (addrEl) addrEl.textContent = company.osoite || 'Laukaa';
+
+        // Etäisyys käyttäjälle SÄILYY – yritys pysyy paikkatietoverkostossa
+        // Etäisyyslaskenta ajetaan myöhemmin kuten normaalisti
+
+        // Piilotetaan kaikki mainossisältö
+        [
+            'logo-container', 'gallery-container', 'phone-item',
+            'google-reviews-item', 'service-methods-item',
+            'service-area-confirmation', 'card-map',
+            'promotional-links-section', 'video-section', 'social-links',
+            'website-item'
+        ].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+
+        const socialIcons = document.getElementById('social-icons');
+        if (socialIcons) socialIcons.innerHTML = '';
+
+        // Lisätään kunnioittava aktivointiviesti
+        const infoPanel = document.querySelector('.info-panel');
+        if (infoPanel && !document.getElementById('basic-visibility-notice')) {
+            const notice = document.createElement('div');
+            notice.id = 'basic-visibility-notice';
+            notice.style.cssText = 'margin-top:1rem;padding:1rem 1.25rem;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:16px;font-size:0.88rem;color:#475569;line-height:1.6;';
+            notice.innerHTML = `
+                <p style="margin:0 0 0.5rem;font-weight:600;color:#334155;">
+                    &#8505;&#65038; Yritys ei ole vielä aktivoinut tai päivittänyt omaa yritysesittelyään LaukaaInfossa.
+                </p>
+                <p style="margin:0;font-size:0.82rem;color:#64748b;">
+                    Yrityksen perustiedot ovat saatavilla, mutta tarkemmat palvelu- ja yhteystiedot eivät ole yrityksen ylläpitämässä esittelyssä.
+                </p>
+            `;
+            infoPanel.appendChild(notice);
+
+            // CTA yritysedustajalle
+            const cta = document.createElement('div');
+            cta.id = 'basic-visibility-cta';
+            cta.style.cssText = 'margin-top:1rem;padding:1rem 1.25rem;background:#eff6ff;border:1.5px solid #bae6fd;border-radius:16px;text-align:center;';
+            cta.innerHTML = `
+                <p style="margin:0 0 0.75rem;color:#1e40af;font-size:0.85rem;font-weight:600;">
+                    Oletko tämän yrityksen edustaja?
+                </p>
+                <a href="lisaa-yritys.html" style="display:inline-block;padding:0.6rem 1.5rem;background:#2563eb;color:#fff;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">
+                    Ota yritysesittely käyttöön tai päivitä tiedot &rarr;
+                </a>
+            `;
+            infoPanel.appendChild(cta);
+        }
+
+        // Skaalataan otsikko
+        const titleEl = document.getElementById('display-name');
+        if (titleEl) setTimeout(() => fitText(titleEl, 16), 50);
+    }
+
     async function loadCompanyDetails(id) {
         try {
+            // Ladataan asetukset (settings.json) rinnakkain yritystietojen kanssa
+            const siteSettingsPromise = loadSiteSettings();
+
             // Käytetään palvelimen proxyä, joka hoitaa CORS-ongelmat ja datan muunnoksen
             // Haetaan vain kyseisen yrityksen tiedot (Security & Performance)
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
@@ -139,15 +245,62 @@
 
             // --- Ladataan yksittäisen yrityksen rikastusdata palvelimelta ---
             try {
-                // Haemme vain kyseisen yrityksen datan PHP-rajapinnan kautta, joka piilottaa täyden JSON-tiedoston
-                const enrichedRes = await fetch(`https://www.mediazoo.fi/laukaainfo-web/get_enriched_data.php?id=${encodeURIComponent(actualId)}&t=${Date.now()}`);
-                if (enrichedRes.ok) {
-                    const enrichedData = await enrichedRes.json();
-                    
-                    companies.forEach(company => {
-                        // Varmistetaan, että saatu rikastusdata liitetään oikeaan yritykseen (vaikka PHP tekee sen jo)
+                let enrichedResults = null;
+                const cleanId = String(actualId).replace('company-', '');
+
+                // 1. Ensisijaisesti kokeillaan PHP-rajapintaa (mediazoo.fi)
+                try {
+                    const enrichedRes = await fetch(`https://www.mediazoo.fi/laukaainfo-web/get_enriched_data.php?id=${encodeURIComponent(actualId)}&t=${Date.now()}`);
+                    if (enrichedRes.ok) {
+                        const enrichedData = await enrichedRes.json();
                         if (enrichedData && enrichedData.results) {
-                            company.enrichedData = enrichedData.results;
+                            enrichedResults = enrichedData.results;
+                        }
+                    }
+                } catch (e1) {
+                    console.warn('PHP get_enriched_data haku epäonnistui:', e1);
+                }
+
+                // 2. Jos PHP-rajapinta ei palauttanut tulosta (tai yritys on uusi), ladataan laukaainfo.fi:n oma profiling/enriched-data-clean.json
+                if (!enrichedResults) {
+                    try {
+                        const isDist = window.location.pathname.includes('/yritys/');
+                        const prefix = isDist ? '../' : './';
+                        const localEnrichedRes = await fetch(prefix + 'profiling/enriched-data-clean.json?t=' + Date.now());
+                        if (localEnrichedRes.ok) {
+                            const fullJson = await localEnrichedRes.json();
+                            const fullList = Array.isArray(fullJson) ? fullJson : (fullJson.companies || fullJson.results || []);
+                            const matchItem = fullList.find(c => 
+                                String(c.id) === String(actualId) || 
+                                String(c.id) === cleanId ||
+                                (c.results && (String(c.results.companyId) === String(actualId) || String(c.results.companyId) === cleanId))
+                            );
+                            if (matchItem) {
+                                enrichedResults = matchItem.results || matchItem;
+                                if (matchItem.website && !enrichedResults.website) {
+                                    enrichedResults.website = matchItem.website;
+                                }
+                            }
+                        }
+                    } catch (e2) {
+                        console.warn('Paikallisen rikastusdatan fallback epäonnistui:', e2);
+                    }
+                }
+
+                if (enrichedResults) {
+                    companies.forEach(company => {
+                        company.enrichedData = enrichedResults;
+                        // Jos yritykseltä puuttuu kotisivu, täydennetään se suoraan rikastusdatasta!
+                        const enrichedWeb = enrichedResults.website || (enrichedResults.contacts && enrichedResults.contacts.contactPage);
+                        if ((!company.nettisivu || company.nettisivu === '-' || company.nettisivu.trim() === '') && enrichedWeb) {
+                            company.nettisivu = enrichedWeb;
+                        }
+                        // Täydennetään myös puuttuva sähköposti ja puhelin jos löytyy
+                        if ((!company.sahkoposti || company.sahkoposti === '-' || company.sahkoposti.trim() === '') && enrichedResults.contacts?.email) {
+                            company.sahkoposti = enrichedResults.contacts.email;
+                        }
+                        if ((!company.puhelin || company.puhelin === '-' || company.puhelin.trim() === '') && enrichedResults.contacts?.phone) {
+                            company.puhelin = enrichedResults.contacts.phone;
                         }
                     });
                 }
@@ -198,7 +351,9 @@
                 return;
             }
 
-            renderCompanyDetails(company);
+            // Odotetaan asetukset valmiiksi ja välitetään renderCompanyDetails-funktiolle
+            const siteSettings = await siteSettingsPromise;
+            renderCompanyDetails(company, siteSettings);
         } catch (error) {
             console.error('Virhe ladattaessa yrityksen tietoja:', error);
             document.getElementById('loading-overlay').innerHTML = '<h2>Virhe ladattaessa tietoja. Tarkista PHP-tiedostot.</h2>';
@@ -315,7 +470,47 @@
         }
     }
 
-    function renderCompanyDetails(company) {
+    function renderCompanyDetails(company, siteSettings) {
+        // --- ON/OFF näkyvyyslogiikka (2 tasoa) ---
+        // Taso 1: palvelun yleiskytkin (settings.json -> business_profiles_enabled)
+        // Taso 2: yrityskohtainen tila (company.visibility_status === 'OFF')
+        // Vanha is_expired-logiikka säilyy yhteensopivuuden vuoksi
+        const settings = siteSettings || { business_profiles_enabled: true };
+        const isBasicVisibility = (settings.business_profiles_enabled === false)
+            || (company.visibility_status === 'OFF')
+            || (company.is_expired === true);
+
+        if (isBasicVisibility) {
+            renderBasicVisibilityCompanyCard(company);
+            // Etäisyyslaskenta silti käynnistetään (paikkatietoverkosto säilyy)
+            if (navigator.geolocation && company.lat && company.lng) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    try {
+                        const R = 6371;
+                        const dLat = (company.lat - pos.coords.latitude) * Math.PI / 180;
+                        const dLon = (company.lng - pos.coords.longitude) * Math.PI / 180;
+                        const a = Math.sin(dLat/2)*Math.sin(dLat/2)
+                            + Math.cos(pos.coords.latitude*Math.PI/180)*Math.cos(company.lat*Math.PI/180)
+                            * Math.sin(dLon/2)*Math.sin(dLon/2);
+                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        const dist = R * c;
+                        const distText = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1)} km`;
+                        const addrEl = document.getElementById('display-address');
+                        const addressContainer = addrEl ? addrEl.parentElement : null;
+                        let distElem = document.getElementById('display-distance');
+                        if (!distElem && addressContainer) {
+                            distElem = document.createElement('div');
+                            distElem.id = 'display-distance';
+                            distElem.className = 'distance-badge';
+                            addressContainer.appendChild(distElem);
+                        }
+                        if (distElem) distElem.innerHTML = `🚗 Etäisyys: ${distText}`;
+                    } catch(e) {}
+                }, () => {});
+            }
+            return;
+        }
+
         if (company.is_expired) {
             renderExpiredCompanyCard(company);
             return;
@@ -517,9 +712,10 @@
         }
 
         const websiteItem = document.getElementById('website-item');
-        if (company.nettisivu && company.nettisivu !== '-') {
+        const activeWebsite = (company.nettisivu || company.website || (company.enrichedData && (company.enrichedData.website || (company.enrichedData.contacts && company.enrichedData.contacts.contactPage))) || '').trim();
+        if (activeWebsite && activeWebsite !== '-') {
             const webLink = document.getElementById('display-website');
-            const sanitizedUrl = cleanUrl(company.nettisivu, true);
+            const sanitizedUrl = cleanUrl(activeWebsite, true);
             const displayUrl = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, ''); // Siivotaan protokolla ja loppuslash
             
             if (displayUrl.length > 25) {
@@ -1413,8 +1609,9 @@
         }
 
         if (actWeb) {
-            if (company.nettisivu && company.nettisivu !== '-') {
-                actWeb.href = cleanUrl(company.nettisivu, true);
+            const actWebUrl = (company.nettisivu || company.website || (company.enrichedData && (company.enrichedData.website || (company.enrichedData.contacts && company.enrichedData.contacts.contactPage))) || '').trim();
+            if (actWebUrl && actWebUrl !== '-') {
+                actWeb.href = cleanUrl(actWebUrl, true);
                 actWeb.style.display = 'flex';
             } else {
                 actWeb.style.display = 'none';
