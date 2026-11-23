@@ -85,19 +85,127 @@
 
         document.title = `${company.nimi} – LaukaaInfo`;
 
+        // 1. Moderni 2.0 kansiokuva ja otsikkoalue (#bc-cover-photo)
+        const coverPhoto = document.getElementById('bc-cover-photo');
+        if (coverPhoto) {
+            coverPhoto.style.display = 'flex';
+            coverPhoto.style.background = 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
+            coverPhoto.style.backgroundImage = 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
+            coverPhoto.classList.remove('has-photo');
+        }
+
+        // Vanha 1.0 fallback jos olemassa
         const header = document.querySelector('.card-header');
         if (header) {
-            header.style.background = 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)';
-            header.style.color = '#334155';
+            header.style.background = 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
+            header.style.color = '#ffffff';
             header.classList.remove('has-gallery');
         }
 
-        document.getElementById('display-name').textContent = company.nimi;
-        document.getElementById('display-category').textContent = company.kategoria || '';
+        // 2. Yrityksen nimi ja kategoria
+        const nameEl = document.getElementById('display-name');
+        if (nameEl) nameEl.textContent = company.nimi;
 
-        // Piilotetaan mainosmainen sisältö
-        const headlineEl = document.getElementById('display-headline');
-        if (headlineEl) { headlineEl.textContent = ''; headlineEl.style.display = 'none'; }
+        const catEl = document.getElementById('display-category');
+        if (catEl) catEl.textContent = (company.kategoria || 'Yritys') + ' • Perustiedot';
+
+        // 3. Osoitetiedot sekä otsikkoon (#display-address-short) että sivupalkkiin (#display-address)
+        const fullAddress = company.osoite || 'Laukaa';
+        const parts = fullAddress.split(',');
+        const displayAddressShort = document.getElementById('display-address-short');
+        if (displayAddressShort) {
+            displayAddressShort.textContent = parts[0].trim();
+        }
+        const displayPostalCity = document.getElementById('display-postal-city');
+        if (displayPostalCity) {
+            if (parts.length > 1) {
+                displayPostalCity.textContent = parts[1].trim();
+                displayPostalCity.style.display = 'block';
+            } else {
+                displayPostalCity.style.display = 'none';
+            }
+        }
+        const addrFull = document.getElementById('display-address');
+        if (addrFull) addrFull.textContent = fullAddress;
+
+        // 4. Toimintopainikkeet: pidetään vain reitti (Google Maps / etäisyys)
+        const actRoute = document.getElementById('act-route');
+        if (actRoute) {
+            const query = encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`);
+            actRoute.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+            actRoute.style.display = 'flex';
+        }
+        ['act-call', 'act-web', 'act-wa'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+
+        // 5. TÄRKEIN: Arvokas ja asiallinen aktivointi-ilmoitus ETUSIVU-välilehdelle (#tab-business-card)
+        const tabBc = document.getElementById('tab-business-card');
+        if (tabBc) {
+            const oldFront = document.getElementById('basic-visibility-notice-front');
+            if (oldFront) oldFront.remove();
+
+            const noticeBox = document.createElement('div');
+            noticeBox.id = 'basic-visibility-notice-front';
+            noticeBox.className = 'bc-block';
+            noticeBox.style.cssText = 'background:#f8fafc; border:2px solid #cbd5e1; border-left:6px solid #0284c7; border-radius:18px; padding:1.25rem 1.5rem; margin:1.25rem 0; text-align:left; box-shadow:0 4px 12px rgba(0,0,0,0.05);';
+            noticeBox.innerHTML = `
+                <div style="display:flex; align-items:center; gap:8px; font-weight:800; color:#0f172a; margin-bottom:8px; font-size:1.1rem; font-family:'Outfit', sans-serif;">
+                    <span>ℹ️ Yrityksen perustiedot</span>
+                </div>
+                <p style="margin:0 0 12px; color:#475569; font-size:0.95rem; line-height:1.6;">
+                    Yritys ei ole vielä aktivoinut tai päivittänyt omaa yritysesittelyään LaukaaInfossa.
+                    Yrityksen perustiedot ja sijainti ovat saatavilla, mutta tarkemmat palvelu- ja yhteystiedot eivät ole yrityksen ylläpitämässä esittelyssä.
+                </p>
+                <div style="border-top:1px dashed #cbd5e1; padding-top:12px; margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+                    <span style="font-size:0.85rem; color:#64748b; font-weight:600;">Oletko tämän yrityksen edustaja?</span>
+                    <a href="lisaa-yritys.html" style="display:inline-block; padding:10px 20px; background:#0284c7; color:#fff; text-decoration:none; font-weight:700; font-size:0.9rem; border-radius:10px; width:fit-content; box-shadow:0 2px 6px rgba(2,132,199,0.3);">
+                        Ota yritysesittely käyttöön tai päivitä tiedot &rarr;
+                    </a>
+                </div>
+            `;
+            tabBc.prepend(noticeBox);
+        }
+
+        // 6. Ilmoitus myös Tiedot-välilehdelle (.info-panel)
+        const infoPanel = document.querySelector('.info-panel');
+        if (infoPanel) {
+            const oldSide = document.getElementById('basic-visibility-notice-sidebar');
+            if (oldSide) oldSide.remove();
+
+            const sideNotice = document.createElement('div');
+            sideNotice.id = 'basic-visibility-notice-sidebar';
+            sideNotice.style.cssText = 'margin-top:1rem;padding:1rem 1.25rem;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:16px;font-size:0.88rem;color:#475569;line-height:1.6;';
+            sideNotice.innerHTML = `
+                <p style="margin:0 0 0.5rem;font-weight:700;color:#334155;">
+                    ℹ️ Yritys ei ole vielä aktivoinut yritysesittelyään.
+                </p>
+                <p style="margin:0 0 10px;font-size:0.82rem;color:#64748b;">
+                    Yrityksen perustiedot ovat saatavilla, mutta tarkemmat palvelu- ja yhteystiedot eivät ole yrityksen ylläpitämässä esittelyssä.
+                </p>
+                <a href="lisaa-yritys.html" style="color:#0284c7;font-weight:700;text-decoration:underline;font-size:0.85rem;">
+                    Ota esittely käyttöön tai päivitä tiedot &rarr;
+                </a>
+            `;
+            infoPanel.appendChild(sideNotice);
+        }
+
+        // 7. Piilotetaan kaupalliset ja mainosmaiset lohkot
+        [
+            'logo-container', 'gallery-container', 'phone-item', 'email-item',
+            'google-reviews-item', 'service-methods-item',
+            'service-area-confirmation', 'card-map',
+            'promotional-links-section', 'video-section', 'social-links',
+            'website-item', 'display-rating-stars', 'display-headline',
+            'bc-status-banner', 'bc-news-block', 'company-self-service-block',
+            'company-encounters-box', 'bc-capabilities', 'bc-intro-block',
+            'bc-ai-summary-block', 'bc-tips-section', 'bc-media-gallery',
+            'google-reviews-card'
+        ].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
 
         const descEl = document.getElementById('display-description');
         if (descEl) {
@@ -106,61 +214,40 @@
             if (descWrap) descWrap.style.display = 'none';
         }
 
-        const addrEl = document.getElementById('display-address');
-        if (addrEl) addrEl.textContent = company.osoite || 'Laukaa';
-
-        // Etäisyys käyttäjälle SÄILYY – yritys pysyy paikkatietoverkostossa
-        // Etäisyyslaskenta ajetaan myöhemmin kuten normaalisti
-
-        // Piilotetaan kaikki mainossisältö
-        [
-            'logo-container', 'gallery-container', 'phone-item',
-            'google-reviews-item', 'service-methods-item',
-            'service-area-confirmation', 'card-map',
-            'promotional-links-section', 'video-section', 'social-links',
-            'website-item'
-        ].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
-
         const socialIcons = document.getElementById('social-icons');
         if (socialIcons) socialIcons.innerHTML = '';
 
-        // Lisätään kunnioittava aktivointiviesti
-        const infoPanel = document.querySelector('.info-panel');
-        if (infoPanel && !document.getElementById('basic-visibility-notice')) {
-            const notice = document.createElement('div');
-            notice.id = 'basic-visibility-notice';
-            notice.style.cssText = 'margin-top:1rem;padding:1rem 1.25rem;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:16px;font-size:0.88rem;color:#475569;line-height:1.6;';
-            notice.innerHTML = `
-                <p style="margin:0 0 0.5rem;font-weight:600;color:#334155;">
-                    &#8505;&#65038; Yritys ei ole vielä aktivoinut tai päivittänyt omaa yritysesittelyään LaukaaInfossa.
-                </p>
-                <p style="margin:0;font-size:0.82rem;color:#64748b;">
-                    Yrityksen perustiedot ovat saatavilla, mutta tarkemmat palvelu- ja yhteystiedot eivät ole yrityksen ylläpitämässä esittelyssä.
-                </p>
-            `;
-            infoPanel.appendChild(notice);
-
-            // CTA yritysedustajalle
-            const cta = document.createElement('div');
-            cta.id = 'basic-visibility-cta';
-            cta.style.cssText = 'margin-top:1rem;padding:1rem 1.25rem;background:#eff6ff;border:1.5px solid #bae6fd;border-radius:16px;text-align:center;';
-            cta.innerHTML = `
-                <p style="margin:0 0 0.75rem;color:#1e40af;font-size:0.85rem;font-weight:600;">
-                    Oletko tämän yrityksen edustaja?
-                </p>
-                <a href="lisaa-yritys.html" style="display:inline-block;padding:0.6rem 1.5rem;background:#2563eb;color:#fff;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">
-                    Ota yritysesittely käyttöön tai päivitä tiedot &rarr;
-                </a>
-            `;
-            infoPanel.appendChild(cta);
+        // 8. Etäisyyslaskenta (paikkatietoverkosto säilyy)
+        if (navigator.geolocation && company.lat && company.lng) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                try {
+                    const R = 6371;
+                    const dLat = (company.lat - pos.coords.latitude) * Math.PI / 180;
+                    const dLon = (company.lng - pos.coords.longitude) * Math.PI / 180;
+                    const a = Math.sin(dLat/2)*Math.sin(dLat/2)
+                        + Math.cos(pos.coords.latitude*Math.PI/180)*Math.cos(company.lat*Math.PI/180)
+                        * Math.sin(dLon/2)*Math.sin(dLon/2);
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                    const dist = R * c;
+                    const distText = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1)} km`;
+                    const addrShort = document.getElementById('display-address-short');
+                    const addrFull = document.getElementById('display-address');
+                    const addressContainer = addrShort ? addrShort.parentElement : (addrFull ? addrFull.parentElement : null);
+                    let distElem = document.getElementById('display-distance');
+                    if (!distElem && addressContainer) {
+                        distElem = document.createElement('div');
+                        distElem.id = 'display-distance';
+                        distElem.className = 'distance-badge';
+                        distElem.style.cssText = 'display:inline-block; margin-top:6px; font-weight:700; color:#38bdf8; font-size:0.85rem;';
+                        addressContainer.appendChild(distElem);
+                    }
+                    if (distElem) distElem.innerHTML = `🚗 Etäisyys: ${distText}`;
+                } catch(e) {}
+            }, () => {});
         }
 
         // Skaalataan otsikko
-        const titleEl = document.getElementById('display-name');
-        if (titleEl) setTimeout(() => fitText(titleEl, 16), 50);
+        setTimeout(() => fitText(document.getElementById('display-name'), 16), 50);
     }
 
     async function loadCompanyDetails(id) {
@@ -496,32 +583,6 @@
 
         if (isBasicVisibility) {
             renderBasicVisibilityCompanyCard(company);
-            // Etäisyyslaskenta silti käynnistetään (paikkatietoverkosto säilyy)
-            if (navigator.geolocation && company.lat && company.lng) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    try {
-                        const R = 6371;
-                        const dLat = (company.lat - pos.coords.latitude) * Math.PI / 180;
-                        const dLon = (company.lng - pos.coords.longitude) * Math.PI / 180;
-                        const a = Math.sin(dLat/2)*Math.sin(dLat/2)
-                            + Math.cos(pos.coords.latitude*Math.PI/180)*Math.cos(company.lat*Math.PI/180)
-                            * Math.sin(dLon/2)*Math.sin(dLon/2);
-                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-                        const dist = R * c;
-                        const distText = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1)} km`;
-                        const addrEl = document.getElementById('display-address');
-                        const addressContainer = addrEl ? addrEl.parentElement : null;
-                        let distElem = document.getElementById('display-distance');
-                        if (!distElem && addressContainer) {
-                            distElem = document.createElement('div');
-                            distElem.id = 'display-distance';
-                            distElem.className = 'distance-badge';
-                            addressContainer.appendChild(distElem);
-                        }
-                        if (distElem) distElem.innerHTML = `🚗 Etäisyys: ${distText}`;
-                    } catch(e) {}
-                }, () => {});
-            }
             return;
         }
 
