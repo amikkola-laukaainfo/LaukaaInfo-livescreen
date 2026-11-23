@@ -479,7 +479,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
     const heroImage = place.cover_image || place.image_url || (placeImages.length > 0 ? placeImages[0].url : '../../hero-kuva.webp');
     
     // Interactive URL link
-    const interactiveUrl = `../../tietoa-paikasta.html?id=${encodeURIComponent(place.id || place.place_id || slug)}`;
+    const interactiveUrl = place.custom_interactive_url || `../../tietoa-paikasta.html?id=${encodeURIComponent(place.id || place.place_id || slug)}`;
 
     // Schema.org JSON-LD
     const jsonLd = {
@@ -527,13 +527,35 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
             <h1>${escapeHtml(place.name)}</h1>
             ${place.description ? `<p class="hero-lead">${escapeHtml(place.description)}</p>` : ''}
             <a href="${interactiveUrl}" class="cta-button">
-                Avaa kohde LaukaaInfo-palvelussa &rarr;
+                ${escapeHtml(place.custom_cta_text || 'Avaa kohde LaukaaInfo-palvelussa')} &rarr;
             </a>
         </div>
     </div>
 
     <div class="container">
         <main class="main-content">
+            ${place.highlight_box ? `
+            <section style="background: linear-gradient(135deg, rgba(15, 118, 110, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid var(--primary); border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem;">
+                <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: #ffffff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    ${escapeHtml(place.highlight_box.title || 'Tietoa kohteesta LaukaaInfossa')}
+                </h3>
+                <p style="color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.25rem;">
+                    ${escapeHtml(place.highlight_box.desc || '')}
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                    ${place.highlight_box.primary_btn ? `
+                    <a href="${escapeHtml(place.highlight_box.primary_btn.url)}" class="cta-button" style="padding: 0.65rem 1.25rem; font-size: 0.9rem;">
+                        ${escapeHtml(place.highlight_box.primary_btn.text)}
+                    </a>
+                    ` : ''}
+                    ${place.highlight_box.secondary_btn ? `
+                    <a href="${escapeHtml(place.highlight_box.secondary_btn.url)}" style="display: inline-flex; align-items: center; padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 600; color: #38bdf8; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(56, 189, 248, 0.2)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.1)'">
+                        ${escapeHtml(place.highlight_box.secondary_btn.text)}
+                    </a>
+                    ` : ''}
+                </div>
+            </section>
+            ` : ''}
             ${place.history_text || place.long_description ? `
             <section>
                 <h2>${escapeHtml(place.section_title || `${place.name} ja sen ympäristö`)}</h2>
@@ -619,11 +641,21 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
             </div>
             ` : ''}
             <div class="sidebar-widget action-box">
-                <h3>Kartta, reitit ja lähipalvelut</h3>
-                <p>Tutustu kohteen <strong>${escapeHtml(place.name)}</strong> sijaintiin kartalla ja löydä lähialueen palvelut sekä muut kiinnostavat kohteet. LaukaaInfon paikkaverkosto yhdistää sijainnit niihin liittyviin palveluihin, tapahtumiin ja paikalliseen tietoon.</p>
+                <h3>${escapeHtml(place.action_box_title || 'Kartta, reitit ja lähipalvelut')}</h3>
+                <p>${escapeHtml(place.action_box_desc || `Tutustu kohteen ${place.name} sijaintiin kartalla ja löydä lähialueen palvelut sekä muut kiinnostavat kohteet. LaukaaInfon paikkaverkosto yhdistää sijainnit niihin liittyviin palveluihin, tapahtumiin ja paikalliseen tietoon.`)}</p>
                 <a href="${interactiveUrl}" class="cta-button" style="width: 100%; justify-content: center;">
-                    Avaa kartta ja palvelut &rarr;
+                    ${escapeHtml(place.action_box_cta || (place.custom_cta_text || 'Avaa kartta ja palvelut'))} &rarr;
                 </a>
+                ${Array.isArray(place.secondary_links) && place.secondary_links.length > 0 ? `
+                <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 0.6rem; text-align: left;">
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8;">${escapeHtml(place.secondary_links_title || 'Aiheeseen liittyvät kohteet ja teemat:')}</div>
+                    ${place.secondary_links.map(l => `
+                        <a href="${escapeHtml(l.url)}" style="color: #38bdf8; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                            <span>${l.icon || '📍'}</span> <span>${escapeHtml(l.label)}</span> &rarr;
+                        </a>
+                    `).join('')}
+                </div>
+                ` : ''}
             </div>
 
             <div class="sidebar-widget">
@@ -638,7 +670,7 @@ function renderPlaceSeoPage({ place, relatedThemes = [], relatedRoutes = [], rel
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
     (async function initLiveEncounters() {
-        const placeId = ${JSON.stringify(place.id || place.place_id || 'b3b3a0e1-4c12-4c63-b8e7-2c1b82a34567')};
+        const placeId = ${JSON.stringify(place.encounters_place_id || place.id || place.place_id || 'b3b3a0e1-4c12-4c63-b8e7-2c1b82a34567')};
         const container = document.getElementById('live-encounters-container');
         if (!container) return;
 
