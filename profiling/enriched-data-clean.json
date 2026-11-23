@@ -1,6 +1,102 @@
 {
   "companies": [
     {
+      "id": "316",
+      "name": "Laukaan Pitopalvelu",
+      "website": "https://www.laukaanpitopalvelu.fi",
+      "status": "done",
+      "results": {
+        "companyId": "316",
+        "website": "https://www.laukaanpitopalvelu.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "aapo@laukaanpitopalvelu.fi",
+          "phone": "0400 356 844"
+        },
+        "interestingLinks": [
+          {
+            "type": "tilaa",
+            "url": "https://www.laukaanpitopalvelu.fi/#"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:01:59.606Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "315",
+      "name": "Äijäparkki",
+      "website": "https://www.aijaparkki.fi",
+      "status": "done",
+      "results": {
+        "companyId": "315",
+        "website": "https://www.aijaparkki.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "asiakaspalvelu@multamesta.fi",
+          "phone": "+358 500 635 217",
+          "contactPage": "https://www.aijaparkki.fi/yhteystiedot"
+        },
+        "interestingLinks": [
+          {
+            "type": "yhteystiedot",
+            "url": "https://www.aijaparkki.fi/yhteystiedot"
+          }
+        ],
+        "lastAnalyzed": "2026-06-14T15:43:00.652Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
+      "id": "314",
+      "name": "Valkolan kyläyhdistys ry",
+      "website": "https://valkolankyla.yhdistysavain.fi",
+      "status": "done",
+      "results": {
+        "companyId": "314",
+        "website": "https://valkolankyla.yhdistysavain.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/profile.php?id=61565702764493"
+          }
+        ],
+        "contacts": {
+          "contactPage": "https://valkolankyla.yhdistysavain.fi/yhteystiedot/"
+        },
+        "interestingLinks": [
+          {
+            "type": "yhteystiedot",
+            "url": "https://valkolankyla.yhdistysavain.fi/yhteystiedot/"
+          },
+          {
+            "type": "hinnasto",
+            "url": "https://valkolankyla.yhdistysavain.fi/kylatalo-2/vuokraus/hinnasto/"
+          }
+        ],
+        "lastAnalyzed": "2026-06-14T15:43:00.656Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": false
+      }
+    },
+    {
       "id": "305",
       "name": "Sähköpalvelu Valoisat Oy",
       "website": "https://www.valoisat.fi",
@@ -982,7 +1078,8 @@
         },
         "socialLinks": [],
         "contacts": {
-          "email": "fysioterapiaehyt@gmail.com"
+          "email": "fysioterapiaehyt@gmail.com",
+          "phone": "0503640445"
         },
         "interestingLinks": [
           {
@@ -994,7 +1091,7 @@
             "url": "https://www.fysioterapiaehyt.fi/hinnasto/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:25:57.552Z",
+        "lastAnalyzed": "2026-11-23T07:02:24.501Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1106,7 +1203,7 @@
             "url": "https://www.ruskanriemut.fi/yhteystiedot/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:25:58.216Z",
+        "lastAnalyzed": "2026-11-23T07:02:35.461Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1254,7 +1351,7 @@
         "socialLinks": [],
         "contacts": {},
         "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:25:59.866Z",
+        "lastAnalyzed": "2026-11-23T07:02:46.949Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1369,7 +1466,7 @@
             "url": "https://kauneuspuotiamelie.fi/yhteystiedot/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:00.708Z",
+        "lastAnalyzed": "2026-11-23T07:03:09.533Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1389,6 +1486,7 @@
         },
         "socialLinks": [],
         "contacts": {
+          "phone": "+358409679225",
           "contactPage": "https://www.evenails.fi/#yhteystiedot"
         },
         "interestingLinks": [
@@ -1405,7 +1503,7 @@
             "url": "https://www.evenails.fi/#yhteystiedot"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:01.135Z",
+        "lastAnalyzed": "2026-11-23T07:03:23.765Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1543,7 +1641,7 @@
         "socialLinks": [],
         "contacts": {},
         "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:26:02.540Z",
+        "lastAnalyzed": "2026-11-23T07:03:31.557Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -1780,7 +1878,7 @@
             "url": "https://www.vuonteenhelmi.fi/kauppa/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:04.039Z",
+        "lastAnalyzed": "2026-11-23T07:03:43.269Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -2562,7 +2660,7 @@
             "url": "https://countryhakkinen.fi/index.php/tuulilasin-korjauspalvelut/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:11.025Z",
+        "lastAnalyzed": "2026-11-23T07:04:03.365Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -2646,11 +2744,52 @@
           "url": ""
         },
         "socialLinks": [],
-        "contacts": {},
-        "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:26:12.546Z",
+        "contacts": {
+          "email": "info@mediazoo.fi",
+          "phone": "+358 41 465 5290",
+          "contactPage": "https://mediazoo.fi/yhteystiedot/"
+        },
+        "interestingLinks": [
+          {
+            "type": "Etusivu",
+            "url": "https://www.mediazoo.fi/"
+          },
+          {
+            "type": "Palvelut ja tuotegalleria",
+            "url": "https://www.mediazoo.fi/"
+          },
+          {
+            "type": "Digitointipalvelut",
+            "url": "https://mediazoo.fi/digitoinnit.html"
+          },
+          {
+            "type": "Videotuotanto ja videokuvaus",
+            "url": "https://mediazoo.fi/videokuvaaja-keski-suomi-jyvaskyla-laukaa/"
+          },
+          {
+            "type": "Diojen ja valokuvien digitointi / Hinnasto",
+            "url": "https://mediazoo.fi/diat.html"
+          },
+          {
+            "type": "Kaitafilmit",
+            "url": "https://mediazoo.fi/kaitafilmi.html"
+          },
+          {
+            "type": "Videokasettien digitointi",
+            "url": "https://mediazoo.fi/vhs.html"
+          },
+          {
+            "type": "Muut digitointipalvelut",
+            "url": "https://mediazoo.fi/muut.html"
+          },
+          {
+            "type": "Yhteystiedot ja tarjouspyyntö",
+            "url": "https://mediazoo.fi/yhteystiedot/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-23T07:05:10.810Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -2757,7 +2896,7 @@
             "url": "https://www.katinca.fi/yhteystiedot.html"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:13.235Z",
+        "lastAnalyzed": "2026-11-23T07:05:26.118Z",
         "isPlaywrightSimulated": true,
         "isAiAssisted": false
       }
@@ -4591,5 +4730,5 @@
       }
     }
   ],
-  "lastSaved": "2026-06-12T10:24:06.640Z"
+  "lastSaved": "2026-11-23T07:05:26.425Z"
 }
