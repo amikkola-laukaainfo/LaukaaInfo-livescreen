@@ -76,24 +76,50 @@
           {
             "platform": "Facebook",
             "url": "https://www.facebook.com/profile.php?id=61565702764493"
+          },
+          {
+            "platform": "Instagram",
+            "url": "https://www.instagram.com/valkolankyla/"
           }
         ],
         "contacts": {
+          "email": "valkolankyla@gmail.com",
+          "phone": "0407692224",
           "contactPage": "https://valkolankyla.yhdistysavain.fi/yhteystiedot/"
         },
         "interestingLinks": [
           {
-            "type": "yhteystiedot",
-            "url": "https://valkolankyla.yhdistysavain.fi/yhteystiedot/"
+            "type": "Kylätalo",
+            "url": "https://valkolankyla.yhdistysavain.fi/kylatalo/"
           },
           {
-            "type": "hinnasto",
-            "url": "https://valkolankyla.yhdistysavain.fi/kylatalo-2/vuokraus/hinnasto/"
+            "type": "Tilojen vuokraus",
+            "url": "https://valkolankyla.yhdistysavain.fi/kylatalo/vuokraus/"
+          },
+          {
+            "type": "Hinnasto",
+            "url": "https://valkolankyla.yhdistysavain.fi/kylatalo/vuokraus/hinnasto/"
+          },
+          {
+            "type": "Valkolan Kyläteatteri",
+            "url": "https://valkolankyla.yhdistysavain.fi/valkolan-kylateatteri/"
+          },
+          {
+            "type": "Tapahtumat",
+            "url": "https://valkolankyla.yhdistysavain.fi/tapahtumat/"
+          },
+          {
+            "type": "Liity jäseneksi",
+            "url": "https://valkolankyla.yhdistysavain.fi/yhdistys/liity-jaseneksi/"
+          },
+          {
+            "type": "Kylän yritykset",
+            "url": "https://valkolankyla.yhdistysavain.fi/valkola/yritykset/"
           }
         ],
-        "lastAnalyzed": "2026-06-14T15:43:00.656Z",
+        "lastAnalyzed": "2026-11-24T14:28:31.029Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -232,12 +258,50 @@
           "provider": "",
           "url": ""
         },
-        "socialLinks": [],
-        "contacts": {},
-        "interestingLinks": [],
-        "lastAnalyzed": "2026-06-12T09:25:47.230Z",
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/laukaanrakennustyo"
+          }
+        ],
+        "contacts": {
+          "email": "info@laukaanrakennustyo.fi",
+          "phone": "0401620339",
+          "contactPage": "https://www.laukaanrakennustyo.fi/ota-yhteytta/"
+        },
+        "interestingLinks": [
+          {
+            "type": "Palvelut",
+            "url": "https://www.laukaanrakennustyo.fi/#palvelut"
+          },
+          {
+            "type": "Talopaketit",
+            "url": "https://www.laukaanrakennustyo.fi/"
+          },
+          {
+            "type": "Uudisrakentaminen",
+            "url": "https://www.laukaanrakennustyo.fi/"
+          },
+          {
+            "type": "Remontointi",
+            "url": "https://www.laukaanrakennustyo.fi/"
+          },
+          {
+            "type": "Sisustustyöt",
+            "url": "https://www.laukaanrakennustyo.fi/"
+          },
+          {
+            "type": "Luotettava Kumppani",
+            "url": "https://www.tilaajavastuu.fi/"
+          },
+          {
+            "type": "Yhteystiedot",
+            "url": "https://www.laukaanrakennustyo.fi/ota-yhteytta/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T14:29:14.013Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -795,7 +859,42 @@
       "id": "78",
       "name": "Tecvest Oy",
       "website": "",
-      "status": "not_started"
+      "status": "done",
+      "results": {
+        "companyId": "78",
+        "website": "",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "atte.racing@gmail.com",
+          "phone": "+358445424463",
+          "contactPage": ""
+        },
+        "interestingLinks": [
+          {
+            "type": "Yrityksen tiedot ja yhteystiedot – Suomen Yrittäjät",
+            "url": "https://www.yrittajat.fi/yritykset/tecvest-oy/"
+          },
+          {
+            "type": "Yrityksen rekisteritiedot",
+            "url": "https://syynilabs.fi/yritys/2777170-2"
+          },
+          {
+            "type": "Yrityksen taloustiedot ja yhteystiedot",
+            "url": "https://www.proff.fi/yrityksen/tecvest-oy/laukaa/autokorjaamot/2777170-2I0064"
+          },
+          {
+            "type": "Laukaan autokorjaamohakemisto",
+            "url": "https://laukaainfo.fi/koko-laukaa.html?tag=autokorjaamot"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T14:43:59.022Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "79",
@@ -839,24 +938,41 @@
         "companyId": "80",
         "website": "https://www.wakpal.fi",
         "booking": {
-          "found": true,
-          "provider": "Online Booking",
-          "url": "https://www.wakpal.fi/yhteydenotto/"
+          "found": false,
+          "provider": "",
+          "url": ""
         },
         "socialLinks": [],
         "contacts": {
-          "phone": "014284793",
-          "contactPage": "https://www.wakpal.fi/yhteystiedot/"
+          "email": "",
+          "phone": "+35814284793",
+          "contactPage": "https://www.wakpal.fi/yhteydenotto/"
         },
         "interestingLinks": [
           {
-            "type": "yhteystiedot",
-            "url": "https://www.wakpal.fi/yhteystiedot/"
+            "type": "Huoltopalvelut",
+            "url": "https://www.wakpal.fi/huoltopalvelut/"
+          },
+          {
+            "type": "Yhteydenotto",
+            "url": "https://www.wakpal.fi/yhteydenotto/"
+          },
+          {
+            "type": "Huoltotarjouspyyntö",
+            "url": "https://www.wakpal.fi/huoltopalvelut/"
+          },
+          {
+            "type": "Etusivu ja ajanvaraus",
+            "url": "https://www.wakpal.fi/"
+          },
+          {
+            "type": "Yrityksen rekisteritiedot",
+            "url": "https://www.asiakastieto.fi/yritykset/fi/wakpal-oy/17566887/rekisteritiedot"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:25:52.111Z",
+        "lastAnalyzed": "2026-11-24T14:47:43.293Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -975,8 +1091,43 @@
     {
       "id": "87",
       "name": "Kalaliike Pentti Rossi",
-      "website": "",
-      "status": "not_started"
+      "website": "https://www.rossinkala.fi",
+      "status": "done",
+      "results": {
+        "companyId": "87",
+        "website": "https://www.rossinkala.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "pentti.rossi@rossinkala.fi",
+          "phone": "+358400157640",
+          "contactPage": ""
+        },
+        "interestingLinks": [
+          {
+            "type": "Yrityksen virallinen verkkosivusto",
+            "url": "https://www.rossinkala.fi"
+          },
+          {
+            "type": "Yrityksen tuotteet ja palvelut",
+            "url": "https://www.rossinkala.fi"
+          },
+          {
+            "type": "Yrityksen yhteystiedot",
+            "url": "https://www.yrittajat.fi/yritykset/kalaliike-pentti-rossi/"
+          },
+          {
+            "type": "Yrityksen rekisteritiedot",
+            "url": "https://www.asiakastieto.fi/yritykset/fi/kalaliike-pentti-rossi/11072878/rekisteritiedot"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T14:48:24.688Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "88",
@@ -1390,8 +1541,39 @@
     {
       "id": "16",
       "name": "Hieroja Anni Piilonen",
-      "website": "",
-      "status": "not_started"
+      "website": "https://ytunnus.fi/foretag/8768817/koulutettu-hieroja-anni-piilonen/",
+      "status": "done",
+      "results": {
+        "companyId": "16",
+        "website": "https://ytunnus.fi/foretag/8768817/koulutettu-hieroja-anni-piilonen/",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "anni-rp@hotmail.com",
+          "phone": "+358407166948",
+          "contactPage": ""
+        },
+        "interestingLinks": [
+          {
+            "type": "Yrityksen tiedot ja yhteystiedot",
+            "url": "https://ytunnus.fi/foretag/8768817/koulutettu-hieroja-anni-piilonen/"
+          },
+          {
+            "type": "Yrityksen perustiedot ja toimipaikka",
+            "url": "https://b2b.profinder.fi/haku/koulutettu-hieroja-anni-piilonen/21799843"
+          },
+          {
+            "type": "Laukaan paikallinen yrityshakemisto",
+            "url": "https://laukaainfo.fi/koko-laukaa.html?tag=autokorjaamot"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T15:08:37.895Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "18",
@@ -1453,30 +1635,36 @@
         },
         "socialLinks": [
           {
-            "platform": "Facebook",
-            "url": "https://www.facebook.com/RuskanRiemut"
-          },
-          {
-            "platform": "Instagram",
-            "url": "https://www.instagram.com/ruskanriemut"
+            "platform": "YouTube",
+            "url": "https://www.youtube.com/@ruskanriemut"
           }
         ],
         "contacts": {
+          "email": "ruskan.riemut@gmail.com",
+          "phone": "+358505893254",
           "contactPage": "https://www.ruskanriemut.fi/yhteystiedot/"
         },
         "interestingLinks": [
           {
-            "type": "palvelut",
+            "type": "Palvelut ja palvelukuvaukset",
             "url": "https://www.ruskanriemut.fi/palvelut/"
           },
           {
-            "type": "yhteystiedot",
+            "type": "Ajankohtaista",
+            "url": "https://www.ruskanriemut.fi/ajankohtaista/"
+          },
+          {
+            "type": "Yhteystiedot",
             "url": "https://www.ruskanriemut.fi/yhteystiedot/"
+          },
+          {
+            "type": "Yrityksen esittely ja yhteystiedot",
+            "url": "https://www.yrittajat.fi/yritykset/ruskan-riemut-oy/"
           }
         ],
-        "lastAnalyzed": "2026-11-23T07:02:35.461Z",
+        "lastAnalyzed": "2026-11-24T15:09:49.680Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -2112,8 +2300,48 @@
     {
       "id": "159",
       "name": "Hiushuone Soma",
-      "website": "",
-      "status": "not_started"
+      "website": "https://www.facebook.com/502757006445728/",
+      "status": "done",
+      "results": {
+        "companyId": "159",
+        "website": "https://www.facebook.com/502757006445728/",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/502757006445728/"
+          }
+        ],
+        "contacts": {
+          "email": "",
+          "phone": "+358400261979",
+          "contactPage": ""
+        },
+        "interestingLinks": [
+          {
+            "type": "Hiushuone SOMA – yrityksen esittely, palvelut ja ajankohtaiset tiedotteet",
+            "url": "https://www.beautynailhairsalons.com/FI/Laukaa/502757006445728/Hiushuone-SOMA"
+          },
+          {
+            "type": "Mari – ajanvaraus puhelimitse",
+            "url": "https://www.beautynailhairsalons.com/FI/Laukaa/502757006445728/Hiushuone-SOMA"
+          },
+          {
+            "type": "Sonja Maija Raitanen – yritystiedot ja yhteystiedot",
+            "url": "https://www.kauppalehti.fi/yritykset/yritys/25504897"
+          },
+          {
+            "type": "ZENZ-tuotteiden jälleenmyyjä Laukaassa",
+            "url": "https://www.zenzorganicshop.com/pages/ita-suomi"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T15:12:20.358Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "160",
@@ -2692,44 +2920,30 @@
         "companyId": "270",
         "website": "https://kampaamodoris.fi/",
         "booking": {
-          "found": true,
-          "provider": "Online Booking",
-          "url": "https://kampaamodoris.fi/ajanvaraus/"
+          "found": false,
+          "provider": "",
+          "url": ""
         },
         "socialLinks": [
           {
             "platform": "Facebook",
-            "url": "https://www.facebook.com/kampaamodoris/"
-          },
-          {
-            "platform": "Instagram",
-            "url": "https://www.instagram.com/parturikampaamodoris/"
+            "url": "esimerkki_url"
           }
         ],
         "contacts": {
-          "contactPage": "https://kampaamodoris.fi/ajanvaraus/"
+          "email": "tarkka_sahkoposti",
+          "phone": "tarkka_puhelin",
+          "contactPage": "tarkka_yhteysteistosivun_url"
         },
         "interestingLinks": [
           {
-            "type": "palvelut",
-            "url": "https://kampaamodoris.fi/palvelut/"
-          },
-          {
-            "type": "tuotteet",
-            "url": "https://kampaamodoris.fi/palvelut/#hiustenhoitotuotteet"
-          },
-          {
-            "type": "hinnasto",
-            "url": "https://kampaamodoris.fi/hinnasto/"
-          },
-          {
-            "type": "yhteystiedot",
-            "url": "https://kampaamodoris.fi/ajanvaraus/"
+            "type": "Hinnasto/Hinnat",
+            "url": "hinnastosivun_url"
           }
         ],
-        "lastAnalyzed": "2026-11-23T07:51:13.587Z",
-        "isPlaywrightSimulated": false,
-        "isAiAssisted": false
+        "lastAnalyzed": "2026-11-24T15:13:32.047Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": true
       }
     },
     {
@@ -2988,8 +3202,56 @@
     {
       "id": "129",
       "name": "Fieldhill Oy",
-      "website": "",
-      "status": "not_started"
+      "website": "https://www.fieldhillguitars.com/",
+      "status": "done",
+      "results": {
+        "companyId": "129",
+        "website": "https://www.fieldhillguitars.com/",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/fieldhillguitars"
+          },
+          {
+            "platform": "Instagram",
+            "url": "https://www.instagram.com/fieldhillguitars"
+          }
+        ],
+        "contacts": {
+          "email": "juha@fieldhillguitars.com",
+          "phone": "+358452665212",
+          "contactPage": "https://www.fieldhillguitars.com/yhteydenotto/"
+        },
+        "interestingLinks": [
+          {
+            "type": "Verkkokauppa – käytetyt kitarat ja bassot",
+            "url": "https://www.fieldhillguitars.com/kauppa/"
+          },
+          {
+            "type": "Palvelut – kitarahuolto ja äänentoistovuokraus",
+            "url": "https://www.fieldhillguitars.com/palvelut/"
+          },
+          {
+            "type": "Hinnasto – soitinhuolto ja äänentoistopalvelut",
+            "url": "https://www.fieldhillguitars.com/hinnasto/"
+          },
+          {
+            "type": "Yhteystiedot ja yhteydenottolomake",
+            "url": "https://www.fieldhillguitars.com/yhteydenotto/"
+          },
+          {
+            "type": "Yrityksen tiedot Laukaan yrityshakemistossa",
+            "url": "https://laukaa.yrityshakemistot.fi/companies/4e3a409d-c192-4985-a494-883dceb9d784?page=1&pageSize=20&returnTo=companies"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T15:14:15.054Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "134",
@@ -3026,8 +3288,43 @@
     {
       "id": "141",
       "name": "Laukaan Kultakello Avoin yhtiö",
-      "website": "",
-      "status": "not_started"
+      "website": "https://www.laukaankultakello.net/",
+      "status": "done",
+      "results": {
+        "companyId": "141",
+        "website": "https://www.laukaankultakello.net/",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [],
+        "contacts": {
+          "email": "",
+          "phone": "+358505557216",
+          "contactPage": ""
+        },
+        "interestingLinks": [
+          {
+            "type": "Yrityksen tiedot ja yhteystiedot",
+            "url": "https://www.cylex.fi/yritys/laukaan-kultakello-11441729.html"
+          },
+          {
+            "type": "Yrityksen perustiedot ja osoite",
+            "url": "https://syynilabs.fi/yritys/2203766-4"
+          },
+          {
+            "type": "Korukaupan esittely ja verkkosivutieto",
+            "url": "https://www.korukauppa24.fi/laukaan-kultakello-avoin-yhtio/"
+          },
+          {
+            "type": "Leijona-kellojen jälleenmyyjälista",
+            "url": "https://leijonawatches.com/fi/pages/retailers"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T15:16:21.861Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "142",
@@ -3272,28 +3569,32 @@
         "website": "https://www.fincottage.com/",
         "booking": {
           "found": true,
-          "provider": "Online Booking",
-          "url": "https://www.fincottage.com/contact-us"
+          "provider": "Sivuston oma varauskalenteri",
+          "url": "https://www.fincottage.com/"
         },
-        "socialLinks": [
-          {
-            "platform": "Facebook",
-            "url": "https://www.facebook.com/VuokramokkiSuviranta/"
-          }
-        ],
+        "socialLinks": [],
         "contacts": {
           "email": "suviranta@finadmin.fi",
-          "contactPage": "https://www.fincottage.com/contact-us"
+          "phone": "+358442452019",
+          "contactPage": ""
         },
         "interestingLinks": [
           {
-            "type": "yhteystiedot",
+            "type": "Varauskalenteri ja hinnat – Nettimökki",
+            "url": "https://www.nettimokki.com/laukaa/10040"
+          },
+          {
+            "type": "Varaus ja yhteydenotto",
             "url": "https://www.fincottage.com/contact-us"
+          },
+          {
+            "type": "Kohteen kuvat ja lisätiedot",
+            "url": "https://www.fincottage.com/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:10.415Z",
-        "isPlaywrightSimulated": false,
-        "isAiAssisted": false
+        "lastAnalyzed": "2026-11-24T15:17:48.239Z",
+        "isPlaywrightSimulated": true,
+        "isAiAssisted": true
       }
     },
     {
@@ -3309,33 +3610,41 @@
           "provider": "",
           "url": ""
         },
-        "socialLinks": [
-          {
-            "platform": "Facebook",
-            "url": "https://www.facebook.com/pietilanlomamokit/?ref=embed_page"
-          },
-          {
-            "platform": "Instagram",
-            "url": "https://www.instagram.com/pietilanlomamokit/?igsh=MWU5d3p2dXo0c3VtYw%3D%3D"
-          }
-        ],
+        "socialLinks": [],
         "contacts": {
           "email": "irja.pietilainen@pietilanlomamokit.com",
-          "contactPage": "https://pietilanlomamokit.com/yhteystiedot/"
+          "phone": "+358503403154",
+          "contactPage": "https://www.pietilanlomamokit.com/yhteystiedot/"
         },
         "interestingLinks": [
           {
-            "type": "palvelut",
-            "url": "https://pietilanlomamokit.com/oheispalvelut/"
+            "type": "Varausohjeet ja vuokrausehdot – varaukset puhelimitse tai sähköpostitse",
+            "url": "https://www.pietilanlomamokit.com/varaaminen/"
           },
           {
-            "type": "yhteystiedot",
-            "url": "https://pietilanlomamokit.com/yhteystiedot/"
+            "type": "Mökkien esittely ja hinnat",
+            "url": "https://www.pietilanlomamokit.com/mokit/"
+          },
+          {
+            "type": "Yrityksille – juhlat ja kokouspäivät",
+            "url": "https://www.pietilanlomamokit.com/yrityksille/"
+          },
+          {
+            "type": "Oheispalvelut ja vuokravälineet",
+            "url": "https://www.pietilanlomamokit.com/oheispalvelut/"
+          },
+          {
+            "type": "Yhteystiedot",
+            "url": "https://www.pietilanlomamokit.com/yhteystiedot/"
+          },
+          {
+            "type": "Visit Laukaa – matkailukohteen esittely",
+            "url": "https://visitlaukaa.fi/palvelu/pietilan-lomamokit/"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:10.933Z",
+        "lastAnalyzed": "2026-11-24T15:18:31.629Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -3985,8 +4294,44 @@
     {
       "id": "178",
       "name": "Almek",
-      "website": "",
-      "status": "not_started"
+      "website": "https://www.almek.fi",
+      "status": "done",
+      "results": {
+        "companyId": "178",
+        "website": "https://www.almek.fi",
+        "booking": {
+          "found": false,
+          "provider": "",
+          "url": ""
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/Almek.fi/"
+          }
+        ],
+        "contacts": {
+          "email": "toimisto.almek@gmail.com",
+          "phone": "+358407278316",
+          "contactPage": ""
+        },
+        "interestingLinks": [
+          {
+            "type": "Yrityksen esittely ja yhteystiedot – Suomen Yrittäjät",
+            "url": "https://www.yrittajat.fi/yritykset/isannointitoimisto-almek/"
+          },
+          {
+            "type": "Yrityksen rekisteritiedot ja Y-tunnus 1874616-9",
+            "url": "https://www.asiakastieto.fi/yritykset/fi/almek/18746169/rekisteritiedot"
+          },
+          {
+            "type": "Yrityksen toimiala ja paikallinen yrityslistaus",
+            "url": "https://suomenyritysrekisteri.fi/yritysrekisteri/kiinteistot/kiinteistonhuolto/laukaa/"
+          }
+        ],
+        "lastAnalyzed": "2026-11-24T15:20:01.278Z",
+        "isAiAssisted": true
+      }
     },
     {
       "id": "180",
@@ -5277,23 +5622,38 @@
           "provider": "",
           "url": ""
         },
-        "socialLinks": [],
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/pitopalvelusojakka/"
+          }
+        ],
         "contacts": {
-          "contactPage": "https://pitopalvelusojakka.fi/yhteydenotto/"
+          "email": "juha@pitopalvelusojakka.fi",
+          "phone": "+358400648800",
+          "contactPage": "https://www.pitopalvelusojakka.fi/yhteystiedot"
         },
         "interestingLinks": [
           {
-            "type": "palvelut",
-            "url": "https://pitopalvelusojakka.fi/palvelut/"
+            "type": "Pitopalvelut ja palvelukuvaus",
+            "url": "https://www.pitopalvelusojakka.fi/pitopalvelu"
           },
           {
-            "type": "yhteystiedot",
-            "url": "https://pitopalvelusojakka.fi/yhteydenotto/"
+            "type": "Menu ja tarjoiluvaihtoehdot",
+            "url": "https://www.pitopalvelusojakka.fi/menu"
+          },
+          {
+            "type": "Galleria",
+            "url": "https://www.pitopalvelusojakka.fi/galleria"
+          },
+          {
+            "type": "Yhteystiedot ja tarjouspyynnöt",
+            "url": "https://www.pitopalvelusojakka.fi/yhteystiedot"
           }
         ],
-        "lastAnalyzed": "2026-06-12T09:26:27.370Z",
+        "lastAnalyzed": "2026-11-24T15:22:44.157Z",
         "isPlaywrightSimulated": true,
-        "isAiAssisted": false
+        "isAiAssisted": true
       }
     },
     {
@@ -5804,5 +6164,5 @@
       }
     }
   ],
-  "lastSaved": "2026-11-23T08:55:00.751Z"
+  "lastSaved": "2026-11-24T15:23:26.491Z"
 }
