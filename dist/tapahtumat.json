@@ -1,518 +1,602 @@
 [
   {
-    "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "la, 03 loka 2026 11:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-550419c9/"
   },
   {
-    "nimi": "Kauhujen Kylpylä",
-    "aika": "ke, 28 loka 2026 14:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kauhujen-kylpyla-2/"
-  },
-  {
-    "nimi": "Kauhujen Kylpylä",
-    "aika": "to, 29 loka 2026 14:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kauhujen-kylpyla-2/"
-  },
-  {
-    "nimi": "Kauhujen Kylpylä",
-    "aika": "pe, 30 loka 2026 14:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kauhujen-kylpyla-2/"
-  },
-  {
-    "nimi": "LEFFALAUANTAI",
-    "aika": "la, 31 loka 2026 11:00:00",
-    "paikka": "Sydän-Laukaan koulun auditorio, Saralinnantie 3, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/leffalauantai-3/"
-  },
-  {
-    "nimi": "Komiat ja Kake Randelin",
-    "aika": "la, 31 loka 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/komiat-ja-kake-randelin/"
+    "nimi": "Perttulan Tilan joulukahvila",
+    "aika": "",
+    "paikka": "Laukaa, Vaajakoskentie 113, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/perttulan-tilan-joulukahvila/"
   },
   {
     "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "su, 01 marras 2026 10:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
+    "aika": "",
+    "paikka": "Saralinnantie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-teatteri-seitseman-koiraveljesta-bd1946c3/"
   },
   {
-    "nimi": "Improvisoi! Aikuisten improillat",
-    "aika": "su, 01 marras 2026 15:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/improvisoi-aikuisten-improillat/"
+    "nimi": "Kyllä isä osaa",
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-0e4878a0/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 03 marras 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+    "nimi": "Olavi Uusivirta + Mira Luoti",
+    "aika": "",
+    "paikka": "Laukaasta 10 €",
+    "url": "https://visitlaukaa.fi/tapahtumat/olavi-uusivirta-mira-luoti/"
   },
   {
-    "nimi": "Välvöyhkä – Aamukahvit",
-    "aika": "ti, 03 marras 2026 14:30:00",
-    "paikka": "Saravedentie 3, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/valvoyhka-aamukahvit/"
+    "nimi": "Osallistu Laukaan upein piparkakkuteos -kisaan",
+    "aika": "",
+    "paikka": "leveys x korkeus x syvyys",
+    "url": "https://visitlaukaa.fi/tapahtumat/osallistu-laukaan-upein-piparkakkuteos-kisaan/"
   },
   {
-    "nimi": "Pelikirppis Laukaan pääkirjastolla",
-    "aika": "ti, 03 marras 2026 16:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/pelikirppis-laukaan-paakirjastolla/"
-  },
-  {
-    "nimi": "Kaverikoirat Laukaan pääkirjastossa",
-    "aika": "ke, 04 marras 2026 14:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kaverikoirat-laukaan-paakirjastossa/"
-  },
-  {
-    "nimi": "TurinaKahvit",
-    "aika": "to, 05 marras 2026 15:30:00",
-    "paikka": "Laukaan kirkonkylän vanha nuorisotalo",
-    "url": "https://visitlaukaa.fi/tapahtuma/turinakahvit/"
-  },
-  {
-    "nimi": "Taikakuu",
-    "aika": "to, 05 marras 2026 19:30:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/taikakuu/"
-  },
-  {
-    "nimi": "Improvisoi! Aikuisten improillat",
-    "aika": "pe, 06 marras 2026 15:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/improvisoi-aikuisten-improillat/"
-  },
-  {
-    "nimi": "Arttu Wiskari   Elonkerjuu",
-    "aika": "pe, 06 marras 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/arttu-wiskari-elonkerjuu/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 07 marras 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
-  },
-  {
-    "nimi": "Pizzalauantai",
-    "aika": "la, 07 marras 2026 10:00:00",
-    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
-    "url": "https://visitlaukaa.fi/tapahtuma/pizzalauantai-12/"
+    "nimi": "Perttulan Tilan joulukahvila",
+    "aika": "",
+    "paikka": "Laukaa, Vaajakoskentie 113, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/perttulan-tilan-joulukahvila-0d7347a4/"
   },
   {
     "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "la, 07 marras 2026 12:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
+    "aika": "",
+    "paikka": "Saralinnantie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-teatteri-seitseman-koiraveljesta-b5c67b46/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "la, 07 marras 2026 15:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-2b5d8742/"
   },
   {
-    "nimi": "Isänpäivälounas",
-    "aika": "su, 08 marras 2026 12:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/isanpaivalounas/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "su, 08 marras 2026 13:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 10 marras 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "Lukulemmikki Laukaan pääkirjastossa",
-    "aika": "ti, 10 marras 2026 15:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/lukulemmikki-laukaan-paakirjastossa/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "ke, 11 marras 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Yritystankkaamo-iltapäivät kerran kuukaudessa torstaisin",
-    "aika": "to, 12 marras 2026 12:00:00",
-    "paikka": "Lisätietoja",
-    "url": "https://visitlaukaa.fi/tapahtuma/yritystankkaamo-iltapaivat-kerran-kuukaudessa-torstaisin/"
-  },
-  {
-    "nimi": "The Italian Tenors",
-    "aika": "to, 12 marras 2026 19:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/the-italian-tenors/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "pe, 13 marras 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Neljä Ruusua   Technicolour",
-    "aika": "pe, 13 marras 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/nelja-ruusua-technicolour/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 14 marras 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Vihtavuoren kyläturvallisuusilta",
+    "aika": "",
+    "paikka": "Laukaa, Ruokala, Koulutie 2, Vihtavuori",
+    "url": "https://visitlaukaa.fi/tapahtumat/vihtavuoren-kylaturvallisuusilta/"
   },
   {
     "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "su, 15 marras 2026 12:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
+    "aika": "",
+    "paikka": "Saralinnantie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-teatteri-seitseman-koiraveljesta-6f4696bf/"
+  },
+  {
+    "nimi": "Kestävä arki yhdessä -teemapäivä",
+    "aika": "",
+    "paikka": "Laukaa, Kierrätysmyymälä Retrokeidas, Saravedentie 1, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/kestava-arki-yhdessa-teemapaiva/"
+  },
+  {
+    "nimi": "Arki turvalliseksi",
+    "aika": "",
+    "paikka": "Laukaa, Laukaan pääkirjasto, Vuojärventie 2, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/arki-turvalliseksi/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-b9d620c0/"
+  },
+  {
+    "nimi": "Laukaan yrityspalvelut Lievestuoreella",
+    "aika": "",
+    "paikka": "Laukaa, Paikka: Liisantien Leidi, Lievestuoreen Liisantie 15, Lievestuore, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-yrityspalvelut-lievestuoreella/"
+  },
+  {
+    "nimi": "Välvöyhkä-kahvit Lievestuoreella",
+    "aika": "",
+    "paikka": "Laukaa, Paikka: Liisantien leidi, Lievestuoreen Liisantie 15, Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtumat/valvoyhka-kahvit-lievestuoreella/"
+  },
+  {
+    "nimi": "Juhlaorkesteri Azzurron joulukonsertti",
+    "aika": "",
+    "paikka": "Laukaa, Sarakuja 2, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/juhlaorkesteri-azzurron-joulukonsertti/"
+  },
+  {
+    "nimi": "Christmas Jukebox Show",
+    "aika": "",
+    "paikka": "Laukaa, Peurungantie 85, Laukaa, Suomi",
+    "url": "https://visitlaukaa.fi/tapahtumat/christmas-jukebox-show/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "su, 15 marras 2026 13:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-5b05f46a/"
   },
   {
-    "nimi": "Joulupuoti",
-    "aika": "ma, 16 marras 2026 11:00:00",
-    "paikka": "Saralinnantie 1, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/joulupuoti/"
+    "nimi": "Nämä vedet välillämme -monologi Aino Kallaksesta",
+    "aika": "",
+    "paikka": "Koskelantie 43, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/nama-vedet-valillamme-monologi-aino-kallaksesta-0e17109e/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 17 marras 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "ke, 18 marras 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Keiski & ENO",
-    "aika": "to, 19 marras 2026 19:30:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/keiski-eno-2/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "pe, 20 marras 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Eläkeläiset ja Steve ’n’ Seagulls",
-    "aika": "pe, 20 marras 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/elakelaiset-ja-steve-n-seagulls/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 21 marras 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
-  },
-  {
-    "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "la, 21 marras 2026 12:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "la, 21 marras 2026 15:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Olavi Uusivirta & Mira Luoti",
-    "aika": "la, 21 marras 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/olavi-uusivirta-mira-luoti/"
-  },
-  {
-    "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "su, 22 marras 2026 12:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "su, 22 marras 2026 13:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
-  },
-  {
-    "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "su, 22 marras 2026 15:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 24 marras 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "Laukaan yrityspalvelujen Lievestuore-päivät",
-    "aika": "ke, 25 marras 2026 06:00:00",
-    "paikka": "Liisantien Leidi",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-yrityspalvelut-lievestuoreella/"
-  },
-  {
-    "nimi": "Välvöyhkä – Aamukahvit",
-    "aika": "ke, 25 marras 2026 14:00:00",
-    "paikka": "Liisantien Leidi",
-    "url": "https://visitlaukaa.fi/tapahtuma/valvoyhka-aamukahvit-3/"
-  },
-  {
-    "nimi": "Äijälän ja pohjoisten kylien matkailu -kyläilta",
-    "aika": "ke, 25 marras 2026 17:00:00",
-    "paikka": "Pitkäniemen Helmi. Tapahtuman tiedot tarkentuvat myöhemmin.",
-    "url": "https://visitlaukaa.fi/tapahtuma/aijalan-ja-pohjoisten-kylien-matkailu-kylailta/"
-  },
-  {
-    "nimi": "Kyllä isä osaa",
-    "aika": "ke, 25 marras 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "nimi": "Raskasta joulua Laukaan Hirviareenalla 26.11.2026",
+    "aika": "",
+    "paikka": "Laukaa, Hirviareenalla, Lintumäenkatu 3, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/raskasta-joulua-laukaan-hirviareenalla-26-11-2026/"
   },
   {
     "nimi": "Jarkko Yli-Sikkilä & Soiva Orkesteri",
-    "aika": "to, 26 marras 2026 19:30:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/jarkko-yli-sikkila-soiva-orkesteri/"
+    "aika": "",
+    "paikka": "Peurunka Areena, Peurungantie 85, Laukaa, Suomi",
+    "url": "https://visitlaukaa.fi/tapahtumat/jarkko-yli-sikkila-soiva-orkesteri/"
+  },
+  {
+    "nimi": "Laukaan joulunavaus ja joulutori",
+    "aika": "",
+    "paikka": "Laukaa, Saralinnan piha-alue., Saralinnantie 1, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-joulunavaus-ja-joulutori/"
   },
   {
     "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "pe, 27 marras 2026 16:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
+    "aika": "",
+    "paikka": "Saralinnantie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-teatteri-seitseman-koiraveljesta-c7a9bd88/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "pe, 27 marras 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-2c5a44c4/"
   },
   {
-    "nimi": "Yö   Olli Halonen",
-    "aika": "pe, 27 marras 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/yo-olli-halonen/"
+    "nimi": "Yö + Olli Halonen",
+    "aika": "",
+    "paikka": "Laukaasta 10 €",
+    "url": "https://visitlaukaa.fi/tapahtumat/yo-olli-halonen/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 28 marras 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-b7f230be/"
+  },
+  {
+    "nimi": "Melontaretki Saraakallion kalliomaalauksiin",
+    "aika": "",
+    "paikka": "Laukaa, Kokoontuminen: klo 10:00, Laukaan satama, Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/melontaretki-saraakallion-kalliomaalauksiin-dfd0f137/"
+  },
+  {
+    "nimi": "Perttulan Tilan joulukahvila",
+    "aika": "",
+    "paikka": "Laukaa, Vaajakoskentie 113, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/perttulan-tilan-joulukahvila-1037ffab/"
+  },
+  {
+    "nimi": "Joulumarkkinat - Різдвяний ярмарок - Рождественская ярмарка",
+    "aika": "",
+    "paikka": "",
+    "url": "https://visitlaukaa.fi/tapahtumat/joulumarkkinat-%25d0%25a0%25d1%2596%25d0%25b7%25d0%25b4%25d0%25b2%25d1%258f%25d0%25bd%25d0%25b8%25d0%25b9-%25d1%258f%25d1%2580%25d0%25bc%25d0%25b0%25d1%2580%25d0%25be%25d0%25ba-%25d0%25a0%25d0%25be%25d0%25b6%25d0%25b4%25d0%25b5%25d1%2581%25d1%2582%25d0%25b2%25d0%25b5%25d0%25bd%25d1%2581%25d0%25ba%25d0%25b0/"
   },
   {
     "nimi": "Popeda ja Dingo",
-    "aika": "la, 28 marras 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/popeda-ja-dingo/"
+    "aika": "",
+    "paikka": "Laukaasta 10 €",
+    "url": "https://visitlaukaa.fi/tapahtumat/popeda-ja-dingo/"
+  },
+  {
+    "nimi": "Perttulan Tilan joulukahvila",
+    "aika": "",
+    "paikka": "Laukaa, Vaajakoskentie 113, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/perttulan-tilan-joulukahvila-595fa0e9/"
   },
   {
     "nimi": "Laukaan Teatteri: Seitsemän koiraveljestä",
-    "aika": "su, 29 marras 2026 12:00:00",
-    "paikka": "Sarakuja 2, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-teatteri-seitseman-koiraveljesta/"
+    "aika": "",
+    "paikka": "Saralinnantie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-teatteri-seitseman-koiraveljesta-06ce2bfc/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "su, 29 marras 2026 13:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-327a491c/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 01 joulu 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+    "nimi": "Kestävän joulun avaus Retrokeitaalla 30.11.",
+    "aika": "",
+    "paikka": "Laukaa, Saravedentie 1, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/kestavan-joulun-avaus-retrokeitaalla-30-11/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa/"
+  },
+  {
+    "nimi": "Lievestuoreen matkailun kehittämisilta",
+    "aika": "",
+    "paikka": "Laukaa, Tervamäen koulu, Liepeentie (taajama) 49, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/lievestuoreen-matkailun-kehittamisilta/"
+  },
+  {
+    "nimi": "Laukaan järjestöilta ja urheiluseurojen seurafoorumi",
+    "aika": "",
+    "paikka": "liittyy Laukaan talviuintipaikoille etsitään kiinnostuneita ylläpitäjiä",
+    "url": "https://visitlaukaa.fi/tapahtumat/laukaan-jarjestoilta-ja-urheiluseurojen-seurafoorumi/"
   },
   {
     "nimi": "Kaverikoirat Laukaan pääkirjastossa",
-    "aika": "ke, 02 joulu 2026 14:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kaverikoirat-laukaan-paakirjastossa/"
+    "aika": "",
+    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, Laukaa, Suomi",
+    "url": "https://visitlaukaa.fi/tapahtumat/kaverikoirat-laukaan-paakirjastossa-b5b82724/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "ke, 02 joulu 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-701859d9/"
   },
   {
-    "nimi": "Välvöyhkä – Aamukahvit",
-    "aika": "to, 03 joulu 2026 17:00:00",
-    "paikka": "Liisantien Leidi",
-    "url": "https://visitlaukaa.fi/tapahtuma/valvoyhka-aamukahvit-2/"
+    "nimi": "Kehonkoostumusmittaus ja kevään liikuntaryhmien esittely",
+    "aika": "",
+    "paikka": "Laukaa, Laukaan pääkirjaston aula. , Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/kehonkoostumusmittaus-ja-kevaan-liikuntaryhmien-esittely/"
+  },
+  {
+    "nimi": "Välvöyhkä-kahvit Viertolassa",
+    "aika": "",
+    "paikka": "Laukaa, Saravedentie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/valvoyhka-kahvit-viertolassa-00d2167c/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "pe, 04 joulu 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-a1936407/"
   },
   {
     "nimi": "Elastinen ja Stig",
-    "aika": "pe, 04 joulu 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/elastinen-ja-stig/"
+    "aika": "",
+    "paikka": "Laukaasta 10 €",
+    "url": "https://visitlaukaa.fi/tapahtumat/elastinen-ja-stig/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 05 joulu 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-b433d929/"
   },
   {
-    "nimi": "Vesterinen yhtyeineen Folk Saimaa",
-    "aika": "la, 05 joulu 2026 20:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/vesterinen-yhtyeineen-folk-saimaa/"
+    "nimi": "Nämä vedet välillämme -monologi Aino Kallaksesta",
+    "aika": "",
+    "paikka": "Koskelantie 43, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/nama-vedet-valillamme-monologi-aino-kallaksesta-e477aa71/"
+  },
+  {
+    "nimi": "Vesterinen Yhtyeineen + Folk Saimaa",
+    "aika": "",
+    "paikka": "Laukaasta 10 €",
+    "url": "https://visitlaukaa.fi/tapahtumat/vesterinen-yhtyeineen-folk-saimaa/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "su, 06 joulu 2026 13:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-3bd65734/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 08 joulu 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+    "nimi": "Avoin luento: Ikääntyneenä liikenteessä turvallisesti",
+    "aika": "",
+    "paikka": "65 +",
+    "url": "https://visitlaukaa.fi/tapahtumat/avoin-luento-ikaantyneena-liikenteessa-turvallisesti/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-a9b78358/"
   },
   {
     "nimi": "Lukulemmikki Laukaan pääkirjastossa",
-    "aika": "ti, 08 joulu 2026 15:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/lukulemmikki-laukaan-paakirjastossa/"
+    "aika": "",
+    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, Laukaa, Suomi",
+    "url": "https://visitlaukaa.fi/tapahtumat/lukulemmikki-laukaan-paakirjastossa-10fea6c9/"
+  },
+  {
+    "nimi": "Jouluetkot Laukaan pääkirjastolla - joulunavaustapahtuma",
+    "aika": "",
+    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, Laukaa, Suomi",
+    "url": "https://visitlaukaa.fi/tapahtumat/jouluetkot-laukaan-paakirjastolla-joulunavaustapahtuma/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "ke, 09 joulu 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-70e941aa/"
   },
   {
     "nimi": "Peurungan joululounas",
-    "aika": "to, 10 joulu 2026 11:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/peurungan-joululounas/"
+    "aika": "",
+    "paikka": "Peurunka, Peurungantie 85, Laukaa, Suomi",
+    "url": "https://visitlaukaa.fi/tapahtumat/peurungan-joululounas/"
   },
   {
-    "nimi": "Yritystankkaamo-iltapäivät kerran kuukaudessa torstaisin",
-    "aika": "to, 10 joulu 2026 12:00:00",
-    "paikka": "Lisätietoja",
-    "url": "https://visitlaukaa.fi/tapahtuma/yritystankkaamo-iltapaivat-kerran-kuukaudessa-torstaisin/"
+    "nimi": "Yritystankkaamo-iltapäivä",
+    "aika": "",
+    "paikka": "Laukaan kunta, yrityspalvelut",
+    "url": "https://visitlaukaa.fi/tapahtumat/yritystankkaamo-iltapaiva-1ea00475/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "pe, 11 joulu 2026 17:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-91a9e2b2/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 12 joulu 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-5b61baed/"
+  },
+  {
+    "nimi": "Perttulan Tilan joulukahvila",
+    "aika": "",
+    "paikka": "Laukaa, Vaajakoskentie 113, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/perttulan-tilan-joulukahvila-62b9d41e/"
   },
   {
     "nimi": "Vanhan ajan Joulumarkkinat",
-    "aika": "su, 13 joulu 2026 10:00:00",
-    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
-    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-joulumarkkinat/"
+    "aika": "",
+    "paikka": "Laukaa, Ränssintie 5, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/vanhan-ajan-joulumarkkinat/"
+  },
+  {
+    "nimi": "Perttulan Tilan joulukahvila",
+    "aika": "",
+    "paikka": "Laukaa, Vaajakoskentie 113, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtumat/perttulan-tilan-joulukahvila-3841722e/"
+  },
+  {
+    "nimi": "Vehniän joulumyyjäiset",
+    "aika": "",
+    "paikka": "Laukaa, Yläpohjantie 34, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/vehnian-joulumyyjaiset/"
   },
   {
     "nimi": "Kyllä isä osaa",
-    "aika": "su, 13 joulu 2026 13:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/kylla-isa-osaa/"
+    "aika": "",
+    "paikka": "omasta mielestään",
+    "url": "https://visitlaukaa.fi/tapahtumat/kylla-isa-osaa-f1893939/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 15 joulu 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+    "nimi": "Naisten turvesaunailta",
+    "aika": "",
+    "paikka": "Laukaa, Ränssintie 5, Laukaa, Finland",
+    "url": "https://visitlaukaa.fi/tapahtumat/naisten-turvesaunailta-6e21412a/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-0c57345c/"
   },
   {
     "nimi": "Saunatontun pikkujoulut",
-    "aika": "pe, 18 joulu 2026 17:00:00",
-    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
-    "url": "https://visitlaukaa.fi/tapahtuma/saunatontun-pikkujoulut/"
+    "aika": "",
+    "paikka": "si ennakkoon:",
+    "url": "https://visitlaukaa.fi/tapahtumat/saunatontun-pikkujoulut/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 19 joulu 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-772d4c03/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 22 joulu 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-e292faf5/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 26 joulu 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-e704848a/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 29 joulu 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-883c3551/"
   },
   {
     "nimi": "Uusi vuosi Peurungassa",
-    "aika": "to, 31 joulu 2026 17:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/uusi-vuosi-peurungassa/"
+    "aika": "",
+    "paikka": "Laukaa, Peurungantie 85, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtumat/uusi-vuosi-peurungassa/"
   },
   {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 02 tammi 2027 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-ad8e56bb/"
   },
   {
-    "nimi": "Yritystankkaamo-iltapäivät kerran kuukaudessa torstaisin",
-    "aika": "to, 14 tammi 2027 12:00:00",
-    "paikka": "Lisätietoja",
-    "url": "https://visitlaukaa.fi/tapahtuma/yritystankkaamo-iltapaivat-kerran-kuukaudessa-torstaisin/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-cb93d5f5/"
   },
   {
-    "nimi": "Yritystankkaamo-iltapäivät kerran kuukaudessa torstaisin",
-    "aika": "to, 11 helmi 2027 12:00:00",
-    "paikka": "Lisätietoja",
-    "url": "https://visitlaukaa.fi/tapahtuma/yritystankkaamo-iltapaivat-kerran-kuukaudessa-torstaisin/"
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-7ecd07c9/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-8aa8e458/"
+  },
+  {
+    "nimi": "Yritystankkaamo-iltapäivä",
+    "aika": "",
+    "paikka": "Laukaan kunta, yrityspalvelut",
+    "url": "https://visitlaukaa.fi/tapahtumat/yritystankkaamo-iltapaiva-d3d5ae8e/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-acc56c7a/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-c1531a7e/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-a7d5e0a7/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-44bbabae/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-f02dcc70/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-8404d7e2/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-99bd4cd3/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-96c33d2c/"
+  },
+  {
+    "nimi": "Yritystankkaamo-iltapäivä",
+    "aika": "",
+    "paikka": "Laukaan kunta, yrityspalvelut",
+    "url": "https://visitlaukaa.fi/tapahtumat/yritystankkaamo-iltapaiva-220c024f/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-3205cf7f/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-f208e212/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-24fc5a9d/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-526a3f8b/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-0d48e1b8/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-34619097/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-25894e41/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-1b41986f/"
+  },
+  {
+    "nimi": "Yritystankkaamo-iltapäivä",
+    "aika": "",
+    "paikka": "Laukaan kunta, yrityspalvelut",
+    "url": "https://visitlaukaa.fi/tapahtumat/yritystankkaamo-iltapaiva-9583f3ca/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-770c1972/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-0ef32f37/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-bcb166fb/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-1299c4a1/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-27eebbed/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-3d776a1d/"
+  },
+  {
+    "nimi": "Apua Ukrainaan keräys Laukaa",
+    "aika": "",
+    "paikka": ", ilmaiskahvio, äitiys- ja sotilaspakkaustehdas",
+    "url": "https://visitlaukaa.fi/tapahtumat/apua-ukrainaan-kerays-laukaa-b7b55770/"
   }
 ]
