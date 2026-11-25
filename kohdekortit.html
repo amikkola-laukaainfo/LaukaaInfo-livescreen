@@ -502,13 +502,18 @@ async function loadPlacesAndMunicipalities() {
 
     muniPlaces.forEach(p => {
       const slug = slugify(p.name);
-      if (slug && !kuntaMap.has(slug)) {
+      if (!slug) return;
+      const existing = kuntaMap.get(slug);
+      if (!existing) {
         kuntaMap.set(slug, {
           id: p.id,
           place_id: p.place_id,
           name: p.name,
           slug: slug
         });
+      } else if (!existing.id && !existing.place_id) {
+        existing.id = p.id;
+        existing.place_id = p.place_id;
       }
     });
 
@@ -561,9 +566,11 @@ function resolveDescendantPlaceIds(targetSlug) {
     if (muni.place_id) validPlaceIds.add(muni.place_id);
   }
 
-  // Lisää paikat joiden municipality täsmää kunnan slugiin
+  // Lisää kunta itse sekä paikat joiden municipality täsmää kunnan slugiin
+  const SUOMI_ID = '54bf89b2-9e5d-46e0-9a9d-395f768c4195';
   allPlaces.forEach(p => {
-    if (p.municipality && slugify(p.municipality) === targetSlug) {
+    const isThisMuni = (p.type === 'KUNTA' || p.parent_place_id === SUOMI_ID) && p.name && slugify(p.name) === targetSlug;
+    if (isThisMuni || (p.municipality && slugify(p.municipality) === targetSlug)) {
       if (p.id) validPlaceIds.add(p.id);
       if (p.place_id) validPlaceIds.add(p.place_id);
     }
