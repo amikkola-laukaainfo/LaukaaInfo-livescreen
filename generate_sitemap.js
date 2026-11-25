@@ -59,6 +59,7 @@ async function generateSitemap() {
         { file: 'reitti-partner.html', url: 'reitti-partner.html', priority: '0.75', changefreq: 'weekly' },
         { file: 'tilannekuva.html', url: 'tilannekuva.html', priority: '0.75', changefreq: 'weekly' },
         { file: 'tietoa-paikasta.html', url: 'tietoa-paikasta.html', priority: '0.80', changefreq: 'weekly' },
+        { file: 'tietokortit.html', url: 'tietokortit.html', priority: '0.90', changefreq: 'daily' },
         { file: 'wonderin/esittely.html', url: 'wonderin/esittely.html', priority: '0.80', changefreq: 'monthly' },
         { file: 'laukaan-ravintolat.html', url: 'laukaan-ravintolat.html', priority: '0.80', changefreq: 'weekly' },
         { file: 'laukaan-autohuollot.html', url: 'laukaan-autohuollot.html', priority: '0.80', changefreq: 'weekly' },
@@ -189,6 +190,40 @@ async function generateSitemap() {
         });
     }
 
+    // ── 5b. Tietokortit (tietokortti.html?id=...) ───────────────────────────────
+    let tietokorttiCount = 0;
+    try {
+        const tkPosts = await new Promise((resolve) => {
+            const req = https.request({
+                hostname: 'duxluwyqxvbmkkjzuzkz.supabase.co',
+                path: '/rest/v1/posts?select=id,published_at,updated_at,created_at,visibility,status&type=in.(INFO,knowledge,article)&order=published_at.desc.nullslast,created_at.desc&limit=200',
+                method: 'GET',
+                headers: {
+                    'apikey': 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+                    'Authorization': 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+                    'Accept': 'application/json'
+                }
+            }, (res) => {
+                let d = '';
+                res.on('data', c => d += c);
+                res.on('end', () => {
+                    try { const p = JSON.parse(d); resolve(Array.isArray(p) ? p : []); } catch (_) { resolve([]); }
+                });
+            });
+            req.on('error', () => resolve([]));
+            req.setTimeout(6000, () => { req.destroy(); resolve([]); });
+            req.end();
+        });
+
+        tkPosts.filter(p => (p.visibility || 'public').toLowerCase() === 'public' && (p.status || 'published').toLowerCase() !== 'draft' && p.id)
+            .forEach(p => {
+                const rawDate = p.updated_at || p.published_at || p.created_at;
+                const lastmod = rawDate ? new Date(rawDate).toISOString().split('T')[0] : today;
+                xml += `<url>\n  <loc>${baseUrl}tietokortti.html?id=${encodeURIComponent(p.id)}</loc>\n  <lastmod>${lastmod}</lastmod>\n  <changefreq>monthly</changefreq>\n  <priority>0.85</priority>\n</url>\n`;
+                tietokorttiCount++;
+            });
+    } catch (e) {}
+
     xml += `</urlset>\n`;
 
     // ── Kirjoitetaan sitemap.xml ────────────────────────────────────────────────
@@ -233,7 +268,7 @@ Sitemap: https://laukaainfo.fi/sitemap.xml
     fs.writeFileSync(path.join(mediazooDir, 'sitemap-mediazoo.xml'), xml2, 'utf8');
 
     // ── Tulostetaan laaturaportti ───────────────────────────────────────────────
-    const totalUrls = 1 + checkedStaticCount + dynamicServices.length + paikkaCount + teemaCount + yritysCount;
+    const totalUrls = 1 + checkedStaticCount + dynamicServices.length + paikkaCount + teemaCount + yritysCount + tietokorttiCount;
 
     console.log('---------------------------------------------------');
     console.log(`✅ sitemap.xml luotu onnistuneesti!`);
@@ -242,6 +277,7 @@ Sitemap: https://laukaainfo.fi/sitemap.xml
     console.log(`   - Paikkasivut (paikka/)        : ${paikkaCount} kpl`);
     console.log(`   - Teemasivut (teemat/)         : ${teemaCount} kpl`);
     console.log(`   - Yrityssivut (yritys/)        : ${yritysCount} kpl`);
+    console.log(`   - Tietokortit (tietokortti)    : ${tietokorttiCount} kpl`);
     console.log(`   - Kohdistetut palveluhaut      : ${dynamicServices.length} kpl`);
     console.log(`   -----------------------------------------------`);
     console.log(`   YHTEENSÄ: ${totalUrls} tarkistettua, laadukasta sivua.`);

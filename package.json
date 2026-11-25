@@ -8,7 +8,8 @@
         "build": "node build.js",
         "seo": "node generate_seo_pages.js",
         "kohteet": "node generate_kohteet_index.js",
-        "generate": "node generate_seo_pages.js && node generate_kohteet_index.js && node generate_sitemap.js",
+        "tietokortit": "node generate_tietokortit.js",
+        "generate": "node generate_seo_pages.js && node generate_kohteet_index.js && node generate_tietokortit.js && node generate_sitemap.js",
         "build:julkaise": "npx @tailwindcss/cli -i julkaise_input.css -o julkaise.css --content julkaise.html --minify",
         "sitemap": "node generate_sitemap.js"
     },

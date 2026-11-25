@@ -45,6 +45,13 @@ try {
     console.error('Virhe datan modularisoinnissa:', e.message);
 }
 
+console.log('1.55 Generoidaan tietokortit.html -nostosivu...');
+try {
+    execSync('node generate_tietokortit.js', { stdio: 'inherit' });
+} catch (e) {
+    console.error('Virhe tietokortit.html generoinnissa:', e.message);
+}
+
 console.log('1.6 Generoidaan sitemap...');
 try {
     execSync('node generate_sitemap.js', { stdio: 'inherit' });
