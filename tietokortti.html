@@ -627,6 +627,144 @@
             overflow: hidden;
         }
 
+        /* Kolmitasoinen linkitys: Sarja, Näkökulmat, Paikkanosto */
+        .series-nav-box {
+            background: linear-gradient(135deg, #fffaf5 0%, #ffffff 100%);
+            border: 1px solid #ebd8c5;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2.25rem;
+        }
+
+        .series-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .series-progress-pill {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid #ebd8c5;
+        }
+
+        .series-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .series-nav-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            padding: 1rem 1.1rem;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 0.85rem;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .series-nav-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .series-nav-card.next {
+            text-align: right;
+            align-items: flex-end;
+        }
+
+        .series-nav-dir {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .series-nav-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.25rem;
+        }
+
+        .pillar-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            padding: 1.1rem;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 0.9rem;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .pillar-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .pillar-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .place-spotlight-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.15rem 1.35rem;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 2.25rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .place-spotlight-banner:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
         /* Latausanimaatio ja Virhetilat */
         .loading-state {
             display: flex;
@@ -851,8 +989,37 @@
                 </aside>
             </div>
 
-            <!-- Alaosio: Liittyvät tietokortit ja vinkit -->
+            <!-- Alaosio: Kolmitasoinen paikalliskirjalinkitys -->
             <section class="bottom-section" id="related-section">
+                <!-- Taso 1: Sarjan lukupolku (näytetään vain jos kortti kuuluu sarjaan) -->
+                <div class="series-nav-box" id="series-nav-box" style="display: none;">
+                    <div class="series-header">
+                        <h2 class="section-title" id="series-nav-heading" style="margin: 0;">📖 Jatka sarjaa</h2>
+                        <span class="series-progress-pill" id="series-progress-pill"></span>
+                    </div>
+                    <div class="series-nav-grid" id="series-nav-grid"></div>
+                </div>
+
+                <!-- Taso 2: Sama paikka, muita näkökulmia -->
+                <div id="pillars-section" style="display: none;">
+                    <div class="section-header" style="margin-bottom: 1rem;">
+                        <h2 class="section-title" id="pillars-heading">🔎 Sama paikka, muita näkökulmia</h2>
+                    </div>
+                    <div class="pillars-grid" id="pillars-grid"></div>
+                </div>
+
+                <!-- Taso 3a: Tutustu paikkaan -->
+                <a href="#" class="place-spotlight-banner" id="place-spotlight-banner" style="display: none;">
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); margin-bottom: 0.2rem;">📍 Tutustu paikkaan</div>
+                        <div id="place-spotlight-title" style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text-main);"></div>
+                    </div>
+                    <span class="nav-btn" style="background: var(--primary); color: #fff; border-color: var(--primary);">
+                        Kohteet, kartta ja julkaisut →
+                    </span>
+                </a>
+
+                <!-- Taso 3b: Liittyvät tietokortit ja vinkit -->
                 <div class="section-header">
                     <h2 class="section-title">Liittyvää paikallistietoa</h2>
                     <a href="teema.html" id="see-all-theme-link" class="nav-btn">
@@ -1314,9 +1481,9 @@
             sideThemeBtn.href = themePageUrl;
             document.getElementById('side-theme-btn-text').textContent = `${tag.name} (${place.name})`;
 
-            // Alaosan Teemanostot
+            // Alaosan Teemanostot ja kolmitasoinen linkitys
             document.getElementById('see-all-theme-link').href = themePageUrl;
-            renderRelatedCards(tag, place, currentPost ? currentPost.id : null);
+            renderRelatedCards(tag, place, currentPost ? currentPost.id : null, currentPost);
         }
 
         // Alustaa pienen Leaflet-kartan
@@ -1344,63 +1511,225 @@
                 .bindPopup(`<strong>${title}</strong>`);
         }
 
-        // Liittyvien sisältöjen dynaaminen renderöinti (Supabase posts + älykäs täydennys)
-        async function renderRelatedCards(tag, place, excludePostId) {
+        // Tietokortin näkökulma-, sarja- ja järjestystagien jäsentäjä
+        const PILLAR_META = {
+            historia: { label: '🏛️ Historia', order: 1 },
+            ymparisto: { label: '🌿 Ympäristö', order: 2 },
+            yhteiso: { label: '🏘️ Yhteisö', order: 3 },
+            muutos: { label: '🚧 Muutos', order: 4 }
+        };
+
+        const SERIES_TITLES = {
+            lievestuore: 'Lievestuoreen paikalliskirja',
+            'lievestuore-kirja': 'Lievestuoreen paikalliskirja'
+        };
+
+        function parseKnowledgeTags(tags) {
+            const list = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()).filter(Boolean) : [];
+            let series = null;
+            let part = null;
+            let pillar = null;
+
+            for (const t of list) {
+                if (t.startsWith('series:')) series = t.slice(7).trim();
+                else if (t.startsWith('part:')) {
+                    const n = parseInt(t.slice(5).trim(), 10);
+                    if (!Number.isNaN(n)) part = n;
+                } else if (t.startsWith('pillar:')) {
+                    const p = t.slice(7).trim();
+                    if (PILLAR_META[p]) pillar = p;
+                }
+            }
+
+            // Varamekanismi: päätellään näkökulma yleisistä tageista jos pillar:* puuttuu
+            if (!pillar) {
+                if (list.some(t => ['historia', 'teollisuus', 'rautatie', 'haarla'].includes(t))) pillar = 'historia';
+                else if (list.some(t => ['ymparisto', 'ympäristö', 'luonto', 'retkeily', 'jarvi', 'järvi'].includes(t))) pillar = 'ymparisto';
+                else if (list.some(t => ['yhteiso', 'yhteisö', 'taajama', 'ihmiset', 'palvelut', 'muistot'].includes(t))) pillar = 'yhteiso';
+                else if (list.some(t => ['muutos', 'ysitie', 'liikenne', 'tulevaisuus'].includes(t))) pillar = 'muutos';
+            }
+
+            return {
+                series,
+                part,
+                pillar,
+                pillarMeta: pillar ? PILLAR_META[pillar] : null
+            };
+        }
+
+        function buildKnowledgeCardUrl(postId, placeSlug, tagId) {
+            return `tietokortti.html?id=${encodeURIComponent(postId)}&place=${encodeURIComponent(placeSlug)}&theme=${encodeURIComponent(tagId)}`;
+        }
+
+        // Liittyvien sisältöjen kolmitasoinen renderöinti (Sarja -> Näkökulmat -> Paikka & Aiheet)
+        async function renderRelatedCards(tag, place, excludePostId, activePost = null) {
             const grid = document.getElementById('related-cards-grid');
             if (!grid) return;
 
             const placeId = place?.place_id || place?.id || place?.canonical_name || '';
+            const placeName = place?.name || 'Lievestuore';
             const placeSlug = place?.canonical_name || place?.name || 'laukaa';
             const tagId = tag?.tag_id || tag?.name || 'retkeily';
 
-            let dynamicCards = [];
+            // Paikkanostobanneri (Taso 3a)
+            const spotlightEl = document.getElementById('place-spotlight-banner');
+            const spotlightTitle = document.getElementById('place-spotlight-title');
+            if (spotlightEl && spotlightTitle && placeId) {
+                spotlightEl.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+                spotlightTitle.textContent = `${placeName}n kohteet, kartta ja muut julkaisut`;
+                spotlightEl.style.display = 'flex';
+            }
 
-            // 1. Haetaan Supabasen posts-taulusta muut samaan paikkaan tai samaan teemaan liittyvät tietokortit
+            let allKnowledgePosts = [];
             const db = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
             if (db) {
                 try {
-                    let query = db
+                    const { data: dbPosts, error: dbErr } = await db
                         .from('posts')
                         .select('id, title, description, content, image_url, place_id, target_id, target_type, type, tags, published_at, created_at')
+                        .in('type', ['info', 'knowledge', 'article', 'guide', 'story', 'notice'])
                         .or('status.eq.published,status.eq.APPROVED,status.is.null')
-                        .order('created_at', { ascending: false })
-                        .limit(8);
+                        .order('created_at', { ascending: true })
+                        .limit(60);
 
-                    if (excludePostId) {
-                        query = query.neq('id', excludePostId);
-                    }
-
-                    const { data: dbPosts, error: dbErr } = await query;
-                    if (!dbErr && dbPosts && dbPosts.length > 0) {
-                        // Suodatetaan ne, jotka liittyvät samaan paikkaan tai samaan teemaan
-                        dynamicCards = dbPosts.filter(p => {
-                            const pType = (p.type || '').toLowerCase();
-                            const isKnowledge = ['info', 'knowledge', 'article', 'guide', 'story', 'notice'].includes(pType) ||
-                                Boolean(p.target_type);
-
-                            const matchesPlace = placeId && (
-                                p.place_id === placeId ||
-                                p.target_id === placeId ||
-                                (p.place_id && place?.canonical_name && p.place_id.toLowerCase().includes(place.canonical_name.toLowerCase()))
-                            );
-
-                            const cleanTag = String(tagId).toLowerCase();
-                            const matchesTag = Array.isArray(p.tags) && p.tags.some(t => String(t).toLowerCase() === cleanTag);
-
-                            return isKnowledge && (matchesPlace || matchesTag);
-                        });
+                    if (!dbErr && Array.isArray(dbPosts)) {
+                        allKnowledgePosts = dbPosts;
                     }
                 } catch (fetchErr) {
                     console.debug('Liittyvien korttien dynaaminen haku notice:', fetchErr);
                 }
             }
 
+            const usedIds = new Set(excludePostId ? [excludePostId] : []);
+
+            // ── TASO 1: Sarjan lukupolku (series:* + part:*) ───────────────────
+            const seriesBox = document.getElementById('series-nav-box');
+            const seriesGrid = document.getElementById('series-nav-grid');
+            const seriesHeading = document.getElementById('series-nav-heading');
+            const seriesPill = document.getElementById('series-progress-pill');
+
+            const activeMeta = parseKnowledgeTags(activePost?.tags);
+            if (seriesBox && seriesGrid && activeMeta.series) {
+                const seriesPosts = allKnowledgePosts
+                    .map(p => ({ post: p, meta: parseKnowledgeTags(p.tags) }))
+                    .filter(item => item.meta.series === activeMeta.series)
+                    .sort((a, b) => {
+                        const pa = a.meta.part ?? 9999;
+                        const pb = b.meta.part ?? 9999;
+                        if (pa !== pb) return pa - pb;
+                        return String(a.post.created_at || '').localeCompare(String(b.post.created_at || ''));
+                    });
+
+                const currentIdx = seriesPosts.findIndex(item => item.post.id === excludePostId);
+                if (seriesPosts.length > 1 && currentIdx !== -1) {
+                    const prevItem = currentIdx > 0 ? seriesPosts[currentIdx - 1] : null;
+                    const nextItem = currentIdx < seriesPosts.length - 1 ? seriesPosts[currentIdx + 1] : null;
+
+                    const seriesTitle = SERIES_TITLES[activeMeta.series] || `Jatka ${placeName}n tarinaa`;
+                    seriesHeading.textContent = `📖 ${seriesTitle}`;
+                    seriesPill.textContent = `Osa ${currentIdx + 1} / ${seriesPosts.length}`;
+
+                    let navHtml = '';
+                    if (prevItem) {
+                        usedIds.add(prevItem.post.id);
+                        navHtml += `
+                            <a href="${buildKnowledgeCardUrl(prevItem.post.id, placeSlug, tagId)}" class="series-nav-card prev">
+                                <span class="series-nav-dir">← Edellinen aihe</span>
+                                <span class="series-nav-title">${escapeHtml(prevItem.post.title || 'Edellinen osa')}</span>
+                            </a>
+                        `;
+                    } else {
+                        navHtml += '<div></div>';
+                    }
+
+                    if (nextItem) {
+                        usedIds.add(nextItem.post.id);
+                        navHtml += `
+                            <a href="${buildKnowledgeCardUrl(nextItem.post.id, placeSlug, tagId)}" class="series-nav-card next">
+                                <span class="series-nav-dir">Seuraava aihe →</span>
+                                <span class="series-nav-title">${escapeHtml(nextItem.post.title || 'Seuraava osa')}</span>
+                            </a>
+                        `;
+                    }
+
+                    seriesGrid.innerHTML = navHtml;
+                    seriesBox.style.display = 'block';
+                } else {
+                    seriesBox.style.display = 'none';
+                }
+            }
+
+            // Samaan paikkaan osuvat muut tietokortit
+            const matchesPlace = p => placeId && (
+                p.place_id === placeId ||
+                p.target_id === placeId ||
+                (p.place_id && place?.canonical_name && p.place_id.toLowerCase().includes(place.canonical_name.toLowerCase()))
+            );
+
+            // ── TASO 2: Sama paikka, muita näkökulmia ──────────────────────────
+            const pillarsSection = document.getElementById('pillars-section');
+            const pillarsGrid = document.getElementById('pillars-grid');
+            const pillarsHeading = document.getElementById('pillars-heading');
+
+            if (pillarsSection && pillarsGrid) {
+                const samePlaceOtherPosts = allKnowledgePosts.filter(p => p.id !== excludePostId && matchesPlace(p));
+                const byPillar = new Map();
+
+                // Priorisoidaan muut näkökulmat kuin nykyisen kortin oma näkökulma
+                samePlaceOtherPosts.forEach(p => {
+                    const m = parseKnowledgeTags(p.tags);
+                    if (!m.pillar) return;
+                    if (!byPillar.has(m.pillar)) {
+                        byPillar.set(m.pillar, { post: p, meta: m });
+                    }
+                });
+
+                const pillarItems = Array.from(byPillar.values())
+                    .sort((a, b) => {
+                        const aSame = a.meta.pillar === activeMeta.pillar ? 1 : 0;
+                        const bSame = b.meta.pillar === activeMeta.pillar ? 1 : 0;
+                        if (aSame !== bSame) return aSame - bSame;
+                        return a.meta.pillarMeta.order - b.meta.pillarMeta.order;
+                    })
+                    .slice(0, 4);
+
+                if (pillarItems.length > 0) {
+                    pillarsHeading.textContent = `🔎 ${placeName} – muita näkökulmia`;
+                    pillarsGrid.innerHTML = pillarItems.map(({ post, meta }) => {
+                        usedIds.add(post.id);
+                        return `
+                            <a href="${buildKnowledgeCardUrl(post.id, placeSlug, tagId)}" class="pillar-card">
+                                <span class="pillar-label">${meta.pillarMeta.label}</span>
+                                <span class="pillar-title">${escapeHtml(post.title || 'Tietokortti')}</span>
+                            </a>
+                        `;
+                    }).join('');
+                    pillarsSection.style.display = 'block';
+                } else {
+                    pillarsSection.style.display = 'none';
+                }
+            }
+
+            // ── TASO 3b: Automaattiset liittyvät kortit (paikka tai teema) ─────
+            const cleanTag = String(tagId).toLowerCase();
+            let dynamicCards = allKnowledgePosts.filter(p => {
+                if (usedIds.has(p.id)) return false;
+                const matchesTag = Array.isArray(p.tags) && p.tags.some(t => String(t).toLowerCase() === cleanTag);
+                return matchesPlace(p) || matchesTag;
+            });
+
+            // Jos suurin osa saman paikan korteista meni jo ylempiin tasoihin, näytetään silti muita saman paikan kortteja
+            if (dynamicCards.length === 0) {
+                dynamicCards = allKnowledgePosts.filter(p => p.id !== excludePostId && (matchesPlace(p) || (Array.isArray(p.tags) && p.tags.some(t => String(t).toLowerCase() === cleanTag))));
+            }
+
             // Renderöidään haetut tietokortit
             let html = '';
             if (dynamicCards.length > 0) {
                 html = dynamicCards.slice(0, 4).map(post => {
-                    const cardUrl = `tietokortti.html?id=${encodeURIComponent(post.id)}&place=${encodeURIComponent(placeSlug)}&theme=${encodeURIComponent(tagId)}`;
+                    const cardUrl = buildKnowledgeCardUrl(post.id, placeSlug, tagId);
                     const imgUrl = post.image_url || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80';
+                    const m = parseKnowledgeTags(post.tags);
                     const rawType = (post.target_type || post.type || 'Tietokortti').toUpperCase();
                     const templateLabelMap = {
                         'GENERAL': 'Yleistieto',
@@ -1410,16 +1739,16 @@
                         'STORY': 'Tarina / Muistelu',
                         'INFO': 'Tietokortti'
                     };
-                    const badgeText = templateLabelMap[rawType] || 'Paikallistieto';
+                    const badgeText = m.pillarMeta ? m.pillarMeta.label : (templateLabelMap[rawType] || 'Paikallistieto');
                     const lead = post.description || (post.content ? post.content.replace(/^[#\s]+/, '').substring(0, 140) : '');
 
                     return `
                         <a href="${cardUrl}" class="related-card">
-                            <img src="${imgUrl}" class="related-img" alt="${(post.title || '').replace(/"/g, '&quot;')}" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80'">
+                            <img src="${imgUrl}" class="related-img" alt="${escapeHtml(post.title || '')}" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80'">
                             <div class="related-content">
                                 <div class="related-badge">${badgeText}</div>
-                                <h4 class="related-title">${post.title || 'Nimetön tietokortti'}</h4>
-                                <p class="related-desc">${lead || 'Lue lisää paikallistietoa ja tutustu aiheeseen.'}</p>
+                                <h4 class="related-title">${escapeHtml(post.title || 'Nimetön tietokortti')}</h4>
+                                <p class="related-desc">${escapeHtml(lead || 'Lue lisää paikallistietoa ja tutustu aiheeseen.')}</p>
                             </div>
                         </a>
                     `;
