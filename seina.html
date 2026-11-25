@@ -202,9 +202,9 @@
             Otsikko
           </h2>
           
-          <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line" id="pinnedContent">
+          <div class="text-sm text-slate-700 leading-relaxed space-y-1.5" id="pinnedContent">
             Sisältö...
-          </p>
+          </div>
 
           <!-- Pinned Event / Offer Slot -->
           <div id="pinnedEventSlot" class="pt-1"></div>
@@ -787,7 +787,7 @@
               <span>🕐 ${dateStr}</span>
             </div>
             <h1 class="text-xl md:text-2xl font-black text-slate-900 leading-tight">${title}</h1>
-            ${desc ? `<div class="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">${desc}</div>` : ''}
+            ${desc ? `<div class="text-sm md:text-base text-slate-700 leading-relaxed space-y-1.5">${desc}</div>` : ''}
             ${renderEventBoxHTML(post)}
             ${renderOfferBoxHTML(post)}
             ${renderMediaHTML(post.post_media || [])}
@@ -1585,7 +1585,7 @@
 
               <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(p.title)}</h3>
               
-              ${p.content ? `<p class="text-xs md:text-sm text-slate-600 leading-relaxed whitespace-pre-line">${parseMarkdownLinks(p.content)}</p>` : ''}
+              ${p.content ? `<div class="text-xs md:text-sm text-slate-600 leading-relaxed space-y-1.5">${parseMarkdownLinks(p.content)}</div>` : ''}
 
               <!-- Tapahtuman dynaaminen osio -->
               ${renderEventBoxHTML(p)}
@@ -1731,12 +1731,11 @@
           .replace(/'/g, '&#039;');
       }
 
-      // Markdown Link Parser: [Teksti](https://...) -> <a> (strict HTTP/HTTPS only)
-      function parseMarkdownLinks(rawText) {
-        if (!rawText) return '';
-        let escaped = escapeHtml(rawText);
+      // Inline Markdown Formatter (XSS-safe: expects already HTML-escaped text)
+      function formatInlineMarkdown(escaped) {
+        if (!escaped) return '';
         // [Linkin teksti](https://osoite)
-        escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, linkUrl) => {
+        let out = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, linkUrl) => {
           const cleanUrl = linkUrl.trim();
           try {
             const parsed = new URL(cleanUrl);
@@ -1744,10 +1743,10 @@
               return `<a href="${parsed.href}" target="_blank" rel="noopener noreferrer" class="text-violet-600 font-bold hover:underline">${linkText}</a>`;
             }
           } catch (e) {}
-          return escapeHtml(match);
+          return match;
         });
         // Legacy: link:Teksti=https://osoite
-        escaped = escaped.replace(/link:([^=]+)=([^\s]+)/g, (match, linkText, linkUrl) => {
+        out = out.replace(/link:([^=]+)=([^\s]+)/g, (match, linkText, linkUrl) => {
           const cleanUrl = linkUrl.trim();
           try {
             const parsed = new URL(cleanUrl);
@@ -1755,9 +1754,119 @@
               return `<a href="${parsed.href}" target="_blank" rel="noopener noreferrer" class="text-violet-600 font-bold hover:underline">${linkText}</a>`;
             }
           } catch (e) {}
-          return escapeHtml(match);
+          return match;
         });
-        return escaped;
+        // Inline code: `koodi`
+        out = out.replace(/`([^`\n]+)`/g, '<code class="bg-slate-100 text-slate-800 px-1 py-0.5 rounded text-[0.9em] font-mono">$1</code>');
+        // Bold + Italic: ***teksti***
+        out = out.replace(/\*\*\*([^*\n]+)\*\*\*/g, '<strong class="font-bold text-slate-900"><em>$1</em></strong>');
+        // Bold: **teksti** or __teksti__
+        out = out.replace(/\*\*([^*\n]+)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>');
+        out = out.replace(/__([^_\n]+)__/g, '<strong class="font-bold text-slate-900">$1</strong>');
+        // Italic: *teksti* or _teksti_
+        out = out.replace(/(^|[\s(>])\*([^*\n]+)\*(?=[\s.,!?:;)<]|$)/g, '$1<em>$2</em>');
+        out = out.replace(/(^|[\s(>])_([^_\n]+)_(?=[\s.,!?:;)<]|$)/g, '$1<em>$2</em>');
+        return out;
+      }
+
+      // Safe Lightweight Markdown Parser (headings, lists, quotes, bold/italic, code, links)
+      function parseMarkdownLinks(rawText) {
+        if (!rawText) return '';
+        const normalized = String(rawText).replace(/\r\n?/g, '\n');
+        const escaped = escapeHtml(normalized);
+        const lines = escaped.split('\n');
+        const htmlBlocks = [];
+        let i = 0;
+
+        while (i < lines.length) {
+          const line = lines[i];
+          const trimmed = line.trim();
+
+          if (!trimmed) {
+            i++;
+            continue;
+          }
+
+          // Horizontal rule
+          if (/^(---|___|\*\*\*)$/.test(trimmed)) {
+            htmlBlocks.push('<hr class="my-2.5 border-slate-200" />');
+            i++;
+            continue;
+          }
+
+          // Headings (#, ##, ###)
+          const h3 = trimmed.match(/^###\s+(.+)$/);
+          if (h3) {
+            htmlBlocks.push(`<h4 class="font-bold text-slate-900 text-sm md:text-base pt-1">${formatInlineMarkdown(h3[1])}</h4>`);
+            i++;
+            continue;
+          }
+          const h2 = trimmed.match(/^##\s+(.+)$/);
+          if (h2) {
+            htmlBlocks.push(`<h3 class="font-bold text-slate-900 text-base md:text-lg pt-1">${formatInlineMarkdown(h2[1])}</h3>`);
+            i++;
+            continue;
+          }
+          const h1 = trimmed.match(/^#\s+(.+)$/);
+          if (h1) {
+            htmlBlocks.push(`<h2 class="font-extrabold text-slate-900 text-lg md:text-xl pt-1">${formatInlineMarkdown(h1[1])}</h2>`);
+            i++;
+            continue;
+          }
+
+          // Blockquote (&gt; ...)
+          if (/^&gt;\s?/.test(trimmed)) {
+            const quoteLines = [];
+            while (i < lines.length && /^&gt;\s?/.test(lines[i].trim())) {
+              quoteLines.push(formatInlineMarkdown(lines[i].trim().replace(/^&gt;\s?/, '')));
+              i++;
+            }
+            htmlBlocks.push(`<blockquote class="border-l-2 border-violet-300 pl-3 py-0.5 text-slate-600 italic">${quoteLines.join('<br>')}</blockquote>`);
+            continue;
+          }
+
+          // Unordered list (- , * , • )
+          if (/^[-*•]\s+/.test(trimmed)) {
+            const items = [];
+            while (i < lines.length && /^[-*•]\s+/.test(lines[i].trim())) {
+              items.push(`<li>${formatInlineMarkdown(lines[i].trim().replace(/^[-*•]\s+/, ''))}</li>`);
+              i++;
+            }
+            htmlBlocks.push(`<ul class="list-disc pl-5 space-y-0.5">${items.join('')}</ul>`);
+            continue;
+          }
+
+          // Ordered list (1. , 2. ...)
+          if (/^\d+\.\s+/.test(trimmed)) {
+            const items = [];
+            while (i < lines.length && /^\d+\.\s+/.test(lines[i].trim())) {
+              items.push(`<li>${formatInlineMarkdown(lines[i].trim().replace(/^\d+\.\s+/, ''))}</li>`);
+              i++;
+            }
+            htmlBlocks.push(`<ol class="list-decimal pl-5 space-y-0.5">${items.join('')}</ol>`);
+            continue;
+          }
+
+          // Normal paragraph (until blank line or another block element)
+          const paraLines = [];
+          while (
+            i < lines.length &&
+            lines[i].trim() !== '' &&
+            !/^(---|___|\*\*\*)$/.test(lines[i].trim()) &&
+            !/^#{1,3}\s+/.test(lines[i].trim()) &&
+            !/^&gt;\s?/.test(lines[i].trim()) &&
+            !/^[-*•]\s+/.test(lines[i].trim()) &&
+            !/^\d+\.\s+/.test(lines[i].trim())
+          ) {
+            paraLines.push(formatInlineMarkdown(lines[i]));
+            i++;
+          }
+          if (paraLines.length > 0) {
+            htmlBlocks.push(`<p>${paraLines.join('<br>')}</p>`);
+          }
+        }
+
+        return htmlBlocks.join('');
       }
 
       // PDF Attachment Pill Renderer
