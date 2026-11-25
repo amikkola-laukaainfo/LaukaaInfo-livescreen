@@ -1410,7 +1410,7 @@
             try {
                 const { data, error } = await window.LaukaaSupabase
                     .from('posts')
-                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type), post_attachments(type, provider, storage_path, url, file_name, mime_type, sort_order)')
                     .eq('id', uuid)
                     .in('status', ['published', 'APPROVED'])
                     .in('visibility', ['public', 'link', 'unlisted'])
@@ -1443,7 +1443,7 @@
             try {
                 const { data, error } = await window.LaukaaSupabase
                     .from('posts')
-                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                    .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, youtube_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type), post_attachments(type, provider, storage_path, url, file_name, mime_type, sort_order)')
                     .eq('target_id', targetId)
                     .in('status', ['published', 'APPROVED'])
                     .in('visibility', ['public', 'link', 'unlisted'])
@@ -1666,6 +1666,28 @@
                     }
                     return u;
                 })(),
+                attachments: (() => {
+                    const list = Array.isArray(p.post_attachments) ? p.post_attachments : (Array.isArray(p.attachments) ? p.attachments : []);
+                    return list
+                        .map(att => {
+                            if (!att) return null;
+                            let url = (att.url && att.url !== '#') ? att.url : '';
+                            if (!url && att.storage_path) {
+                                const cleanPath = String(att.storage_path).replace(/^\/+/, '');
+                                url = `https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/publication-files/${cleanPath}`;
+                            }
+                            if (!url) return null;
+                            return {
+                                url,
+                                type: att.type || 'pdf',
+                                file_name: att.file_name || 'Avaa liite (PDF)',
+                                mime_type: att.mime_type || '',
+                                sort_order: att.sort_order ?? 0
+                            };
+                        })
+                        .filter(Boolean)
+                        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+                })(),
                 additionalWishes: (() => {
                     let w = p.additional_wishes || p.notes || '';
                     if (!w && Array.isArray(p.tags)) {
@@ -1814,7 +1836,7 @@
                 try {
                     const { data, error } = await window.LaukaaSupabase
                         .from('posts')
-                        .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type)')
+                        .select('id, type, title, description, content, place_id, organization_id, publisher_name, status, visibility, image_url, link, target_id, target_type, event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url, offer_start_at, offer_end_at, offer_terms, created_at, updated_at, contact_email, contact_phone, website_url, tags, post_media(url, media_type), post_links(url, title, link_type), post_attachments(type, provider, storage_path, url, file_name, mime_type, sort_order)')
                         .in('type', ['event', 'offer'])
                         .in('status', ['published', 'APPROVED'])
                         .eq('visibility', 'public')
@@ -2411,15 +2433,36 @@
             }
 
             const extraLinkEl = document.getElementById('el-extra-link');
+            const extraRowEl = document.getElementById('row-extra-link');
             const extraUrlVal = entity.extraUrl || entity.extra_url || '';
-            if (extraLinkEl) {
+            const attachmentsList = Array.isArray(entity.attachments) ? entity.attachments.filter(a => a && a.url) : [];
+            if (extraLinkEl && extraRowEl) {
+                // Poistetaan mahdolliset aiemmat dynaamiset liitelinkit
+                extraRowEl.querySelectorAll('.extra-attachment-link').forEach(el => el.remove());
+
                 if (extraUrlVal) {
                     extraLinkEl.textContent = 'Avaa lisätiedot';
                     extraLinkEl.href = extraUrlVal;
-                    extraLinkEl.parentElement.parentElement.style.display = 'flex';
+                    extraLinkEl.style.display = 'inline';
                 } else {
-                    extraLinkEl.parentElement.parentElement.style.display = 'none';
+                    extraLinkEl.style.display = 'none';
                 }
+
+                const detailsBox = extraLinkEl.parentElement;
+                attachmentsList.forEach(att => {
+                    const a = document.createElement('a');
+                    a.href = att.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = 'extra-attachment-link';
+                    a.style.display = 'block';
+                    a.style.marginTop = extraUrlVal ? '4px' : '2px';
+                    const isPdf = att.type === 'pdf' || (att.mime_type && att.mime_type.includes('pdf')) || (att.file_name && att.file_name.toLowerCase().endsWith('.pdf'));
+                    a.textContent = `${isPdf ? '📄' : '📎'} ${att.file_name || 'Avaa liite'}`;
+                    detailsBox.appendChild(a);
+                });
+
+                extraRowEl.style.display = (extraUrlVal || attachmentsList.length > 0) ? 'flex' : 'none';
             }
 
             const wishesPanel = document.getElementById('panel-wishes');
