@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2500); // Odotetaan 2.5s jotta allCompanies ehtii latautua
 });
 
-// Etusivun hero-kuvan slideshow
+// Etusivun hero-kuvan slideshow (satunnainen järjestys, 10 s vaihto, fade-siirtymä)
 document.addEventListener('DOMContentLoaded', () => {
     const heroSlideshow = document.getElementById('hero-slideshow');
     if (!heroSlideshow) return;
@@ -153,39 +153,74 @@ document.addEventListener('DOMContentLoaded', () => {
         'kuvia/hero_new_7.jpg',
         'kuvia/hero_new_8.jpg',
         'kuvia/hero_new_9.jpg',
-        'kuvia/hero_1.jpg',
+        'kuvia/hero_new_10.jpg',
+        'kuvia/hero_new_11.jpg',
+        'kuvia/hero_new_12.jpg',
         'kuvia/hero_2.jpg',
         'kuvia/hero_3.jpg',
-        'kuvia/hero_4.jpg',
         'kuvia/hero_5.jpg',
         'otsikkokuvat/kuva-2478.jpg',
         'otsikkokuvat/kuva-2527 (1).jpg',
         'otsikkokuvat/kuva-2589 (1).jpg',
-        'otsikkokuvat/hero-kuva.jpg'
+        'otsikkokuvat/hero-kuva.jpg',
+        ...Array.from({ length: 21 }, (_, i) => `assets/hero_bg/hero-${String(i + 1).padStart(2, '0')}.jpg`)
     ];
 
+    // Fisher-Yates -sekoitus satunnaiseen järjestykseen
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+
+    shuffleArray(images);
     let currentIndex = 0;
+
+    // Asetetaan ensimmäinen satunnainen kuva aktiiviseksi ja siivotaan ylimääräiset staattiset kuvat
+    const existingImgs = Array.from(heroSlideshow.querySelectorAll('.hero-nature-img'));
+    const initialImg = existingImgs.find(img => img.classList.contains('active')) || existingImgs[0];
+    if (initialImg) {
+        initialImg.src = images[0];
+        initialImg.classList.add('active');
+    }
+    existingImgs.forEach(img => {
+        if (img !== initialImg) {
+            img.remove();
+        }
+    });
 
     function nextImage() {
         currentIndex = (currentIndex + 1) % images.length;
+        if (currentIndex === 0) {
+            // Sekoitetaan uudelleen kierroksen alussa, mutta vältetään saman kuvan toistuminen heti
+            const lastSrc = images[images.length - 1];
+            shuffleArray(images);
+            if (images[0] === lastSrc && images.length > 1) {
+                [images[0], images[1]] = [images[1], images[0]];
+            }
+        }
         const nextSrc = images[currentIndex];
 
         const currentImg = heroSlideshow.querySelector('.hero-nature-img.active');
-        
+
         const newImg = document.createElement('img');
         newImg.src = nextSrc;
         newImg.alt = "Laukaa maisema";
         newImg.className = "hero-nature-img";
-        
+        newImg.onerror = () => {
+            if (newImg.parentNode) newImg.parentNode.removeChild(newImg);
+        };
+
         heroSlideshow.appendChild(newImg);
-        
+
         setTimeout(() => {
             if (currentImg) {
                 currentImg.classList.remove('active');
                 currentImg.classList.add('prev');
             }
             newImg.classList.add('active');
-            
+
             setTimeout(() => {
                 if (currentImg) {
                     const parent = currentImg.parentNode;
@@ -199,6 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
-    // Vaihdetaan kuva 6 sekunnin välein
-    setInterval(nextImage, 6000);
+    // Vaihdetaan kuva 10 sekunnin välein fade-siirtymällä
+    setInterval(nextImage, 10000);
 });
