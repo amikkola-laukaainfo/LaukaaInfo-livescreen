@@ -1931,6 +1931,11 @@
         // =========================================================================
         const urlParams = new URLSearchParams(window.location.search);
         const CURRENT_ORG_ID = urlParams.get('org') || null;
+        const URL_BOARD_CODE = urlParams.get('code') || null;
+        if (CURRENT_ORG_ID && URL_BOARD_CODE) {
+            localStorage.setItem(`board_access_code_${CURRENT_ORG_ID}`, URL_BOARD_CODE.trim().toUpperCase());
+        }
+        let BOARD_ACCESS_CODE = CURRENT_ORG_ID ? (localStorage.getItem(`board_access_code_${CURRENT_ORG_ID}`) || '') : '';
         const INITIAL_MODE = urlParams.get('mode') || null;
         const REF_POST_ID = urlParams.get('ref_post') || null;
         const REF_POST_TITLE = urlParams.get('ref_title') || null;
@@ -2642,6 +2647,15 @@
             }
         }
 
+        function unlockBoardWithCode() {
+            const input = document.getElementById('board-access-code-input');
+            const code = (input ? input.value : '').trim().toUpperCase();
+            if (!code || !CURRENT_ORG_ID) return;
+            BOARD_ACCESS_CODE = code;
+            localStorage.setItem(`board_access_code_${CURRENT_ORG_ID}`, code);
+            fetchBoardData();
+        }
+
         // =========================================================================
         // TIETOJEN HAKU SUPABASESTA (RPC: get_board_data)
         // =========================================================================
@@ -2656,8 +2670,39 @@
 
             try {
                 const { data, error } = await sb.rpc('get_board_data', {
-                    p_organization_id: CURRENT_ORG_ID
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_access_code: BOARD_ACCESS_CODE || null
                 });
+
+                if (data && data.requires_code) {
+                    const btnSuggest = document.getElementById('btn-suggest-item');
+                    const btnCreate = document.getElementById('btn-create-item');
+                    const filterTabs = document.querySelector('.filter-tabs');
+                    const workspaceBanner = document.querySelector('.workspace-banner');
+                    if (btnSuggest) btnSuggest.style.display = 'none';
+                    if (btnCreate) btnCreate.style.display = 'none';
+                    if (filterTabs) filterTabs.style.display = 'none';
+                    if (workspaceBanner) workspaceBanner.style.display = 'none';
+                    if (data.organization_name) {
+                        document.getElementById('header-org-name').innerText = data.organization_name;
+                    }
+                    container.innerHTML = `
+                        <div style="max-width: 480px; margin: 3rem auto; text-align: center; padding: 2.5rem 2rem; background: rgba(30,41,59,0.9); border: 1.5px solid rgba(139,92,246,0.35); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.35);">
+                            <div style="font-size: 2.8rem; margin-bottom: 0.7rem;">🔒</div>
+                            <h2 style="font-family:'Outfit',sans-serif; color: #fff; font-size: 1.35rem; font-weight: 800; margin: 0 0 0.5rem 0;">Vain jäsenille (Yleiskoodi)</h2>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0 0 1.4rem 0;">
+                                ${escapeHtml(data.error || 'Syötä yhdistyksen yleiskoodi avataksesi toimintataulun ja osallistuaksesi talkootehtäviin.')}
+                            </p>
+                            <form onsubmit="event.preventDefault(); unlockBoardWithCode();" style="display:flex; gap: 0.5rem; flex-direction: column;">
+                                <input id="board-access-code-input" type="text" value="${escapeHtml(BOARD_ACCESS_CODE)}" placeholder="Syötä yleiskoodi (esim. LAUKAA26)" style="padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(15,23,42,0.8); color: #fff; font-size: 0.95rem; text-align: center; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;" />
+                                <button type="submit" class="gateway-btn gateway-btn-purple" style="justify-content:center; border:none; cursor:pointer;">
+                                    <span>🔓 Avaa toimintataulu</span>
+                                </button>
+                            </form>
+                        </div>
+                    `;
+                    return;
+                }
 
                 if (error || (data && !data.success)) {
                     const errMsg = (data && data.error) || (error && error.message) || 'Tietojen lataus epäonnistui.';
@@ -2698,6 +2743,14 @@
                 }
 
                 if (data && data.success) {
+                    const btnSuggest = document.getElementById('btn-suggest-item');
+                    const btnCreate = document.getElementById('btn-create-item');
+                    const filterTabs = document.querySelector('.filter-tabs');
+                    const workspaceBanner = document.querySelector('.workspace-banner');
+                    if (btnSuggest) btnSuggest.style.display = '';
+                    if (btnCreate) btnCreate.style.display = '';
+                    if (filterTabs) filterTabs.style.display = '';
+                    if (workspaceBanner) workspaceBanner.style.display = '';
                     BOARD_DATA.organization_name = data.organization_name || 'Laukaan Testaajat ry';
                     BOARD_DATA.items = data.items || [];
                     document.getElementById('header-org-name').innerText = BOARD_DATA.organization_name;
