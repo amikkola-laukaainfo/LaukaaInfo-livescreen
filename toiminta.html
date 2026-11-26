@@ -1998,9 +1998,39 @@
             updateRoleBadge();
         }
 
+        function hasBoardChairOrGovRole() {
+            return !!(ROLE_SESSION && ROLE_SESSION.session_token);
+        }
+
         function updateRoleBadge() {
             const badge = document.getElementById('gov-role-badge');
             const nameEl = document.getElementById('gov-role-name');
+            const btnCreate = document.getElementById('btn-create-item');
+            const btnAdmin = document.getElementById('btn-admin-toggle');
+            const hasGov = hasBoardChairOrGovRole();
+
+            if (!hasGov && IS_ADMIN) {
+                IS_ADMIN = false;
+                if (CURRENT_ORG_ID) {
+                    localStorage.setItem(`toiminta_is_admin_${CURRENT_ORG_ID}`, 'false');
+                }
+            }
+
+            if (btnCreate && CURRENT_ORG_ID && BOARD_DATA && Array.isArray(BOARD_DATA.items)) {
+                btnCreate.style.display = hasGov ? 'inline-flex' : 'none';
+            }
+
+            if (btnAdmin) {
+                if (hasGov) {
+                    btnAdmin.innerText = IS_ADMIN ? '🛡️ Hallitus (Päällä)' : '🛡️ Hallitustila';
+                    if (IS_ADMIN) btnAdmin.classList.add('active');
+                    else btnAdmin.classList.remove('active');
+                } else {
+                    btnAdmin.classList.remove('active');
+                    btnAdmin.innerText = '👑 Hallituksen PJ';
+                }
+            }
+
             if (!badge || !nameEl) return;
 
             if (ROLE_SESSION && ROLE_SESSION.session_token) {
@@ -2745,15 +2775,18 @@
                 if (data && data.success) {
                     const btnSuggest = document.getElementById('btn-suggest-item');
                     const btnCreate = document.getElementById('btn-create-item');
+                    const btnAdmin = document.getElementById('btn-admin-toggle');
                     const filterTabs = document.querySelector('.filter-tabs');
                     const workspaceBanner = document.querySelector('.workspace-banner');
                     if (btnSuggest) btnSuggest.style.display = '';
-                    if (btnCreate) btnCreate.style.display = '';
+                    if (btnCreate) btnCreate.style.display = hasBoardChairOrGovRole() ? 'inline-flex' : 'none';
+                    if (btnAdmin) btnAdmin.style.display = '';
                     if (filterTabs) filterTabs.style.display = '';
                     if (workspaceBanner) workspaceBanner.style.display = '';
                     BOARD_DATA.organization_name = data.organization_name || 'Laukaan Testaajat ry';
                     BOARD_DATA.items = data.items || [];
                     document.getElementById('header-org-name').innerText = BOARD_DATA.organization_name;
+                    updateRoleBadge();
                     renderBoard();
                     if (activeItemId) {
                         openDetail(activeItemId);
@@ -3503,17 +3536,13 @@
         }
 
         function toggleAdminMode() {
+            if (!hasBoardChairOrGovRole()) {
+                openRoleAuthModal(CURRENT_ORG_ID);
+                return;
+            }
             IS_ADMIN = !IS_ADMIN;
             localStorage.setItem(`toiminta_is_admin_${CURRENT_ORG_ID}`, IS_ADMIN ? 'true' : 'false');
-            
-            const btn = document.getElementById('btn-admin-toggle');
-            if (IS_ADMIN) {
-                btn.classList.add('active');
-                btn.innerText = '🛡️ Ylläpito (Päällä)';
-            } else {
-                btn.classList.remove('active');
-                btn.innerText = '🛡️ Ylläpito';
-            }
+            updateRoleBadge();
             if (activeItemId) {
                 openDetail(activeItemId);
             }
@@ -3530,9 +3559,9 @@
             const modal = document.getElementById('detail-modal');
             const content = document.getElementById('modal-content');
 
-            // Äänestysosio
+            // Äänestysosio — näkyy vain jos voting_enabled ei ole false
             let voteHtml = '';
-            if (item.stage === 'vote' || item.votes) {
+            if (item.voting_enabled !== false && (item.stage === 'vote' || item.votes)) {
                 const votes = item.votes || { yes: 0, no: 0, cond: 0, total: 0 };
                 const yesPct = votes.total > 0 ? (votes.yes / votes.total) * 100 : 0;
                 const noPct = votes.total > 0 ? (votes.no / votes.total) * 100 : 0;
@@ -3556,11 +3585,17 @@
                                 <span class="vote-legend-item">🟡 Ehdollisena (${votes.cond})</span>
                                 <span class="vote-legend-item">🔴 Ei (${votes.no})</span>
                             </div>
+                            ${hasBoardChairOrGovRole() ? `
                             <div class="vote-options-row">
                                 <button class="vote-btn" onclick="castVote('${item.id}', 'yes')"><span>👍</span> <span>Kannatan</span></button>
                                 <button class="vote-btn" onclick="castVote('${item.id}', 'cond')"><span>✋</span> <span>Ehdollisena</span></button>
                                 <button class="vote-btn" onclick="castVote('${item.id}', 'no')"><span>👎</span> <span>Vastustan</span></button>
                             </div>
+                            ` : `
+                            <div style="margin-top:0.75rem;padding:0.65rem 0.85rem;border-radius:10px;background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);font-size:0.78rem;color:var(--text-muted);">
+                                🔒 Päätösten tekeminen ja äänestys ovat hallituksen puheenjohtajan roolissa. Jäsenenä voit osallistua talkootehtäviin ja kommentoida alla.
+                            </div>
+                            `}
                         </div>
                     </div>
                 `;
@@ -3569,12 +3604,13 @@
             // Tehtäväosio ja jatkotoimet
             const taskCount = (item.tasks && item.tasks.length) || 0;
             let tasksHtml = '';
-            if (taskCount > 0 || (IS_ADMIN && item.stage !== 'archived')) {
+            const canManageBoard = IS_ADMIN && hasBoardChairOrGovRole();
+            if (taskCount > 0 || (canManageBoard && item.stage !== 'archived')) {
                 tasksHtml = `
                     <div class="modal-section">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">
                             <div class="modal-section-title" style="margin:0;">🛠️ Jatkotoimet ja tehtävät (${taskCount})</div>
-                            ${IS_ADMIN && item.stage !== 'archived' ? `
+                            ${canManageBoard && item.stage !== 'archived' ? `
                                 <button class="btn-signup" style="background:#0284c7;font-size:0.78rem;padding:0.35rem 0.75rem;display:inline-flex;align-items:center;gap:0.35rem;" onclick="openAddTaskModal('${item.id}')">
                                     <span>➕</span> <span>Lisää tehtävä</span>
                                 </button>
@@ -3628,9 +3664,9 @@
                 `;
             }
 
-            // Ylläpitäjän ohjauspaneeli
+            // Ylläpitäjän ohjauspaneeli (vain hallituksen PJ / valtuutettu rooli-istunto)
             let adminHtml = '';
-            if (IS_ADMIN) {
+            if (IS_ADMIN && hasBoardChairOrGovRole()) {
                 const hasRole = !!(ROLE_SESSION && ROLE_SESSION.session_token);
                 const isArchived = item.stage === 'archived';
                 adminHtml = `
