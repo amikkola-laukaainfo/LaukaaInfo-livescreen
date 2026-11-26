@@ -2506,7 +2506,10 @@
                             <div style="color:var(--light-text);">klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit', timeZone: 'Europe/Helsinki'})}</div>
                         </div>`;
                 } else if (s) {
-                    schedHtml = `<div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric', timeZone: 'Europe/Helsinki'})}</div>`;
+                    const startTime = s.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Helsinki' });
+                    const hasStartTime = startTime && startTime !== '00.00' && startTime !== '00:00';
+                    schedHtml = `<div style="font-size:1.15rem; font-weight:700; color:var(--secondary-blue); margin-bottom:0.5rem;">${s.toLocaleDateString('fi-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric', timeZone: 'Europe/Helsinki'})}</div>`
+                              + (hasStartTime ? `<div style="font-size:1rem; color:var(--light-text);">🕐 klo ${startTime}</div>` : '');
                 }
 
                 // Sivupalkin lipunmyynti- ja osallistumiskaavake-napit
@@ -2697,7 +2700,11 @@
                                     <p><strong>📅 Päättyy:</strong> ${endDay} klo ${endTime}</p>`;
                     }
                 } else if (start) {
-                    dateHtml = `<p><strong>📅 Päivä:</strong> ${formatDate(entity.event.startDate)}</p>`;
+                    const startDay = start.toLocaleDateString('fi-FI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Helsinki' });
+                    const startTime = start.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Helsinki' });
+                    const hasStartTime = startTime && startTime !== '00.00' && startTime !== '00:00';
+                    dateHtml = `<p><strong>📅 Päivä:</strong> ${startDay}</p>`
+                             + (hasStartTime ? `<p><strong>🕐 Alkaa:</strong> klo ${startTime}</p>` : '');
                 }
 
                 specEl.innerHTML = `
