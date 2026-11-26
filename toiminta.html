@@ -1944,6 +1944,7 @@
         let PUBLIC_ORGANIZATIONS = [];
 
         let USER_NAME = localStorage.getItem('toiminta_user_name') || 'Matti K.';
+        let IP_LOCKED_NAME = null;
         let USER_FINGERPRINT = localStorage.getItem('toiminta_user_fp');
         if (!USER_FINGERPRINT) {
             USER_FINGERPRINT = 'fp_' + Math.random().toString(36).substring(2, 10);
@@ -1983,6 +1984,10 @@
         let activeItemId = urlParams.get('item') || null;
 
         function promptChangeUserName() {
+            if (IP_LOCKED_NAME && !hasBoardChairOrGovRole()) {
+                alert(`Nimesi on lukittu tähän IP-osoitteeseen: "${IP_LOCKED_NAME}". Et voi vaihtaa nimeä toiseksi samassa osoitteessa.`);
+                return;
+            }
             const newName = prompt('Anna nimesi ilmoittautumisia ja kommentteja varten:', USER_NAME);
             if (newName && newName.trim()) {
                 USER_NAME = newName.trim();
@@ -1994,7 +1999,13 @@
         }
 
         function updateUserBadge() {
-            document.getElementById('current-user-name').innerText = USER_NAME;
+            const nameEl = document.getElementById('current-user-name');
+            if (nameEl) {
+                nameEl.innerText = IP_LOCKED_NAME ? `${USER_NAME} 🔒` : USER_NAME;
+                nameEl.title = IP_LOCKED_NAME
+                    ? `Nimi on lukittu tähän IP-osoitteeseen (${IP_LOCKED_NAME})`
+                    : 'Vaihda oma nimesi';
+            }
             updateRoleBadge();
         }
 
@@ -2786,7 +2797,24 @@
                     BOARD_DATA.organization_name = data.organization_name || 'Laukaan Testaajat ry';
                     BOARD_DATA.items = data.items || [];
                     document.getElementById('header-org-name').innerText = BOARD_DATA.organization_name;
-                    updateRoleBadge();
+
+                    // Tarkista IP-kohtainen nimilukko tälle yhdistykselle (095)
+                    try {
+                        const { data: lockData } = await sb.rpc('get_board_ip_lock', {
+                            p_organization_id: CURRENT_ORG_ID
+                        });
+                        if (lockData && lockData.locked && lockData.locked_name) {
+                            IP_LOCKED_NAME = lockData.locked_name;
+                            USER_NAME = lockData.locked_name;
+                            localStorage.setItem('toiminta_user_name', USER_NAME);
+                        } else {
+                            IP_LOCKED_NAME = null;
+                        }
+                    } catch (lockErr) {
+                        // Jos migraatio 095 ei vielä ajettu, ohitetaan siististi
+                    }
+
+                    updateUserBadge();
                     renderBoard();
                     if (activeItemId) {
                         openDetail(activeItemId);
@@ -3786,7 +3814,7 @@
             if (!sb) return;
 
             try {
-                const { error } = await sb.rpc('submit_board_vote', {
+                const { data, error } = await sb.rpc('submit_board_vote', {
                     p_item_id: itemId,
                     p_voter_name: USER_NAME,
                     p_voter_fingerprint: USER_FINGERPRINT,
@@ -3794,6 +3822,14 @@
                 });
                 if (error) {
                     alert('Äänestyksessä tapahtui virhe: ' + error.message);
+                } else if (data && data.success === false) {
+                    if (data.ip_locked && data.locked_name) {
+                        IP_LOCKED_NAME = data.locked_name;
+                        USER_NAME = data.locked_name;
+                        localStorage.setItem('toiminta_user_name', USER_NAME);
+                        updateUserBadge();
+                    }
+                    alert(data.error || 'Äänestys epäonnistui.');
                 } else {
                     await fetchBoardData();
                 }
@@ -3826,6 +3862,12 @@
                     }
                     await fetchBoardData();
                 } else {
+                    if (data && data.ip_locked && data.locked_name) {
+                        IP_LOCKED_NAME = data.locked_name;
+                        USER_NAME = data.locked_name;
+                        localStorage.setItem('toiminta_user_name', USER_NAME);
+                        updateUserBadge();
+                    }
                     alert(data?.error || 'Ilmoittautuminen epäonnistui.');
                 }
             } catch (err) {
