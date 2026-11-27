@@ -3305,26 +3305,32 @@
             }
             const sb = window.LaukaaSupabase || window.supabaseClient;
             if (!sb) return;
+
+            let targetTask = null;
+            BOARD_DATA.items.forEach(item => {
+                if (item.tasks) {
+                    item.tasks.forEach(t => {
+                        if (t.id === taskId) targetTask = t;
+                    });
+                }
+            });
+            if (!targetTask) return;
+            const newValue = !targetTask[field];
+
             try {
                 const { data, error } = await sb.rpc('toggle_board_task_status', {
+                    p_organization_id: CURRENT_ORG_ID,
                     p_task_id: taskId,
-                    p_field: field
+                    p_field: field,
+                    p_value: newValue,
+                    p_session_token: ROLE_SESSION?.session_token || null
                 });
                 if (error || (data && !data.success)) {
                     alert((data && data.error) || error?.message || 'Kuittaus epäonnistui.');
                     return;
                 }
                 // Päivitä lokaali data
-                BOARD_DATA.items.forEach(item => {
-                    if (item.tasks) {
-                        item.tasks.forEach(t => {
-                            if (t.id === taskId) {
-                                if (field === 'is_agreed') t.is_agreed = !t.is_agreed;
-                                if (field === 'is_done') t.is_done = !t.is_done;
-                            }
-                        });
-                    }
-                });
+                targetTask[field] = newValue;
                 renderTapahtumatila();
                 updateMissingPanel();
             } catch (err) {
