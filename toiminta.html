@@ -1280,6 +1280,9 @@
                 <button class="btn-signup" id="btn-export-pdf" onclick="openPdfExportModal()" style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #0284c7, #0369a1);color:#fff;" title="Vie ja tulosta valitut päätökset PDF:ksi">
                     <span>📄</span> <span>Vie PDF</span>
                 </button>
+                <button class="btn-signup" id="btn-status-report" onclick="openStatusReportModal()" style="display:none;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #7c3aed, #6d28d9);color:#fff;" title="Luo tilannekatsaus WhatsApp-viestiksi tai tarkistuslistaksi">
+                    <span>📋</span> <span>Tilannekatsaus</span>
+                </button>
                 <button class="btn-toggle-admin" id="btn-admin-toggle" onclick="toggleAdminMode()" title="Vaihda ylläpitäjän ja jäsenen näkymän välillä">
                     🛡️ Ylläpito
                 </button>
@@ -1314,6 +1317,12 @@
                     <span>Ilmoittau<br class="mobile-break">tunut</span>
                 </div>
             </div>
+            <!-- Ohjekorttilinkki (näkyy jos board_guide_url on asetettu) -->
+            <div id="guide-card-banner" style="display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.08);">
+                <a id="btn-guide-card" href="#" target="_blank" rel="noopener" style="display:none;align-items:center;gap:0.5rem;text-decoration:none;background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.1));border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;color:#34d399;">
+                    <span>📖</span> <span class="guide-label">Tapahtuman ohjeet ja liitteet</span> <span style="opacity:0.6;">→</span>
+                </a>
+            </div>
         </section>
 
         <!-- SUODATINTABIT -->
@@ -1339,6 +1348,18 @@
             <button class="tab-btn" id="tab-archive" onclick="setFilter('archived', this)">
                 📦 Arkisto <span class="tab-count" id="count-archived">–</span>
             </button>
+            <button class="tab-btn" id="tab-tapahtumatila" onclick="setFilter('tapahtumatila', this)" style="background:linear-gradient(135deg,rgba(217,119,6,0.18),rgba(180,83,9,0.12));border-color:rgba(251,191,36,0.3);color:#fbbf24;">
+                🎄 Tapahtumatila
+            </button>
+        </div>
+
+        <!-- 🚨 MITÄ PUUTTUU VIELÄ? (koostetaan automaattisesti BOARD_DATA:sta) -->
+        <div id="missing-panel" style="display:none;margin:0 0 1rem 0;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.25);border-radius:14px;padding:0.9rem 1.1rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleMissingPanel()">
+                <span style="font-weight:800;font-size:0.9rem;color:#fca5a5;">🚨 Mitä puuttuu vielä?</span>
+                <span id="missing-toggle-icon" style="color:#fca5a5;font-size:0.85rem;">▼</span>
+            </div>
+            <div id="missing-list" style="margin-top:0.65rem;"></div>
         </div>
 
         <!-- ASIALISTA (CARDS) -->
@@ -1350,6 +1371,52 @@
         </section>
 
     </main>
+
+    <!-- 📋 TILANNEKATSAUS-MODAALI -->
+    <div class="modal-overlay" id="status-report-modal" style="display:none;">
+        <div class="modal-card" style="max-width:640px;width:95%;">
+            <button class="modal-close" onclick="closeStatusReportModal()">&times;</button>
+            <h3 style="font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:0.3rem;">📋 Luo tilannekatsaus</h3>
+            <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;">Valitse mitä katsaukseen sisällytetään, esikatsele ja kopioi WhatsApp-viestiksi.</p>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+                <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;cursor:pointer;">
+                    <input type="checkbox" id="sr-include-done" checked> ✅ Valmiit / päätetyt asiat
+                </label>
+                <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;cursor:pointer;">
+                    <input type="checkbox" id="sr-include-progress" checked> 🟡 Kesken olevat asiat
+                </label>
+                <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;cursor:pointer;">
+                    <input type="checkbox" id="sr-include-missing" checked> 🔴 Puuttuvat talkoolaiset &amp; vahvistukset
+                </label>
+                <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;cursor:pointer;">
+                    <input type="checkbox" id="sr-include-guide"> 📖 Ohje- ja tietokorttilinkki
+                </label>
+            </div>
+            <div style="margin-bottom:0.75rem;">
+                <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.3rem;">Katsauksen otsikko</label>
+                <input type="text" id="sr-title" placeholder="🎄 Joulunavauksen tilanne DD.MM." style="width:100%;background:var(--bg);border:1px solid var(--card-border);border-radius:10px;padding:0.5rem 0.85rem;color:var(--text-main);font-size:0.9rem;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:0.9rem;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">
+                    <span style="font-size:0.78rem;font-weight:700;color:var(--text-muted);">Esikatselu</span>
+                    <button onclick="generateStatusReport()" style="font-size:0.75rem;padding:0.25rem 0.75rem;background:rgba(255,255,255,0.08);border:1px solid var(--card-border);border-radius:8px;color:var(--text-muted);cursor:pointer;">🔄 Päivitä</button>
+                </div>
+                <textarea id="sr-preview" readonly rows="12" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--card-border);border-radius:10px;padding:0.75rem;color:var(--text-main);font-size:0.8rem;font-family:monospace;line-height:1.5;resize:vertical;box-sizing:border-box;"></textarea>
+            </div>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+                <button onclick="copyStatusReport()" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1.1rem;background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">
+                    📋 Kopioi WhatsAppiin
+                </button>
+                <button onclick="printStatusReport()" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.07);border:1px solid var(--card-border);border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;color:var(--text-main);">
+                    🖨️ Tulosta tarkistuslista
+                </button>
+                <button onclick="closeStatusReportModal()" style="margin-left:auto;padding:0.5rem 1rem;background:transparent;border:1px solid var(--card-border);border-radius:10px;font-size:0.85rem;cursor:pointer;color:var(--text-muted);">
+                    Sulje
+                </button>
+            </div>
+            <div id="sr-copy-feedback" style="display:none;margin-top:0.5rem;font-size:0.82rem;color:#34d399;font-weight:600;">✓ Kopioitu leikepöydälle!</div>
+        </div>
+    </div>
 
     <!-- DETALJI-MODAALI (Asian käsittely & tehtävät) -->
     <div class="modal-overlay" id="detail-modal">
@@ -1977,6 +2044,8 @@
         let BOARD_DATA = {
             organization_id: CURRENT_ORG_ID,
             organization_name: 'Laukaan Testaajat ry',
+            board_guide_url: null,
+            board_guide_label: 'Tapahtuman ohjeet ja liitteet',
             items: []
         };
 
@@ -2796,7 +2865,25 @@
                     if (workspaceBanner) workspaceBanner.style.display = '';
                     BOARD_DATA.organization_name = data.organization_name || 'Laukaan Testaajat ry';
                     BOARD_DATA.items = data.items || [];
+                    BOARD_DATA.board_guide_url = data.board_guide_url || null;
+                    BOARD_DATA.board_guide_label = data.board_guide_label || 'Tapahtuman ohjeet ja liitteet';
                     document.getElementById('header-org-name').innerText = BOARD_DATA.organization_name;
+
+                    // Päivitä ohjekorttilinkki banneriin (migration 099)
+                    const guideBtn = document.getElementById('btn-guide-card');
+                    const guideBanner = document.getElementById('guide-card-banner');
+                    if (guideBtn) {
+                        if (BOARD_DATA.board_guide_url) {
+                            guideBtn.href = BOARD_DATA.board_guide_url;
+                            guideBtn.title = BOARD_DATA.board_guide_label;
+                            guideBtn.querySelector('span.guide-label').textContent = BOARD_DATA.board_guide_label;
+                            guideBtn.style.display = 'inline-flex';
+                            if (guideBanner) guideBanner.style.display = '';
+                        } else {
+                            guideBtn.style.display = 'none';
+                            if (guideBanner) guideBanner.style.display = 'none';
+                        }
+                    }
 
                     // Tarkista IP-kohtainen nimilukko tälle yhdistykselle (095)
                     try {
@@ -2836,6 +2923,7 @@
             });
 
             updateStats();
+            updateMissingPanel();
 
             if (items.length === 0) {
                 container.innerHTML = `
@@ -3127,13 +3215,357 @@
             currentFilter = filter;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             if (el) el.classList.add('active');
+            // Näytä/piilota tilannekatsausnappi tapahtumatilassa
+            const srBtn = document.getElementById('btn-status-report');
+            if (srBtn) srBtn.style.display = (filter === 'tapahtumatila') ? 'inline-flex' : 'none';
             if (filter === 'archived') {
                 renderArchivedBoard();
             } else if (filter === 'suggestions') {
                 renderSuggestionsBoard();
+            } else if (filter === 'tapahtumatila') {
+                renderTapahtumatila();
             } else {
                 renderBoard();
             }
+        }
+
+        // =========================================================================
+        // 🚨 MITÄ PUUTTUU VIELÄ? -PANEELI
+        // =========================================================================
+        let missingPanelOpen = true;
+
+        function updateMissingPanel() {
+            const panel = document.getElementById('missing-panel');
+            const list = document.getElementById('missing-list');
+            if (!panel || !list) return;
+
+            const issues = [];
+            const items = BOARD_DATA.items || [];
+            items.forEach(item => {
+                if (item.stage === 'archived' || item.stage === 'done') return;
+                // Vastuuhenkilö puuttuu
+                if (!item.lead && (item.stage === 'in_progress' || item.stage === 'discussion')) {
+                    issues.push(`👤 Vastuuhenkilö puuttuu: <strong>${escapeHtml(item.title)}</strong>`);
+                }
+                // Talkoovajaus
+                if (item.tasks && item.tasks.length > 0) {
+                    item.tasks.forEach(t => {
+                        const signed = t.signups ? t.signups.length : 0;
+                        const needed = (t.required || 0) - signed;
+                        if (needed > 0) {
+                            issues.push(`🛠️ Talkoolaisia puuttuu <strong>${needed} kpl</strong> — tehtävä: <em>${escapeHtml(t.name)}</em> (${escapeHtml(item.title)})`);
+                        }
+                    });
+                }
+                // Päätös avoin äänestyksessä
+                if (item.stage === 'vote') {
+                    issues.push(`🗳️ Äänestys auki: <strong>${escapeHtml(item.title)}</strong>`);
+                }
+            });
+
+            if (issues.length === 0) {
+                panel.style.display = 'none';
+                return;
+            }
+            panel.style.display = '';
+            if (missingPanelOpen) {
+                list.style.display = '';
+                list.innerHTML = `<ul style="margin:0;padding-left:1.1rem;font-size:0.83rem;color:#fca5a5;line-height:1.9;">${
+                    issues.map(i => `<li>${i}</li>`).join('')
+                }</ul>`;
+            } else {
+                list.style.display = 'none';
+            }
+        }
+
+        function toggleMissingPanel() {
+            missingPanelOpen = !missingPanelOpen;
+            const icon = document.getElementById('missing-toggle-icon');
+            if (icon) icon.textContent = missingPanelOpen ? '▼' : '▶';
+            updateMissingPanel();
+        }
+
+        // =========================================================================
+        // 🎄 TAPAHTUMATILA-NÄKYMÄ
+        // =========================================================================
+        async function toggleTaskCheck(taskId, field) {
+            if (!hasBoardChairOrGovRole()) {
+                alert('Kuittaukset vaativat hallitusroolin.');
+                return;
+            }
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) return;
+            try {
+                const { data, error } = await sb.rpc('toggle_board_task_status', {
+                    p_task_id: taskId,
+                    p_field: field
+                });
+                if (error || (data && !data.success)) {
+                    alert((data && data.error) || error?.message || 'Kuittaus epäonnistui.');
+                    return;
+                }
+                // Päivitä lokaali data
+                BOARD_DATA.items.forEach(item => {
+                    if (item.tasks) {
+                        item.tasks.forEach(t => {
+                            if (t.id === taskId) {
+                                if (field === 'is_agreed') t.is_agreed = !t.is_agreed;
+                                if (field === 'is_done') t.is_done = !t.is_done;
+                            }
+                        });
+                    }
+                });
+                renderTapahtumatila();
+                updateMissingPanel();
+            } catch (err) {
+                console.error('toggleTaskCheck failed:', err);
+            }
+        }
+
+        function renderTapahtumatila() {
+            const container = document.getElementById('items-container');
+            if (!container) return;
+
+            const canToggle = hasBoardChairOrGovRole();
+            const activeItems = (BOARD_DATA.items || []).filter(i =>
+                i.stage === 'in_progress' || i.stage === 'discussion' || i.stage === 'vote' || i.stage === 'decided'
+            );
+
+            // Laske yhteenveto
+            const allTasks = [];
+            activeItems.forEach(item => { if (item.tasks) allTasks.push(...item.tasks); });
+            const totalTasks = allTasks.length;
+            const doneTasks = allTasks.filter(t => t.is_done).length;
+            const agreedTasks = allTasks.filter(t => t.is_agreed).length;
+            const totalSignupNeeded = allTasks.reduce((s, t) => s + (t.required || 0), 0);
+            const totalSigned = allTasks.reduce((s, t) => s + (t.signups ? t.signups.length : 0), 0);
+            const missingVols = Math.max(0, totalSignupNeeded - totalSigned);
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' });
+
+            if (activeItems.length === 0) {
+                container.innerHTML = `<div style="text-align:center;padding:3rem 1rem;"><p style="color:var(--text-muted);">Ei aktiivisia asioita tapahtumatilassa.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <!-- Yhteenvetopalkki -->
+                <div style="grid-column:1/-1;background:linear-gradient(135deg,rgba(217,119,6,0.12),rgba(180,83,9,0.08));border:1px solid rgba(251,191,36,0.25);border-radius:14px;padding:1rem 1.25rem;margin-bottom:0.5rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+                        <div>
+                            <div style="font-size:1rem;font-weight:800;color:#fbbf24;">🎄 Tapahtumatila — ${dateStr}</div>
+                            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.2rem;">${BOARD_DATA.organization_name}</div>
+                        </div>
+                        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                            <div style="text-align:center;">
+                                <div style="font-size:1.3rem;font-weight:900;color:#34d399;">${doneTasks}/${totalTasks}</div>
+                                <div style="font-size:0.72rem;color:var(--text-muted);">Tehtävää<br>valmis</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:1.3rem;font-weight:900;color:#60a5fa;">${agreedTasks}/${totalTasks}</div>
+                                <div style="font-size:0.72rem;color:var(--text-muted);">Sovittu</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:1.3rem;font-weight:900;color:${missingVols > 0 ? '#fca5a5' : '#34d399'};">${totalSigned}/${totalSignupNeeded}</div>
+                                <div style="font-size:0.72rem;color:var(--text-muted);">Talkoolaiset</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${activeItems.map(item => {
+                    const tasks = item.tasks || [];
+                    if (tasks.length === 0) return '';
+                    const itemDone = tasks.filter(t => t.is_done).length;
+                    const itemTotal = tasks.length;
+                    const stageIcon = getStageIcon(item.stage);
+
+                    const taskRows = tasks.map(t => {
+                        const signed = t.signups ? t.signups.length : 0;
+                        const signerNames = t.signups && t.signups.length > 0
+                            ? t.signups.map(s => escapeHtml(s.name || '?')).join(', ')
+                            : '<em style="color:var(--text-muted)">Ei ilmoittautuneita</em>';
+                        const isAgreed = t.is_agreed;
+                        const isDone = t.is_done;
+                        const agreeBtnStyle = isAgreed
+                            ? 'background:rgba(96,165,250,0.25);border-color:rgba(96,165,250,0.5);color:#93c5fd;'
+                            : 'background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--text-muted);';
+                        const doneBtnStyle = isDone
+                            ? 'background:rgba(52,211,153,0.25);border-color:rgba(52,211,153,0.5);color:#34d399;'
+                            : 'background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--text-muted);';
+                        const toggleAttr = canToggle ? '' : 'disabled title="Vaatii hallitusroolin"';
+                        return `
+                            <div style="padding:0.6rem 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:0.75rem;flex-wrap:wrap;">
+                                <div style="flex:1;min-width:140px;">
+                                    <div style="font-size:0.85rem;font-weight:700;color:var(--text-main);">${escapeHtml(t.name)}</div>
+                                    <div style="font-size:0.76rem;color:var(--text-muted);margin-top:0.15rem;">
+                                        👥 ${signed}/${t.required || 0}: ${signerNames}
+                                    </div>
+                                </div>
+                                <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+                                    <button onclick="${canToggle ? `toggleTaskCheck('${t.id}','is_agreed')` : ''}" ${toggleAttr}
+                                        style="font-size:0.72rem;padding:0.22rem 0.6rem;border:1px solid;border-radius:7px;cursor:${canToggle ? 'pointer' : 'default'};font-weight:700;${agreeBtnStyle}">
+                                        ${isAgreed ? '✓' : '○'} Sovittu
+                                    </button>
+                                    <button onclick="${canToggle ? `toggleTaskCheck('${t.id}','is_done')` : ''}" ${toggleAttr}
+                                        style="font-size:0.72rem;padding:0.22rem 0.6rem;border:1px solid;border-radius:7px;cursor:${canToggle ? 'pointer' : 'default'};font-weight:700;${doneBtnStyle}">
+                                        ${isDone ? '✓' : '○'} Valmis
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    return `
+                        <div style="grid-column:1/-1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1rem 1.1rem;cursor:default;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;flex-wrap:wrap;gap:0.4rem;">
+                                <div style="font-size:0.9rem;font-weight:800;color:var(--text-main);">${stageIcon} ${escapeHtml(item.title)}</div>
+                                <div style="font-size:0.78rem;padding:0.2rem 0.6rem;border-radius:8px;background:rgba(255,255,255,0.07);color:var(--text-muted);">${itemDone}/${itemTotal} valmis</div>
+                            </div>
+                            ${item.lead ? `<div style="font-size:0.76rem;color:var(--text-muted);margin-bottom:0.4rem;">👤 Vastuu: ${escapeHtml(item.lead)}</div>` : ''}
+                            ${taskRows}
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        // =========================================================================
+        // 📋 TILANNEKATSAUS-MODAALI
+        // =========================================================================
+        function openStatusReportModal() {
+            // Alusta otsikko
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' });
+            const titleEl = document.getElementById('sr-title');
+            if (titleEl && !titleEl.value) {
+                titleEl.value = `🎄 ${BOARD_DATA.organization_name} – tilanne ${dateStr}`;
+            }
+            generateStatusReport();
+            document.getElementById('status-report-modal').style.display = 'flex';
+        }
+
+        function closeStatusReportModal() {
+            document.getElementById('status-report-modal').style.display = 'none';
+        }
+
+        function generateStatusReport() {
+            const includeDone = document.getElementById('sr-include-done')?.checked;
+            const includeProgress = document.getElementById('sr-include-progress')?.checked;
+            const includeMissing = document.getElementById('sr-include-missing')?.checked;
+            const includeGuide = document.getElementById('sr-include-guide')?.checked;
+            const title = document.getElementById('sr-title')?.value?.trim() || '';
+
+            const items = BOARD_DATA.items || [];
+            const lines = [];
+
+            if (title) lines.push(title, '');
+
+            // ✅ Valmiit / päätetyt
+            if (includeDone) {
+                const doneItems = items.filter(i => i.stage === 'decided' || i.stage === 'done');
+                if (doneItems.length > 0) {
+                    lines.push('✅ VALMIIT / PÄÄTETYT');
+                    doneItems.forEach(i => lines.push(`- ${i.title}`));
+                    lines.push('');
+                }
+                // Tehtävät joissa kaikki is_done
+                const fullyDoneTaskItems = items.filter(i =>
+                    i.stage === 'in_progress' && i.tasks && i.tasks.length > 0 &&
+                    i.tasks.every(t => t.is_done)
+                );
+                fullyDoneTaskItems.forEach(i => {
+                    lines.push(`✅ ${i.title} (kaikki tehtävät valmiina)`);
+                });
+                if (fullyDoneTaskItems.length > 0) lines.push('');
+            }
+
+            // 🟡 Kesken
+            if (includeProgress) {
+                const progressItems = items.filter(i =>
+                    (i.stage === 'in_progress' || i.stage === 'discussion' || i.stage === 'vote') &&
+                    !(i.tasks && i.tasks.length > 0 && i.tasks.every(t => t.is_done))
+                );
+                if (progressItems.length > 0) {
+                    lines.push('🟡 KESKEN');
+                    progressItems.forEach(i => {
+                        const tasks = i.tasks || [];
+                        const done = tasks.filter(t => t.is_done).length;
+                        const suffix = tasks.length > 0 ? ` (${done}/${tasks.length} tehtävää)` : '';
+                        const hasUnagreed = tasks.some(t => !t.is_agreed);
+                        const marker = i.stage === 'vote' ? '🗳️ ' : (hasUnagreed && tasks.length > 0 ? '⚠️ ' : '');
+                        lines.push(`- ${marker}${i.title}${suffix}`);
+                    });
+                    lines.push('');
+                }
+            }
+
+            // 🔴 Puuttuvat talkoolaiset & vahvistukset
+            if (includeMissing) {
+                const missingLines = [];
+                items.forEach(item => {
+                    if (item.stage === 'archived' || item.stage === 'done') return;
+                    if (!item.lead && (item.stage === 'in_progress' || item.stage === 'discussion')) {
+                        missingLines.push(`- Vastuuhenkilö puuttuu: ${item.title}`);
+                    }
+                    if (item.tasks) {
+                        item.tasks.forEach(t => {
+                            const needed = (t.required || 0) - (t.signups ? t.signups.length : 0);
+                            if (needed > 0) {
+                                missingLines.push(`- Talkoolaisia puuttuu ${needed} kpl: ${t.name} (${item.title})`);
+                            }
+                        });
+                    }
+                });
+                if (missingLines.length > 0) {
+                    lines.push('🔴 PUUTTUU / VAHVISTAMATTA');
+                    missingLines.forEach(l => lines.push(l));
+                    lines.push('');
+                }
+            }
+
+            // 📖 Ohjelinkki
+            if (includeGuide && BOARD_DATA.board_guide_url) {
+                lines.push('📖 OHJEET JA LIITTEET');
+                lines.push(`${BOARD_DATA.board_guide_label || 'Tapahtuman ohjeet'}: ${BOARD_DATA.board_guide_url}`);
+                lines.push('');
+            }
+
+            // Aikaleima
+            const now = new Date();
+            lines.push(`Päivitetty ${now.toLocaleDateString('fi-FI')} klo ${now.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })}`);
+
+            const preview = document.getElementById('sr-preview');
+            if (preview) preview.value = lines.join('\n');
+        }
+
+        async function copyStatusReport() {
+            const preview = document.getElementById('sr-preview');
+            if (!preview) return;
+            try {
+                await navigator.clipboard.writeText(preview.value);
+                const fb = document.getElementById('sr-copy-feedback');
+                if (fb) {
+                    fb.style.display = '';
+                    setTimeout(() => { fb.style.display = 'none'; }, 2500);
+                }
+            } catch (e) {
+                alert('Kopioi teksti käsin yllä olevasta kentästä.');
+            }
+        }
+
+        function printStatusReport() {
+            const preview = document.getElementById('sr-preview');
+            if (!preview) return;
+            const content = preview.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+            const w = window.open('', '_blank');
+            if (!w) return;
+            w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Tilannekatsaus</title>
+                <style>body{font-family:sans-serif;padding:2rem;max-width:600px;margin:auto;font-size:14px;line-height:1.7;}</style>
+                </head><body>${content}</body></html>`);
+            w.document.close();
+            w.print();
         }
 
         // =========================================================================
