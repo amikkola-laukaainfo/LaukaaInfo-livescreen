@@ -1357,7 +1357,7 @@
         <div id="missing-panel" style="display:none;margin:0 0 1rem 0;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.25);border-radius:14px;padding:0.9rem 1.1rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleMissingPanel()">
                 <span style="font-weight:800;font-size:0.9rem;color:#fca5a5;">🚨 Mitä puuttuu vielä?</span>
-                <span id="missing-toggle-icon" style="color:#fca5a5;font-size:0.85rem;">▼</span>
+                <span id="missing-toggle-icon" style="color:#fca5a5;font-size:0.85rem;">▶</span>
             </div>
             <div id="missing-list" style="margin-top:0.65rem;"></div>
         </div>
@@ -3232,7 +3232,7 @@
         // =========================================================================
         // 🚨 MITÄ PUUTTUU VIELÄ? -PANEELI
         // =========================================================================
-        let missingPanelOpen = true;
+        let missingPanelOpen = false;
 
         function updateMissingPanel() {
             const panel = document.getElementById('missing-panel');
@@ -3384,7 +3384,7 @@
                     const taskRows = tasks.map(t => {
                         const signed = t.signups ? t.signups.length : 0;
                         const signerNames = t.signups && t.signups.length > 0
-                            ? t.signups.map(s => escapeHtml(s.name || '?')).join(', ')
+                            ? t.signups.map(s => escapeHtml(typeof s === 'string' ? s : (s.name || s.participant_name || '?'))).join(', ')
                             : '<em style="color:var(--text-muted)">Ei ilmoittautuneita</em>';
                         const isAgreed = t.is_agreed;
                         const isDone = t.is_done;
