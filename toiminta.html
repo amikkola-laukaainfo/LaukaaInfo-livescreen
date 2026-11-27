@@ -3505,7 +3505,11 @@
                     progressItems.forEach(i => {
                         const tasks = i.tasks || [];
                         const done = tasks.filter(t => t.is_done).length;
-                        const suffix = tasks.length > 0 ? ` (${done}/${tasks.length} tehtävää)` : '';
+                        const signedCount = tasks.reduce((sum, t) => sum + (t.signups ? t.signups.length : 0), 0);
+                        const reqCount = tasks.reduce((sum, t) => sum + (t.required || 0), 0);
+                        const suffix = tasks.length > 0
+                            ? (reqCount > 0 ? ` (${done}/${tasks.length} valmis, tekijöitä ${signedCount}/${reqCount})` : ` (${done}/${tasks.length} valmis)`)
+                            : '';
                         const hasUnagreed = tasks.some(t => !t.is_agreed);
                         const marker = i.stage === 'vote' ? '🗳️ ' : (hasUnagreed && tasks.length > 0 ? '⚠️ ' : '');
                         lines.push(`- ${marker}${i.title}${suffix}`);
