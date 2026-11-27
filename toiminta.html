@@ -2956,6 +2956,15 @@
                     `;
                 }
 
+                let guideBadge = '';
+                if (item.guide_url) {
+                    guideBadge = `
+                        <a href="${escapeHtml(item.guide_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="item-badge-pill" style="color:#34d399;text-decoration:none;border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);">
+                            <span>📖</span> <span>${escapeHtml(item.guide_label || 'Lisätietoa')}</span>
+                        </a>
+                    `;
+                }
+
                 return `
                     <article class="item-card" onclick="openDetail('${item.id}')">
                         <div class="item-card-top">
@@ -2979,6 +2988,7 @@
                                 </div>
                                 ${taskBadge}
                                 ${wallBadge}
+                                ${guideBadge}
                             </div>
                             <span class="item-action-link">Avaa asia &rarr;</span>
                         </div>
@@ -3421,7 +3431,10 @@
                         <div style="grid-column:1/-1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1rem 1.1rem;cursor:default;">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;flex-wrap:wrap;gap:0.4rem;">
                                 <div style="font-size:0.9rem;font-weight:800;color:var(--text-main);">${stageIcon} ${escapeHtml(item.title)}</div>
-                                <div style="font-size:0.78rem;padding:0.2rem 0.6rem;border-radius:8px;background:rgba(255,255,255,0.07);color:var(--text-muted);">${itemDone}/${itemTotal} valmis</div>
+                                <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+                                    ${item.guide_url ? `<a href="${escapeHtml(item.guide_url)}" target="_blank" rel="noopener" style="font-size:0.75rem;padding:0.2rem 0.6rem;border-radius:8px;background:rgba(16,185,129,0.14);border:1px solid rgba(16,185,129,0.3);color:#34d399;text-decoration:none;font-weight:700;">📖 ${escapeHtml(item.guide_label || 'Lisätietoa')} →</a>` : ''}
+                                    <div style="font-size:0.78rem;padding:0.2rem 0.6rem;border-radius:8px;background:rgba(255,255,255,0.07);color:var(--text-muted);">${itemDone}/${itemTotal} valmis</div>
+                                </div>
                             </div>
                             ${item.lead ? `<div style="font-size:0.76rem;color:var(--text-muted);margin-bottom:0.4rem;">👤 Vastuu: ${escapeHtml(item.lead)}</div>` : ''}
                             ${taskRows}
@@ -3525,11 +3538,19 @@
                 }
             }
 
-            // 📖 Ohjelinkki
-            if (includeGuide && BOARD_DATA.board_guide_url) {
-                lines.push('📖 OHJEET JA LIITTEET');
-                lines.push(`${BOARD_DATA.board_guide_label || 'Tapahtuman ohjeet'}: ${BOARD_DATA.board_guide_url}`);
-                lines.push('');
+            // 📖 Ohjelinkit
+            if (includeGuide) {
+                const itemGuides = items.filter(i => i.guide_url);
+                if (BOARD_DATA.board_guide_url || itemGuides.length > 0) {
+                    lines.push('📖 OHJEET JA LIITTEET');
+                    if (BOARD_DATA.board_guide_url) {
+                        lines.push(`${BOARD_DATA.board_guide_label || 'Tapahtuman ohjeet'}: ${BOARD_DATA.board_guide_url}`);
+                    }
+                    itemGuides.forEach(i => {
+                        lines.push(`- ${i.title} (${i.guide_label || 'Lisätietoa'}): ${i.guide_url}`);
+                    });
+                    lines.push('');
+                }
             }
 
             // Aikaleima
@@ -3979,6 +4000,13 @@
                     <span>👤 Vastuu: <strong>${escapeHtml(item.lead || 'Ei nimetty')}</strong></span>
                     <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
                 </div>
+                ${item.guide_url ? `
+                    <div style="margin-top:0.75rem;">
+                        <a href="${escapeHtml(item.guide_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.45rem 0.9rem;border-radius:10px;background:rgba(16,185,129,0.14);border:1px solid rgba(16,185,129,0.35);color:#34d399;text-decoration:none;font-size:0.82rem;font-weight:700;">
+                            <span>📖</span> <span>${escapeHtml(item.guide_label || 'Avaa tietokortti / lisätietoa')}</span> <span style="opacity:0.7;">→</span>
+                        </a>
+                    </div>
+                ` : ''}
                 ${decisionHtml}
                 ${adminActions}
                 ${voteHtml}
@@ -4179,6 +4207,13 @@
                     <span>👤 Vastuu: <strong>${escapeHtml(item.lead || 'Ei nimetty')}</strong></span>
                     <span>📅 Määräaika: <strong>${escapeHtml(item.deadline_label || 'Avoin')}</strong></span>
                 </div>
+                ${item.guide_url ? `
+                    <div style="margin-top:0.75rem;">
+                        <a href="${escapeHtml(item.guide_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.45rem 0.9rem;border-radius:10px;background:rgba(16,185,129,0.14);border:1px solid rgba(16,185,129,0.35);color:#34d399;text-decoration:none;font-size:0.82rem;font-weight:700;">
+                            <span>📖</span> <span>${escapeHtml(item.guide_label || 'Avaa tietokortti / lisätietoa')}</span> <span style="opacity:0.7;">→</span>
+                        </a>
+                    </div>
+                ` : ''}
 
                 ${actionRowHtml}
                 ${decisionHtml}
