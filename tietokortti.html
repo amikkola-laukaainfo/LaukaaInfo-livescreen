@@ -1050,6 +1050,7 @@
         const postId = urlParams.get('id');
         const placeParam = urlParams.get('place');
         const themeParam = urlParams.get('theme') || urlParams.get('tag');
+        const codeParam = (urlParams.get('code') || '').trim().toUpperCase();
 
         let currentPlace = null;
         let currentTag = null;
@@ -1290,6 +1291,55 @@
             document.getElementById('content-container').style.display = 'block';
 
             const post = currentPost;
+
+            // Koodisuojatun tietokortin tarkistus
+            if (post && post.visibility === 'code_protected') {
+                const expectedCode = String(post.access_key || '').trim().toUpperCase();
+                const savedCode = post.id ? String(localStorage.getItem(`tietokortti_code_${post.id}`) || '').trim().toUpperCase() : '';
+                const providedCode = codeParam || savedCode;
+
+                if (expectedCode && providedCode !== expectedCode) {
+                    const existingGate = document.getElementById('tietokortti-code-gate');
+                    if (existingGate) existingGate.remove();
+
+                    const container = document.getElementById('content-container');
+                    Array.from(container.children).forEach(ch => { ch.style.display = 'none'; });
+
+                    const gate = document.createElement('div');
+                    gate.id = 'tietokortti-code-gate';
+                    gate.style.cssText = 'max-width: 480px; margin: 3rem auto; padding: 2.25rem 2rem; background: #ffffff; border: 1.5px solid #ddd6fe; border-radius: 1.25rem; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.06);';
+                    gate.innerHTML = `
+                        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🔒</div>
+                        <h2 style="margin: 0 0 0.5rem 0; font-size: 1.35rem; font-weight: 800; color: #1e293b;">Koodisuojattu tietokortti</h2>
+                        <p style="margin: 0 0 1.25rem 0; font-size: 0.92rem; color: #64748b; line-height: 1.5;">
+                            Tämä tietokortti on avattavissa vain koodilinkillä tai syöttämällä pääsykoodin.
+                        </p>
+                        <form id="tietokortti-code-form" style="display: flex; flex-direction: column; gap: 0.65rem;">
+                            <input id="tietokortti-code-input" type="text" placeholder="Syötä koodi (esim. TK-123456)" value="${escapeHtml(providedCode)}" style="padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1.5px solid #cbd5e1; font-size: 0.95rem; text-align: center; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;" />
+                            <div id="tietokortti-code-error" style="display: none; color: #dc2626; font-size: 0.82rem; font-weight: 700;">Virheellinen pääsykoodi.</div>
+                            <button type="submit" style="padding: 0.75rem 1rem; border-radius: 0.75rem; border: none; background: #4f46e5; color: #ffffff; font-size: 0.95rem; font-weight: 700; cursor: pointer;">🔓 Avaa tietokortti</button>
+                        </form>
+                    `;
+                    container.appendChild(gate);
+
+                    document.getElementById('tietokortti-code-form').addEventListener('submit', (ev) => {
+                        ev.preventDefault();
+                        const entered = String(document.getElementById('tietokortti-code-input').value || '').trim().toUpperCase();
+                        if (entered === expectedCode) {
+                            if (post.id) localStorage.setItem(`tietokortti_code_${post.id}`, entered);
+                            gate.remove();
+                            Array.from(container.children).forEach(ch => { ch.style.display = ''; });
+                            renderTietokortti();
+                        } else {
+                            document.getElementById('tietokortti-code-error').style.display = 'block';
+                        }
+                    });
+                    return;
+                }
+                if (expectedCode && codeParam === expectedCode && post.id) {
+                    localStorage.setItem(`tietokortti_code_${post.id}`, expectedCode);
+                }
+            }
             const place = currentPlace || {
                 name: 'Lievestuore',
                 municipality: 'Laukaa',
@@ -1383,6 +1433,46 @@
                 bodyElem.innerHTML = marked.parse(rawContent);
             } else {
                 bodyElem.innerHTML = `<p>${rawContent.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
+            }
+
+            // Poimitaan tietokortin liitetiedostot (PDF ym. post_attachments-taulusta)
+            const attachments = Array.isArray(post.post_attachments)
+                ? post.post_attachments.filter(a => a && a.url)
+                : [];
+
+            const existingAttachmentsBox = document.getElementById('article-attachments-box');
+            if (existingAttachmentsBox) existingAttachmentsBox.remove();
+
+            if (attachments.length > 0) {
+                const attBox = document.createElement('div');
+                attBox.id = 'article-attachments-box';
+                attBox.style.cssText = 'margin-top: 2rem; padding: 1.5rem; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 1rem;';
+
+                let attHtml = `
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-main);">
+                        <span class="iconify" data-icon="material-symbols:picture-as-pdf-outline" style="font-size: 1.35rem; color: #7c3aed;"></span>
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Liitetiedostot ja oppaat (PDF)</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                `;
+
+                attachments.forEach(att => {
+                    const isPdf = att.type === 'pdf' || (att.mime_type && att.mime_type.includes('pdf')) || (att.file_name && att.file_name.toLowerCase().endsWith('.pdf'));
+                    const sizeKb = att.file_size ? ` (${Math.max(1, Math.round(att.file_size / 1024))} KB)` : '';
+                    attHtml += `
+                        <a href="${escapeHtml(att.url)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.85rem 1rem; background: #ffffff; border: 1px solid #ddd6fe; border-radius: 0.65rem; color: #5b21b6; text-decoration: none; font-size: 0.92rem; font-weight: 700; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#7c3aed'; this.style.transform='translateY(-1px)';" onmouseout="this.style.borderColor='#ddd6fe'; this.style.transform='none';">
+                            <span style="display: flex; align-items: center; gap: 0.55rem; word-break: break-word;">
+                                <span>${isPdf ? '📄' : '📎'}</span>
+                                <span>${escapeHtml(att.file_name || 'Avaa liitetiedosto')}${escapeHtml(sizeKb)}</span>
+                            </span>
+                            <span style="font-size: 0.75rem; color: #7c3aed; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;">${isPdf ? 'Avaa PDF ↗' : 'Avaa ↗'}</span>
+                        </a>
+                    `;
+                });
+
+                attHtml += `</div>`;
+                attBox.innerHTML = attHtml;
+                bodyElem.appendChild(attBox);
             }
 
             // Poimitaan tietokortin linkit
@@ -1586,14 +1676,14 @@
                 try {
                     const { data: dbPosts, error: dbErr } = await db
                         .from('posts')
-                        .select('id, title, description, content, image_url, place_id, target_id, target_type, type, tags, published_at, created_at')
+                        .select('id, title, description, content, image_url, place_id, target_id, target_type, type, tags, visibility, published_at, created_at')
                         .in('type', ['info', 'knowledge', 'article', 'guide', 'story', 'notice'])
                         .or('status.eq.published,status.eq.APPROVED,status.is.null')
                         .order('created_at', { ascending: true })
                         .limit(60);
 
                     if (!dbErr && Array.isArray(dbPosts)) {
-                        allKnowledgePosts = dbPosts;
+                        allKnowledgePosts = dbPosts.filter(p => p.visibility !== 'code_protected');
                     }
                 } catch (fetchErr) {
                     console.debug('Liittyvien korttien dynaaminen haku notice:', fetchErr);
