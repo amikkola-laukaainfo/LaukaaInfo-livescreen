@@ -256,6 +256,28 @@
         const mergedEvents = [];
         const yesterdayTs = Date.now() - 86400 * 1000;
 
+        // Parsitaan Visit Laukaa -tapahtumaformaatti: "pe 5. joulukuuta 2026 klo 17:00"
+        function parseVisitDateFi(str) {
+            if (!str) return null;
+            const kuukaudet = { tammi:0, helmi:1, maalis:2, huhti:3, touko:4, 'kesä':5, heinä:6, elo:7, syys:8, loka:9, marras:10, joulu:11 };
+            const parts = String(str).trim().split(/\s+/);
+            // Odotettu muoto: "pe 5. joulukuuta 2026 klo 17:00"
+            // parts: [0]=viikonpäivä [1]=päivä. [2]=kuukausi [3]=vuosi [4]=klo [5]=hh:mm
+            if (parts.length < 4) return null;
+            const day = parseInt(parts[1], 10);
+            const monthStr = parts[2]?.toLowerCase().replace('ta','').replace('ta','').replace('a','').replace('ä','ä');
+            // Yritä löytää kuukausi suoraan tai katkaisemalla pääte
+            let month = null;
+            for (const [k, v] of Object.entries(kuukaudet)) {
+                if (parts[2] && parts[2].toLowerCase().startsWith(k)) { month = v; break; }
+            }
+            const year = parseInt(parts[3], 10);
+            if (isNaN(day) || month == null || isNaN(year)) return null;
+            let hours = 0, mins = 0;
+            if (parts[5]) { const hm = parts[5].split(':'); hours = parseInt(hm[0],10)||0; mins = parseInt(hm[1],10)||0; }
+            return new Date(year, month, day, hours, mins).getTime();
+        }
+
         if (kohdeEvRaw.status === 'fulfilled' && kohdeEvRaw.value.length) {
             kohdeEvRaw.value.forEach(p => {
                 if (!p || !p.title) return;
@@ -292,6 +314,8 @@
                 const cleanId = String(rawId).split('/').filter(Boolean).pop()?.split(':').pop() || '';
                 const kseUrl = cleanId ? (`https://keskisuomievents.fi/home/event/${cleanId}`) : 'https://keskisuomievents.fi/home';
                 const infoUrl = ev.info_url?.fi || ev.info_url?.en || '';
+                const kseTs = ev.start_time ? new Date(ev.start_time).getTime() : null;
+                if (kseTs && kseTs < yesterdayTs) return; // Suodatetaan menneet tapahtumat
                 mergedEvents.push({
                     id: 'event:kse-' + ev.id,
                     type: 'event',
@@ -300,7 +324,7 @@
                     title: name,
                     area: loc.name?.fi || loc.street_address?.fi || 'Laukaa',
                     dateStr: ev.start_time ? new Date(ev.start_time).toLocaleDateString('fi-FI') : '',
-                    startTs: ev.start_time ? new Date(ev.start_time).getTime() : null,
+                    startTs: kseTs,
                     desc: (ev.short_description?.fi || '').replace(/<[^>]+>/g, ''),
                     lat: (lat && lon && distKm(62.414, 25.952, lat, lon) <= 100) ? lat : null,
                     lon: (lat && lon && distKm(62.414, 25.952, lat, lon) <= 100) ? lon : null,
@@ -309,8 +333,10 @@
             });
         }
         if (visitRaw.status === 'fulfilled' && Array.isArray(visitRaw.value)) {
-            visitRaw.value.slice(0, 40).forEach((ev, idx) => {
+            visitRaw.value.slice(0, 60).forEach((ev, idx) => {
                 if (!ev || !ev.nimi) return;
+                const visitTs = parseVisitDateFi(ev.aika);
+                if (visitTs && visitTs < yesterdayTs) return; // Suodatetaan menneet tapahtumat
                 const lat = ev.lat != null ? Number(ev.lat) : null;
                 const lon = ev.lng != null ? Number(ev.lng) : null;
                 const validCoord = lat != null && lon != null && distKm(62.414, 25.952, lat, lon) <= 100;
@@ -322,7 +348,7 @@
                     title: ev.nimi,
                     area: ev.paikka || 'Laukaa',
                     dateStr: ev.aika || '',
-                    startTs: null,
+                    startTs: visitTs,
                     desc: ev.aika ? `${ev.aika}${ev.paikka ? ' • ' + ev.paikka : ''}` : (ev.paikka || ''),
                     lat: validCoord ? lat : null,
                     lon: validCoord ? lon : null,
@@ -455,6 +481,7 @@
 
         const list = items
             .filter(it => it.type === 'event' && matchesSearch(it))
+            .filter(it => !it.startTs || it.startTs >= Date.now() - 86400 * 1000) // piilota menneet
             .filter(it => {
                 if (state.eventFilter === 'today') return it.startTs && it.startTs <= dayEnd.getTime();
                 if (state.eventFilter === 'week') return !it.startTs || it.startTs <= weekEnd;
