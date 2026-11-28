@@ -402,9 +402,14 @@
                     <span style="color:#aaa;">|</span>
                     <span>Ilman sijaintia:</span>
                     <span class="map-stat-badge" style="background:#ffc107; color:#333;" id="nogeo-count">–</span>
-                    <a href="https://visitlaukaa.fi/tapahtumat" target="_blank" rel="noopener noreferrer"
+                    <a href="https://keskisuomievents.fi/fi/search?text=laukaa" target="_blank" rel="noopener noreferrer"
                         style="margin-left:auto; font-size:0.9rem; color: var(--primary-blue);">
-                        🌐 Kaikki tapahtumat – VisitLaukaa.fi
+                        🌐 Keski-Suomi Events
+                    </a>
+                    <span style="color:#ccc;">|</span>
+                    <a href="https://visitlaukaa.fi/tapahtumat" target="_blank" rel="noopener noreferrer"
+                        style="font-size:0.9rem; color: var(--primary-blue);">
+                        🌐 VisitLaukaa.fi
                     </a>
                 </div>
 
@@ -459,7 +464,7 @@
     <script src="script.js?v=20260301-1"></script>
 
     <script>
-        // ── Tapahtumakartta – lataa tapahtumat_geo.json ja lisää markerit ──
+        // ── Tapahtumakartta – lataa Keski-Suomi Events API + tapahtumat_geo.json ──
         (function () {
             if (typeof L === 'undefined') {
                 document.getElementById('tapahtumakartta-map').innerHTML =
@@ -467,8 +472,9 @@
                 return;
             }
 
-            const MAP_CENTER = [62.38, 25.97];
+            const MAP_CENTER = [62.413, 25.955];
             const MAP_ZOOM = 11;
+            const KSE_URL = 'https://keskisuomievents.fi/api/v1/event/?text=laukaa&start=today&sort=start_time&include=location&page_size=100';
 
             const map = L.map('tapahtumakartta-map').setView(MAP_CENTER, MAP_ZOOM);
 
@@ -482,93 +488,297 @@
                 maxClusterRadius: 50
             });
 
-            fetch('tapahtumat_geo.json')
-                .then(r => r.json())
-                .then(data => {
-                    const now = new Date();
-                    const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-                    
-                    const kuukaudet = {
-                        "tammi": 0, "helmi": 1, "maalis": 2, "huhti": 3, "touko": 4, "kesä": 5,
-                        "heinä": 6, "elo": 7, "syys": 8, "loka": 9, "marras": 10, "joulu": 11
-                    };
+            // Tunnetut Laukaan paikat ja taajamat fallback-koordinaateiksi jos API:sta puuttuu position
+            const LAUKAA_FALLBACK_PLACES = [
+                { keys: ['peurunka', 'kylpylähotelli peurunka'], lat: 62.3822, lng: 25.9189 },
+                { keys: ['pääkirjasto', 'laukaan kirjasto', 'laukaantie 14'], lat: 62.4143, lng: 25.9522 },
+                { keys: ['sydän-laukaa', 'saralinnantie 3', 'laukaan lukio'], lat: 62.4166, lng: 25.9498 },
+                { keys: ['laukaan kirkko', 'saralinnantie'], lat: 62.4150, lng: 25.9508 },
+                { keys: ['laukaan tori', 'kirkonkylä'], lat: 62.4136, lng: 25.9537 },
+                { keys: ['lievestuore', 'laurinkylä'], lat: 62.2614, lng: 26.2015 },
+                { keys: ['leppävesi', 'tiituspohja'], lat: 62.3292, lng: 25.8442 },
+                { keys: ['vihtavuori'], lat: 62.3694, lng: 25.9017 },
+                { keys: ['vehniä'], lat: 62.4355, lng: 25.7364 },
+                { keys: ['kuusa', 'kuusankoski', 'kuusaan kanava'], lat: 62.4631, lng: 25.9403 },
+                { keys: ['varjola', 'varjolan tila'], lat: 62.4635, lng: 25.9445 },
+                { keys: ['saraakallio'], lat: 62.4042, lng: 25.9950 },
+                { keys: ['nokkakivi', 'nokkakiven puisto'], lat: 62.2678, lng: 26.1558 },
+                { keys: ['tarvaala'], lat: 62.3931, lng: 26.0772 },
+                { keys: ['äijälä'], lat: 62.4956, lng: 26.0825 },
+                { keys: ['laukaa'], lat: 62.4136, lng: 25.9537 }
+            ];
 
-                    const filteredData = data.filter(e => {
-                        if (!e.aika) return true;
-                        const parts = e.aika.split(' ');
-                        if (parts.length >= 4) {
-                            const day = parseInt(parts[1], 10);
-                            const monthStr = parts[2].toLowerCase();
-                            const year = parseInt(parts[3], 10);
-                            const month = kuukaudet[monthStr];
-                            if (month !== undefined && !isNaN(day) && !isNaN(year)) {
-                                const eventDate = new Date(year, month, day);
-                                return eventDate >= yesterday;
+            function isValidFinlandCoord(lat, lng) {
+                return typeof lat === 'number' && typeof lng === 'number' &&
+                    !isNaN(lat) && !isNaN(lng) &&
+                    lat >= 59.0 && lat <= 70.5 && lng >= 19.0 && lng <= 32.0;
+            }
+
+            function matchFallbackCoords(text) {
+                if (!text) return null;
+                const lc = text.toLowerCase();
+                for (const entry of LAUKAA_FALLBACK_PLACES) {
+                    if (entry.keys.some(k => lc.includes(k))) {
+                        return { lat: entry.lat, lng: entry.lng };
+                    }
+                }
+                return null;
+            }
+
+            function getFiText(val) {
+                if (!val) return '';
+                if (typeof val === 'string') return val.trim();
+                if (typeof val === 'object') {
+                    return (val.fi || val.en || val.sv || Object.values(val)[0] || '').toString().trim();
+                }
+                return '';
+            }
+
+            const FI_WEEKDAYS = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
+            const FI_MONTHS = [
+                'Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu',
+                'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'
+            ];
+            const VISIT_MONTHS = {
+                'tammi': 0, 'helmi': 1, 'maalis': 2, 'huhti': 3, 'touko': 4, 'kesä': 5,
+                'heinä': 6, 'elo': 7, 'syys': 8, 'loka': 9, 'marras': 10, 'joulu': 11
+            };
+
+            function formatKseTimeFi(startIso, endIso) {
+                if (!startIso) return '';
+                const startDate = new Date(startIso);
+                if (isNaN(startDate.getTime())) return '';
+                const day = FI_WEEKDAYS[startDate.getDay()];
+                const d = startDate.getDate();
+                const m = startDate.getMonth() + 1;
+                const y = startDate.getFullYear();
+                const sh = String(startDate.getHours()).padStart(2, '0');
+                const smin = String(startDate.getMinutes()).padStart(2, '0');
+                let label = day + ' ' + d + '.' + m + '.' + y + ' klo ' + sh + ':' + smin;
+                if (endIso) {
+                    const endDate = new Date(endIso);
+                    if (!isNaN(endDate.getTime())) {
+                        const eh = String(endDate.getHours()).padStart(2, '0');
+                        const emin = String(endDate.getMinutes()).padStart(2, '0');
+                        if (startDate.toDateString() === endDate.toDateString()) {
+                            label = day + ' ' + d + '.' + m + '.' + y + ' klo ' + sh + ':' + smin + '–' + eh + ':' + emin;
+                        }
+                    }
+                }
+                return label;
+            }
+
+            function normalizeKseEvent(item) {
+                if (!item || item.super_event_type === 'recurring') return null;
+                const title = getFiText(item.name);
+                if (!title) return null;
+
+                const loc = (item.location && typeof item.location === 'object') ? item.location : {};
+                const locName = getFiText(loc.name);
+                const street = getFiText(loc.street_address);
+                const locality = getFiText(loc.address_locality);
+                const extraInfo = getFiText(item.location_extra_info);
+
+                // Kootaan siisti paikkateksti ilman duplikaatteja
+                const paikkaParts = [];
+                [locName, street, extraInfo, locality].forEach(part => {
+                    if (!part) return;
+                    const pLc = part.toLowerCase();
+                    if (!paikkaParts.some(existing => existing.toLowerCase().includes(pLc))) {
+                        paikkaParts.push(part);
+                    }
+                });
+                const paikka = paikkaParts.join(', ');
+
+                // Koordinaatit: ensisijaisesti location.position.coordinates ([lng, lat])
+                let lat = null;
+                let lng = null;
+                let approxGeo = false;
+                const coords = loc.position && Array.isArray(loc.position.coordinates) ? loc.position.coordinates : null;
+                if (coords && coords.length >= 2) {
+                    const rawLng = Number(coords[0]);
+                    const rawLat = Number(coords[1]);
+                    if (isValidFinlandCoord(rawLat, rawLng)) {
+                        lat = rawLat;
+                        lng = rawLng;
+                    }
+                }
+
+                // Fallback jos koordinaatteja ei ollut API:ssa
+                if (lat == null || lng == null) {
+                    const fb = matchFallbackCoords(extraInfo + ' ' + locName + ' ' + street + ' ' + locality);
+                    if (fb) {
+                        lat = fb.lat;
+                        lng = fb.lng;
+                        approxGeo = true;
+                    }
+                }
+
+                const startDate = item.start_time ? new Date(item.start_time) : null;
+                const validStart = (startDate && !isNaN(startDate.getTime())) ? startDate : null;
+                const rawId = item.id || item['@id'] || '';
+                const cleanId = rawId.split('/').filter(Boolean).pop()?.split(':').pop() || '';
+                const kseUrl = cleanId ? ('https://keskisuomievents.fi/home/event/' + cleanId) : 'https://keskisuomievents.fi/home';
+                const infoUrl = getFiText(item.info_url);
+
+                return {
+                    nimi: title,
+                    aika: formatKseTimeFi(item.start_time, item.end_time),
+                    startDate: validStart,
+                    paikka: paikka || 'Laukaa',
+                    url: kseUrl,
+                    infoUrl: (infoUrl && infoUrl !== kseUrl) ? infoUrl : '',
+                    lat,
+                    lng,
+                    approxGeo,
+                    source: 'ks-events'
+                };
+            }
+
+            function parseVisitDate(aika) {
+                if (!aika) return null;
+                const parts = aika.split(' ');
+                if (parts.length >= 4) {
+                    const day = parseInt(parts[1], 10);
+                    const monthStr = parts[2].toLowerCase();
+                    const year = parseInt(parts[3], 10);
+                    const month = VISIT_MONTHS[monthStr];
+                    if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+                        return new Date(year, month, day);
+                    }
+                }
+                return null;
+            }
+
+            Promise.all([
+                fetch(KSE_URL, { headers: { 'Accept': 'application/json' } })
+                    .then(r => r.ok ? r.json() : { data: [] })
+                    .then(json => Array.isArray(json.data) ? json.data : [])
+                    .catch(err => {
+                        console.warn('ks-events API lataus epäonnistui:', err);
+                        return [];
+                    }),
+                fetch('tapahtumat_geo.json')
+                    .then(r => r.ok ? r.json() : [])
+                    .then(data => Array.isArray(data) ? data : [])
+                    .catch(err => {
+                        console.warn('tapahtumat_geo.json lataus epäonnistui:', err);
+                        return [];
+                    })
+            ]).then(([kseRaw, visitRaw]) => {
+                const now = new Date();
+                const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+
+                const kseEvents = kseRaw
+                    .map(normalizeKseEvent)
+                    .filter(Boolean)
+                    .filter(ev => !ev.startDate || ev.startDate >= yesterday);
+
+                const kseTitleSet = new Set(kseEvents.map(e => e.nimi.toLowerCase().trim()));
+
+                const visitEvents = visitRaw
+                    .filter(e => {
+                        if (!e || !e.nimi) return false;
+                        // Vältetään duplikaatit jos sama tapahtuma löytyy jo ks-eventsistä
+                        if (kseTitleSet.has(e.nimi.toLowerCase().trim())) return false;
+                        const d = parseVisitDate(e.aika);
+                        return !d || d >= yesterday;
+                    })
+                    .map(e => {
+                        const valid = isValidFinlandCoord(Number(e.lat), Number(e.lng));
+                        let lat = valid ? Number(e.lat) : null;
+                        let lng = valid ? Number(e.lng) : null;
+                        let approxGeo = false;
+                        if (lat == null || lng == null) {
+                            const fb = matchFallbackCoords(e.paikka);
+                            if (fb) {
+                                lat = fb.lat;
+                                lng = fb.lng;
+                                approxGeo = true;
                             }
                         }
-                        return true;
+                        return {
+                            nimi: e.nimi,
+                            aika: e.aika || '',
+                            startDate: parseVisitDate(e.aika),
+                            paikka: e.paikka || '',
+                            url: e.url || '',
+                            infoUrl: '',
+                            lat,
+                            lng,
+                            approxGeo,
+                            source: 'visitlaukaa'
+                        };
                     });
 
-                    const withGeo = filteredData.filter(e => e.lat != null && e.lng != null);
-                    const noGeo = filteredData.filter(e => e.lat == null || e.lng == null);
-
-                    document.getElementById('geo-count').textContent = withGeo.length;
-                    document.getElementById('nogeo-count').textContent = noGeo.length;
-
-                    if (noGeo.length > 0) {
-                        document.getElementById('nogeo-note').style.display = '';
-                    }
-
-                    // Lisää markerit klusteriryhmään
-                    withGeo.forEach(ev => {
-                        const marker = L.marker([ev.lat, ev.lng]);
-                        const popupHtml = `
-                            <b>${escHtml(ev.nimi)}</b>
-                            <div class="popup-meta">🕐 ${escHtml(ev.aika ? ev.aika.replace(/:00$/, '') : '')}</div>
-                            <div class="popup-meta">📍 ${escHtml(ev.paikka)}</div>
-                            ${ev.url ? `<a href="${escHtml(ev.url)}" target="_blank" rel="noopener">Lue lisää VisitLaukaa.fi →</a>` : ''}
-                        `;
-                        marker.bindPopup(popupHtml, { maxWidth: 280 });
-                        clusterGroup.addLayer(marker);
-                    });
-
-                    map.addLayer(clusterGroup);
-
-                    // Sovita kartta markereihin jos niitä on
-                    if (withGeo.length > 0) {
-                        const bounds = L.latLngBounds(withGeo.map(e => [e.lat, e.lng]));
-                        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
-                    }
-
-                    // Renderöi tapahtumalista (kaikki, geo ensin)
-                    renderEventList(withGeo, noGeo);
-                })
-                .catch(err => {
-                    console.error('tapahtumat_geo.json lataus epäonnistui:', err);
-                    document.getElementById('event-list-grid').innerHTML =
-                        '<p style="color:red;">Tapahtumia ei voitu ladata. Tarkista tapahtumat_geo.json.</p>';
+                const allEvents = [...kseEvents, ...visitEvents].sort((a, b) => {
+                    if (a.startDate && b.startDate) return a.startDate - b.startDate;
+                    if (a.startDate) return -1;
+                    if (b.startDate) return 1;
+                    return 0;
                 });
 
-            function renderEventList(withGeo, noGeo) {
+                const withGeo = allEvents.filter(e => e.lat != null && e.lng != null);
+                const noGeo = allEvents.filter(e => e.lat == null || e.lng == null);
+
+                document.getElementById('geo-count').textContent = withGeo.length;
+                document.getElementById('nogeo-count').textContent = noGeo.length;
+
+                if (noGeo.length > 0) {
+                    document.getElementById('nogeo-note').style.display = '';
+                }
+
+                // Lisää markerit klusteriryhmään
+                withGeo.forEach(ev => {
+                    const marker = L.marker([ev.lat, ev.lng]);
+                    const linkLabel = ev.source === 'ks-events'
+                        ? 'Lue lisää Keski-Suomi Events →'
+                        : 'Lue lisää VisitLaukaa.fi →';
+                    const popupHtml =
+                        '<b>' + escHtml(ev.nimi) + '</b>' +
+                        (ev.aika ? '<div class="popup-meta">🕐 ' + escHtml(ev.aika.replace(/:00$/, '')) + '</div>' : '') +
+                        '<div class="popup-meta">📍 ' + escHtml(ev.paikka) + (ev.approxGeo ? ' <em>(arvioitu sijainti)</em>' : '') + '</div>' +
+                        (ev.url ? '<a href="' + escHtml(ev.url) + '" target="_blank" rel="noopener">' + linkLabel + '</a>' : '');
+                    marker.bindPopup(popupHtml, { maxWidth: 280 });
+                    clusterGroup.addLayer(marker);
+                });
+
+                map.addLayer(clusterGroup);
+
+                // Sovita kartta markereihin jos niitä on
+                if (withGeo.length > 0) {
+                    const bounds = L.latLngBounds(withGeo.map(e => [e.lat, e.lng]));
+                    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+                }
+
+                // Renderöi tapahtumalista
+                renderEventList(allEvents);
+            }).catch(err => {
+                console.error('Tapahtumien lataus epäonnistui:', err);
+                document.getElementById('event-list-grid').innerHTML =
+                    '<p style="color:red;">Tapahtumia ei voitu ladata.</p>';
+            });
+
+            function renderEventList(all) {
                 const grid = document.getElementById('event-list-grid');
-                const all = [...withGeo, ...noGeo];
-                if (all.length === 0) {
+                if (!all || all.length === 0) {
                     grid.innerHTML = '<p style="color:#888;">Ei tapahtumia.</p>';
                     return;
                 }
-                
+
                 // Group by month
                 const grouped = {};
                 all.forEach(ev => {
-                    let monthGroup = "Muu ajankohta";
-                    if (ev.aika) {
+                    let monthGroup = 'Muu ajankohta';
+                    if (ev.startDate) {
+                        monthGroup = FI_MONTHS[ev.startDate.getMonth()] + ' ' + ev.startDate.getFullYear();
+                    } else if (ev.aika) {
                         const parts = ev.aika.split(' ');
                         if (parts.length >= 4) {
-                            monthGroup = parts[2] + ' ' + parts[3]; // esim. "kesä 2026"
-                            // Varmistetaan iso alkukirjain kuukaudelle
+                            monthGroup = parts[2] + ' ' + parts[3];
                             monthGroup = monthGroup.charAt(0).toUpperCase() + monthGroup.slice(1);
                         } else {
-                            monthGroup = ev.aika; // Fallback
+                            monthGroup = ev.aika;
                         }
                     }
                     if (!grouped[monthGroup]) {
@@ -579,18 +789,16 @@
 
                 let html = '';
                 for (const [month, events] of Object.entries(grouped)) {
-                    html += `<h3 style="grid-column: 1 / -1; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #333; border-bottom: 2px solid var(--primary-blue, #0056b3); padding-bottom: 0.3rem;">${escHtml(month)}</h3>`;
-                    
+                    html += '<h3 style="grid-column: 1 / -1; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #333; border-bottom: 2px solid var(--primary-blue, #0056b3); padding-bottom: 0.3rem;">' + escHtml(month) + '</h3>';
+
                     html += events.map(ev => {
                         const hasGeo = ev.lat != null && ev.lng != null;
-                        return `
-                            <div class="event-list-item${hasGeo ? '' : ' no-geo'}">
-                                <div class="event-name">${escHtml(ev.nimi)}</div>
-                                <div class="event-meta">🕐 ${escHtml(ev.aika ? ev.aika.replace(/:00$/, '') : '')}</div>
-                                <div class="event-meta">📍 ${escHtml(ev.paikka)}</div>
-                                ${ev.url ? `<a href="${escHtml(ev.url)}" target="_blank" rel="noopener noreferrer">Lue lisää →</a>` : ''}
-                            </div>
-                        `;
+                        return '<div class="event-list-item' + (hasGeo ? '' : ' no-geo') + '">' +
+                            '<div class="event-name">' + escHtml(ev.nimi) + '</div>' +
+                            (ev.aika ? '<div class="event-meta">🕐 ' + escHtml(ev.aika.replace(/:00$/, '')) + '</div>' : '') +
+                            '<div class="event-meta">📍 ' + escHtml(ev.paikka) + '</div>' +
+                            (ev.url ? '<a href="' + escHtml(ev.url) + '" target="_blank" rel="noopener noreferrer">Lue lisää →</a>' : '') +
+                            '</div>';
                     }).join('');
                 }
                 grid.innerHTML = html;
@@ -598,10 +806,10 @@
 
             function escHtml(str) {
                 if (!str) return '';
-                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             }
         })();
-    </script>
+        </script>
 </body>
 
 </html>
