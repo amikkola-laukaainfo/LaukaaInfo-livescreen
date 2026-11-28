@@ -421,6 +421,8 @@
 
                 <div class="map-legend">
                     <span><span class="dot" style="background:#0056b3;"></span> Tapahtuma kartalla</span>
+                    <span><span class="dot" style="background:#059669;"></span> Kohdekortti-tapahtuma</span>
+                    <span><span class="dot" style="background:#ea580c;"></span> Kohdekortti-tarjous</span>
                     <span><span class="dot" style="background:#ffc107;"></span> Ei sijaintia</span>
                 </div>
             </div>
@@ -476,6 +478,8 @@
             const MAP_ZOOM = 11;
             const MAX_DISTANCE_FROM_LAUKAA_KM = 100;
             const KSE_URL = 'https://keskisuomievents.fi/api/v1/event/?text=laukaa&start=today&sort=start_time&include=location&page_size=100';
+            const SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+            const SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
 
             const map = L.map('tapahtumakartta-map').setView(MAP_CENTER, MAP_ZOOM);
 
@@ -662,6 +666,173 @@
                 return null;
             }
 
+            function makeCustomIcon(bgColor, emoji) {
+                return L.divIcon({
+                    className: 'custom-event-pin',
+                    html: '<div style="width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:' + bgColor + ';border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.32);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:15px;line-height:1;">' + emoji + '</span></div>',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -30]
+                });
+            }
+
+            const kohdeEventIcon = makeCustomIcon('#059669', '📅');
+            const kohdeOfferIcon = makeCustomIcon('#ea580c', '🏷️');
+
+            async function loadKohdekorttiEventsAndOffers(yesterday) {
+                const results = [];
+                const seenIds = new Set();
+
+                // 1. Supabase posts (type in event, offer) joilla on place_id
+                try {
+                    const postsRes = await fetch(
+                        SB_URL + '/rest/v1/posts?type=in.(event,offer)&status=in.(published,APPROVED)&visibility=eq.public&place_id=not.is.null&select=id,type,title,description,place_id,target_id,target_type,event_start_at,event_end_at,offer_start_at,offer_end_at,publisher_name,municipality,created_at&order=created_at.desc&limit=100',
+                        { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } }
+                    );
+                    if (postsRes.ok) {
+                        const posts = await postsRes.json();
+                        if (Array.isArray(posts) && posts.length > 0) {
+                            const placeIds = [...new Set(posts.map(p => p.place_id).filter(Boolean))];
+                            const placeMap = new Map();
+                            if (placeIds.length > 0) {
+                                const inList = placeIds.map(id => '"' + String(id).replace(/"/g, '') + '"').join(',');
+                                const placesRes = await fetch(
+                                    SB_URL + '/rest/v1/places?or=(id.in.(' + encodeURIComponent(inList) + '),place_id.in.(' + encodeURIComponent(inList) + '))&select=id,place_id,name,canonical_name,municipality,lat,lng',
+                                    { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } }
+                                );
+                                if (placesRes.ok) {
+                                    const places = await placesRes.json();
+                                    if (Array.isArray(places)) {
+                                        places.forEach(pl => {
+                                            if (pl.id) placeMap.set(pl.id, pl);
+                                            if (pl.place_id) placeMap.set(pl.place_id, pl);
+                                        });
+                                    }
+                                }
+                            }
+
+                            for (const p of posts) {
+                                const isOffer = p.type === 'offer';
+                                const startIso = isOffer ? (p.offer_start_at || p.created_at) : p.event_start_at;
+                                const endIso = isOffer ? p.offer_end_at : p.event_end_at;
+                                const compareIso = endIso || startIso;
+                                if (compareIso) {
+                                    const cd = new Date(compareIso);
+                                    if (!isNaN(cd.getTime()) && cd < yesterday) continue;
+                                }
+
+                                const pl = placeMap.get(p.place_id);
+                                if (!pl) continue;
+                                const rawLat = Number(pl.lat);
+                                const rawLng = Number(pl.lng);
+                                const hasCoords = pl.lat != null && pl.lng != null && isValidLaukaaAreaCoord(rawLat, rawLng);
+                                if (!hasCoords) continue;
+
+                                const targetId = p.target_id || p.id;
+                                seenIds.add(String(targetId));
+                                seenIds.add(String(p.id));
+
+                                const startDate = startIso ? new Date(startIso) : null;
+                                const validStart = (startDate && !isNaN(startDate.getTime())) ? startDate : null;
+                                let aikaText = '';
+                                if (isOffer) {
+                                    if (p.offer_end_at) {
+                                        const ed = new Date(p.offer_end_at);
+                                        if (!isNaN(ed.getTime())) aikaText = 'Voimassa ' + ed.getDate() + '.' + (ed.getMonth() + 1) + '.' + ed.getFullYear() + ' asti';
+                                    }
+                                    if (!aikaText) aikaText = 'Voimassa oleva tarjous';
+                                } else {
+                                    aikaText = formatKseTimeFi(p.event_start_at, p.event_end_at);
+                                }
+
+                                const placeLabel = [pl.name || pl.canonical_name || '', pl.municipality || '']
+                                    .filter(Boolean)
+                                    .filter((v, idx, arr) => idx === 0 || !arr[0].toLowerCase().includes(v.toLowerCase()))
+                                    .join(', ');
+
+                                results.push({
+                                    nimi: p.title || (isOffer ? 'Tarjous' : 'Tapahtuma'),
+                                    aika: aikaText,
+                                    startDate: isOffer ? null : validStart,
+                                    paikka: placeLabel || 'Laukaa',
+                                    url: 'kohdekortti.html?id=' + encodeURIComponent(targetId),
+                                    infoUrl: '',
+                                    lat: rawLat,
+                                    lng: rawLng,
+                                    approxGeo: false,
+                                    source: isOffer ? 'kohdekortti-offer' : 'kohdekortti-event'
+                                });
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Kohdekortti Supabase -haku epäonnistui:', err);
+                }
+
+                // 2. Fallback: kohdekortit/kohteet.json & kohdekortit/tarjoukset.json
+                for (const [jsonUrl, isOfferFile] of [['kohdekortit/kohteet.json', false], ['kohdekortit/tarjoukset.json', true]]) {
+                    try {
+                        const res = await fetch(jsonUrl);
+                        if (!res.ok) continue;
+                        const items = await res.json();
+                        if (!Array.isArray(items)) continue;
+                        for (const k of items) {
+                            if (!k || k.status === 'inactive') continue;
+                            if (seenIds.has(String(k.id)) || (k.supabase_post_id && seenIds.has(String(k.supabase_post_id)))) continue;
+                            const isOffer = isOfferFile || k.type === 'offer';
+                            if (!isOffer && k.type !== 'event') continue;
+
+                            const rawLat = Number(k.location && k.location.latitude);
+                            const rawLng = Number(k.location && k.location.longitude);
+                            const hasCoords = k.location && k.location.latitude != null && k.location.longitude != null && isValidLaukaaAreaCoord(rawLat, rawLng);
+                            if (!hasCoords) continue;
+
+                            const startIso = isOffer ? (k.offer && k.offer.validFrom) : (k.event && k.event.startDate);
+                            const endIso = isOffer ? (k.offer && k.offer.validUntil) : (k.event && k.event.endDate);
+                            const compareIso = endIso || startIso;
+                            if (compareIso) {
+                                const cd = new Date(compareIso);
+                                if (!isNaN(cd.getTime()) && cd < yesterday) continue;
+                            }
+
+                            const startDate = startIso ? new Date(startIso) : null;
+                            const validStart = (startDate && !isNaN(startDate.getTime())) ? startDate : null;
+                            let aikaText = '';
+                            if (isOffer && endIso) {
+                                const ed = new Date(endIso);
+                                if (!isNaN(ed.getTime())) aikaText = 'Voimassa ' + ed.getDate() + '.' + (ed.getMonth() + 1) + '.' + ed.getFullYear() + ' asti';
+                            } else if (!isOffer) {
+                                aikaText = formatKseTimeFi(startIso, endIso);
+                            }
+
+                            const paikka = [
+                                k.event && k.event.venue,
+                                k.location && k.location.address,
+                                k.location && k.location.municipality
+                            ].filter(Boolean).join(', ');
+
+                            results.push({
+                                nimi: k.name || k.title || 'Kohdekortti',
+                                aika: aikaText,
+                                startDate: isOffer ? null : validStart,
+                                paikka: paikka || 'Laukaa',
+                                url: (isOffer ? 'kohdekortti.html?offer=' : 'kohdekortti.html?id=') + encodeURIComponent(k.id),
+                                infoUrl: '',
+                                lat: rawLat,
+                                lng: rawLng,
+                                approxGeo: false,
+                                source: isOffer ? 'kohdekortti-offer' : 'kohdekortti-event'
+                            });
+                        }
+                    } catch (_) {}
+                }
+
+                return results;
+            }
+
+            const nowInit = new Date();
+            const yesterdayInit = new Date(nowInit.getFullYear(), nowInit.getMonth(), nowInit.getDate() - 1);
+
             Promise.all([
                 fetch(KSE_URL, { headers: { 'Accept': 'application/json' } })
                     .then(r => r.ok ? r.json() : { data: [] })
@@ -676,8 +847,9 @@
                     .catch(err => {
                         console.warn('tapahtumat_geo.json lataus epäonnistui:', err);
                         return [];
-                    })
-            ]).then(([kseRaw, visitRaw]) => {
+                    }),
+                loadKohdekorttiEventsAndOffers(yesterdayInit)
+            ]).then(([kseRaw, visitRaw, kohdekorttiItems]) => {
                 const now = new Date();
                 const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
 
@@ -729,7 +901,7 @@
                         };
                     });
 
-                const allEvents = [...kseEvents, ...visitEvents].sort((a, b) => {
+                const allEvents = [...kohdekorttiItems, ...kseEvents, ...visitEvents].sort((a, b) => {
                     if (a.startDate && b.startDate) return a.startDate - b.startDate;
                     if (a.startDate) return -1;
                     if (b.startDate) return 1;
@@ -748,15 +920,30 @@
 
                 // Lisää markerit klusteriryhmään
                 withGeo.forEach(ev => {
-                    const marker = L.marker([ev.lat, ev.lng]);
-                    const linkLabel = ev.source === 'ks-events'
-                        ? 'Lue lisää Keski-Suomi Events →'
-                        : 'Lue lisää VisitLaukaa.fi →';
+                    const markerOpts = {};
+                    if (ev.source === 'kohdekortti-event') markerOpts.icon = kohdeEventIcon;
+                    else if (ev.source === 'kohdekortti-offer') markerOpts.icon = kohdeOfferIcon;
+
+                    const marker = L.marker([ev.lat, ev.lng], markerOpts);
+                    let linkLabel = 'Lue lisää VisitLaukaa.fi →';
+                    let badgeHtml = '';
+                    if (ev.source === 'ks-events') {
+                        linkLabel = 'Lue lisää Keski-Suomi Events →';
+                    } else if (ev.source === 'kohdekortti-event') {
+                        linkLabel = 'Avaa kohdekortti →';
+                        badgeHtml = '<div style="display:inline-block;font-size:0.72rem;font-weight:700;color:#059669;background:#ecfdf5;padding:2px 7px;border-radius:6px;margin-bottom:4px;">📅 Kohdekortti · Tapahtuma</div><br>';
+                    } else if (ev.source === 'kohdekortti-offer') {
+                        linkLabel = 'Avaa tarjous →';
+                        badgeHtml = '<div style="display:inline-block;font-size:0.72rem;font-weight:700;color:#ea580c;background:#fff7ed;padding:2px 7px;border-radius:6px;margin-bottom:4px;">🏷️ Kohdekortti · Tarjous</div><br>';
+                    }
+                    const isExternal = ev.url && ev.url.startsWith('http');
+                    const targetAttr = isExternal ? ' target="_blank" rel="noopener"' : '';
                     const popupHtml =
+                        badgeHtml +
                         '<b>' + escHtml(ev.nimi) + '</b>' +
                         (ev.aika ? '<div class="popup-meta">🕐 ' + escHtml(ev.aika.replace(/:00$/, '')) + '</div>' : '') +
                         '<div class="popup-meta">📍 ' + escHtml(ev.paikka) + (ev.approxGeo ? ' <em>(arvioitu sijainti)</em>' : '') + '</div>' +
-                        (ev.url ? '<a href="' + escHtml(ev.url) + '" target="_blank" rel="noopener">' + linkLabel + '</a>' : '');
+                        (ev.url ? '<a href="' + escHtml(ev.url) + '"' + targetAttr + '>' + linkLabel + '</a>' : '');
                     marker.bindPopup(popupHtml, { maxWidth: 280 });
                     clusterGroup.addLayer(marker);
                 });
@@ -787,7 +974,7 @@
                 // Group by month
                 const grouped = {};
                 all.forEach(ev => {
-                    let monthGroup = 'Muu ajankohta';
+                    let monthGroup = ev.source === 'kohdekortti-offer' ? 'Tarjoukset' : 'Muu ajankohta';
                     if (ev.startDate) {
                         monthGroup = FI_MONTHS[ev.startDate.getMonth()] + ' ' + ev.startDate.getFullYear();
                     } else if (ev.aika) {
@@ -811,11 +998,21 @@
 
                     html += events.map(ev => {
                         const hasGeo = ev.lat != null && ev.lng != null;
+                        let tagHtml = '';
+                        if (ev.source === 'kohdekortti-event') {
+                            tagHtml = '<span style="display:inline-block;font-size:0.72rem;font-weight:700;color:#059669;background:#ecfdf5;padding:1px 6px;border-radius:5px;margin-bottom:4px;">📅 Kohdekortti</span>';
+                        } else if (ev.source === 'kohdekortti-offer') {
+                            tagHtml = '<span style="display:inline-block;font-size:0.72rem;font-weight:700;color:#ea580c;background:#fff7ed;padding:1px 6px;border-radius:5px;margin-bottom:4px;">🏷️ Tarjous</span>';
+                        }
+                        const isExternal = ev.url && ev.url.startsWith('http');
+                        const targetAttr = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+                        const linkText = ev.source === 'kohdekortti-offer' ? 'Avaa tarjous →' : (ev.source === 'kohdekortti-event' ? 'Avaa kohdekortti →' : 'Lue lisää →');
                         return '<div class="event-list-item' + (hasGeo ? '' : ' no-geo') + '">' +
+                            tagHtml +
                             '<div class="event-name">' + escHtml(ev.nimi) + '</div>' +
                             (ev.aika ? '<div class="event-meta">🕐 ' + escHtml(ev.aika.replace(/:00$/, '')) + '</div>' : '') +
                             '<div class="event-meta">📍 ' + escHtml(ev.paikka) + '</div>' +
-                            (ev.url ? '<a href="' + escHtml(ev.url) + '" target="_blank" rel="noopener noreferrer">Lue lisää →</a>' : '') +
+                            (ev.url ? '<a href="' + escHtml(ev.url) + '"' + targetAttr + '>' + linkText + '</a>' : '') +
                             '</div>';
                     }).join('');
                 }
