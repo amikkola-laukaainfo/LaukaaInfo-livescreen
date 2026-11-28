@@ -2215,7 +2215,7 @@
                 badge.style.display = 'inline-flex';
                 let roleLabel = 'Hallitus';
                 if (ROLE_SESSION.active_roles && ROLE_SESSION.active_roles.length > 0) {
-                    const r = ROLE_SESSION.active_roles[0].role;
+                    const r = ROLE_SESSION.active_roles[0].role || ROLE_SESSION.active_roles[0].role_type;
                     if (r === 'board_chair') roleLabel = 'Puheenjohtaja';
                     else if (r === 'board_member') roleLabel = 'Hallituksen jäsen';
                     else if (r === 'secretary') roleLabel = 'Sihteeri';
@@ -2258,7 +2258,7 @@
         function isBoardChairRole() {
             return !!(ROLE_SESSION && ROLE_SESSION.session_token &&
                 Array.isArray(ROLE_SESSION.active_roles) &&
-                ROLE_SESSION.active_roles.some(r => r.role === 'board_chair'));
+                ROLE_SESSION.active_roles.some(r => (r.role || r.role_type) === 'board_chair'));
         }
 
         function updateMeetingBanner() {
@@ -2406,7 +2406,7 @@
 
             let roleLabel = 'Hallitus';
             if (ROLE_SESSION.active_roles && ROLE_SESSION.active_roles.length > 0) {
-                const r = ROLE_SESSION.active_roles[0].role;
+                const r = ROLE_SESSION.active_roles[0].role || ROLE_SESSION.active_roles[0].role_type;
                 if (r === 'board_chair') roleLabel = 'Puheenjohtaja';
                 else if (r === 'board_member') roleLabel = 'Hallituksen jäsen';
                 else if (r === 'secretary') roleLabel = 'Sihteeri';
@@ -5281,7 +5281,7 @@
             const orgName = BOARD_DATA.organization_name || 'Organisaatio';
             const printDate = new Date().toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' });
             const roleLabel = (ROLE_SESSION && ROLE_SESSION.member_name)
-                ? `${ROLE_SESSION.member_name} (${getStageName(ROLE_SESSION.active_roles?.[0]?.role || '')})`
+                ? `${ROLE_SESSION.member_name} (${getStageName(ROLE_SESSION.active_roles?.[0]?.role || ROLE_SESSION.active_roles?.[0]?.role_type || '')})`
                 : 'Puheenjohtaja / Hallitus';
 
             // Yhteenvetotaulukko
