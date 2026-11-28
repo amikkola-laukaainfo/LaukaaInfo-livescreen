@@ -474,6 +474,7 @@
 
             const MAP_CENTER = [62.413, 25.955];
             const MAP_ZOOM = 11;
+            const MAX_DISTANCE_FROM_LAUKAA_KM = 100;
             const KSE_URL = 'https://keskisuomievents.fi/api/v1/event/?text=laukaa&start=today&sort=start_time&include=location&page_size=100';
 
             const map = L.map('tapahtumakartta-map').setView(MAP_CENTER, MAP_ZOOM);
@@ -508,10 +509,21 @@
                 { keys: ['laukaa'], lat: 62.4136, lng: 25.9537 }
             ];
 
-            function isValidFinlandCoord(lat, lng) {
+            function haversineKm(lat1, lng1, lat2, lng2) {
+                const R = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLng = (lng2 - lng1) * Math.PI / 180;
+                const a = Math.sin(dLat / 2) ** 2 +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLng / 2) ** 2;
+                return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            }
+
+            function isValidLaukaaAreaCoord(lat, lng) {
                 return typeof lat === 'number' && typeof lng === 'number' &&
                     !isNaN(lat) && !isNaN(lng) &&
-                    lat >= 59.0 && lat <= 70.5 && lng >= 19.0 && lng <= 32.0;
+                    lat >= 59.0 && lat <= 70.5 && lng >= 19.0 && lng <= 32.0 &&
+                    haversineKm(MAP_CENTER[0], MAP_CENTER[1], lat, lng) <= MAX_DISTANCE_FROM_LAUKAA_KM;
             }
 
             function matchFallbackCoords(text) {
@@ -598,7 +610,7 @@
                 if (coords && coords.length >= 2) {
                     const rawLng = Number(coords[0]);
                     const rawLat = Number(coords[1]);
-                    if (isValidFinlandCoord(rawLat, rawLng)) {
+                    if (isValidLaukaaAreaCoord(rawLat, rawLng)) {
                         lat = rawLat;
                         lng = rawLng;
                     }
@@ -685,11 +697,17 @@
                         return !d || d >= yesterday;
                     })
                     .map(e => {
-                        const valid = isValidFinlandCoord(Number(e.lat), Number(e.lng));
-                        let lat = valid ? Number(e.lat) : null;
-                        let lng = valid ? Number(e.lng) : null;
+                        const rawLat = Number(e.lat);
+                        const rawLng = Number(e.lng);
+                        const hasRaw = e.lat != null && e.lng != null;
+                        const valid = hasRaw && isValidLaukaaAreaCoord(rawLat, rawLng);
+                        let lat = valid ? rawLat : null;
+                        let lng = valid ? rawLng : null;
                         let approxGeo = false;
-                        if (lat == null || lng == null) {
+                        // Jos koordinaatit puuttuivat kokonaan, kokeillaan paikkasanaston fallbackia.
+                        // Jos koordinaatit olivat >100 km päässä (esim. virheellinen geokoodaus Tuuriin/Alavudelle),
+                        // tapahtuma jätetään pois kartalta ja näytetään tekstilistalla kartan alla.
+                        if (!hasRaw) {
                             const fb = matchFallbackCoords(e.paikka);
                             if (fb) {
                                 lat = fb.lat;
