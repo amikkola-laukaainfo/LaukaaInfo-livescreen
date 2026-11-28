@@ -17,7 +17,23 @@
     }
 
     function getSessionToken() {
-        return (window.ROLE_SESSION && window.ROLE_SESSION.session_token) || null;
+        if (window.ROLE_SESSION && window.ROLE_SESSION.session_token) {
+            return window.ROLE_SESSION.session_token;
+        }
+        const orgId = getOrgId();
+        if (orgId) {
+            try {
+                const raw = localStorage.getItem('toiminta_role_session_' + orgId);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && parsed.session_token && (!parsed.expires_at || new Date(parsed.expires_at) > new Date())) {
+                        window.ROLE_SESSION = parsed;
+                        return parsed.session_token;
+                    }
+                }
+            } catch (_) {}
+        }
+        return null;
     }
 
     function getOrgId() {
@@ -131,7 +147,11 @@
                 window.history.replaceState({}, '', cleanUrl);
             } catch (_) {}
 
-            if (typeof window.updateRoleBadge === 'function') window.updateRoleBadge();
+            if (typeof window.setRoleSession === 'function') {
+                window.setRoleSession(sessionObj);
+            } else if (typeof window.updateRoleBadge === 'function') {
+                window.updateRoleBadge();
+            }
             if (typeof window.fetchBoardData === 'function') await window.fetchBoardData();
         } catch (ex) {
             if (errEl) { errEl.textContent = 'Virhe: ' + ex.message; errEl.style.display = 'block'; }
@@ -172,7 +192,15 @@
         const token = getSessionToken();
         const orgId = getOrgId();
         const portal = document.getElementById('org-governance-portal');
-        if (!sb || !token || !orgId || !portal) return;
+        if (!portal) return;
+        if (!sb || !token || !orgId) {
+            portal.innerHTML = `<div style="max-width:720px;margin:2rem auto;padding:1.5rem;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:14px;color:#fca5a5;">
+                <div style="font-weight:700;margin-bottom:0.5rem;">⚠️ Hallintaportaalia ei voitu avata</div>
+                <div style="font-size:0.85rem;margin-bottom:1rem;">Puuttuva kirjautumisistunto tai yhdistystunnus. Kirjaudu ensin hallituksen puheenjohtajan henkilökohtaisella koodilla.</div>
+                <button onclick="toggleOrgGovernancePortal(false)" style="background:rgba(255,255,255,0.12);border:none;color:#fff;border-radius:8px;padding:0.5rem 0.9rem;cursor:pointer;font-weight:700;">← Takaisin toimintataululle</button>
+            </div>`;
+            return;
+        }
 
         portal.innerHTML = '<div style="max-width:960px;margin:2rem auto;padding:2rem;text-align:center;color:#94a3b8;">Ladataan yhdistyksen hallintatietoja...</div>';
 

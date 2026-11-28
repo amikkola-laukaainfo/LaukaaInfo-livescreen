@@ -2226,6 +2226,9 @@
             } else {
                 badge.style.display = 'none';
             }
+            if (!ROLE_SESSION && window.ROLE_SESSION && window.ROLE_SESSION.session_token) {
+                ROLE_SESSION = window.ROLE_SESSION;
+            }
             window.ROLE_SESSION = ROLE_SESSION;
             window.CURRENT_ORG_ID = CURRENT_ORG_ID;
             window.BOARD_DATA = BOARD_DATA;
@@ -2236,6 +2239,12 @@
             // Päivitä muokkausnappulan näkyvyys kirjautumisen/kirjautumisen poiston yhteydessä
             if (typeof updateMeetingBanner === 'function') updateMeetingBanner();
         }
+
+        window.setRoleSession = function(sessionObj) {
+            ROLE_SESSION = sessionObj || null;
+            window.ROLE_SESSION = ROLE_SESSION;
+            updateRoleBadge();
+        };
 
         function promptSwitchRoleAuth() {
             if (!ROLE_SESSION) return;
