@@ -1283,6 +1283,9 @@
                 <button class="btn-signup" id="btn-status-report" onclick="openStatusReportModal()" style="display:none;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #7c3aed, #6d28d9);color:#fff;" title="Luo tilannekatsaus WhatsApp-viestiksi tai tarkistuslistaksi">
                     <span>📋</span> <span>Tilannekatsaus</span>
                 </button>
+                <button class="btn-signup" id="btn-org-governance-portal" onclick="if(typeof toggleOrgGovernancePortal==='function') toggleOrgGovernancePortal()" style="display:none;align-items:center;gap:0.35rem;font-size:0.75rem;padding:0.35rem 0.85rem;background:linear-gradient(135deg, #4f46e5, #4338ca);color:#fff;" title="Avaa yhdistyksen oma hallintanäkymä (käyttäjät, asetukset, vienti)">
+                    <span>⚙️</span> <span>Yhdistyksen hallinta</span>
+                </button>
                 <button class="btn-toggle-admin" id="btn-admin-toggle" onclick="toggleAdminMode()" title="Vaihda ylläpitäjän ja jäsenen näkymän välillä">
                     🛡️ Ylläpito
                 </button>
@@ -1377,6 +1380,52 @@
         </section>
 
     </main>
+
+    <!-- YHDISTYKSEN OMA HALLINTAPORTAALI (näkyy pääkäyttäjälle) -->
+    <section id="org-governance-portal" style="display:none;"></section>
+
+    <!-- HALLINNAN LUOVUTUKSEN / PJ-SIIRRON VASTAANOTTOMODAALI -->
+    <div class="modal-overlay" id="handover-accept-modal">
+        <div class="modal-card" style="max-width:500px;">
+            <button class="modal-close" onclick="closeHandoverAcceptModal()">&times;</button>
+            <div id="handover-view-form">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                    <div style="font-size:1.6rem;background:rgba(99,102,241,0.18);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;">🤝</div>
+                    <div>
+                        <h3 style="font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin:0;">Ota yhdistyksen hallinta vastaan</h3>
+                        <p style="font-size:0.78rem;color:var(--text-muted);margin:0.15rem 0 0 0;">Vahvista pääkäyttäjän rooli ja yhdistyksen itsenäinen hallinta</p>
+                    </div>
+                </div>
+                <div id="handover-accept-error" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.82rem;color:#fca5a5;margin-bottom:0.75rem;"></div>
+                <div style="display:flex;flex-direction:column;gap:0.65rem;">
+                    <div>
+                        <label style="font-size:0.76rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.25rem;">Aktivointitunnus</label>
+                        <input id="handover-token-input" type="text" readonly style="width:100%;box-sizing:border-box;padding:0.55rem 0.85rem;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.8);color:#a5b4fc;font-family:monospace;font-size:0.85rem;" />
+                    </div>
+                    <div>
+                        <label style="font-size:0.76rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.25rem;">Koko nimesi (vastuuhenkilö / puheenjohtaja) *</label>
+                        <input id="handover-name-input" type="text" placeholder="Esim. Matti Meikäläinen" style="width:100%;box-sizing:border-box;padding:0.6rem 0.85rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.88rem;" />
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+                        <input id="handover-email-input" type="email" placeholder="Sähköposti (valinnainen)" style="padding:0.55rem 0.8rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.82rem;" />
+                        <input id="handover-phone-input" type="tel" placeholder="Puhelin (valinnainen)" style="padding:0.55rem 0.8rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(15,23,42,0.6);color:#fff;font-size:0.82rem;" />
+                    </div>
+                    <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.78rem;color:#cbd5e1;line-height:1.45;cursor:pointer;margin-top:0.2rem;">
+                        <input id="handover-terms-checkbox" type="checkbox" style="margin-top:0.2rem;" />
+                        <span>Hyväksyn yhdistyksen hallintavastuun ja palvelun toimintaperiaatteet. Yhdistys hallitsee itse käyttäjiään ja tietojaan.</span>
+                    </label>
+                    <button id="btn-submit-handover-accept" onclick="submitAcceptHandover()" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:12px;padding:0.75rem 1.2rem;font-size:0.9rem;font-weight:800;cursor:pointer;margin-top:0.25rem;">✅ Hyväksy hallintavastuu</button>
+                </div>
+            </div>
+            <div id="handover-view-success" style="display:none;text-align:center;padding:0.5rem 0;">
+                <div style="font-size:2.4rem;margin-bottom:0.5rem;">🎉</div>
+                <h3 style="font-family:'Outfit',sans-serif;color:#fff;margin:0 0 0.4rem 0;">Hallinta luovutettu yhdistykselle!</h3>
+                <p style="font-size:0.82rem;color:#94a3b8;margin:0 0 0.85rem 0;">Ota henkilökohtainen pääkäyttäjäkoodisi talteen seuraavia kirjautumisia varten:</p>
+                <div id="handover-personal-code" style="font-family:monospace;font-size:1.3rem;font-weight:800;letter-spacing:0.08em;color:#6ee7b7;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:12px;padding:0.75rem;margin-bottom:1rem;">-</div>
+                <button onclick="closeHandoverAcceptModal(); if(typeof toggleOrgGovernancePortal==='function') toggleOrgGovernancePortal(true);" style="background:#6366f1;color:#fff;border:none;border-radius:10px;padding:0.65rem 1.2rem;font-weight:700;cursor:pointer;">⚙️ Avaa yhdistyksen hallinta →</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 📋 TILANNEKATSAUS-MODAALI -->
     <div class="modal-overlay" id="status-report-modal" style="display:none;">
@@ -2176,6 +2225,13 @@
                 nameEl.innerText = `${ROLE_SESSION.member_name || 'Jäsen'} (${roleLabel})`;
             } else {
                 badge.style.display = 'none';
+            }
+            window.ROLE_SESSION = ROLE_SESSION;
+            window.CURRENT_ORG_ID = CURRENT_ORG_ID;
+            window.BOARD_DATA = BOARD_DATA;
+            const portalBtn = document.getElementById('btn-org-governance-portal');
+            if (portalBtn) {
+                portalBtn.style.display = (typeof isBoardChairRole === 'function' && isBoardChairRole()) ? 'inline-flex' : 'none';
             }
             // Päivitä muokkausnappulan näkyvyys kirjautumisen/kirjautumisen poiston yhteydessä
             if (typeof updateMeetingBanner === 'function') updateMeetingBanner();
@@ -4459,11 +4515,12 @@
             if (!sb) return;
 
             try {
-                const { data, error } = await sb
-                    .from('board_comments')
-                    .select('id, author_name, content, created_at')
-                    .eq('item_id', itemId)
-                    .order('created_at', { ascending: true });
+                const { data: rpcRes, error } = await sb.rpc('get_board_comments', {
+                    p_organization_id: CURRENT_ORG_ID,
+                    p_item_ids: [itemId],
+                    p_access_code: BOARD_ACCESS_CODE || null
+                });
+                const data = (rpcRes && rpcRes.success) ? (rpcRes.comments || []) : [];
 
                 if (!error && data && data.length > 0) {
                     container.innerHTML = data.map(c => `
@@ -5194,11 +5251,12 @@
                 try {
                     const sb = window.LaukaaSupabase || window.supabaseClient;
                     if (sb) {
-                        const { data } = await sb
-                            .from('board_comments')
-                            .select('id, item_id, author_name, content, created_at')
-                            .in('item_id', selectedIds)
-                            .order('created_at', { ascending: true });
+                        const { data: rpcRes } = await sb.rpc('get_board_comments', {
+                            p_organization_id: CURRENT_ORG_ID,
+                            p_item_ids: selectedIds,
+                            p_access_code: BOARD_ACCESS_CODE || null
+                        });
+                        const data = (rpcRes && rpcRes.success) ? (rpcRes.comments || []) : [];
                         if (data) {
                             for (const c of data) {
                                 if (!commentsByItemId[c.item_id]) commentsByItemId[c.item_id] = [];
@@ -6159,5 +6217,6 @@ ${itemsHtml}
             });
         });
     </script>
+    <script src="toiminta-hallinta.js"></script>
 </body>
 </html>
