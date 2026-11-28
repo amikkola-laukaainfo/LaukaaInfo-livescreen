@@ -332,22 +332,25 @@
         }
         if (mergedEvents.length) state.events = mergedEvents;
 
-        if (compRaw.status === 'fulfilled' && Array.isArray(compRaw.value)) {
-            state.companies = compRaw.value
-                .filter(c => c && (c.nimi || c.name))
-                .slice(0, 120)
+        const compList = (compRaw.status === 'fulfilled' && compRaw.value)
+            ? (Array.isArray(compRaw.value) ? compRaw.value : (Array.isArray(compRaw.value.results) ? compRaw.value.results : []))
+            : [];
+        if (compList.length) {
+            state.companies = compList
+                .filter(c => c && (c.nimi || c.name) && !c.is_expired)
+                .slice(0, 300)
                 .map(c => ({
                     id: 'company:' + (c.id || c.slug || c.nimi),
                     type: 'company',
                     badge: '🏢 Palvelu',
                     badgeClass: 'badge-company',
                     title: c.nimi || c.name,
-                    area: c.alue || c.paikkakunta || c.osoite || 'Laukaa',
+                    area: c.alue_slug || c.alue || c.paikkakunta || c.osoite || 'Laukaa',
                     category: c.kategoria || '',
-                    desc: c.kuvaus || c.kategoria || 'Paikallinen yritys tai palvelu',
-                    lat: c.lat != null ? Number(c.lat) : null,
-                    lon: (c.lon ?? c.lng) != null ? Number(c.lon ?? c.lng) : null,
-                    url: c.id ? `../kohdekortti.html?id=${encodeURIComponent(c.id)}` : '../index.html'
+                    desc: c.mainoslause || c.service_note || c.kuvaus || c.kategoria || 'Paikallinen yritys tai palvelu',
+                    lat: c.lat != null && c.lat !== '' ? Number(c.lat) : null,
+                    lon: (c.lon ?? c.lng) != null && (c.lon ?? c.lng) !== '' ? Number(c.lon ?? c.lng) : null,
+                    url: c.id ? `../yrityskortti.html?id=${encodeURIComponent(c.id)}` : '../index.html'
                 }));
         }
 
