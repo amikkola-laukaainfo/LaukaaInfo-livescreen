@@ -190,15 +190,17 @@
         const statusEl = document.getElementById('mini-status-text');
         if (statusEl) statusEl.textContent = 'Päivitetään tietoja...';
 
-        const [placesRaw, postsRaw, kseRaw, visitRaw, compRaw] = await Promise.allSettled([
+        const [placesRaw, postsRaw, kohdeEvRaw, kseRaw, visitRaw, compRaw] = await Promise.allSettled([
             sbFetch('/rest/v1/places?select=*&limit=200'),
             sbFetch('/rest/v1/posts?select=id,type,title,description,place_id,municipality,status,visibility,created_at&type=in.(INFO,knowledge,article)&order=created_at.desc&limit=40'),
+            sbFetch('/rest/v1/posts?type=in.(event,offer)&status=in.(published,APPROVED)&visibility=eq.public&select=id,type,title,description,place_id,target_id,event_start_at,offer_end_at,municipality,created_at&order=created_at.desc&limit=50'),
             fetch(KSE_URL).then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../tapahtumat_geo.json').then(r => r.ok ? r.json() : []).catch(() => []),
             fetch('../companies_data.json').then(r => r.ok ? r.json() : []).catch(() => [])
         ]);
 
         const storyByPlaceId = {};
+        const placeCoordsMap = {};
         if (postsRaw.status === 'fulfilled' && postsRaw.value.length) {
             state.stories = postsRaw.value
                 .filter(p => p && p.title && (!p.status || p.status === 'published') && p.visibility !== 'private')
@@ -228,6 +230,12 @@
                 .map(p => {
                     const pid = p.place_id || p.id;
                     const slugParam = p.canonical_name ? `&name=${encodeURIComponent(p.canonical_name)}` : '';
+                    const lat = p.lat != null ? Number(p.lat) : null;
+                    const lon = p.lon != null ? Number(p.lon) : null;
+                    if (lat != null && lon != null) {
+                        placeCoordsMap[pid] = { lat, lon, name: p.name || p.canonical_name, municipality: p.municipality };
+                        if (p.id) placeCoordsMap[p.id] = placeCoordsMap[pid];
+                    }
                     return {
                         id: 'place:' + pid,
                         place_id: pid,
@@ -238,14 +246,40 @@
                         area: p.municipality || 'Laukaa',
                         category: p.category || '',
                         desc: p.description || p.category || 'Paikallinen kohde Laukaassa',
-                        lat: p.lat != null ? Number(p.lat) : null,
-                        lon: p.lon != null ? Number(p.lon) : null,
+                        lat,
+                        lon,
                         url: `../tietoa-paikasta.html?id=${encodeURIComponent(pid)}${slugParam}`
                     };
                 });
         }
 
         const mergedEvents = [];
+        const yesterdayTs = Date.now() - 86400 * 1000;
+
+        if (kohdeEvRaw.status === 'fulfilled' && kohdeEvRaw.value.length) {
+            kohdeEvRaw.value.forEach(p => {
+                if (!p || !p.title) return;
+                const isOffer = p.type === 'offer';
+                const ts = p.event_start_at ? new Date(p.event_start_at).getTime() : null;
+                if (ts && ts < yesterdayTs) return;
+                const pl = p.place_id ? placeCoordsMap[p.place_id] : null;
+                mergedEvents.push({
+                    id: 'event:kohde-' + p.id,
+                    type: 'event',
+                    badge: isOffer ? '🏷️ Tarjous' : '📅 Tapahtuma',
+                    badgeClass: 'badge-event',
+                    title: p.title,
+                    area: (pl && (pl.municipality || pl.name)) || p.municipality || 'Laukaa',
+                    dateStr: ts ? new Date(ts).toLocaleDateString('fi-FI') : '',
+                    startTs: ts,
+                    desc: (p.description || '').replace(/<[^>]+>/g, ''),
+                    lat: pl ? pl.lat : null,
+                    lon: pl ? pl.lon : null,
+                    url: `../kohdekortti.html?id=${encodeURIComponent(p.target_id || p.id)}`
+                });
+            });
+        }
+
         if (kseRaw.status === 'fulfilled' && kseRaw.value && Array.isArray(kseRaw.value.data)) {
             kseRaw.value.data.forEach(ev => {
                 const name = ev.name?.fi || ev.name?.en || '';
@@ -254,6 +288,10 @@
                 const coords = loc.position?.coordinates;
                 const lon = Array.isArray(coords) ? Number(coords[0]) : null;
                 const lat = Array.isArray(coords) ? Number(coords[1]) : null;
+                const rawId = ev.id || ev['@id'] || '';
+                const cleanId = String(rawId).split('/').filter(Boolean).pop()?.split(':').pop() || '';
+                const kseUrl = cleanId ? (`https://keskisuomievents.fi/home/event/${cleanId}`) : 'https://keskisuomievents.fi/home';
+                const infoUrl = ev.info_url?.fi || ev.info_url?.en || '';
                 mergedEvents.push({
                     id: 'event:kse-' + ev.id,
                     type: 'event',
@@ -266,7 +304,7 @@
                     desc: (ev.short_description?.fi || '').replace(/<[^>]+>/g, ''),
                     lat: (lat && lon && distKm(62.414, 25.952, lat, lon) <= 100) ? lat : null,
                     lon: (lat && lon && distKm(62.414, 25.952, lat, lon) <= 100) ? lon : null,
-                    url: ev.info_url?.fi || '../tapahtumakartta.html'
+                    url: infoUrl || kseUrl
                 });
             });
         }
@@ -288,7 +326,7 @@
                     desc: ev.aika ? `${ev.aika}${ev.paikka ? ' • ' + ev.paikka : ''}` : (ev.paikka || ''),
                     lat: validCoord ? lat : null,
                     lon: validCoord ? lon : null,
-                    url: ev.url || '../tapahtumakartta.html'
+                    url: ev.url || 'https://visitlaukaa.fi/tapahtumat/'
                 });
             });
         }
@@ -552,7 +590,7 @@
                 ${navUrl ? `<a class="btn-secondary" href="${esc(navUrl)}" target="_blank" rel="noopener">🧭 Reittiohjeet</a>` : `<button id="sheet-share-btn" class="btn-secondary" type="button">📤 Jaa</button>`}
             </div>
             <div style="display:flex;gap:0.6rem;margin-top:0.6rem;">
-                ${item.url ? `<a class="btn-primary" href="${esc(item.url)}" style="flex:1;">Lue lisää →</a>` : ''}
+                ${item.url ? `<a class="btn-primary" href="${esc(item.url)}" ${/^https?:\/\//.test(item.url) ? 'target="_blank" rel="noopener"' : ''} style="flex:1;">Lue lisää →</a>` : ''}
                 <button id="sheet-close-btn" class="btn-secondary" type="button">Sulje</button>
             </div>
         `;

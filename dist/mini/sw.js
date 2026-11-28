@@ -1,4 +1,4 @@
-const VERSION = '80fb32b4';
+const VERSION = '3ae6f74c';
 const CACHE_NAME = `laukaainfo-mini-${VERSION}`;
 const APP_SHELL = [
     '/mini/',
