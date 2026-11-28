@@ -697,7 +697,7 @@
                             if (placeIds.length > 0) {
                                 const inList = placeIds.map(id => '"' + String(id).replace(/"/g, '') + '"').join(',');
                                 const placesRes = await fetch(
-                                    SB_URL + '/rest/v1/places?or=(id.in.(' + encodeURIComponent(inList) + '),place_id.in.(' + encodeURIComponent(inList) + '))&select=id,place_id,name,canonical_name,municipality,lat,lng',
+                                    SB_URL + '/rest/v1/places?place_id=in.(' + encodeURIComponent(inList) + ')&select=id,place_id,name,canonical_name,municipality,lat,lon',
                                     { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } }
                                 );
                                 if (placesRes.ok) {
@@ -723,9 +723,10 @@
 
                                 const pl = placeMap.get(p.place_id);
                                 if (!pl) continue;
+                                const rawLonVal = pl.lon != null ? pl.lon : pl.lng;
                                 const rawLat = Number(pl.lat);
-                                const rawLng = Number(pl.lng);
-                                const hasCoords = pl.lat != null && pl.lng != null && isValidLaukaaAreaCoord(rawLat, rawLng);
+                                const rawLng = Number(rawLonVal);
+                                const hasCoords = pl.lat != null && rawLonVal != null && isValidLaukaaAreaCoord(rawLat, rawLng);
                                 if (!hasCoords) continue;
 
                                 const targetId = p.target_id || p.id;
