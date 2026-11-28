@@ -227,7 +227,7 @@
                 .filter(p => p && (p.name || p.canonical_name))
                 .map(p => {
                     const pid = p.place_id || p.id;
-                    const linkedPostId = storyByPlaceId[pid];
+                    const slugParam = p.canonical_name ? `&name=${encodeURIComponent(p.canonical_name)}` : '';
                     return {
                         id: 'place:' + pid,
                         place_id: pid,
@@ -240,9 +240,7 @@
                         desc: p.description || p.category || 'Paikallinen kohde Laukaassa',
                         lat: p.lat != null ? Number(p.lat) : null,
                         lon: p.lon != null ? Number(p.lon) : null,
-                        url: linkedPostId
-                            ? `../tietokortti.html?id=${encodeURIComponent(linkedPostId)}`
-                            : `../tietokortti.html?place=${encodeURIComponent(pid)}&theme=yleinen`
+                        url: `../tietoa-paikasta.html?id=${encodeURIComponent(pid)}${slugParam}`
                     };
                 });
         }
