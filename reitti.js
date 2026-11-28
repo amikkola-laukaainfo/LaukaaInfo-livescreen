@@ -610,7 +610,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     p._lat = feature.geometry.coordinates[1];
                     p._lng = feature.geometry.coordinates[0];
                     p._layer = layer;
-                    points.push(p);
+
+                    // GPS navigation engine only tracks navigable destination points.
+                    // Place points (place, company, observation, virtual) are shown on the map
+                    // but excluded from the sequential GPS arrival queue — they would otherwise
+                    // freeze nextPointIndex because the user is never GPS-guided to them.
+                    const pt = p.point_type || p.pointType || p.type || 'destination';
+                    const isNonNavigable = pt === 'place' || pt === 'company' ||
+                                           pt === 'observation' || pt === 'virtual' ||
+                                           p.is_place_point === true ||
+                                           p.routeViaPoint === true;
+                    if (!isNonNavigable) {
+                        points.push(p);
+                    }
 
                     // Bind click event to open custom modal instead of default popup
                     layer.on('click', () => {

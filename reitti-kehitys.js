@@ -568,7 +568,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     p._lat = feature.geometry.coordinates[1];
                     p._lng = feature.geometry.coordinates[0];
                     p._layer = layer;
-                    points.push(p);
+                    // Exclude non-navigable point types from GPS queue
+                    const pt = p.point_type || p.pointType || p.type || 'destination';
+                    const isNonNavigable = pt === 'place' || pt === 'company' ||
+                                           pt === 'observation' || pt === 'virtual' ||
+                                           p.is_place_point === true || p.routeViaPoint === true;
+                    if (!isNonNavigable) points.push(p);
                     layer.on('click', () => window.openPointModal(p));
                 }
             }
