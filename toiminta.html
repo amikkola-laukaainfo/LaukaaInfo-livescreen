@@ -1301,6 +1301,12 @@
                 <div style="margin-top:0.6rem;display:flex;gap:0.75rem;font-size:0.8rem;">
                     <a href="tilannekuva.html" style="color:var(--primary);text-decoration:none;font-weight:700;">📊 Kunnan tilannekuva &rarr;</a>
                     <a href="seina.html" style="color:#94a3b8;text-decoration:none;font-weight:600;">📢 LaukaaInfon Seinä &rarr;</a>
+                    <a id="virtual-meeting-link" href="#" target="_blank" rel="noopener" style="display:none;color:#34d399;text-decoration:none;font-weight:700;">📹 Virtuaalikokous &rarr;</a>
+                </div>
+                <!-- Seuraava kokous + PJ-muokkaus -->
+                <div id="next-meeting-banner" style="display:none;margin-top:0.5rem;display:none;align-items:center;gap:0.6rem;flex-wrap:wrap;font-size:0.78rem;">
+                    <span id="next-meeting-text" style="color:#cbd5e1;font-weight:600;"></span>
+                    <button id="btn-edit-meeting" onclick="openMeetingEditModal()" style="display:none;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;border-radius:8px;padding:2px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;">✏️ Muokkaa</button>
                 </div>
             </div>
             <div class="banner-stats">
@@ -1618,6 +1624,49 @@
                     <button type="submit" class="btn-signup" id="btn-submit-add-task" style="background:#0284c7;">➕ Lisää tehtävä</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- VIRTUAALIKOKOUS / SEURAAVAN KOKOUKSEN MUOKKAUSMODAALI (PJ & hallitus) -->
+    <div class="modal-overlay" id="meeting-edit-modal">
+        <div class="modal-card" style="max-width:480px;">
+            <button class="modal-close" onclick="closeMeetingEditModal()">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+                <div style="font-size:1.6rem;background:rgba(99,102,241,0.15);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;">📹</div>
+                <div>
+                    <h3 style="font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin:0;">Virtuaalikokous &amp; ajankohta</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0.15rem 0 0 0;">Päivitä Google Meet -linkki ja seuraavan kokouksen ajankohta</p>
+                </div>
+            </div>
+
+            <div id="meeting-edit-error" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.82rem;color:#fca5a5;margin-bottom:0.75rem;"></div>
+
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <div>
+                    <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.3rem;">📹 Virtuaalikokouslinkki (Google Meet / Teams / Zoom)</label>
+                    <input id="meeting-edit-link" type="url" placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                        style="width:100%;box-sizing:border-box;padding:0.65rem 0.9rem;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.88rem;font-family:inherit;" />
+                    <p style="font-size:0.72rem;color:var(--text-muted);margin:0.25rem 0 0 0;">Jätä tyhjäksi poistaaksesi linkin näkyvistä.</p>
+                </div>
+
+                <div>
+                    <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.3rem;">📅 Seuraavan kokouksen ajankohta</label>
+                    <input id="meeting-edit-datetime" type="datetime-local"
+                        style="width:100%;box-sizing:border-box;padding:0.65rem 0.9rem;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.88rem;font-family:inherit;" />
+                    <p style="font-size:0.72rem;color:var(--text-muted);margin:0.25rem 0 0 0;">Jätä tyhjäksi poistaaksesi ajankohdan.</p>
+                </div>
+
+                <div>
+                    <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.3rem;">📝 Kokouksen otsikko (valinnainen)</label>
+                    <input id="meeting-edit-label" type="text" placeholder="esim. Kevätkokous 2026" maxlength="100"
+                        style="width:100%;box-sizing:border-box;padding:0.65rem 0.9rem;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.6);color:#fff;font-size:0.88rem;font-family:inherit;" />
+                </div>
+
+                <button id="btn-submit-meeting-edit" onclick="submitMeetingEdit()"
+                    style="background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none;border-radius:12px;padding:0.75rem 1.2rem;font-size:0.9rem;font-weight:800;cursor:pointer;font-family:inherit;margin-top:0.25rem;">
+                    💾 Tallenna kokoustiedot
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2128,11 +2177,161 @@
             } else {
                 badge.style.display = 'none';
             }
+            // Päivitä muokkausnappulan näkyvyys kirjautumisen/kirjautumisen poiston yhteydessä
+            if (typeof updateMeetingBanner === 'function') updateMeetingBanner();
         }
 
         function promptSwitchRoleAuth() {
             if (!ROLE_SESSION) return;
             openRoleManageModal();
+        }
+
+        // =========================================================================
+        // VIRTUAALIKOKOUSLINKKI & SEURAAVA KOKOUS (migration 101)
+        // =========================================================================
+
+        function isBoardChairRole() {
+            return !!(ROLE_SESSION && ROLE_SESSION.session_token &&
+                Array.isArray(ROLE_SESSION.active_roles) &&
+                ROLE_SESSION.active_roles.some(r => r.role === 'board_chair'));
+        }
+
+        function updateMeetingBanner() {
+            const linkEl    = document.getElementById('virtual-meeting-link');
+            const bannerEl  = document.getElementById('next-meeting-banner');
+            const textEl    = document.getElementById('next-meeting-text');
+            const editBtn   = document.getElementById('btn-edit-meeting');
+
+            const link  = BOARD_DATA.virtual_meeting_link || null;
+            const when  = BOARD_DATA.next_meeting_at  || null;   // "DD.MM.YYYY HH:MM" (SQL muotoiltu)
+            const label = BOARD_DATA.next_meeting_label || null;
+            const isChair = isBoardChairRole();
+
+            // Virtuaalikokouslinkki
+            if (linkEl) {
+                if (link) {
+                    linkEl.href = link;
+                    linkEl.style.display = '';
+                } else {
+                    linkEl.style.display = 'none';
+                }
+            }
+
+            // Seuraavan kokouksen banneri (näkyy jos kokoustietoja on asetettu TAI puheenjohtaja on kirjautunut)
+            if (bannerEl && textEl) {
+                if (when || label) {
+                    let txt = '';
+                    if (label) txt += label;
+                    if (when) txt += (txt ? ' · ' : '') + '🕐 ' + when;
+                    textEl.innerText = txt;
+                    bannerEl.style.display = 'flex';
+                } else if (isChair) {
+                    textEl.innerText = '📅 Virtuaalikokous & seuraava kokous:';
+                    bannerEl.style.display = 'flex';
+                } else {
+                    bannerEl.style.display = 'none';
+                }
+            }
+
+            // Muokkausnappula – näkyy puheenjohtajalle
+            if (editBtn) {
+                editBtn.style.display = isChair ? '' : 'none';
+            }
+        }
+
+        function openMeetingEditModal() {
+            if (!isBoardChairRole()) {
+                openRoleAuthModal(() => openMeetingEditModal());
+                return;
+            }
+            const modal = document.getElementById('meeting-edit-modal');
+            if (!modal) return;
+
+            const linkInput  = document.getElementById('meeting-edit-link');
+            const dtInput    = document.getElementById('meeting-edit-datetime');
+            const labelInput = document.getElementById('meeting-edit-label');
+            const err        = document.getElementById('meeting-edit-error');
+            const btn        = document.getElementById('btn-submit-meeting-edit');
+
+            if (linkInput)  linkInput.value  = BOARD_DATA.virtual_meeting_link  || '';
+            if (labelInput) labelInput.value = BOARD_DATA.next_meeting_label || '';
+            // Muunna "DD.MM.YYYY HH:MM" → datetime-local "YYYY-MM-DDTHH:MM"
+            if (dtInput) {
+                const raw = BOARD_DATA.next_meeting_at || '';
+                if (raw && raw.match(/\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}/)) {
+                    const [datePart, timePart] = raw.split(' ');
+                    const [d, m, y] = datePart.split('.');
+                    dtInput.value = `${y}-${m}-${d}T${timePart}`;
+                } else {
+                    dtInput.value = '';
+                }
+            }
+            if (err)  { err.innerText = ''; err.style.display = 'none'; }
+            if (btn)  { btn.disabled = false; btn.innerText = '💾 Tallenna kokoustiedot'; }
+
+            modal.classList.add('open');
+            setTimeout(() => { if (linkInput) linkInput.focus(); }, 100);
+        }
+
+        function closeMeetingEditModal() {
+            const modal = document.getElementById('meeting-edit-modal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        async function submitMeetingEdit() {
+            if (!ROLE_SESSION || !ROLE_SESSION.session_token) {
+                closeMeetingEditModal();
+                openRoleAuthModal(() => openMeetingEditModal());
+                return;
+            }
+
+            const link  = (document.getElementById('meeting-edit-link')?.value  || '').trim();
+            const dtVal = (document.getElementById('meeting-edit-datetime')?.value || '').trim();
+            const label = (document.getElementById('meeting-edit-label')?.value   || '').trim();
+            const err   = document.getElementById('meeting-edit-error');
+            const btn   = document.getElementById('btn-submit-meeting-edit');
+
+            const sb = window.LaukaaSupabase || window.supabaseClient;
+            if (!sb) {
+                if (err) { err.innerText = 'Tietokantayhteys ei ole käytettävissä.'; err.style.display = 'block'; }
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Tallennetaan...'; }
+            if (err) err.style.display = 'none';
+
+            try {
+                // datetime-local → ISO 8601 (Suomen aikavyöhyke, lähetetään sellaisenaan)
+                let isoAt = null;
+                if (dtVal) {
+                    try { isoAt = new Date(dtVal).toISOString(); } catch(e) { isoAt = null; }
+                }
+
+                const { data, error } = await sb.rpc('update_meeting_info', {
+                    p_session_token:      ROLE_SESSION.session_token,
+                    p_organization_id:    CURRENT_ORG_ID,
+                    p_meeting_link:       link  || null,
+                    p_next_meeting_at:    isoAt || null,
+                    p_next_meeting_label: label || null
+                });
+
+                if (error || (data && !data.success)) {
+                    const msg = (data && data.error) || (error && error.message) || 'Tallennus epäonnistui.';
+                    if (err) { err.innerText = msg; err.style.display = 'block'; }
+                    if (btn) { btn.disabled = false; btn.innerText = '💾 Tallenna kokoustiedot'; }
+                    return;
+                }
+
+                // Päivitä paikallinen tila ja banneri heti
+                BOARD_DATA.virtual_meeting_link  = data.meeting_link  || null;
+                BOARD_DATA.next_meeting_label    = data.next_meeting_label || null;
+                // Päivitä muotoiltu aika uudelleen fetchaamalla koko data
+                closeMeetingEditModal();
+                await fetchBoardData();
+            } catch (ex) {
+                if (err) { err.innerText = 'Virhe: ' + ex.message; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.innerText = '💾 Tallenna kokoustiedot'; }
+            }
         }
 
         function openRoleManageModal() {
@@ -2867,6 +3066,9 @@
                     BOARD_DATA.items = data.items || [];
                     BOARD_DATA.board_guide_url = data.board_guide_url || null;
                     BOARD_DATA.board_guide_label = data.board_guide_label || 'Tapahtuman ohjeet ja liitteet';
+                    BOARD_DATA.virtual_meeting_link = data.virtual_meeting_link || null;
+                    BOARD_DATA.next_meeting_at = data.next_meeting_at || null;
+                    BOARD_DATA.next_meeting_label = data.next_meeting_label || null;
                     document.getElementById('header-org-name').innerText = BOARD_DATA.organization_name;
 
                     // Päivitä ohjekorttilinkki banneriin (migration 099)
@@ -2884,6 +3086,9 @@
                             if (guideBanner) guideBanner.style.display = 'none';
                         }
                     }
+
+                    // Päivitä virtuaalikokouslinkki + seuraava kokous banneriin (migration 101)
+                    updateMeetingBanner();
 
                     // Tarkista IP-kohtainen nimilukko tälle yhdistykselle (095)
                     try {
