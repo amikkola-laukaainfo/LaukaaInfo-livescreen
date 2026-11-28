@@ -1,11 +1,12 @@
-const VERSION = 'db058d10';
+const VERSION = '8a8bf930';
 const CACHE_NAME = `laukaainfo-mini-${VERSION}`;
 const APP_SHELL = [
     '/mini/',
     '/mini/index.html',
     '/mini/manifest.json',
     '/mini/icons/icon-192.png',
-    '/mini/icons/icon-512.png'
+    '/mini/icons/icon-512.png',
+    '/mini/icons/apple-touch-icon-180.png'
 ];
 
 self.addEventListener('install', event => {

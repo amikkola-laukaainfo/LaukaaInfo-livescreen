@@ -192,46 +192,59 @@
 
         const [placesRaw, postsRaw, kseRaw, visitRaw, compRaw] = await Promise.allSettled([
             sbFetch('/rest/v1/places?select=*&limit=200'),
-            sbFetch('/rest/v1/posts?select=id,title,summary,place_id,status,created_at&order=created_at.desc&limit=40'),
+            sbFetch('/rest/v1/posts?select=id,type,title,description,place_id,municipality,status,visibility,created_at&type=in.(INFO,knowledge,article)&order=created_at.desc&limit=40'),
             fetch(KSE_URL).then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../tapahtumat_geo.json').then(r => r.ok ? r.json() : []).catch(() => []),
             fetch('../companies_data.json').then(r => r.ok ? r.json() : []).catch(() => [])
         ]);
 
+        const storyByPlaceId = {};
+        if (postsRaw.status === 'fulfilled' && postsRaw.value.length) {
+            state.stories = postsRaw.value
+                .filter(p => p && p.title && (!p.status || p.status === 'published') && p.visibility !== 'private')
+                .map(p => {
+                    if (p.place_id && !storyByPlaceId[p.place_id]) {
+                        storyByPlaceId[p.place_id] = p.id;
+                    }
+                    return {
+                        id: 'story:' + p.id,
+                        place_id: p.place_id || null,
+                        type: 'story',
+                        badge: '📖 Tietokortti',
+                        badgeClass: 'badge-story',
+                        title: p.title,
+                        area: p.municipality || 'Laukaa',
+                        desc: (p.description || 'Paikallinen tietokortti ja taustatarina.').replace(/<[^>]+>/g, ''),
+                        lat: null,
+                        lon: null,
+                        url: `../tietokortti.html?id=${encodeURIComponent(p.id)}`
+                    };
+                });
+        }
+
         if (placesRaw.status === 'fulfilled' && placesRaw.value.length) {
             state.places = placesRaw.value
                 .filter(p => p && (p.name || p.canonical_name))
-                .map(p => ({
-                    id: 'place:' + (p.place_id || p.id),
-                    place_id: p.place_id || p.id,
-                    type: 'place',
-                    badge: '📍 Paikka',
-                    badgeClass: 'badge-place',
-                    title: p.name || p.canonical_name,
-                    area: p.municipality || 'Laukaa',
-                    category: p.category || '',
-                    desc: p.description || p.category || 'Paikallinen kohde Laukaassa',
-                    lat: p.lat != null ? Number(p.lat) : null,
-                    lon: p.lon != null ? Number(p.lon) : null,
-                    url: `../tietokortti.html?place=${encodeURIComponent(p.place_id || p.id)}`
-                }));
-        }
-
-        if (postsRaw.status === 'fulfilled' && postsRaw.value.length) {
-            state.stories = postsRaw.value
-                .filter(p => p && p.title && (!p.status || p.status === 'published'))
-                .map(p => ({
-                    id: 'story:' + p.id,
-                    type: 'story',
-                    badge: '📖 Tietokortti',
-                    badgeClass: 'badge-story',
-                    title: p.title,
-                    area: 'Laukaa',
-                    desc: p.summary || 'Paikallinen tietokortti ja taustatarina.',
-                    lat: null,
-                    lon: null,
-                    url: `../tietokortti.html?id=${encodeURIComponent(p.id)}`
-                }));
+                .map(p => {
+                    const pid = p.place_id || p.id;
+                    const linkedPostId = storyByPlaceId[pid];
+                    return {
+                        id: 'place:' + pid,
+                        place_id: pid,
+                        type: 'place',
+                        badge: '📍 Paikka',
+                        badgeClass: 'badge-place',
+                        title: p.name || p.canonical_name,
+                        area: p.municipality || 'Laukaa',
+                        category: p.category || '',
+                        desc: p.description || p.category || 'Paikallinen kohde Laukaassa',
+                        lat: p.lat != null ? Number(p.lat) : null,
+                        lon: p.lon != null ? Number(p.lon) : null,
+                        url: linkedPostId
+                            ? `../tietokortti.html?id=${encodeURIComponent(linkedPostId)}`
+                            : `../tietokortti.html?place=${encodeURIComponent(pid)}&theme=yleinen`
+                    };
+                });
         }
 
         const mergedEvents = [];
@@ -362,7 +375,7 @@
                 <span class="section-title">Paikallisia tietokortteja</span>
             </div>
             <div class="cards-stack">
-                ${stories.length ? stories.map(renderCard).join('') : '<div class="empty-box">Tietokortteja ladataan...</div>'}
+                ${stories.length ? stories.map(renderCard).join('') : '<div class="empty-box">Ei julkaistuja tietokortteja valitulle alueelle.</div>'}
             </div>
         `;
     }
@@ -676,18 +689,61 @@
         );
     });
 
-    // PWA-asennusbanneri
+    // PWA-asennusbanneri (Android beforeinstallprompt + iOS Safari -ohje)
+    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+
     window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault();
         state.deferredPrompt = e;
         document.getElementById('install-banner')?.classList.add('show');
     });
-    document.getElementById('btn-install-app')?.addEventListener('click', async () => {
-        if (!state.deferredPrompt) return;
-        state.deferredPrompt.prompt();
-        await state.deferredPrompt.userChoice;
-        state.deferredPrompt = null;
+
+    if (isIos && !isStandalone && !localStorage.getItem('laukaa_mini_ios_dismissed')) {
+        const banner = document.getElementById('install-banner');
+        const titleEl = document.getElementById('install-banner-title');
+        const descEl = document.getElementById('install-banner-desc');
+        const actBtn = document.getElementById('btn-install-app');
+        const disBtn = document.getElementById('btn-dismiss-install');
+        if (titleEl) titleEl.textContent = 'Lisää iPhonen kotinäyttöön';
+        if (descEl) descEl.innerHTML = 'Paina Safarin <strong>Jaa (↑)</strong> → <strong>Lisää kotinäyttöön</strong>.';
+        if (actBtn) actBtn.textContent = 'Ohje';
+        if (disBtn) disBtn.style.display = '';
+        banner?.classList.add('show');
+    }
+
+    document.getElementById('btn-dismiss-install')?.addEventListener('click', () => {
+        localStorage.setItem('laukaa_mini_ios_dismissed', '1');
         document.getElementById('install-banner')?.classList.remove('show');
+    });
+
+    document.getElementById('btn-install-app')?.addEventListener('click', async () => {
+        if (state.deferredPrompt) {
+            state.deferredPrompt.prompt();
+            await state.deferredPrompt.userChoice;
+            state.deferredPrompt = null;
+            document.getElementById('install-banner')?.classList.remove('show');
+            return;
+        }
+        if (isIos) {
+            const sheet = document.getElementById('detail-sheet');
+            const body = document.getElementById('detail-sheet-body');
+            if (sheet && body) {
+                body.innerHTML = `
+                    <div class="sheet-handle"></div>
+                    <h3 style="font-family:'Outfit',sans-serif;margin:0 0 0.5rem 0;">📱 Asenna LaukaaInfo Mini iPhoneen</h3>
+                    <ol style="font-size:0.86rem;color:var(--muted);line-height:1.6;padding-left:1.2rem;margin:0 0 1rem 0;">
+                        <li>Varmista, että sivu on auki <strong>Safarissa</strong> (<code>laukaainfo.fi/mini/</code>).</li>
+                        <li>Paina alareunan tai yläreunan <strong>Jaa</strong>-kuvaketta (neliö ja nuoli ylöspäin).</li>
+                        <li>Valitse listasta <strong>Lisää kotinäyttöön</strong>.</li>
+                        <li>Jätä <em>Avaa verkkosovelluksena</em> päälle ja paina <strong>Lisää</strong>.</li>
+                    </ol>
+                    <button id="ios-guide-close" class="btn-primary" type="button" style="width:100%;">Selvä, sulje</button>
+                `;
+                sheet.classList.add('open');
+                document.getElementById('ios-guide-close')?.addEventListener('click', () => sheet.classList.remove('open'));
+            }
+        }
     });
 
     // Käynnistys: välimuistista heti -> taustalla päivitys

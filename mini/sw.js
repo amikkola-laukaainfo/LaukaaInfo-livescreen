@@ -5,7 +5,8 @@ const APP_SHELL = [
     '/mini/index.html',
     '/mini/manifest.json',
     '/mini/icons/icon-192.png',
-    '/mini/icons/icon-512.png'
+    '/mini/icons/icon-512.png',
+    '/mini/icons/apple-touch-icon-180.png'
 ];
 
 self.addEventListener('install', event => {

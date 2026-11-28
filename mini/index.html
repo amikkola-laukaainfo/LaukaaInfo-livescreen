@@ -8,9 +8,10 @@
     <meta name="theme-color" content="#0f172a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="LaukaaInfo" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="icons/icon-192.png" type="image/png" />
-    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" />
@@ -42,10 +43,13 @@
     <main class="mini-main">
         <div id="install-banner" class="install-banner">
             <div style="font-size:0.8rem;line-height:1.35;">
-                <strong>Asenna LaukaaInfo Mini</strong><br />
+                <strong id="install-banner-title">Asenna LaukaaInfo Mini</strong><br />
                 <span style="color:var(--muted);" id="install-banner-desc">Lisää aloitusnäyttöön nopeaa käyttöä varten.</span>
             </div>
-            <button id="btn-install-app" class="btn-primary" type="button" style="padding:0.5rem 0.85rem;font-size:0.78rem;white-space:nowrap;">Asenna</button>
+            <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
+                <button id="btn-install-app" class="btn-primary" type="button" style="padding:0.5rem 0.85rem;font-size:0.78rem;white-space:nowrap;">Asenna</button>
+                <button id="btn-dismiss-install" class="btn-secondary" type="button" style="padding:0.45rem 0.6rem;font-size:0.78rem;display:none;" title="Sulje">✕</button>
+            </div>
         </div>
 
         <div id="mini-content">
